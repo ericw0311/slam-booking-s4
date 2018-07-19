@@ -1,0 +1,20 @@
+{% extends 'base.unconnected.html.twig' %}
+ 
+{% block body %}
+
+<div class="container">
+
+{{ form_start(form) }}
+    {{ form_row(form.firstName) }}
+    {{ form_row(form.lastName) }}
+    {{ form_row(form.userName) }}
+    {{ form_row(form.email) }}
+    {{ form_row(form.password.first) }}
+    {{ form_row(form.password.second) }}
+ 
+    <button type="submit">S'inscrire !</button>
+{{ form_end(form) }}
+
+</div>
+        
+{% endblock %}

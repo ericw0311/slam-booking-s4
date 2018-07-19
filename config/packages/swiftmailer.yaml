@@ -1,0 +1,6 @@
+parameters:
+    env(MAILER_URL): 'gmail://eric.pierre.willard:Jveuadp0410@localhost'
+
+swiftmailer:
+    url: '%env(MAILER_URL)%'
+    spool: { type: 'memory' }
