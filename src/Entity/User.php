@@ -77,6 +77,7 @@ class User implements UserInterface, \Serializable
     {
         $this->files = new ArrayCollection();
         $this->userFiles = new ArrayCollection();
+        $this->userParameters = new ArrayCollection();
     }
 
     public function getId()
@@ -234,6 +235,11 @@ class User implements UserInterface, \Serializable
   * @ORM\OneToMany(targetEntity="App\Entity\UserFile", mappedBy="user", orphanRemoval=true)
   */
  private $userFiles;
+
+ /**
+  * @ORM\OneToMany(targetEntity="App\Entity\UserParameter", mappedBy="user", orphanRemoval=true)
+  */
+ private $userParameters;
  /**
   * @return Collection|File[]
   */
@@ -290,6 +296,37 @@ class User implements UserInterface, \Serializable
          // set the owning side to null (unless already changed)
          if ($userFile->getUser() === $this) {
              $userFile->setUser(null);
+         }
+     }
+     $__EXTRA__LINE;
+     return $this;
+ }
+
+ /**
+  * @return Collection|UserParameter[]
+  */
+ public function getUserParameters(): Collection
+ {
+     return $this->userParameters;
+ }
+
+ public function addUserParameter(UserParameter $userParameter): self
+ {
+     if (!$this->userParameters->contains($userParameter)) {
+         $this->userParameters[] = $userParameter;
+         $userParameter->setUser($this);
+     }
+     $__EXTRA__LINE;
+     return $this;
+ }
+
+ public function removeUserParameter(UserParameter $userParameter): self
+ {
+     if ($this->userParameters->contains($userParameter)) {
+         $this->userParameters->removeElement($userParameter);
+         // set the owning side to null (unless already changed)
+         if ($userParameter->getUser() === $this) {
+             $userParameter->setUser(null);
          }
      }
      $__EXTRA__LINE;

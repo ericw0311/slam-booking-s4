@@ -1,0 +1,265 @@
+# translations/messages.en.yaml
+
+activity.ask.delete: Do you really want to delete activity %name% ?
+activity.back.to.list: Back to activities list
+activity.create: Create an activity
+activity.created.ok: The activity has been created
+activity.deleted.ok: The activity has been deleted
+activity.name: Activity name
+activity.plural: Activities
+activity.singular: Activity
+activity.updated.ok: The activity has been updated
+
+booking.all: All bookings
+booking.ask.delete: Do you really want to delete this booking ?
+booking.back.to.list: Back to bookings list
+booking.create: Book
+booking.created.ok: The booking has been created
+booking.deleted.ok: The booking has been deleted
+booking.in.progress: Bookings in progress
+booking.period.beginning.update: Modify beginning period
+booking.period.end.update: Modify end period
+booking.plural: Bookings
+booking.singular: Booking
+booking.updated.ok: The booking has been updated
+booking.your: Your bookings
+booking.your.in.progress: Your bookings in progress
+
+dashboard.plural: Dashboards
+dashboard.singular: Dashboard
+
+file.ask.delete: Do you really want to delete file %name% ?
+file.back.to.list: Back to file list
+file.create: Create a file
+file.created.by: File created by
+file.created.ok: The file has been created
+file.current: Current file
+file.current.updated.ok: Current file has been updated
+file.delete.not.allowed: Only the creator of the file ia allowed to delete it
+file.delete.not.allowed.2: File is referenced. Delete not allowed
+file.deleted.ok: The file has been deleted
+file.name: File name
+file.plural: Files
+file.set.as.current: Set as current file
+file.singular: File
+file.update.not.allowed: Only the creator of the file ia allowed to update it
+file.updated.ok: The file has been updated
+
+label: Label
+label.ask.delete: Do you really want to delete label %name% ?
+label.back.to.list: Back to labels list
+label.create: Create an label
+label.created.ok: The label has been created
+label.deleted.ok: The label has been deleted
+label.list.update: Modify labels list
+label.name: Label name
+label.no: No label
+label.select: Select label
+label.unselect: Unselect label
+label.updated.ok: The label has been updated
+
+labels: Labels
+labels.available: Available labels
+labels.selected: Selected labels
+
+note: Note
+note.enter: Saisir une note
+note.no: Pas de note
+note.update: Modifier la note
+
+period.type: Period
+period.type.AFTER: After a day
+period.type.AFTER.SYSDATE: After current day
+period.type.BEFORE: Before a day
+period.type.BEFORE.SYSDATE: Before current day
+period.type.BETWEEN: Between two days
+period.type.NO: No period
+period.type.SYSDATE: Current date
+
+planification.ask.delete: Do you really want to delete planification %name% ?
+planification.back.to.list: Back to planifications list
+planification.create: Create a planification
+planification.created.ok: The planification has been created
+planification.deleted.ok: The planification has been deleted
+planification.line.updated.ok: Per day planifications have been updated
+planification.name: Planification name
+planification.plural: Planifications
+planification.resource.select: Select resource
+planification.resource.selected: Selected resources
+planification.resource.to.planify: Resources to planify
+planification.resource.unselect: Unselect resource
+planification.resource.updated.ok: The resources have been updated
+planification.singular: Planification
+planification.type.select: Select type of resources to planify
+planification.updated.ok: The planification has been updated
+planification.validate.not.allowed: You must select at least one resource
+
+planning: Planning
+planning.calendar: Calendar
+planning.global: Global planning
+planning.stretched.out: Stretched out planning
+planning.timetable: Timetable
+
+queryBooking.ask.delete: Do you really want to delete query %name% ?
+queryBooking.back.to.list: Back to queries list
+queryBooking.create: Create a query
+queryBooking.created.ok: The query has been created
+queryBooking.deleted.ok: The query has been deleted
+queryBooking.name: Query name
+queryBooking.plural: Queries
+queryBooking.singular: Query
+queryBooking.updated.ok: The query has been updated
+
+resource.ask.delete: Do you really want to delete resource %name% ?
+resource.back.to.list: Back to resources list
+resource.create: Create a resource
+resource.created.ok: The resource has been created
+resource.delete.not.allowed: Resource is referenced. Delete not allowed
+resource.deleted.ok: The resource has been deleted
+resource.name: Resource name
+resource.planified: Planified resource
+resource.planning.background.color: Background color on planning
+resource.planning.foreground.color: Foreground color on planning
+resource.plural: Resources
+resource.singular: Resource
+resource.updated.ok: The resource has been updated
+resource.user.ask: Is user %name% a resource ?
+resource.validate.and.create: Validate and add a resource
+
+resourceClassification.activated.ok: The classification has been activated
+resourceClassification.ask.delete: Do you really want to delete classification %name% ?
+resourceClassification.back.to.list: Back to classifications
+resourceClassification.create: Create a resource classification
+resourceClassification.create.warning: Carefull, you are creating a new resource classification. This is do be done only if the default classifications are not sufficient
+resourceClassification.created.ok: The classification has been created
+resourceClassification.delete.not.allowed: Classification is referenced. Delete not allowed
+resourceClassification.deleted.ok: The classification has been deleted
+resourceClassification.name: Resource classification name
+resourceClassification.plural: Resource classifications
+resourceClassification.singular: Resource classification
+resourceClassification.select: Select a resource classification
+resourceClassification.unactivate.not.allowed: Classification is referenced. Unactivate not allowed
+resourceClassification.unactivated.ok: The classification has been unactivated
+resourceClassification.updated.ok: The classification has been updated
+
+resourceClassification.plural.BIKE: Bicycles
+resourceClassification.plural.BOAT: Boats
+resourceClassification.plural.CAMERA: Cameras
+resourceClassification.plural.CAR: Cars
+resourceClassification.plural.COMPUTER: Computers
+resourceClassification.plural.CONTRACTOR: Contractors
+resourceClassification.plural.COURT: Courts
+resourceClassification.plural.DENTIST: Dentists
+resourceClassification.plural.DOCTOR: Doctors
+resourceClassification.plural.FLAT: Flat
+resourceClassification.plural.GLIDER: Gliders
+resourceClassification.plural.GYMNASIUM: Gymnasium
+resourceClassification.plural.HORSE: Horses
+resourceClassification.plural.HOUSE: Houses
+resourceClassification.plural.MOBILE-HOME: Mobile homes
+resourceClassification.plural.MOTORBIKE: Motorbikes
+resourceClassification.plural.PITCH: Pitches
+resourceClassification.plural.PLANE: Planes
+resourceClassification.plural.PROJECTOR: Projectors
+resourceClassification.plural.ROOM: Rooms
+resourceClassification.plural.TEACHER: Teachers
+resourceClassification.plural.TENT: Tents
+resourceClassification.plural.TRACTOR: Tractors
+resourceClassification.plural.TRUCK: Trucks
+
+resourceClassification.singular.BIKE: Bicycle
+resourceClassification.singular.BOAT: Boat
+resourceClassification.singular.CAMERA: Camera
+resourceClassification.singular.CAR: Car
+resourceClassification.singular.COMPUTER: Computer
+resourceClassification.singular.CONTRACTOR: Contractor
+resourceClassification.singular.COURT: Court
+resourceClassification.singular.DENTIST: Dentist
+resourceClassification.singular.DOCTOR: Doctor
+resourceClassification.singular.FLAT: Flat
+resourceClassification.singular.GLIDER: Glider
+resourceClassification.singular.GYMNASIUM: Gymnasium
+resourceClassification.singular.HORSE: Horse
+resourceClassification.singular.HOUSE: House
+resourceClassification.singular.MOBILE-HOME: Mobile home
+resourceClassification.singular.MOTORBIKE: Motorbike
+resourceClassification.singular.PITCH: Pitch
+resourceClassification.singular.PLANE: Plane
+resourceClassification.singular.PROJECTOR: Projector
+resourceClassification.singular.ROOM: Room
+resourceClassification.singular.TEACHER: Teacher
+resourceClassification.singular.TENT: Tent
+resourceClassification.singular.TRACTOR: Tractor
+resourceClassification.singular.TRUCK: Truck
+
+resourceType.create.classification.PLACE: Create a places classification
+resourceType.create.classification.SPORT: Create a sport equipments classification
+resourceType.create.classification.TOOL: Create a tools classification
+resourceType.create.classification.USER: Create a users classification
+resourceType.create.classification.VEHICLE: Create a vehicles classification
+
+resourceType.plural.PLACE: Places
+resourceType.plural.SPORT: Sport equipments
+resourceType.plural.TOOL: Tools
+resourceType.plural.USER: Users
+resourceType.plural.VEHICLE: Vehicles
+
+resourceType.singular.PLACE: Place
+resourceType.singular.SPORT: Sport equipment
+resourceType.singular.TOOL: Tool
+resourceType.singular.USER: User
+resourceType.singular.VEHICLE: Vehicle
+
+slam-booking.access: Access Slam-Booking
+
+timetable.ask.delete: Do you really want to delete timetable %name% ?
+timetable.back.to.list: Back to timetables list
+timetable.create: Create a timetable
+timetable.created.ok: The timetable has been created. Please enter a first timeslot
+timetable.day: Day
+timetable.delete.not.allowed.1: The timetable Day cannot be deleted
+timetable.delete.not.allowed.2: The timetable Half day cannot be deleted
+timetable.delete.not.allowed.3: Timetable is referenced. Delete not allowed
+timetable.deleted.ok: The timetable has been deleted
+timetable.half.day: Half day
+timetable.name: Timetable name
+timetable.plural: Timetables
+timetable.singular: Timetable
+timetable.update.not.allowed.1: The timetable Day cannot be updated
+timetable.update.not.allowed.2: The timetable Half day cannot be updated
+timetable.update.not.allowed.3: Timetable is referenced. Update not allowed
+timetable.updated.ok: The timetable has been updated
+
+timetableLine.create: Add a timetable slot
+timetableLine.created.ok: The timetable slot has been created
+timetableLine.deleted.ok: The timetable slot has been deleted
+timetableLine.updated.ok: The timetable slot has been updated
+timetableLine.validate.and.create: Validate and add a timetable slot
+
+user: User
+user.account.type: Account type
+user.account.type.INDIVIDUAL: Individual
+user.account.type.ORGANISATION: Organisation
+user.firstName: First name
+user.lastName: Last name
+user.list.update: Modify users list
+user.organisation.name: Organisation name
+user.select: Select user
+user.unselect: Unselect user
+
+users: Users
+users.available: Available users
+users.selected: Selected users
+
+userFile.administrator.rights: The user has administrator rights on file
+userFile.ask.delete: Do you really want to remove user %name% from file ?
+userFile.back.to.list: Back to users list
+userFile.create: Add a user to file
+userFile.created.ok: The user has been added to file
+userFile.delete.not.allowed: The file creator cannot be removed from file
+userFile.deleted.ok: The user has been removed from file
+userFile.resource.updated.ok: Informations "user resource" have been updated
+userFile.update.not.allowed.1: The file creator cannot be modified
+userFile.update.not.allowed.2: Only the file creator can modify a registered user
+userFile.update.not.allowed.3: Informations related to user can be modified from his profile only
+userFile.updated.ok: The user has been updated

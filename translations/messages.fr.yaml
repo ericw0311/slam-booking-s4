@@ -1,0 +1,265 @@
+# translations/messages.fr.yaml
+
+activity.ask.delete: Voulez-vous vraiment supprimer l'activité %name% ?
+activity.back.to.list: Retour à la liste des activités
+activity.create: Créer une activité
+activity.created.ok: L'activité a bien été créée
+activity.deleted.ok: L'activité a bien été supprimée
+activity.name: Nom de l'activité
+activity.plural: Activités
+activity.singular: Activité
+activity.updated.ok: L'activité a bien été modifiée
+
+booking.all: Toutes les réservations
+booking.ask.delete: Voulez-vous vraiment supprimer cette réservation ?
+booking.back.to.list: Retour à la liste des réservations
+booking.create: Réserver
+booking.created.ok: La réservation a bien été créée
+booking.deleted.ok: La réservation a bien été supprimée
+booking.in.progress: Les réservations en cours
+booking.period.beginning.update: Modifier la période de début
+booking.period.end.update: Modifier la période de fin
+booking.plural: Réservations
+booking.singular: Réservation
+booking.updated.ok: La réservation a bien été modifiée
+booking.your: Vos réservations
+booking.your.in.progress: Vos réservations en cours
+
+dashboard.plural: Tableaux de bord
+dashboard.singular: Tableau de bord
+
+file.ask.delete: Voulez-vous vraiment supprimer le dossier %name% ?
+file.back.to.list: Retour à la liste des dossiers
+file.create: Créer un dossier
+file.created.by: Dossier créé par
+file.created.ok: Le dossier a bien été créé
+file.current: En cours
+file.current.updated.ok: Le dossier en cours a été modifié
+file.delete.not.allowed: Seul le créateur d'un dossier est autorisé à le supprimer
+file.delete.not.allowed.2: Le dossier est référencé. Suppression impossible
+file.deleted.ok: Le dossier a bien été supprimé
+file.name: Nom du dossier
+file.plural: Dossiers
+file.set.as.current: Positionner comme dossier en cours
+file.singular: Dossier
+file.update.not.allowed: Seul le créateur d'un dossier est autorisé à le modifier
+file.updated.ok: Le dossier a bien été modifié
+
+label: Etiquette
+label.ask.delete: Voulez-vous vraiment supprimer l'étiquette %name% ?
+label.back.to.list: Retour à la liste des étiquettes
+label.create: Créer une étiquette
+label.created.ok: L'étiquette a bien été créée
+label.deleted.ok: L'étiquette a bien été supprimée
+label.list.update: Modifier la liste des étiquettes
+label.name: Nom de l'étiquette
+label.no: Pas d'étiquette
+label.select: Sélectionner l'étiquette
+label.unselect: Déselectionner l'étiquette
+label.updated.ok: L'étiquette a bien été modifiée
+
+labels: Etiquettes
+labels.available: Etiquettes disponibles
+labels.selected: Etiquettes sélectionnées
+
+note: Note
+note.enter: Saisir une note
+note.no: Pas de note
+note.update: Modifier la note
+
+period.type: Période
+period.type.AFTER: Au dela d'une date
+period.type.AFTER.SYSDATE: Au dela de la date du jour
+period.type.BEFORE: Avant une date
+period.type.BEFORE.SYSDATE: Avant la date du jour
+period.type.BETWEEN: Entre deux dates
+period.type.NO: Pas de période
+period.type.SYSDATE: Date du jour
+
+planification.ask.delete: Voulez-vous vraiment supprimer la planification %name% ?
+planification.back.to.list: Retour à la liste des planifications
+planification.create: Créer une planification
+planification.created.ok: La planification a bien été créée
+planification.deleted.ok: La planification a bien été supprimée
+planification.line.updated.ok: Les planifications par jour ont bien été modifiées
+planification.name: Nom de la planification
+planification.plural: Planifications
+planification.resource.select: Sélectionner la ressource
+planification.resource.selected: Ressources sélectionnées
+planification.resource.to.planify: Ressources à planifier
+planification.resource.unselect: Désélectionner la ressource
+planification.resource.updated.ok: Les ressources ont bien été modifiées
+planification.singular: Planification
+planification.type.select: Sélectionnez le type des ressources à planifier
+planification.updated.ok: La planification a bien été modifiée
+planification.validate.not.allowed: Vous devez sélectionner au moins une ressource
+
+planning: Planning
+planning.calendar: Calendrier
+planning.global: Planning global
+planning.stretched.out: Planning étendu
+planning.timetable: Grille horaire
+
+queryBooking.ask.delete: Voulez-vous vraiment supprimer la requête %name% ?
+queryBooking.back.to.list: Retour à la liste des requêtes
+queryBooking.create: Créer une requête
+queryBooking.created.ok: La requête a bien été créée
+queryBooking.deleted.ok: La requête a bien été supprimée
+queryBooking.name: Nom de requête
+queryBooking.plural: Requêtes
+queryBooking.singular: Requête
+queryBooking.updated.ok: La requête a bien été modifiée
+
+resource.ask.delete: Voulez-vous vraiment supprimer la ressource %name% ?
+resource.back.to.list: Retour à la liste des ressources
+resource.create: Créer une ressource
+resource.created.ok: La ressource a bien été créée
+resource.delete.not.allowed: La ressource est référencée. Suppression impossible
+resource.deleted.ok: La ressource a bien été supprimée
+resource.name: Nom de la ressource
+resource.planified: Ressource planifiée
+resource.planning.background.color: Couleur de fond sur le planning
+resource.planning.foreground.color: Couleur du texte sur le planning
+resource.plural: Ressources
+resource.singular: Ressource
+resource.updated.ok: La ressource a bien été modifiée
+resource.user.ask: L'utilisateur %name% est-il une ressource ?
+resource.validate.and.create: Valider et ajouter une ressource
+
+resourceClassification.activated.ok: La classification a bien été activée
+resourceClassification.ask.delete: Voulez-vous vraiment supprimer la classification %name% ?
+resourceClassification.back.to.list: Retour aux classifications de ressources
+resourceClassification.create: Créer une classification de ressources
+resourceClassification.create.warning: Attention, vous créez une nouvelle classification de ressource. Ceci n'est à faire que si les classifications proposées par défaut ne suffisent pas
+resourceClassification.created.ok: La classification a bien été créée
+resourceClassification.delete.not.allowed: La classification est référencée. Suppression impossible
+resourceClassification.deleted.ok: La classification a bien été supprimée
+resourceClassification.name: Nom de la classification de ressources
+resourceClassification.plural: Classifications de ressources
+resourceClassification.select: Sélectionnez une classification de ressources
+resourceClassification.singular: Classification de ressources
+resourceClassification.unactivate.not.allowed: La classification est référencée. Désactivation impossible
+resourceClassification.unactivated.ok: La classification a bien été désactivée
+resourceClassification.updated.ok: La classification a bien été modifiée
+
+resourceClassification.plural.BIKE: Vélos
+resourceClassification.plural.BOAT: Bateaux
+resourceClassification.plural.CAMERA: Appareils photo
+resourceClassification.plural.CAR: Voitures
+resourceClassification.plural.COMPUTER: Ordinateurs
+resourceClassification.plural.CONTRACTOR: Prestataires
+resourceClassification.plural.COURT: Courts
+resourceClassification.plural.DENTIST: Dentistes
+resourceClassification.plural.DOCTOR: Médecins
+resourceClassification.plural.FLAT: Appartements
+resourceClassification.plural.GLIDER: Planeurs
+resourceClassification.plural.GYMNASIUM: Gymnases
+resourceClassification.plural.HORSE: Chevaux
+resourceClassification.plural.HOUSE: Maisons
+resourceClassification.plural.MOBILE-HOME: Mobile homes
+resourceClassification.plural.MOTORBIKE: Motos
+resourceClassification.plural.PITCH: Terrains
+resourceClassification.plural.PLANE: Avions
+resourceClassification.plural.PROJECTOR: Rétro projecteurs
+resourceClassification.plural.ROOM: Salles
+resourceClassification.plural.TEACHER: Formateurs
+resourceClassification.plural.TENT: Tentes
+resourceClassification.plural.TRACTOR: Tracteurs
+resourceClassification.plural.TRUCK: Camions
+
+resourceClassification.singular.BIKE: Vélo
+resourceClassification.singular.BOAT: Bateau
+resourceClassification.singular.CAMERA: Appareil photo
+resourceClassification.singular.CAR: Voiture
+resourceClassification.singular.COMPUTER: Ordinateur
+resourceClassification.singular.CONTRACTOR: Prestataire
+resourceClassification.singular.COURT: Court
+resourceClassification.singular.DENTIST: Dentiste
+resourceClassification.singular.DOCTOR: Médecin
+resourceClassification.singular.FLAT: Appartement
+resourceClassification.singular.GLIDER: Planeur
+resourceClassification.singular.GYMNASIUM: Gymnase
+resourceClassification.singular.HORSE: Cheval
+resourceClassification.singular.HOUSE: Maison
+resourceClassification.singular.MOBILE-HOME: Mobile home
+resourceClassification.singular.MOTORBIKE: Moto
+resourceClassification.singular.PITCH: Terrain
+resourceClassification.singular.PLANE: Avion
+resourceClassification.singular.PROJECTOR: Rétro projecteur
+resourceClassification.singular.ROOM: Salle
+resourceClassification.singular.TEACHER: Formateur
+resourceClassification.singular.TENT: Tente
+resourceClassification.singular.TRACTOR: Tracteur
+resourceClassification.singular.TRUCK: Camion
+
+resourceType.create.classification.PLACE: Créer une classification de lieux
+resourceType.create.classification.SPORT: Créer une classification d'équipements sportifs
+resourceType.create.classification.TOOL: Créer une classification d'outils
+resourceType.create.classification.USER: Créer une classification d'utilisateurs
+resourceType.create.classification.VEHICLE: Créer une classification de véhicules
+
+resourceType.plural.PLACE: Lieux
+resourceType.plural.SPORT: Equipements sportifs
+resourceType.plural.TOOL: Outils
+resourceType.plural.USER: Utilisateurs
+resourceType.plural.VEHICLE: Véhicules
+
+resourceType.singular.PLACE: Lieu
+resourceType.singular.SPORT: Equipement sportif
+resourceType.singular.TOOL: Outil
+resourceType.singular.USER: Utilisateur
+resourceType.singular.VEHICLE: Véhicule
+
+slam-booking.access: Accéder à Slam-Booking
+
+timetable.ask.delete: Voulez-vous vraiment supprimer la grille horaire %name% ?
+timetable.back.to.list: Retour à la liste des grilles horaires
+timetable.create: Créer une grille horaire
+timetable.created.ok: La grille horaire a bien été créée. Veuillez saisir un premier créneau horaire
+timetable.day: Journée
+timetable.delete.not.allowed.1: La grille horaire journée ne peut pas être suprimée
+timetable.delete.not.allowed.2: La grille horaire demi-journée ne peut pas être suprimée
+timetable.delete.not.allowed.3: La grille horaire est référencée. Suppression impossible
+timetable.deleted.ok: La grille horaire a bien été supprimée
+timetable.half.day: Demi journée
+timetable.name: Nom de la grille horaire
+timetable.plural: Grilles horaires
+timetable.singular: Grille horaire
+timetable.update.not.allowed.1: La grille horaire journée ne peut pas être modifiée
+timetable.update.not.allowed.2: La grille horaire demi-journée ne peut pas être modifiée
+timetable.update.not.allowed.3: La grille horaire est référencée. Modification impossible
+timetable.updated.ok: La grille horaire a bien été modifiée
+
+timetableLine.create: Ajouter un créneau horaire
+timetableLine.created.ok: Le créneau horaire a bien été créé
+timetableLine.deleted.ok: Le créneau horaire a bien été supprimé
+timetableLine.updated.ok: Le créneau horaire a bien été modifié
+timetableLine.validate.and.create: Valider et ajouter un créneau horaire
+
+user: Utilisateur
+user.account.type: Type de compte
+user.account.type.INDIVIDUAL: Individuel
+user.account.type.ORGANISATION: Organisation
+user.firstName: Prénom
+user.lastName: Nom de famille
+user.list.update: Modifier la liste des utilisateurs
+user.organisation.name: Nom de l'organisation
+user.select: Sélectionner l'utilisateur
+user.unselect: Désélectionner l'utilisateur
+
+users: Utilisateurs
+users.available: Utilisateurs disponibles
+users.selected: Utilisateurs sélectionnés
+
+userFile.administrator.rights: L'utilisateur a les droits d'administrateur sur le dossier
+userFile.ask.delete: Voulez-vous vraiment retirer l'utilisateur %name% du dossier ?
+userFile.create: Ajouter un utilisateur
+userFile.back.to.list: Retour à la liste des utilisateurs
+userFile.created.ok: L'utilisateur a bien été ajouté au dossier.
+userFile.delete.not.allowed: Le créateur d'un dossier ne peut pas être supprimé du dossier
+userFile.deleted.ok: L'utilisateur a bien été retiré du dossier
+userFile.resource.updated.ok: Les informations "ressource utilisateur" ont bien été modifiées
+userFile.update.not.allowed.1: Le créateur d'un dossier ne peut pas être modifié
+userFile.update.not.allowed.2: Seul le créateur du dossier peut modifier un utilisateur inscrit
+userFile.update.not.allowed.3: Les informations relatives a l'utilisateur peuvent être modifiées depuis son profile uniquement
+userFile.updated.ok: L'utilisateur a bien été modifié

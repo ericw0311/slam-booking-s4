@@ -1,0 +1,41 @@
+{% extends 'base.connected.html.twig' %}
+
+{% block body %}
+
+<div class="well well-sm">
+{% if display_create_path %}
+<a href="{{ path(create_path) }}" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> {{ (listContext.entityCode ~ '.create')|trans }}</a>
+{% endif %}
+<a href="{{ path('parameter_numberLinesColumns', { 'entityCode': listContext.entityCode, 'listPath': list_path }) }}" class="btn btn-default"><i class="glyphicon glyphicon-wrench"></i> {{ 'parameters'|trans }}</a>
+</div>
+
+{% if (listContext.numberPages > 1) %}
+  
+<ul class="pagination">
+{% if listContext.page > 2 %}
+	<li><a href="{{ path(list_path, { 'page': 1 }) }}">1</a></li>
+{% endif %}
+{% if listContext.page > 1 %}
+	<li><a href="{{ path(list_path, { 'page': (listContext.page-1) }) }}">{{ (listContext.page-1) }}</a></li>
+{% endif %}
+	<li class="active"><a href="{{ path(list_path, { 'page': listContext.page }) }}">{{ listContext.page }}</a></li>
+{% if listContext.page < listContext.numberPages %}
+	<li><a href="{{ path(list_path, { 'page': (listContext.page+1) }) }}">{{ (listContext.page+1) }}</a></li>
+{% endif %}
+{% if listContext.page < (listContext.numberPages-1) %}
+	<li><a href="{{ path(list_path, { 'page': listContext.numberPages }) }}">{{ listContext.numberPages }}</a></li>
+{% endif %}
+</ul>
+
+{% endif %}
+
+{% block listRow %}{% endblock %}
+
+{% for flash_message in app.session.flashBag.get('notice') %}
+<div class="alert alert-success">
+<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    {{ flash_message|trans }}
+</div>
+{% endfor %}
+
+{% endblock %}
