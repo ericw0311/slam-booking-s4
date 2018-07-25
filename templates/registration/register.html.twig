@@ -2,19 +2,26 @@
  
 {% block body %}
 
-<div class="container">
+{{ form_start(form, {'action': path('user_registration'), 'method': 'POST', 'class': 'form-horizontal'}) }}
 
-{{ form_start(form) }}
-    {{ form_row(form.firstName) }}
-    {{ form_row(form.lastName) }}
-    {{ form_row(form.userName) }}
-    {{ form_row(form.email) }}
-    {{ form_row(form.password.first) }}
-    {{ form_row(form.password.second) }}
- 
-    <button type="submit">S'inscrire !</button>
+<fieldset>
+	<legend>Inscription</legend>
+	{{ form_row(form.lastName) }}
+	{{ form_row(form.firstName) }}
+	{{ form_row(form.userName) }}
+	{{ form_row(form.email) }}
+	{{ form_row(form.password.first) }}
+	{{ form_row(form.password.second) }}
+	{{ form_rest(form) }}
+	<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> S'inscrire !</button>
+</fieldset>
+
 {{ form_end(form) }}
 
-</div>
-        
+{% endblock %}
+
+{% block javascripts %}
+
+document.getElementById("user_lastName").focus();
+
 {% endblock %}

@@ -1,6 +1,8 @@
 <?php
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -65,6 +67,17 @@ class User implements UserInterface, \Serializable
      * @ORM\Column(name="unique_name", type="string", length=255, nullable=true)
      */
     private $uniqueName;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\File", mappedBy="user", orphanRemoval=true)
+     */
+    private $files;
+
+    public function __construct()
+    {
+        $this->files = new ArrayCollection();
+        $this->userFiles = new ArrayCollection();
+    }
 
     public function getId()
     {
@@ -214,4 +227,72 @@ class User implements UserInterface, \Serializable
     {
         [$this->id, $this->userName, $this->password] = unserialize($serialized, ['allowed_classes' => false]);
     }
+
+ private $__EXTRA__LINE;
+
+ /**
+  * @ORM\OneToMany(targetEntity="App\Entity\UserFile", mappedBy="user", orphanRemoval=true)
+  */
+ private $userFiles;
+ /**
+  * @return Collection|File[]
+  */
+ public function getFiles(): Collection
+ {
+     return $this->files;
+ }
+ 
+ public function addFile(File $file): self
+ {
+     if (!$this->files->contains($file)) {
+         $this->files[] = $file;
+         $file->setUser($this);
+     }
+     $__EXTRA__LINE;
+     return $this;
+ }
+ 
+ public function removeFile(File $file): self
+ {
+     if ($this->files->contains($file)) {
+         $this->files->removeElement($file);
+         // set the owning side to null (unless already changed)
+         if ($file->getUser() === $this) {
+             $file->setUser(null);
+         }
+     }
+     $__EXTRA__LINE;
+     return $this;
+ }
+
+ /**
+  * @return Collection|UserFile[]
+  */
+ public function getUserFiles(): Collection
+ {
+     return $this->userFiles;
+ }
+
+ public function addUserFile(UserFile $userFile): self
+ {
+     if (!$this->userFiles->contains($userFile)) {
+         $this->userFiles[] = $userFile;
+         $userFile->setUser($this);
+     }
+     $__EXTRA__LINE;
+     return $this;
+ }
+
+ public function removeUserFile(UserFile $userFile): self
+ {
+     if ($this->userFiles->contains($userFile)) {
+         $this->userFiles->removeElement($userFile);
+         // set the owning side to null (unless already changed)
+         if ($userFile->getUser() === $this) {
+             $userFile->setUser(null);
+         }
+     }
+     $__EXTRA__LINE;
+     return $this;
+ }
 }

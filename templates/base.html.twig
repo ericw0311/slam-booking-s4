@@ -12,7 +12,7 @@
     </head>
     <body>
         {% block navbar %}{% endblock %}
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
+		<div class="container">{% block body %}{% endblock %}</div>
+		<script>{% block javascripts %}{% endblock %}</script>
     </body>
 </html>
