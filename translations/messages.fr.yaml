@@ -1,5 +1,86 @@
 # translations/messages.fr.yaml
 
+activate: Activer
+administration: Administration
+back: Retour
+beginning.time: Heure de début
+cancel: Annuler
+close: Fermer
+day.next: Jour suivant
+day.previous: Jour précédent
+day.MON: Lundi
+day.TUE: Mardi
+day.WED: Mercredi
+day.THU: Jeudi
+day.FRI: Vendredi
+day.SAT: Samedi
+day.SUN: Dimanche
+day.abbr.MON: Lun
+day.abbr.TUE: Mar
+day.abbr.WED: Mer
+day.abbr.THU: Jeu
+day.abbr.FRI: Ven
+day.abbr.SAT: Sam
+day.abbr.SUN: Dim
+days.next: Jours suivants
+days.previous: Jours précédents
+delete: Supprimer
+delete.not.allowed: Suppression interdite
+end.time: Heure de fin
+from: De
+modify: Modifier
+month.next: Mois suivant
+month.previous: Mois précédent
+month.JAN: Janvier
+month.FEB: Février
+month.MAR: Mars
+month.APR: Avril
+month.MAY: Mai
+month.JUN: Juin
+month.JUL: Juillet
+month.AUG: Aout
+month.SEP: Septembre
+month.OCT: Octobre
+month.NOV: Novembre
+month.DEC: Décembre
+month.abbr.JAN: Jan
+month.abbr.FEB: Fév
+month.abbr.MAR: Mar
+month.abbr.APR: Avr
+month.abbr.MAY: Mai
+month.abbr.JUN: Juin
+month.abbr.JUL: Juil
+month.abbr.AUG: Aout
+month.abbr.SEP: Sept
+month.abbr.OCT: Oct
+month.abbr.NOV: Nov
+month.abbr.DEC: Déc
+no: Non
+number.columns: Nombre de colonnes
+number.lines: Nombre de lignes
+number.lines.columns.updated.ok: Les nombres de lignes et de colonnes affichées ont été mis à jour
+open: Ouvert
+parameters: Paramètres
+period.from: A partir du %beginningDate%
+period.from.to: Du %beginningDate% au %endDate%
+period.next: Période suivante
+period.previous: Période précédente
+period.until: Jusqu'au %endDate%
+sort.after: Trier après
+sort.before: Trier avant
+summary: Synthèse
+to: A
+unactivate: Désactiver
+update.not.allowed: Modification interdite
+user.account: Compte utilisateur
+validate: Valider
+validate.not.allowed: Validation interdite
+week.next: Semaine suivante
+week.previous: Semaine précédente
+yes: Oui
+
+# Messages par écrans
+
 activity.ask.delete: Voulez-vous vraiment supprimer l'activité %name% ?
 activity.back.to.list: Retour à la liste des activités
 activity.create: Créer une activité
