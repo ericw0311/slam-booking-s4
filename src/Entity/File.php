@@ -48,8 +48,9 @@ class File
      */
     private $userFiles;
 
-    public function __construct()
+    public function __construct(\App\Entity\User $user)
     {
+		$this->setUser($user);
         $this->userFiles = new ArrayCollection();
     }
 
