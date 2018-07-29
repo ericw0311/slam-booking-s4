@@ -16,11 +16,12 @@ class RegistrationNotifySubscriber implements EventSubscriberInterface
     private $mailer;
     private $sender;
 
-    public function __construct(\Swift_Mailer $mailer)
+    public function __construct(\Swift_Mailer $mailer, $sender)
     {
         // On injecte notre expediteur et la classe pour envoyer des mails
         $this->mailer = $mailer;
-        $this->sender = 'eric.willard@slam-data.net';
+        // $this->sender = 'eric.willard@slam-data.net';
+        $this->sender = $sender;
     }
 
     public static function getSubscribedEvents(): array

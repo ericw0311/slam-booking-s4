@@ -57,4 +57,17 @@ class FileController extends Controller
 
 	return $this->render('file/add.html.twig', array('userContext' => $userContext, 'form' => $form->createView()));
     }
+
+    /**
+     * @Route("/file/edit", name="file_edit")
+     */
+    public function edit()
+    {
+	$connectedUser = $this->getUser();
+	$em = $this->getDoctrine()->getManager();
+ 
+	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+	return $this->render('file/edit.html.twig', array('userContext' => $userContext));
+    }
 }

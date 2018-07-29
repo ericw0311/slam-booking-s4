@@ -31,10 +31,10 @@ class AdministrationApi
 	$userParameter = AdministrationApi::getCurrentFile($em, $user);
 	if ($userParameter === null) {
 		$userParameter = new UserParameter($user, 'booking', 'current.file');
-		$userParameter->setSDIntegerValue($file->getId());
+		$userParameter->setSBIntegerValue($file->getId());
 		$em->persist($userParameter);
 	} else {
-		$userParameter->setSDIntegerValue($file->getId());
+		$userParameter->setSBIntegerValue($file->getId());
 	}
 	$em->flush();
 	}
@@ -46,10 +46,10 @@ class AdministrationApi
 	$userParameter = AdministrationApi::getCurrentFile($em, $user);
 	if ($userParameter === null) {
 		$userParameter = new UserParameter($user, 'booking', 'current.file');
-		$userParameter->setSDIntegerValue($fileID);
+		$userParameter->setSBIntegerValue($fileID);
 		$em->persist($userParameter);
 	} else {
-		$userParameter->setSDIntegerValue($fileID);
+		$userParameter->setSBIntegerValue($fileID);
 	}
 	$em->flush();
 	}
@@ -61,7 +61,7 @@ class AdministrationApi
 	$userParameter = AdministrationApi::getCurrentFile($em, $user);
 	if ($userParameter === null) {
 		$userParameter = new UserParameter($user, 'booking', 'current.file');
-		$userParameter->setSDIntegerValue($file->getId());
+		$userParameter->setSBIntegerValue($file->getId());
 		$em->persist($userParameter);
 		$em->flush();
 	}
@@ -80,10 +80,10 @@ class AdministrationApi
 	if ($firstFile != null) { // Le premier dossier est trouve
 		if ($userParameter === null) { // Mise a jour du parametre "dossier en cours"
 			$userParameter = new UserParameter($user, 'booking', 'current.file');
-			$userParameter->setSDIntegerValue($firstFile->getId());
+			$userParameter->setSBIntegerValue($firstFile->getId());
 			$em->persist($userParameter);
 		} else { // Creation "dossier en cours"
-			$userParameter->setSDIntegerValue($firstFile->getId());
+			$userParameter->setSBIntegerValue($firstFile->getId());
 		}
 		$doFlush = true;
 	} else { // Plus de dossier: suppression du parametre

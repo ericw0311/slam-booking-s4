@@ -8,11 +8,6 @@ parameters:
     app.notifications.email_sender: eric.willard@slam-data.net
 
 services:
-    # le nom de votre service
-    App\EventSubscriber\RegistrationNotifySubscriber:
-        # le nom de la variable que l'on utilisera dans le service
-        $sender: '%app.notifications.email_sender%'
-
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
@@ -35,3 +30,11 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    App\EventSubscriber\DoctrineSubscriber:
+        arguments: ["@security.token_storage", "@translator"]
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+
+    App\EventSubscriber\RegistrationNotifySubscriber:
+        # le nom de la variable que l'on utilisera dans le service
+        $sender: '%app.notifications.email_sender%'

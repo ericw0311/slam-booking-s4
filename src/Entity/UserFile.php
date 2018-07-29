@@ -156,7 +156,7 @@ class UserFile
         return $this->uniqueName;
     }
 
-    public function setUniqueName(string $uniqueName): self
+    public function setUniqueName($uniqueName): self
     {
         $this->uniqueName = $uniqueName;
 
@@ -259,6 +259,12 @@ class UserFile
         return $this;
     }
     
+	public function __construct(\App\Entity\User $user, \App\Entity\File $file)
+    {
+    $this->setUser($user);
+    $this->setFile($file);
+    }
+
     /**
     * @ORM\PrePersist
     */
