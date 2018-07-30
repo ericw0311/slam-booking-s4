@@ -2,21 +2,16 @@
  
 {% block body %}
 
-{{ form_start(form, {'action': path('file_add'), 'method': 'POST', 'class': 'form-horizontal'}) }}
+{{ form_start(form, {'action': path('parameter_numberLinesColumns', { 'entityCode': entityCode, 'listPath': listPath }), 'method': 'POST', 'class': 'form-horizontal'}) }}
 
 <fieldset>
 	<legend>Inscription</legend>
-	{{ form_row(form.name) }}
+	{{ form_row(form.numberLines) }}
+	{{ form_row(form.numberColumns) }}
 	{{ form_rest(form) }}
 	<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> Valider</button>
 </fieldset>
 
 {{ form_end(form) }}
-
-{% endblock %}
-
-{% block javascripts %}
-
-document.getElementById('file_name').focus();
 
 {% endblock %}
