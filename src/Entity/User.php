@@ -188,6 +188,11 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
+    public function getFirstAndLastName()
+    {
+        return $this->getFirstName().' '.$this->getLastName();
+    }
+
 	/**
      * Retour le salt qui a servi à coder le mot de passe
      *

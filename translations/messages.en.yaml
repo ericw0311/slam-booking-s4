@@ -120,6 +120,7 @@ file.delete.not.allowed: Only the creator of the file ia allowed to delete it
 file.delete.not.allowed.2: File is referenced. Delete not allowed
 file.deleted.ok: The file has been deleted
 file.name: File name
+file.new: New file
 file.plural: Files
 file.set.as.current: Set as current file
 file.singular: File

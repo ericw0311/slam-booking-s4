@@ -2,9 +2,11 @@
 
 namespace App\Repository;
 
-use App\Entity\UserFile;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+
+use App\Entity\UserFile;
+use App\Entity\File;
 
 /**
  * @method UserFile|null find($id, $lockMode = null, $lockVersion = null)
@@ -19,32 +21,16 @@ class UserFileRepository extends ServiceEntityRepository
         parent::__construct($registry, UserFile::class);
     }
 
-//    /**
-//     * @return UserFile[] Returns an array of UserFile objects
-//     */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('u.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?UserFile
-    {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
+	public function getUserFilesExceptFileCreatorCount(\App\Entity\File $file)
+	{
+	$qb = $this->createQueryBuilder('uf');
+	$qb->select($qb->expr()->count('uf'));
+	$qb->where('uf.file = :file')->setParameter('file', $file);
+	$qb->andWhere($qb->expr()->not($qb->expr()->eq('uf.account', '?1')));
+	$qb->setParameter(1, $file->getUser()); 
+	$query = $qb->getQuery();
+	$singleScalar = $query->getSingleScalarResult();
+	return $singleScalar;
+	}
 }

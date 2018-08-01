@@ -1,15 +1,19 @@
 <?php
 namespace App\Controller;
 
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+
 use App\Entity\File;
 use App\Entity\User;
 use App\Entity\UserContext;
 use App\Entity\ListContext;
 use App\Form\FileType;
+use App\Entity\FileEditContext;
 
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class FileController extends Controller
 {
     /**
@@ -59,15 +63,17 @@ class FileController extends Controller
     }
 
     /**
-     * @Route("/file/edit", name="file_edit")
+     * @Route("/file/edit/{fileID}", name="file_edit")
+     * @ParamConverter("file", options={"mapping": {"fileID": "id"}})
      */
-    public function edit()
+    public function edit(Request $request, File $file)
     {
 	$connectedUser = $this->getUser();
 	$em = $this->getDoctrine()->getManager();
  
 	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+	$fileEditContext = new FileEditContext($em, $file); // contexte dossier
 
-	return $this->render('file/edit.html.twig', array('userContext' => $userContext));
+	return $this->render('file/edit.html.twig', array('userContext' => $userContext, 'file' => $file, 'fileEditContext' => $fileEditContext));
     }
 }

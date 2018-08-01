@@ -1,0 +1,9 @@
+{% extends 'base.connected.html.twig' %}
+ 
+{% block body %}
+
+<legend>
+<img src="{{ asset('images/file-32.png') }}"></img>&nbsp;{{ file.name }}&nbsp;<img src="{{ asset('images/administrator-32.png') }}"></img>&nbsp;{{ 'file.created.by'|trans }}&nbsp;{{ file.user.getFirstAndLastName() }}
+</legend>
+
+{% endblock %}

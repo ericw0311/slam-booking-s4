@@ -120,6 +120,7 @@ file.delete.not.allowed: Seul le créateur d'un dossier est autorisé à le supp
 file.delete.not.allowed.2: Le dossier est référencé. Suppression impossible
 file.deleted.ok: Le dossier a bien été supprimé
 file.name: Nom du dossier
+file.new: Nouveau dossier
 file.plural: Dossiers
 file.set.as.current: Positionner comme dossier en cours
 file.singular: Dossier

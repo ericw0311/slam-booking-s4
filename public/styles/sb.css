@@ -1,0 +1,18 @@
+.sb-message {
+    margin-top: 10px;
+}
+
+/* Listes */
+
+.sb-list-header {
+    margin-bottom: 10px;
+}
+
+.sb-page {
+    color: #286090;
+}
+
+.sb-current-page {
+    color: white;
+    background-color: #286090;
+}
