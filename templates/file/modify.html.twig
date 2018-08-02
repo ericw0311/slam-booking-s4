@@ -1,0 +1,26 @@
+{% extends 'base.connected.html.twig' %}
+ 
+{% block body %}
+
+{{ form_start(form, {'action': path('file_modify', { 'fileID': file.ID }), 'method': 'POST', 'class': 'form-horizontal'}) }}
+
+<fieldset>
+	<legend><img src="{{ asset('images/file-32.png') }}">&nbsp;</img>&nbsp;{{ file.name }}</legend>
+	{{ form_row(form.name) }}
+	{{ form_rest(form) }}
+</fieldset>
+
+<div class="btn-group">
+<a href="{{ path('file_edit', { 'fileID': file.ID }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
+<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> {{ 'validate'|trans }}</button>
+</div>
+
+{{ form_end(form) }}
+
+{% endblock %}
+
+{% block javascripts %}
+
+document.getElementById('file_name').focus();
+
+{% endblock %}

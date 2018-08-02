@@ -2,8 +2,76 @@
  
 {% block body %}
 
-<legend>
-<img src="{{ asset('images/file-32.png') }}"></img>&nbsp;{{ file.name }}&nbsp;<img src="{{ asset('images/administrator-32.png') }}"></img>&nbsp;{{ 'file.created.by'|trans }}&nbsp;{{ file.user.getFirstAndLastName() }}
-</legend>
+<legend><img src="{{ asset('images/file-32.png') }}"></img>&nbsp;{{ file.name }}</legend>
+
+<p><img src="{{ asset('images/administrator-32.png') }}"></img>&nbsp;{{ 'file.created.by'|trans }}&nbsp;{{ file.user.getFirstAndLastName() }}</p>
+
+<div class="btn-group">
+
+<a href="{{ path('file', { 'page': 1 }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'file.back.to.list'|trans }}</a>
+
+{% if file.user.id != userContext.user.id %}
+	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateModal"><span class="glyphicon glyphicon-pencil"></span> <del>{{ 'modify'|trans }}</del></button>
+	<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal"><span class="glyphicon glyphicon-trash"></span> <del>{{ 'delete'|trans }}</del></button>
+{% elseif (fileEditContext.userFilesCount + fileEditContext.userTimetablesCount + fileEditContext.resourcesCount + fileEditContext.labelsCount) > 0 %}
+	<a href="{{ path('file_modify', { 'fileID': file.ID }) }}" class="btn btn-primary"><i class="glyphicon glyphicon-pencil"></i> {{ 'modify'|trans }}</a>
+	<a href="{{ path('file_foreign', { 'fileID': file.ID }) }}" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> <del>{{ 'delete'|trans }}</del></a>
+{% else %}
+	<a href="{{ path('file_modify', { 'fileID': file.ID }) }}" class="btn btn-primary"><i class="glyphicon glyphicon-pencil"></i> {{ 'modify'|trans }}</a>
+	<a href="{{ path('file_delete', { 'fileID': file.ID }) }}" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> {{ 'delete'|trans }}</a>
+{% endif %}
+
+{% if file.ID != userContext.currentFileID %}
+	<a href="{{ path('file_set_current', { 'fileID': file.ID }) }}" class="btn btn-success"><i class="glyphicon glyphicon-paperclip"></i> {{ 'file.set.as.current'|trans }}</a>
+{% endif %}
+
+</div>
+
+<!-- Modal -->
+<div id="updateModal" class="modal fade" role="dialog">
+<div class="modal-dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">&times;</button>
+			<h4 class="modal-title">{{ 'update.not.allowed'|trans }}</h4>
+		</div>
+		<div class="modal-body">
+			<p>{{ 'file.update.not.allowed'|trans }}</p>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">{{ 'close'|trans }}</button>
+		</div>
+	</div>
+</div>
+</div>
+
+<div id="deleteModal" class="modal fade" role="dialog">
+<div class="modal-dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">&times;</button>
+			<h4 class="modal-title">{{ 'delete.not.allowed'|trans }}</h4>
+		</div>
+		<div class="modal-body">
+			<p>{{ 'file.delete.not.allowed'|trans }}</p>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">{{ 'close'|trans }}</button>
+		</div>
+	</div>
+</div>
+</div>
+
+{% endblock %}
+
+
+{% block message %}
+
+{% for flash_message in app.session.flashBag.get('notice') %}
+<div class="alert alert-success sb-message">
+	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+	{{ flash_message|trans }}
+</div>
+{% endfor %}
 
 {% endblock %}

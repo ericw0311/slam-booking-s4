@@ -1,0 +1,11 @@
+{% extends 'base.connected.html.twig' %}
+ 
+{% block body %}
+
+<legend><img src="{{ asset('images/file-32.png') }}"></img>&nbsp;{{ file.name }}</legend>
+
+<div class="btn-group">
+<a href="{{ path('file_edit', { 'fileID': file.ID }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
+</div>
+
+{% endblock %}
