@@ -86,7 +86,7 @@ class UserFile
     /**
      * @ORM\Column(name="resource_user", type="boolean")
      */
-    private $resourceUser;
+    private $resourceUser = false;
 
     /**
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
@@ -259,6 +259,11 @@ class UserFile
         return $this;
     }
     
+	public function getFirstAndLastName()
+	{
+		return $this->getFirstName().' '.$this->getLastName();
+	}
+
 	public function __construct(\App\Entity\User $user, \App\Entity\File $file)
     {
     $this->setUser($user);

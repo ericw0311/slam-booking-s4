@@ -322,9 +322,11 @@ user: Utilisateur
 user.account.type: Type de compte
 user.account.type.INDIVIDUAL: Individuel
 user.account.type.ORGANISATION: Organisation
+user.email: Email
 user.firstName: Prénom
 user.lastName: Nom de famille
 user.list.update: Modifier la liste des utilisateurs
+user.new: Nouvel utilisateur
 user.organisation.name: Nom de l'organisation
 user.select: Sélectionner l'utilisateur
 user.unselect: Désélectionner l'utilisateur
@@ -333,15 +335,15 @@ users: Utilisateurs
 users.available: Utilisateurs disponibles
 users.selected: Utilisateurs sélectionnés
 
-userFile.administrator.rights: L'utilisateur a les droits d'administrateur sur le dossier
-userFile.ask.delete: Voulez-vous vraiment retirer l'utilisateur %name% du dossier ?
-userFile.create: Ajouter un utilisateur
-userFile.back.to.list: Retour à la liste des utilisateurs
-userFile.created.ok: L'utilisateur a bien été ajouté au dossier.
-userFile.delete.not.allowed: Le créateur d'un dossier ne peut pas être supprimé du dossier
-userFile.deleted.ok: L'utilisateur a bien été retiré du dossier
-userFile.resource.updated.ok: Les informations "ressource utilisateur" ont bien été modifiées
-userFile.update.not.allowed.1: Le créateur d'un dossier ne peut pas être modifié
-userFile.update.not.allowed.2: Seul le créateur du dossier peut modifier un utilisateur inscrit
-userFile.update.not.allowed.3: Les informations relatives a l'utilisateur peuvent être modifiées depuis son profile uniquement
-userFile.updated.ok: L'utilisateur a bien été modifié
+user_file.administrator.rights: L'utilisateur a les droits d'administrateur sur le dossier
+user_file.ask.delete: Voulez-vous vraiment retirer l'utilisateur %name% du dossier ?
+user_file.create: Ajouter un utilisateur
+user_file.back.to.list: Retour à la liste des utilisateurs
+user_file.created.ok: L'utilisateur a bien été ajouté au dossier.
+user_file.delete.not.allowed: Le créateur d'un dossier ne peut pas être supprimé du dossier
+user_file.deleted.ok: L'utilisateur a bien été retiré du dossier
+user_file.resource.updated.ok: Les informations "ressource utilisateur" ont bien été modifiées
+user_file.update.not.allowed.1: Le créateur d'un dossier ne peut pas être modifié
+user_file.update.not.allowed.2: Seul le créateur du dossier peut modifier un utilisateur inscrit
+user_file.update.not.allowed.3: Les informations relatives a l'utilisateur peuvent être modifiées depuis son profile uniquement
+user_file.updated.ok: L'utilisateur a bien été modifié

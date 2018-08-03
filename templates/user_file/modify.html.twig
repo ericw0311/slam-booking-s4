@@ -1,0 +1,32 @@
+{% extends 'base.connected.html.twig' %}
+ 
+{% block body %}
+
+{{ form_start(form, {'action': path('user_file_modify', { 'userFileID': userFile.ID }), 'method': 'POST', 'class': 'form-horizontal'}) }}
+
+<fieldset>
+	<legend><img src="{{ asset('images/user-32.png') }}">&nbsp;</img>{{ userFile.getFirstAndLastName() }}</legend>
+	
+	{{ form_row(form.email) }}
+	{{ form_row(form.accountType) }}
+	{{ form_row(form.firstName) }}
+	{{ form_row(form.lastName) }}
+	{{ form_row(form.uniqueName) }}
+	{{ form_row(form.administrator) }}
+	{{ form_rest(form) }}
+</fieldset>
+
+<div class="btn-group">
+<a href="{{ path('user_file', { 'page': 1 }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
+<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> {{ 'validate'|trans }}</button>
+</div>
+
+{{ form_end(form) }}
+
+{% endblock %}
+
+{% block javascripts %}
+
+document.getElementById('user_file_firstName').focus();
+
+{% endblock %}
