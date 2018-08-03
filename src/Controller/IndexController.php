@@ -6,6 +6,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
+use App\Entity\UserContext;
+
 class IndexController extends Controller
 {
 	/**
@@ -21,6 +23,10 @@ class IndexController extends Controller
      */
     public function admin()
     {
-		return $this->render('admin/index.html.twig');
+	$connectedUser = $this->getUser();
+	$em = $this->getDoctrine()->getManager();
+	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+	return $this->render('admin/index.html.twig', array('userContext' => $userContext));
 	}
 }

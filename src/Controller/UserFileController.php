@@ -112,7 +112,7 @@ class UserFileController extends Controller
 		if ($form->isSubmitted() && $form->isValid()) {
 			$em->persist($userFile);
 			$em->flush();
-			$request->getSession()->getFlashBag()->add('notice', 'user_file.created.ok');
+			$request->getSession()->getFlashBag()->add('notice', 'userFile.created.ok');
 			return $this->redirectToRoute('user_file', array('page' => 1));
 		}
     }
@@ -192,7 +192,7 @@ class UserFileController extends Controller
     }
 
     if ($userFileUserCreated) { // L'utilisateur a modifier a un compte utilisateur de cree
-        $request->getSession()->getFlashBag()->add('notice', 'user_file.update.not.allowed.3');
+        $request->getSession()->getFlashBag()->add('notice', 'userFile.update.not.allowed.3');
     }
     return $this->render('user_file/modify.html.twig', array('userContext' => $userContext, 'userFile' => $userFile, 'form' => $form->createView()));
     }
@@ -224,7 +224,7 @@ class UserFileController extends Controller
 					AdministrationApi::setFirstFileAsCurrent($em, $userAccount); // On met a jour son dossier en cours
 				}
 			}
-			$request->getSession()->getFlashBag()->add('notice', 'user_file.deleted.ok');
+			$request->getSession()->getFlashBag()->add('notice', 'userFile.deleted.ok');
 			return $this->redirectToRoute('user_file', array('page' => 1));
 		}
 	}

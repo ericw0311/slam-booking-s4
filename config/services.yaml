@@ -30,11 +30,11 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
-    App\EventSubscriber\DoctrineSubscriber:
-        arguments: ["@security.token_storage", "@translator"]
+    App\Event\DoctrineSubscriber:
+        arguments: ["@security.token_storage", "@logger", "@translator"]
         tags:
             - { name: doctrine.event_subscriber, connection: default }
 
-    App\EventSubscriber\RegistrationNotifySubscriber:
+    App\Event\RegistrationNotifySubscriber:
         # le nom de la variable que l'on utilisera dans le service
         $sender: '%app.notifications.email_sender%'

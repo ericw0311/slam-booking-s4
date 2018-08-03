@@ -1,6 +1,6 @@
 <?php
-// App\EventSubscriber\RegistrationNotifySubscriber.php
-namespace App\EventSubscriber;
+// App\Event\RegistrationNotifySubscriber.php
+namespace App\Event;
 
 use App\Entity\User;
 use App\Events;

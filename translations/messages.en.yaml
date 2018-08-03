@@ -319,6 +319,7 @@ timetableLine.updated.ok: The timetable slot has been updated
 timetableLine.validate.and.create: Validate and add a timetable slot
 
 user: User
+user.accountt: User account
 user.account.type: Account type
 user.account.type.INDIVIDUAL: Individual
 user.account.type.ORGANISATION: Organisation
@@ -326,8 +327,12 @@ user.email: Email
 user.firstName: First name
 user.lastName: Last name
 user.list.update: Modify users list
+user.login: Login
+user.logout: Logout
+user.modify.password: Modify password
 user.new: New user
 user.organisation.name: Organisation name
+user.register: Register
 user.select: Select user
 user.unselect: Unselect user
 
@@ -335,15 +340,15 @@ users: Users
 users.available: Available users
 users.selected: Selected users
 
-user_file.administrator.rights: The user has administrator rights on file
-user_file.ask.delete: Do you really want to remove user %name% from file ?
-user_file.back.to.list: Back to users list
-user_file.create: Add a user to file
-user_file.created.ok: The user has been added to file
-user_file.delete.not.allowed: The file creator cannot be removed from file
-user_file.deleted.ok: The user has been removed from file
-user_file.resource.updated.ok: Informations "user resource" have been updated
-user_file.update.not.allowed.1: The file creator cannot be modified
-user_file.update.not.allowed.2: Only the file creator can modify a registered user
-user_file.update.not.allowed.3: Informations related to user can be modified from his profile only
-user_file.updated.ok: The user has been updated
+userFile.administrator.rights: The user has administrator rights on file
+userFile.ask.delete: Do you really want to remove user %name% from file ?
+userFile.back.to.list: Back to users list
+userFile.create: Add a user to file
+userFile.created.ok: The user has been added to file
+userFile.delete.not.allowed: The file creator cannot be removed from file
+userFile.deleted.ok: The user has been removed from file
+userFile.resource.updated.ok: Informations "user resource" have been updated
+userFile.update.not.allowed.1: The file creator cannot be modified
+userFile.update.not.allowed.2: Only the file creator can modify a registered user
+userFile.update.not.allowed.3: Informations related to user can be modified from his profile only
+userFile.updated.ok: The user has been updated

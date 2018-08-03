@@ -22,7 +22,7 @@ class UserFileAccountType extends AbstractType
 			->add('lastName', HiddenType::class)
 			->add('firstName', HiddenType::class)
 			->add('uniqueName', HiddenType::class)
-			->add('administrator', CheckboxType::class, array('label' => 'user_file.administrator.rights', 'translation_domain' => 'messages', 'required' => false));
+			->add('administrator', CheckboxType::class, array('label' => 'userFile.administrator.rights', 'translation_domain' => 'messages', 'required' => false));
 	}
 
 	public function configureOptions(OptionsResolver $resolver)

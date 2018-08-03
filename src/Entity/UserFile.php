@@ -270,6 +270,14 @@ class UserFile
     $this->setFile($file);
     }
 
+	/**
+    * @Assert\IsTrue(message="user.organisation.name.null")
+    */
+    public function isUniqueName()
+    {
+        return ($this->getAccountType() != 'ORGANISATION' or $this->getUniqueName() !== null);
+    }
+
     /**
     * @ORM\PrePersist
     */

@@ -1,0 +1,105 @@
+{% extends 'base.connected.html.twig' %}
+ 
+{% set resourceTypeIcons = constant('App\\Entity\\Constants::RESOURCE_TYPE_ICON') %}
+{% set resourceClassificationIcons = constant('App\\Entity\\Constants::RESOURCE_CLASSIFICATION_ICON') %}
+ 
+ {% block body %}
+
+{% if userFile.administrator %}
+<legend><img src="{{ asset('images/administrator-32.png') }}">&nbsp;</img>&nbsp;{{ userFile.getFirstAndLastName() }}</legend>
+{% else %}
+<legend><img src="{{ asset('images/user-32.png') }}">&nbsp;</img>&nbsp;{{ userFile.getFirstAndLastName() }}</legend>
+{% endif %}
+
+{% if userFile.accountType == "ORGANISATION" %}
+<p><img src="{{ asset('images/organisation-32.png') }}">&nbsp;<strong>{{ userFile.uniqueName }}</strong></p>
+{% endif %}
+
+{% if userFile.userCreated %}
+<p><span class="glyphicon glyphicon-user icon-size32"></span>&nbsp;{{ userFile.userName }}</strong></p>
+{% endif %}
+<p><span class="glyphicon glyphicon-envelope icon-size32"></span>&nbsp;{{ userFile.email }}</strong></p>
+
+<div class="btn-group">
+
+<a href="{{ path('user_file', { 'page': 1 }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'userFile.back.to.list'|trans }}</a>
+{% if selectedUserIsFileCreator %}
+	<button type="button" class="btn btn-info btn-primary" data-toggle="modal" data-target="#updateModal1"><span class="glyphicon glyphicon-pencil"></span> <del>{{ 'modify'|trans }}</del></button>
+{% elseif userFile.userCreated and not connectedUserIsFileCreator %}
+	<button type="button" class="btn btn-info btn-primary" data-toggle="modal" data-target="#updateModal2"><span class="glyphicon glyphicon-pencil"></span> <del>{{ 'modify'|trans }}</del></button>
+{% else %}
+	<a href="{{ path('user_file_modify', { 'userFileID': userFile.ID }) }}" class="btn btn-primary"><i class="glyphicon glyphicon-pencil"></i> {{ 'modify'|trans }}</a>
+{% endif %}
+{% if selectedUserIsFileCreator %}
+	<button type="button" class="btn btn-info btn-danger" data-toggle="modal" data-target="#deleteModal"><span class="glyphicon glyphicon-trash"></span> <del>{{ 'delete'|trans }}</del></button>
+{% else %}
+	<a href="{{ path('user_file_delete', { 'userFileID': userFile.ID }) }}" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> {{ 'delete'|trans }}</a>
+{% endif %}
+
+</div>
+
+<!-- Modal -->
+<div id="updateModal1" class="modal fade" role="dialog">
+<div class="modal-dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">&times;</button>
+			<h4 class="modal-title">{{ 'update.not.allowed'|trans }}</h4>
+		</div>
+		<div class="modal-body">
+			<p>{{ 'userFile.update.not.allowed.1'|trans }}</p>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">{{ 'close'|trans }}</button>
+		</div>
+	</div>
+</div>
+</div>
+
+<div id="updateModal2" class="modal fade" role="dialog">
+<div class="modal-dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">&times;</button>
+			<h4 class="modal-title">{{ 'update.not.allowed'|trans }}</h4>
+		</div>
+		<div class="modal-body">
+			<p>{{ 'userFile.update.not.allowed.2'|trans }}</p>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">{{ 'close'|trans }}</button>
+		</div>
+	</div>
+</div>
+</div>
+
+<div id="deleteModal" class="modal fade" role="dialog">
+<div class="modal-dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">&times;</button>
+			<h4 class="modal-title">{{ 'delete.not.allowed'|trans }}</h4>
+		</div>
+		<div class="modal-body">
+			<p>{{ 'userFile.delete.not.allowed'|trans }}</p>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">{{ 'close'|trans }}</button>
+		</div>
+	</div>
+</div>
+</div>
+
+{% endblock %}
+
+
+{% block message %}
+
+{% for flash_message in app.session.flashBag.get('notice') %}
+<div class="alert alert-success sb-message">
+	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+	{{ flash_message|trans }}
+</div>
+{% endfor %}
+
+{% endblock %}

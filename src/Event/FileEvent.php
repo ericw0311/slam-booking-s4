@@ -1,5 +1,5 @@
 <?php
-namespace App\EventSubscriber;
+namespace App\Event;
 
 use App\Entity\File;
 use App\Entity\UserFile;
@@ -9,7 +9,6 @@ use App\Api\AdministrationApi;
 
 class FileEvent
 {
-
     static function postPersist($em, \App\Entity\User $user, \App\Entity\File $file, $translator)
     {
 	FileEvent::createUserFile($em, $user, $file);

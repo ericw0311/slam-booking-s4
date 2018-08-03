@@ -24,8 +24,8 @@ class UserFileType extends AbstractType
 				'choices' => array('INDIVIDUAL' => 'INDIVIDUAL', 'ORGANISATION' => 'ORGANISATION'),
 				'choice_label' => function ($value, $key, $index) { return 'user.account.type.'.$key; }
 			))
-			->add('lastName', TextType::class, array('label' => 'user.last_name', 'translation_domain' => 'messages'))
-			->add('firstName', TextType::class, array('label' => 'user.first_name', 'translation_domain' => 'messages'))
+			->add('lastName', TextType::class, array('label' => 'user.lastName', 'translation_domain' => 'messages'))
+			->add('firstName', TextType::class, array('label' => 'user.firstName', 'translation_domain' => 'messages'))
 			->add('uniqueName', TextType::class, array('label' => 'user.organisation.name', 'translation_domain' => 'messages', 'required' => false))
 			->add('administrator', HiddenType::class, array('data' => 0));
 	}

@@ -6,7 +6,7 @@
 
 <legend><img src="{{ asset('images/user-32.png') }}">&nbsp;</img>&nbsp;{{ userFile.getFirstAndLastName() }}</legend>
 
-<p>{{ 'user_file.ask.delete'|trans({'%name%': userFile.getFirstAndLastName()}) }}</p>
+<p>{{ 'userFile.ask.delete'|trans({'%name%': userFile.getFirstAndLastName()}) }}</p>
 
 <div class="btn-group">
 <a href="{{ path('user_file_edit', { 'userFileID': userFile.ID }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
