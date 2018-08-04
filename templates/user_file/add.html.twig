@@ -7,8 +7,11 @@
 <fieldset>
 	<legend><img src="{{ asset('images/user-32.png') }}">&nbsp;</img>{{ 'user.new'|trans }}</legend>
 	{{ form_row(form.email) }}
+	{{ form_row(form.accountType) }}
+	{{ form_row(form.administrator) }}
 	{{ form_row(form.firstName) }}
 	{{ form_row(form.lastName) }}
+	{{ form_row(form.uniqueName) }}
 	{{ form_row(form.administrator) }}
 	{{ form_rest(form) }}
 </fieldset>
@@ -24,6 +27,6 @@
 
 {% block javascripts %}
 
-<script>document.getElementById('user_file_add_firstName').focus();</script>
+<script src="{{ asset('scripts/userFile_add.js') }}"></script>
 
 {% endblock %}
