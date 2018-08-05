@@ -335,12 +335,13 @@ user.name: User name
 user.new: New user
 user.organisation.name: Organisation name
 user.password: Password
+user.password.updated.ok: The password has been updated
 user.register: Register
 user.registration: Registration
 user.repeat.password: Repeat password
 user.select: Select user
 user.unselect: Unselect user
-user.updated.ok: Your user account has been updated
+user.updated.ok: The user account has been updated
 
 users: Users
 users.available: Available users

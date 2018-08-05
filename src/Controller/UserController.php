@@ -13,6 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 use App\Form\UserType;
+use App\Form\UserPasswordType;
 use App\Form\UserModifyType;
 use App\Entity\User;
 use App\Entity\UserContext;
@@ -112,5 +113,31 @@ class UserController extends Controller
     }
 
     return $this->render('user/modify.html.twig', array('userContext' => $userContext, 'user' => $connectedUser, 'form' => $form->createView()));
+    }
+
+	// Modification du mot de passe de l' utilisateur connecté
+    /**
+    * @Route("/user/password", name="user_password")
+    */
+    public function password(Request $request, UserPasswordEncoderInterface $passwordEncoder)
+    {
+	$connectedUser = $this->getUser();
+	$em = $this->getDoctrine()->getManager();
+	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+    $form = $this->createForm(UserPasswordType::class, $connectedUser);
+
+	if ($request->isMethod('POST')) {
+		$form->submit($request->request->get($form->getName()));
+		if ($form->isSubmitted() && $form->isValid()) {
+			$password = $passwordEncoder->encodePassword($connectedUser, $connectedUser->getPassword());
+			$connectedUser->setPassword($password);
+			$em->flush();
+			$request->getSession()->getFlashBag()->add('notice', 'user.password.updated.ok');
+			return $this->redirectToRoute('user_edit');
+		}
+    }
+
+    return $this->render('user/password.html.twig', array('userContext' => $userContext, 'user' => $connectedUser, 'form' => $form->createView()));
     }
 }

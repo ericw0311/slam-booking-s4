@@ -13,7 +13,8 @@
 <p><span class="glyphicon glyphicon-envelope icon-size32"></span>&nbsp;{{ user.email }}</strong></p>
 
 <div class="btn-group">
-	<a href="{{ path('user_modify', { 'userID': user.ID }) }}" class="btn btn-primary"><i class="glyphicon glyphicon-pencil"></i> {{ 'modify'|trans }}</a>
+	<a href="{{ path('user_modify') }}" class="btn btn-primary"><i class="glyphicon glyphicon-pencil"></i> {{ 'modify'|trans }}</a>
+	<a href="{{ path('user_password') }}" class="btn btn-success"><i class="glyphicon glyphicon-tag"></i> {{ 'user.modify.password'|trans }}</a>
 </div>
 
 {% endblock %}

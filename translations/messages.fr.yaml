@@ -335,12 +335,13 @@ user.name: Nom d'utilisateur
 user.new: Nouvel utilisateur
 user.organisation.name: Nom de l'organisation
 user.password: Mot de passe
+user.password.updated.ok: Le mot de passe a bien été modifié
 user.register: S'inscrire
 user.registration: Inscription
 user.repeat.password: Répéter le mot de passe
 user.select: Sélectionner l'utilisateur
 user.unselect: Désélectionner l'utilisateur
-user.updated.ok: Votre compte utilisateur a bien été modifié
+user.updated.ok: Le compte utilisateur a bien été modifié
 
 users: Utilisateurs
 users.available: Utilisateurs disponibles
