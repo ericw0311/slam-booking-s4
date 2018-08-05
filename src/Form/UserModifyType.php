@@ -1,5 +1,5 @@
 <?php
-// /src/Form/UserType.php
+// /src/Form/UserModifyType.php
 namespace App\Form;
 
 use App\Entity\User;
@@ -9,10 +9,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
-class UserType extends AbstractType
+class UserModifyType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -28,10 +27,7 @@ class UserType extends AbstractType
             ->add('email', EmailType::class, array('label' => 'user.email', 'translation_domain' => 'messages'))
             ->add('userName', TextType::class, array('label' => 'user.name', 'translation_domain' => 'messages'))
 			->add('uniqueName', TextType::class, array('label' => 'user.organisation.name', 'translation_domain' => 'messages', 'required' => false))
-            ->add('password', RepeatedType::class, array(
-                'type' => PasswordType::class,
-                'first_options'  => array('label' => 'user.password', 'translation_domain' => 'messages'),
-                'second_options' => array('label' => 'user.repeat.password', 'translation_domain' => 'messages')));
+            ->add('password', HiddenType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)

@@ -1,0 +1,31 @@
+{% extends 'base.connected.html.twig' %}
+ 
+{% block body %}
+
+<legend><img src="{{ asset('images/user-32.png') }}">&nbsp;</img>&nbsp;{{ user.getFirstAndLastName() }}</legend>
+
+{% if user.accountType == "ORGANISATION" %}
+<p><img src="{{ asset('images/organisation-32.png') }}">&nbsp;<strong>{{ user.uniqueName }}</strong></p>
+{% endif %}
+
+<p><span class="glyphicon glyphicon-user icon-size32"></span>&nbsp;{{ user.userName }}</strong></p>
+
+<p><span class="glyphicon glyphicon-envelope icon-size32"></span>&nbsp;{{ user.email }}</strong></p>
+
+<div class="btn-group">
+	<a href="{{ path('user_modify', { 'userID': user.ID }) }}" class="btn btn-primary"><i class="glyphicon glyphicon-pencil"></i> {{ 'modify'|trans }}</a>
+</div>
+
+{% endblock %}
+
+
+{% block message %}
+
+{% for flash_message in app.session.flashBag.get('notice') %}
+<div class="alert alert-success sb-message">
+	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+	{{ flash_message|trans }}
+</div>
+{% endfor %}
+
+{% endblock %}

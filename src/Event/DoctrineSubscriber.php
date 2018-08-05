@@ -41,7 +41,7 @@ class DoctrineSubscriber implements EventSubscriber
 
 	public function getSubscribedEvents()
     {
-		return array('postPersist');
+		return array('postPersist', 'postUpdate');
 	}
 
     public function postPersist(LifecycleEventArgs $args)
@@ -60,6 +60,19 @@ class DoctrineSubscriber implements EventSubscriber
             $entityManager = $args->getEntityManager();
 
 			FileEvent::postPersist($entityManager, $this->getUser(), $entity, $this->getTranslator());
+		}
+    }
+
+    public function postUpdate(LifecycleEventArgs $args)
+    {
+		$this->getLogger()->info('DoctrineSubscriber postUpdate 1');
+		$entity = $args->getEntity();
+
+        if ($entity instanceof User) {
+			$this->getLogger()->info('DoctrineSubscriber postUpdate 2 User');
+            $entityManager = $args->getEntityManager();
+
+			UserEvent::postUpdate($entityManager, $entity);
 		}
     }
 }

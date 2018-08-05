@@ -323,6 +323,7 @@ user.accountt: Compte utilisateur
 user.account.type: Type de compte
 user.account.type.INDIVIDUAL: Individuel
 user.account.type.ORGANISATION: Organisation
+user.connection: Connexion
 user.email: Email
 user.firstName: Prénom
 user.lastName: Nom de famille
@@ -330,11 +331,16 @@ user.list.update: Modifier la liste des utilisateurs
 user.login: Se connecter
 user.logout: Se déconnecter
 user.modify.password: Modifier le mot de passe
+user.name: Nom d'utilisateur
 user.new: Nouvel utilisateur
 user.organisation.name: Nom de l'organisation
+user.password: Mot de passe
 user.register: S'inscrire
+user.registration: Inscription
+user.repeat.password: Répéter le mot de passe
 user.select: Sélectionner l'utilisateur
 user.unselect: Désélectionner l'utilisateur
+user.updated.ok: Votre compte utilisateur a bien été modifié
 
 users: Utilisateurs
 users.available: Utilisateurs disponibles

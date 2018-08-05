@@ -5,15 +5,17 @@
 {{ form_start(form, {'action': path('user_registration'), 'method': 'POST', 'class': 'form-horizontal'}) }}
 
 <fieldset>
-	<legend>Inscription</legend>
-	{{ form_row(form.lastName) }}
+	<legend>{{ 'user.registration'|trans }}</legend>
+	{{ form_row(form.accountType) }}
 	{{ form_row(form.firstName) }}
+	{{ form_row(form.lastName) }}
 	{{ form_row(form.userName) }}
 	{{ form_row(form.email) }}
+	{{ form_row(form.uniqueName) }}
 	{{ form_row(form.password.first) }}
 	{{ form_row(form.password.second) }}
 	{{ form_rest(form) }}
-	<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> S'inscrire !</button>
+	<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i>{{ 'user.register'|trans }}</button>
 </fieldset>
 
 {{ form_end(form) }}
@@ -22,6 +24,6 @@
 
 {% block javascripts %}
 
-<script>document.getElementById('user_lastName').focus();</script>
+<script src="{{ asset('scripts/user_register.js') }}"></script>
 
 {% endblock %}

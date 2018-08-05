@@ -323,6 +323,7 @@ user.accountt: User account
 user.account.type: Account type
 user.account.type.INDIVIDUAL: Individual
 user.account.type.ORGANISATION: Organisation
+user.connection: Connection
 user.email: Email
 user.firstName: First name
 user.lastName: Last name
@@ -330,11 +331,16 @@ user.list.update: Modify users list
 user.login: Login
 user.logout: Logout
 user.modify.password: Modify password
+user.name: User name
 user.new: New user
 user.organisation.name: Organisation name
+user.password: Password
 user.register: Register
+user.registration: Registration
+user.repeat.password: Repeat password
 user.select: Select user
 user.unselect: Unselect user
+user.updated.ok: Your user account has been updated
 
 users: Users
 users.available: Available users

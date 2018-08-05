@@ -194,6 +194,14 @@ class User implements UserInterface, \Serializable
     }
 
 	/**
+    * @Assert\IsTrue(message="user.organisation.name.null")
+    */
+    public function isUniqueName()
+    {
+        return ($this->getAccountType() != 'ORGANISATION' or $this->getUniqueName() !== null);
+    }
+
+	/**
      * Retour le salt qui a servi à coder le mot de passe
      *
      * {@inheritdoc}
