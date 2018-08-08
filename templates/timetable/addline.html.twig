@@ -1,0 +1,65 @@
+{# templates/timetable/addline.html.twig #}
+
+{% extends 'base.connected.html.twig' %}
+ 
+{% block body %}
+
+{{ form_start(form, {'action': path('timetable_add_line', { 'timetableID': timetable.ID }), 'method': 'POST', 'class': 'form-horizontal'}) }}
+
+<legend><img src="{{ asset('images/time-32.png') }}">&nbsp;</img>&nbsp;{{ timetable.name }}</legend>
+
+<table class="table table-striped">
+<thead>
+	<tr>
+		<th>{{ 'from'|trans }}</th>
+		<th>&nbsp;</th>
+		<th>{{ 'to'|trans }}</th>
+	</tr>
+</thead>
+<tbody>
+
+{% if listLastTimetableLines|length > 0 %}
+{% for timetableLine in listLastTimetableLines|reverse %}
+	<tr>
+		<td>{{ timetableLine.beginningTime|date("H:i") }}</td>
+		<td>&nbsp;</td>
+		<td>{{ timetableLine.endTime|date("H:i") }}</td>
+	</tr>
+{% endfor %}
+{% endif %}
+	<tr>
+		<td>{{ form_row(form.beginningTime) }}</td>
+		<td>&nbsp;</td>
+		<td>{{ form_row(form.endTime) }}</td>
+	</tr>
+</tbody>
+</table>
+
+<div class="btn-group">
+
+<a href="{{ path('timetable_edit', { 'timetableID': timetable.ID }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
+<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> {{ 'validate'|trans }}</button>
+{{ form_widget(form.validateAndCreate, { 'attr': {'class': 'btn btn-success'} }) }}
+
+</div>
+
+{{ form_end(form) }}
+
+{% endblock %}
+
+{% block message %}
+
+{% for flash_message in app.session.flashBag.get('notice') %}
+<div class="alert alert-success sb-message">
+	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+	{{ flash_message|trans }}
+</div>
+{% endfor %}
+
+{% endblock %}
+
+{% block javascripts %}
+
+<script src="{{ asset('scripts/timetableLine.js') }}"></script>
+
+{% endblock %}

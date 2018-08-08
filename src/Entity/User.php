@@ -78,6 +78,8 @@ class User implements UserInterface, \Serializable
         $this->files = new ArrayCollection();
         $this->userFiles = new ArrayCollection();
         $this->userParameters = new ArrayCollection();
+        $this->timetables = new ArrayCollection();
+        $this->timetableLines = new ArrayCollection();
     }
 
     public function getId()
@@ -254,6 +256,15 @@ class User implements UserInterface, \Serializable
   */
  private $userParameters;
  /**
+  * @ORM\OneToMany(targetEntity="App\Entity\Timetable", mappedBy="user", orphanRemoval=true)
+  */
+ private $timetables;
+
+ /**
+  * @ORM\OneToMany(targetEntity="App\Entity\TimetableLine", mappedBy="user", orphanRemoval=true)
+  */
+ private $timetableLines;
+ /**
   * @return Collection|File[]
   */
  public function getFiles(): Collection
@@ -340,6 +351,68 @@ class User implements UserInterface, \Serializable
          // set the owning side to null (unless already changed)
          if ($userParameter->getUser() === $this) {
              $userParameter->setUser(null);
+         }
+     }
+     $__EXTRA__LINE;
+     return $this;
+ }
+
+ /**
+  * @return Collection|Timetable[]
+  */
+ public function getTimetables(): Collection
+ {
+     return $this->timetables;
+ }
+
+ public function addTimetable(Timetable $timetable): self
+ {
+     if (!$this->timetables->contains($timetable)) {
+         $this->timetables[] = $timetable;
+         $timetable->setUser($this);
+     }
+     $__EXTRA__LINE;
+     return $this;
+ }
+
+ public function removeTimetable(Timetable $timetable): self
+ {
+     if ($this->timetables->contains($timetable)) {
+         $this->timetables->removeElement($timetable);
+         // set the owning side to null (unless already changed)
+         if ($timetable->getUser() === $this) {
+             $timetable->setUser(null);
+         }
+     }
+     $__EXTRA__LINE;
+     return $this;
+ }
+
+ /**
+  * @return Collection|TimetableLine[]
+  */
+ public function getTimetableLines(): Collection
+ {
+     return $this->timetableLines;
+ }
+
+ public function addTimetableLine(TimetableLine $timetableLine): self
+ {
+     if (!$this->timetableLines->contains($timetableLine)) {
+         $this->timetableLines[] = $timetableLine;
+         $timetableLine->setUser($this);
+     }
+     $__EXTRA__LINE;
+     return $this;
+ }
+
+ public function removeTimetableLine(TimetableLine $timetableLine): self
+ {
+     if ($this->timetableLines->contains($timetableLine)) {
+         $this->timetableLines->removeElement($timetableLine);
+         // set the owning side to null (unless already changed)
+         if ($timetableLine->getUser() === $this) {
+             $timetableLine->setUser(null);
          }
      }
      $__EXTRA__LINE;

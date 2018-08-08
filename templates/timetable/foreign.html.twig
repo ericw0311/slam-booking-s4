@@ -1,0 +1,9 @@
+{% extends 'base.connected.html.twig' %}
+ 
+{% block body %}
+
+<legend><img src="{{ asset('images/time-32.png') }}"></img>&nbsp;{{ timetable.name }}</legend>
+
+<p>{% block foreign_message %}{% endblock %}</p>
+
+{% endblock %}

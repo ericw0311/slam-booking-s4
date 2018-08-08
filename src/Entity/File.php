@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
@@ -48,10 +49,16 @@ class File
      */
     private $userFiles;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Timetable", mappedBy="file", orphanRemoval=true)
+     */
+    private $timetables;
+
     public function __construct(\App\Entity\User $user)
     {
 		$this->setUser($user);
         $this->userFiles = new ArrayCollection();
+        $this->timetables = new ArrayCollection();
     }
 
     public function getId()
@@ -124,6 +131,37 @@ class File
             // set the owning side to null (unless already changed)
             if ($userFile->getFile() === $this) {
                 $userFile->setFile(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Timetable[]
+     */
+    public function getTimetables(): Collection
+    {
+        return $this->timetables;
+    }
+
+    public function addTimetable(Timetable $timetable): self
+    {
+        if (!$this->timetables->contains($timetable)) {
+            $this->timetables[] = $timetable;
+            $timetable->setFile($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTimetable(Timetable $timetable): self
+    {
+        if ($this->timetables->contains($timetable)) {
+            $this->timetables->removeElement($timetable);
+            // set the owning side to null (unless already changed)
+            if ($timetable->getFile() === $this) {
+                $timetable->setFile(null);
             }
         }
 

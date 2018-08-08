@@ -305,6 +305,7 @@ timetable.delete.not.allowed.3: La grille horaire est référencée. Suppression
 timetable.deleted.ok: La grille horaire a bien été supprimée
 timetable.half.day: Demi journée
 timetable.name: Nom de la grille horaire
+timetable.new: Nouvelle grille horaire
 timetable.plural: Grilles horaires
 timetable.singular: Grille horaire
 timetable.update.not.allowed.1: La grille horaire journée ne peut pas être modifiée

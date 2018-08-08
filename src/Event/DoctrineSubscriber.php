@@ -61,6 +61,7 @@ class DoctrineSubscriber implements EventSubscriber
 
 			FileEvent::postPersist($entityManager, $this->getUser(), $entity, $this->getTranslator());
 		}
+
     }
 
     public function postUpdate(LifecycleEventArgs $args)

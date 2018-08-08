@@ -305,6 +305,7 @@ timetable.delete.not.allowed.3: Timetable is referenced. Delete not allowed
 timetable.deleted.ok: The timetable has been deleted
 timetable.half.day: Half day
 timetable.name: Timetable name
+timetable.new: New timetable
 timetable.plural: Timetables
 timetable.singular: Timetable
 timetable.update.not.allowed.1: The timetable Day cannot be updated

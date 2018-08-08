@@ -1,0 +1,65 @@
+{# templates/timetable/modifyline.html.twig #}
+
+{% extends 'base.connected.html.twig' %}
+ 
+{% block body %}
+
+{{ form_start(form, {'action': path('timetable_modify_line', { 'timetableID': timetable.ID, 'timetableLineID': timetableLine.ID }), 'method': 'POST', 'class': 'form-horizontal'}) }}
+
+<legend><img src="{{ asset('images/time-32.png') }}">&nbsp;</img>&nbsp;{{ timetable.name }}</legend>
+
+<table class="table table-striped">
+<thead>
+	<tr>
+		<th>{{ 'from'|trans }}</th>
+		<th>&nbsp;</th>
+		<th>{{ 'to'|trans }}</th>
+	</tr>
+</thead>
+<tbody>
+
+{% if listPreviousTimetableLines|length > 0 %}
+{% for timetableLine in listPreviousTimetableLines|reverse %}
+<tr>
+	<td>{{ timetableLine.beginningTime|date("H:i") }}</td>
+	<td>&nbsp;</td>
+	<td>{{ timetableLine.endTime|date("H:i") }}</td>
+</tr>
+{% endfor %}
+{% endif %}
+
+<tr>
+	<td>{{ form_row(form.beginningTime) }}</td>
+	<td>&nbsp;</td>
+	<td>{{ form_row(form.endTime) }}</td>
+</tr>
+
+{% if listNextTimetableLines|length > 0 %}
+{% for timetableLine in listNextTimetableLines %}
+<tr>
+	<td>{{ timetableLine.beginningTime|date("H:i") }}</td>
+	<td>&nbsp;</td>
+	<td>{{ timetableLine.endTime|date("H:i") }}</td>
+</tr>
+{% endfor %}
+{% endif %}
+
+</tbody>
+</table>
+
+<div class="btn-group">
+
+<a href="{{ path('timetable_edit', { 'timetableID': timetable.ID }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
+<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> {{ 'validate'|trans }}</button>
+
+</div>
+
+{{ form_end(form) }}
+
+{% endblock %}
+
+{% block javascripts %}
+
+<script src="{{ asset('scripts/timetableLine.js') }}"></script>
+
+{% endblock %}
