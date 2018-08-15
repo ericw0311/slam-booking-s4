@@ -80,6 +80,8 @@ class User implements UserInterface, \Serializable
         $this->userParameters = new ArrayCollection();
         $this->timetables = new ArrayCollection();
         $this->timetableLines = new ArrayCollection();
+        $this->resourceClassifications = new ArrayCollection();
+        $this->resources = new ArrayCollection();
     }
 
     public function getId()
@@ -264,6 +266,19 @@ class User implements UserInterface, \Serializable
   * @ORM\OneToMany(targetEntity="App\Entity\TimetableLine", mappedBy="user", orphanRemoval=true)
   */
  private $timetableLines;
+
+ /**
+  * @ORM\OneToMany(targetEntity="App\Entity\ResourceClassification", mappedBy="user", orphanRemoval=true)
+  */
+ private $resourceClassifications;
+
+ /**
+  * @ORM\OneToMany(targetEntity="App\Entity\Resource", mappedBy="user", orphanRemoval=true)
+  */
+ private $resources;
+
+
+
  /**
   * @return Collection|File[]
   */
@@ -418,4 +433,65 @@ class User implements UserInterface, \Serializable
      $__EXTRA__LINE;
      return $this;
  }
+
+    /**
+     * @return Collection|ResourceClassification[]
+     */
+    public function getResourceClassifications(): Collection
+    {
+        return $this->resourceClassifications;
+    }
+
+    public function addResourceClassification(ResourceClassification $resourceClassification): self
+    {
+        if (!$this->resourceClassifications->contains($resourceClassification)) {
+            $this->resourceClassifications[] = $resourceClassification;
+            $resourceClassification->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeResourceClassification(ResourceClassification $resourceClassification): self
+    {
+       if ($this->resourceClassifications->contains($resourceClassification)) {
+            $this->resourceClassifications->removeElement($resourceClassification);
+            // set the owning side to null (unless already changed)
+            if ($resourceClassification->getUser() === $this) {
+                $resourceClassification->setUser(null);
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * @return Collection|Resource[]
+     */
+    public function getResources(): Collection
+    {
+        return $this->resources;
+    }
+
+    public function addResource(Resource $resource): self
+    {
+        if (!$this->resources->contains($resource)) {
+            $this->resources[] = $resource;
+            $resource->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeResource(Resource $resource): self
+    {
+        if ($this->resources->contains($resource)) {
+            $this->resources->removeElement($resource);
+            // set the owning side to null (unless already changed)
+            if ($resource->getUser() === $this) {
+                $resource->setUser(null);
+            }
+        }
+
+        return $this;
+    }
 }

@@ -54,11 +54,23 @@ class File
      */
     private $timetables;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ResourceClassification", mappedBy="file", orphanRemoval=true)
+     */
+    private $resourceClassifications;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Resource", mappedBy="file", orphanRemoval=true)
+     */
+    private $resources;
+
     public function __construct(\App\Entity\User $user)
     {
 		$this->setUser($user);
         $this->userFiles = new ArrayCollection();
         $this->timetables = new ArrayCollection();
+        $this->resourceClassifications = new ArrayCollection();
+        $this->resources = new ArrayCollection();
     }
 
     public function getId()
@@ -162,6 +174,68 @@ class File
             // set the owning side to null (unless already changed)
             if ($timetable->getFile() === $this) {
                 $timetable->setFile(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ResourceClassification[]
+     */
+    public function getResourceClassifications(): Collection
+    {
+        return $this->resourceClassifications;
+    }
+
+    public function addResourceClassification(ResourceClassification $resourceClassification): self
+    {
+        if (!$this->resourceClassifications->contains($resourceClassification)) {
+            $this->resourceClassifications[] = $resourceClassification;
+            $resourceClassification->setFile($this);
+        }
+
+        return $this;
+    }
+
+    public function removeResourceClassification(ResourceClassification $resourceClassification): self
+    {
+        if ($this->resourceClassifications->contains($resourceClassification)) {
+            $this->resourceClassifications->removeElement($resourceClassification);
+            // set the owning side to null (unless already changed)
+            if ($resourceClassification->getFile() === $this) {
+                $resourceClassification->setFile(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Resource[]
+     */
+    public function getResources(): Collection
+    {
+        return $this->resources;
+    }
+
+    public function addResource(Resource $resource): self
+    {
+        if (!$this->resources->contains($resource)) {
+            $this->resources[] = $resource;
+            $resource->setFile($this);
+        }
+
+        return $this;
+    }
+
+    public function removeResource(Resource $resource): self
+    {
+        if ($this->resources->contains($resource)) {
+            $this->resources->removeElement($resource);
+            // set the owning side to null (unless already changed)
+            if ($resource->getFile() === $this) {
+                $resource->setFile(null);
             }
         }
 

@@ -35,6 +35,18 @@ services:
         tags:
             - { name: doctrine.event_subscriber, connection: default }
 
+    validator.timetableLineBeginningTime:
+        class: App\Validator\TimetableLineBeginningTimeValidator
+        arguments: ["@doctrine.orm.entity_manager"]
+        tags:
+            - { name: validator.constraint_validator, alias: timetableLineBeginningTime }
+
+    validator.timetableLineEndTime:
+        class: App\Validator\TimetableLineEndTimeValidator
+        arguments: ["@doctrine.orm.entity_manager"]
+        tags:
+            - { name: validator.constraint_validator, alias: timetableLineEndTime }
+
     App\Event\RegistrationNotifySubscriber:
         # le nom de la variable que l'on utilisera dans le service
         $sender: '%app.notifications.email_sender%'

@@ -98,6 +98,11 @@ class UserFile
      */
     private $updatedAt;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Resource", inversedBy="userFile", cascade={"persist", "remove"})
+     */
+    private $resource;
+
     public function getId()
     {
         return $this->id;
@@ -292,5 +297,17 @@ class UserFile
     public function updateDate()
     {
         $this->updatedAt = new \DateTime();
+    }
+
+    public function getResource(): ?Resource
+    {
+        return $this->resource;
+    }
+
+    public function setResource(?Resource $resource): self
+    {
+        $this->resource = $resource;
+
+        return $this;
     }
 }

@@ -6,10 +6,15 @@ use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
+use App\Validator\TimetableLineBeginningTime;
+use App\Validator\TimetableLineEndTime;
+
 /**
  * @ORM\Table(name="timetable_line")
  * @ORM\Entity(repositoryClass="App\Repository\TimetableLineRepository")
  * @ORM\HasLifecycleCallbacks()
+ * @TimetableLineBeginningTime()
+ * @TimetableLineEndTime()
  */
 
 class TimetableLine

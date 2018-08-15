@@ -35,6 +35,8 @@
 </tbody>
 </table>
 
+<div>{{ form_errors(form) }}</div>
+
 <div class="btn-group">
 
 <a href="{{ path('timetable_edit', { 'timetableID': timetable.ID }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
