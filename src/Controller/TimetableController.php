@@ -34,7 +34,7 @@ class TimetableController extends Controller
     $tRepository = $em->getRepository(Timetable::Class);
     $numberRecords = $tRepository->getTimetablesCount($userContext->getCurrentFile());
 
-    $listContext = new ListContext($em, $connectedUser, 'timetable', $page, $numberRecords);
+    $listContext = new ListContext($em, $connectedUser, 'timetable', 'time', $page, $numberRecords);
 
     $listTimetables = $tRepository->getDisplayedTimetables($userContext->getCurrentFile(), $listContext->getFirstRecordIndex(), $listContext->getMaxRecords());
     

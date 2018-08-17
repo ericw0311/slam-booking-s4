@@ -34,7 +34,7 @@ class UserFileController extends Controller
  
 	$ufRepository = $em->getRepository(UserFile::Class);
     $numberRecords = $ufRepository->getUserFilesCount($userContext->getCurrentFile());
-    $listContext = new ListContext($em, $connectedUser, 'userFile', $page, $numberRecords);
+    $listContext = new ListContext($em, $connectedUser, 'userFile', 'user', $page, $numberRecords);
     $listUserFiles = $ufRepository->getDisplayedUserFiles($userContext->getCurrentFile(), $listContext->getFirstRecordIndex(), $listContext->getMaxRecords());
     
 	return $this->render('user_file/index.html.twig', array('userContext' => $userContext, 'listContext' => $listContext, 'listUserFiles' => $listUserFiles));

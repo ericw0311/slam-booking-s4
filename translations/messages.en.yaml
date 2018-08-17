@@ -136,11 +136,11 @@ label.deleted.ok: The label has been deleted
 label.list.update: Modify labels list
 label.name: Label name
 label.no: No label
+label.plural: Labels
 label.select: Select label
 label.unselect: Unselect label
 label.updated.ok: The label has been updated
 
-labels: Labels
 labels.available: Available labels
 labels.selected: Selected labels
 
@@ -216,7 +216,7 @@ resourceClassification.create.warning: Carefull, you are creating a new resource
 resourceClassification.created.ok: The classification has been created
 resourceClassification.delete.not.allowed: Classification is referenced. Delete not allowed
 resourceClassification.deleted.ok: The classification has been deleted
-resourceClassification.name: Resource classification name
+resourceClassification.name: Classification name
 resourceClassification.plural: Resource classifications
 resourceClassification.singular: Resource classification
 resourceClassification.select: Select a resource classification
@@ -355,6 +355,7 @@ userFile.create: Add a user to file
 userFile.created.ok: The user has been added to file
 userFile.delete.not.allowed: The file creator cannot be removed from file
 userFile.deleted.ok: The user has been removed from file
+userFile.plural: Users
 userFile.resource.updated.ok: Informations "user resource" have been updated
 userFile.update.not.allowed.1: The file creator cannot be modified
 userFile.update.not.allowed.2: Only the file creator can modify a registered user

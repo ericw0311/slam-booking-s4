@@ -3,13 +3,15 @@ namespace App\Entity;
 class ListContext
 {
     protected $entityCode; // Code de l'entite
+    protected $image; // Image de l'entite
     protected $page; // Numero de la page affichee
     protected $numberRecords; // Nombre d'enregistrements total
     protected $numberLines; // Nombre de lignes pouvant etre affichees sur une page
     protected $numberColumns; // Nombre de colonnes pouvant etre affichees sur une page
 
-    function __construct($em, \App\Entity\User $user, $entityCode, $page, $numberRecords) {
+    function __construct($em, \App\Entity\User $user, $entityCode, $image, $page, $numberRecords) {
     $this->entityCode = $entityCode;
+    $this->image = $image;
     $this->page = $page;
     $this->numberRecords = $numberRecords;
     $userParameterRepository = $em->getRepository(UserParameter::class);
@@ -24,6 +26,11 @@ class ListContext
     public function getEntityCode()
     {
     return $this->entityCode;
+    }
+
+    public function getImage()
+    {
+    return $this->image;
     }
 
     public function getPage()

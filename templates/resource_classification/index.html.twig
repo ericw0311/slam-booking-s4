@@ -1,3 +1,5 @@
+{# templates/resource_classification/index.html.twig #}
+
 {% extends 'base.connected.html.twig' %}
  
 {% set resourceTypes = constant('App\\Entity\\Constants::RESOURCE_TYPE') %}
@@ -6,6 +8,8 @@
 {% set resourceClassificationIcons = constant('App\\Entity\\Constants::RESOURCE_CLASSIFICATION_ICON') %}
 
 {% block body %}
+
+<legend><img src="{{ asset('images/box-32.png') }}">&nbsp;</img>{{ 'resourceClassification.plural'|trans }}</legend>
 
 <div class="col-sm-4">
 
@@ -22,7 +26,6 @@
 {% endblock %}
 
 </div>
-
 
 <div class="col-sm-8">
 
@@ -91,6 +94,21 @@
 
 	</tbody>
 </table>
+
+</div>
+
+{% endblock %}
+
+{% block message %}
+
+<div class="col-sm-12">
+
+{% for flash_message in app.session.flashBag.get('notice') %}
+<div class="alert alert-success sb-message">
+	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+	{{ flash_message|trans }}
+</div>
+{% endfor %}
 
 </div>
 

@@ -136,11 +136,11 @@ label.deleted.ok: L'étiquette a bien été supprimée
 label.list.update: Modifier la liste des étiquettes
 label.name: Nom de l'étiquette
 label.no: Pas d'étiquette
+label.plural: Etiquettes
 label.select: Sélectionner l'étiquette
 label.unselect: Déselectionner l'étiquette
 label.updated.ok: L'étiquette a bien été modifiée
 
-labels: Etiquettes
 labels.available: Etiquettes disponibles
 labels.selected: Etiquettes sélectionnées
 
@@ -216,8 +216,8 @@ resourceClassification.create.warning: Attention, vous créez une nouvelle class
 resourceClassification.created.ok: La classification a bien été créée
 resourceClassification.delete.not.allowed: La classification est référencée. Suppression impossible
 resourceClassification.deleted.ok: La classification a bien été supprimée
-resourceClassification.name: Nom de la classification de ressources
-resourceClassification.plural: Classifications de ressources
+resourceClassification.name: Nom de la classification
+resourceClassification.plural: Classifications des ressources
 resourceClassification.select: Sélectionnez une classification de ressources
 resourceClassification.singular: Classification de ressources
 resourceClassification.unactivate.not.allowed: La classification est référencée. Désactivation impossible
@@ -355,6 +355,7 @@ userFile.back.to.list: Retour à la liste des utilisateurs
 userFile.created.ok: L'utilisateur a bien été ajouté au dossier.
 userFile.delete.not.allowed: Le créateur d'un dossier ne peut pas être supprimé du dossier
 userFile.deleted.ok: L'utilisateur a bien été retiré du dossier
+userFile.plural: Utilisateurs
 userFile.resource.updated.ok: Les informations "ressource utilisateur" ont bien été modifiées
 userFile.update.not.allowed.1: Le créateur d'un dossier ne peut pas être modifié
 userFile.update.not.allowed.2: Seul le créateur du dossier peut modifier un utilisateur inscrit

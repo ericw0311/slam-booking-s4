@@ -30,7 +30,7 @@ class FileController extends Controller
     $fRepository = $em->getRepository(File::Class);
     $numberRecords = $fRepository->getUserFilesCount($connectedUser);
 
-    $listContext = new ListContext($em, $connectedUser, 'file', $page, $numberRecords);
+    $listContext = new ListContext($em, $connectedUser, 'file', 'file', $page, $numberRecords);
 
     $listFiles = $fRepository->getUserDisplayedFiles($connectedUser, $listContext->getFirstRecordIndex(), $listContext->getMaxRecords());
     

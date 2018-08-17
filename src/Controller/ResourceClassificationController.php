@@ -12,6 +12,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use App\Entity\UserContext;
 use App\Entity\ResourceClassification;
 
+use App\Form\ResourceClassificationType;
+
 use App\Api\ResourceApi;
 
 class ResourceClassificationController extends Controller
@@ -30,10 +32,10 @@ class ResourceClassificationController extends Controller
 
 	// Nombre de ressources par classification interne
 	$numberResourcesInternalRC =  ResourceApi::getInternalClassificationNumberResources($em, $userContext->getCurrentFile(), $resourceType);
-    $RCRepository = $em->getRepository(ResourceClassification::Class);
+    $rcRepository = $em->getRepository(ResourceClassification::Class);
 
 	// Classifications externes
-    $listExternalRC = $RCRepository->getExternalResourceClassifications($userContext->getCurrentFile(), $resourceType);
+    $listExternalRC = $rcRepository->getExternalResourceClassifications($userContext->getCurrentFile(), $resourceType);
 
 	// Nombre de ressources par classification externe
 	$numberResourcesExternalRC =  ResourceApi::getExternalClassificationNumberResources($em, $userContext->getCurrentFile(), $resourceType, $listExternalRC);
@@ -50,63 +52,120 @@ class ResourceClassificationController extends Controller
     /**
      * @Route("/resourceclassification/activateinternal/{resourceType}/{resourceClassificationCode}", name="resource_classification_activate_internal")
      */
-    public function activate_internal($resourceType, $resourceClassificationCode)
+    public function activate_internal(Request $request, $resourceType, $resourceClassificationCode)
     {
 	$connectedUser = $this->getUser();
 	$em = $this->getDoctrine()->getManager();
  	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+ 
+	$rcRepository = $em->getRepository(ResourceClassification::Class);
+	$resourceClassification = $rcRepository->findOneBy(array('file' => $userContext->getCurrentFile(), 'internal' => 1, 'type' => $resourceType, 'code' => $resourceClassificationCode));
 
-	return $this->render('resource_classification/index.html.twig');
+	if ($resourceClassification === null) {
+        $resourceClassification = new ResourceClassification($connectedUser, $userContext->getCurrentFile());
+        $resourceClassification->setInternal(1);
+        $resourceClassification->setType($resourceType);
+        $resourceClassification->setCode($resourceClassificationCode);
+        $resourceClassification->setName($resourceClassificationCode);
+        $em->persist($resourceClassification);
+        $resourceClassification->setActive(1);
+	} else {
+		$resourceClassification->setActive(1);
+	}
+	$em->flush();
+    $request->getSession()->getFlashBag()->add('notice', 'resourceClassification.activated.ok');
+    return $this->redirectToRoute('resource_classification', array('resourceType' => $resourceType));
     }
 
     /**
      * @Route("/resourceclassification/unactivateinternal/{resourceType}/{resourceClassificationCode}", name="resource_classification_unactivate_internal")
      */
-    public function unactivate_internal($resourceType, $resourceClassificationCode)
+    public function unactivate_internal(Request $request, $resourceType, $resourceClassificationCode)
     {
 	$connectedUser = $this->getUser();
 	$em = $this->getDoctrine()->getManager();
  	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
-	return $this->render('resource_classification/index.html.twig');
-    }
+	$rcRepository = $em->getRepository(ResourceClassification::Class);
+	$resourceClassification = $rcRepository->findOneBy(array('file' => $userContext->getCurrentFile(), 'internal' => 1, 'type' => $resourceType, 'code' => $resourceClassificationCode));
+    
+	if ($resourceClassification === null) {
+        $resourceClassification = new ResourceClassification($connectedUser, $userContext->getCurrentFile());
+        $resourceClassification->setInternal(1);
+        $resourceClassification->setType($resourceType);
+        $resourceClassification->setCode($resourceClassificationCode);
+        $resourceClassification->setName($resourceClassificationCode);
+        $em->persist($resourceClassification);
+        $resourceClassification->setActive(0);
+	} else {
+		$resourceClassification->setActive(0);
+	}
+	$em->flush();
+    $request->getSession()->getFlashBag()->add('notice', 'resourceClassification.unactivated.ok');
+    return $this->redirectToRoute('resource_classification', array('resourceType' => $resourceType));
+	}
 
     /**
      * @Route("/resourceclassification/activateexternal/{resourceType}/{resourceClassificationID}", name="resource_classification_activate_external")
      * @ParamConverter("resourceClassification", options={"mapping": {"resourceClassificationID": "id"}})
      */
-    public function activate_external($resourceType, $resourceClassificationID)
+    public function activate_external(Request $request, $resourceType, $resourceClassificationID)
     {
 	$connectedUser = $this->getUser();
 	$em = $this->getDoctrine()->getManager();
  	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
-	return $this->render('resource_classification/index.html.twig');
+	$resourceClassification->setActive(1);
+	$em->flush();
+    $request->getSession()->getFlashBag()->add('notice', 'resourceClassification.activated.ok');
+    
+	return $this->redirectToRoute('resource_classification', array('resourceType' => $resourceType));
     }
 
     /**
      * @Route("/resourceclassification/unactivateexternal/{resourceType}/{resourceClassificationID}", name="resource_classification_unactivate_external")
      * @ParamConverter("resourceClassification", options={"mapping": {"resourceClassificationID": "id"}})
      */
-    public function unactivate_external($resourceType, $resourceClassificationID)
+    public function unactivate_external(Request $request, $resourceType, $resourceClassificationID)
     {
 	$connectedUser = $this->getUser();
 	$em = $this->getDoctrine()->getManager();
  	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
-	return $this->render('resource_classification/index.html.twig');
+	$resourceClassification->setActive(0);
+	$em->flush();
+    $request->getSession()->getFlashBag()->add('notice', 'resourceClassification.unactivated.ok');
+    return $this->redirectToRoute('resource_classification', array('resourceType' => $resourceType));
     }
 
     /**
      * @Route("/resourceclassification/add/{resourceType}", name="resource_classification_add")
      */
-    public function add($resourceType)
+    public function add(Request $request, $resourceType)
     {
 	$connectedUser = $this->getUser();
 	$em = $this->getDoctrine()->getManager();
  	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
-	return $this->render('resource_classification/index.html.twig');
+	$resourceClassification = new ResourceClassification($connectedUser, $userContext->getCurrentFile());
+	$resourceClassification->setInternal(0);
+	$resourceClassification->setType($resourceType);
+	$resourceClassification->setActive(1);
+	$form = $this->createForm(ResourceClassificationType::class, $resourceClassification);
+
+	if ($request->isMethod('POST')) {
+		$form->submit($request->request->get($form->getName()));
+		if ($form->isSubmitted() && $form->isValid()) {
+			$em->persist($resourceClassification);
+			$em->flush();
+			$request->getSession()->getFlashBag()->add('notice', 'resourceClassification.created.ok');
+		return $this->redirectToRoute('resource_classification', array('resourceType' => $resourceType));
+		}
+    }
+
+	$request->getSession()->getFlashBag()->add('notice', 'resourceClassification.create.warning');
+	return $this->render('resource_classification/add.html.twig',
+		array('userContext' => $userContext, 'resourceType' => $resourceType, 'form' => $form->createView()));
     }
 
     /**
