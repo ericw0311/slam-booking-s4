@@ -109,7 +109,7 @@ class ResourceClassificationController extends Controller
      * @Route("/resourceclassification/activateexternal/{resourceType}/{resourceClassificationID}", name="resource_classification_activate_external")
      * @ParamConverter("resourceClassification", options={"mapping": {"resourceClassificationID": "id"}})
      */
-    public function activate_external(Request $request, $resourceType, $resourceClassificationID)
+    public function activate_external(Request $request, $resourceType, ResourceClassification $resourceClassification)
     {
 	$connectedUser = $this->getUser();
 	$em = $this->getDoctrine()->getManager();
@@ -126,7 +126,7 @@ class ResourceClassificationController extends Controller
      * @Route("/resourceclassification/unactivateexternal/{resourceType}/{resourceClassificationID}", name="resource_classification_unactivate_external")
      * @ParamConverter("resourceClassification", options={"mapping": {"resourceClassificationID": "id"}})
      */
-    public function unactivate_external(Request $request, $resourceType, $resourceClassificationID)
+    public function unactivate_external(Request $request, $resourceType, ResourceClassification $resourceClassification)
     {
 	$connectedUser = $this->getUser();
 	$em = $this->getDoctrine()->getManager();
@@ -185,7 +185,7 @@ class ResourceClassificationController extends Controller
 		if ($form->isSubmitted() && $form->isValid()) {
 			$em->flush();
 			$request->getSession()->getFlashBag()->add('notice', 'resourceClassification.updated.ok');
-		return $this->redirectToRoute('resource_classification', array('resourceType' => $resourceType));
+			return $this->redirectToRoute('resource_classification', array('resourceType' => $resourceType));
 		}
     }
 
@@ -197,13 +197,25 @@ class ResourceClassificationController extends Controller
      * @Route("/resourceclassification/delete/{resourceType}/{resourceClassificationID}", name="resource_classification_delete")
      * @ParamConverter("resourceClassification", options={"mapping": {"resourceClassificationID": "id"}})
      */
-    public function delete($resourceType, $resourceClassificationID)
+    public function delete(Request $request, $resourceType, ResourceClassification $resourceClassification)
     {
 	$connectedUser = $this->getUser();
 	$em = $this->getDoctrine()->getManager();
  	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
-	return $this->render('resource_classification/index.html.twig');
+	$form = $this->get('form.factory')->create();
+
+	if ($request->isMethod('POST')) {
+		$form->submit($request->request->get($form->getName()));
+		if ($form->isSubmitted() && $form->isValid()) {
+			$em->remove($resourceClassification);
+			$em->flush();
+			$request->getSession()->getFlashBag()->add('notice', 'resourceClassification.deleted.ok');
+			return $this->redirectToRoute('resource_classification', array('resourceType' => $resourceType));
+		}
+    }
+
+	return $this->render('resource_classification/delete.html.twig', array('userContext' => $userContext, 'resourceType' => $resourceType, 'resourceClassification' => $resourceClassification, 'form' => $form->createView()));
     }
 
     /**
