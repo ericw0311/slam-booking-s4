@@ -72,10 +72,10 @@
 	<td><img src="{{ asset('images/red-cross-32.png') }}"></td>
 	<td><a href="{{ path('resource_classification_activate_external', { 'resourceType': resourceType, 'resourceClassificationID': externalRC.id }) }}" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> {{ 'activate'|trans }}</a></td>
 {% endif %}
-	<td><a href="{{ path('resource_classification_modify', { 'resourceType': resourceType, 'resourceClassificationID': externalRC.ID }) }}"><i class="glyphicon glyphicon-pencil"></i></a></td>
+	<td><a href="{{ path('resource_classification_modify', { 'resourceType': resourceType, 'resourceClassificationID': externalRC.ID }) }}" class="glyphicon glyphicon-pencil" title="{{ 'modify'|trans }}"></a></td>
 	<td>
 {% if numberResourcesExternalRC[externalRC.ID] <= 0 %}
-	<a href="{{ path('resource_classification_delete', { 'resourceType': resourceType, 'resourceClassificationID': externalRC.ID }) }}" class="glyphicon glyphicon-trash"></a>
+	<a href="{{ path('resource_classification_delete', { 'resourceType': resourceType, 'resourceClassificationID': externalRC.ID }) }}" class="glyphicon glyphicon-trash" title="{{ 'delete'|trans }}"></a>
 {% else %}
 	<a href="{{ path('resource_classification_foreign_external', { 'resourceType': resourceType, 'resourceClassificationID': externalRC.id, 'action': 'delete' }) }}" class="glyphicon glyphicon-trash" style="color:red"></a>
 {% endif %}

@@ -172,13 +172,25 @@ class ResourceClassificationController extends Controller
      * @Route("/resourceclassification/modify/{resourceType}/{resourceClassificationID}", name="resource_classification_modify")
      * @ParamConverter("resourceClassification", options={"mapping": {"resourceClassificationID": "id"}})
      */
-    public function modify($resourceType, $resourceClassificationID)
+    public function modify(Request $request, $resourceType, ResourceClassification $resourceClassification)
     {
 	$connectedUser = $this->getUser();
 	$em = $this->getDoctrine()->getManager();
  	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
-	return $this->render('resource_classification/index.html.twig');
+	$form = $this->createForm(ResourceClassificationType::class, $resourceClassification);
+
+	if ($request->isMethod('POST')) {
+		$form->submit($request->request->get($form->getName()));
+		if ($form->isSubmitted() && $form->isValid()) {
+			$em->flush();
+			$request->getSession()->getFlashBag()->add('notice', 'resourceClassification.updated.ok');
+		return $this->redirectToRoute('resource_classification', array('resourceType' => $resourceType));
+		}
+    }
+
+	return $this->render('resource_classification/modify.html.twig',
+		array('userContext' => $userContext, 'resourceType' => $resourceType, 'resourceClassification' => $resourceClassification, 'form' => $form->createView()));
     }
 
     /**
