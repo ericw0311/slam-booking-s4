@@ -1,0 +1,49 @@
+{# templates/resource/add.html.twig #}
+
+{% set resourceTypeIcons = constant('App\\Entity\\Constants::RESOURCE_TYPE_ICON') %}
+{% set resourceClassificationIcons = constant('App\\Entity\\Constants::RESOURCE_CLASSIFICATION_ICON') %}
+
+{% extends 'base.connected.html.twig' %}
+ 
+{% block body %}
+
+{% if resource.internal %}
+	{{ form_start(form, {'action': path('resource_add_internal', { 'type': resource.type, 'code': resource.code }), 'method': 'POST', 'class': 'form-horizontal'}) }}
+{% else %}
+	{{ form_start(form, {'action': path('resource_add_external', { 'type': resource.type, 'resourceClassificationID': resource.classification.ID }), 'method': 'POST', 'class': 'form-horizontal'}) }}
+{% endif %}
+
+<fieldset>
+{% if resource.internal %}
+	<legend><img src="{{ asset('images/' ~ resourceClassificationIcons[resource.code] ~ '-32.png') }}">&nbsp;{{ ('resourceClassification.singular.' ~ resource.code)|trans }}</legend>
+{% else %}
+	<legend><img src="{{ asset('images/' ~ resourceTypeIcons[resource.type] ~ '-32.png') }}">&nbsp;{{ resourceClassification.name }}</legend>
+{% endif %}
+	{{ form_row(form.name) }}
+</fieldset>
+
+<div class="btn-group">
+<a href="{{ path('resource', { 'page': 1 }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
+<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> {{ 'validate'|trans }}</button>
+</div>
+
+{{ form_end(form) }}
+
+{% endblock %}
+
+{% block javascripts %}
+
+<script>document.getElementById('resource_add_name').focus();</script>
+
+{% endblock %}
+
+{% block message %}
+
+{% for flash_message in app.session.flashBag.get('notice') %}
+<div class="alert alert-success sb-message">
+	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+	{{ flash_message|trans }}
+</div>
+{% endfor %}
+
+{% endblock %}

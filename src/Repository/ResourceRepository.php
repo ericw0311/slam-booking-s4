@@ -2,9 +2,11 @@
 
 namespace App\Repository;
 
-use App\Entity\Resource;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+
+use App\Entity\ResourceClassification;
+use App\Entity\Resource;
 
 /**
  * @method Resource|null find($id, $lockMode = null, $lockVersion = null)
@@ -19,7 +21,7 @@ class ResourceRepository extends ServiceEntityRepository
         parent::__construct($registry, Resource::class);
     }
 
-    public function getResourcesCount($file)
+    public function getResourcesCount(\App\Entity\File $file)
     {
     $qb = $this->createQueryBuilder('r');
     $qb->select($qb->expr()->count('r'));
@@ -31,7 +33,7 @@ class ResourceRepository extends ServiceEntityRepository
     return $singleScalar;
     }
 
-	public function getResources($file)
+	public function getResources(\App\Entity\File $file)
     {
     $qb = $this->createQueryBuilder('r');
     $qb->where('r.file = :file')->setParameter('file', $file);
@@ -47,7 +49,7 @@ class ResourceRepository extends ServiceEntityRepository
     return $results;
     }
 
-	public function getDisplayedResources($file, $firstRecordIndex, $maxRecord)
+	public function getDisplayedResources(\App\Entity\File $file, $firstRecordIndex, $maxRecord)
     {
     $qb = $this->createQueryBuilder('r');
     $qb->where('r.file = :file')->setParameter('file', $file);
@@ -65,7 +67,7 @@ class ResourceRepository extends ServiceEntityRepository
     return $results;
     }
 
-	public function getResourcesToPlanify($file, $type, $resourcePlanifiedQB)
+	public function getResourcesToPlanify(\App\Entity\File $file, $type, $resourcePlanifiedQB)
     {
     $qb = $this->createQueryBuilder('r');
     $qb->where('r.file = :file')->setParameter('file', $file);
@@ -79,7 +81,7 @@ class ResourceRepository extends ServiceEntityRepository
     return $results;
     }
 
-	public function getResourceTypesToPlanify($file, $resourcePlanifiedQB)
+	public function getResourceTypesToPlanify(\App\Entity\File $file, $resourcePlanifiedQB)
     {
     $qb = $this->createQueryBuilder('r');
     $qb->select('r.type');
@@ -96,7 +98,7 @@ class ResourceRepository extends ServiceEntityRepository
     }
 
     // Retourne le nombre de ressources d'une classification interne
-    public function getResourcesCount_IRC($file, $resourceType, $resourceClassificationCode)
+    public function getResourcesCount_IRC(\App\Entity\File $file, $resourceType, $resourceClassificationCode)
     {
     $qb = $this->createQueryBuilder('r');
     $qb->select($qb->expr()->count('r'));
@@ -110,7 +112,7 @@ class ResourceRepository extends ServiceEntityRepository
     }
 
     // Retourne les ressources d'une classification interne
-    public function getResources_IRC($file, $resourceType, $resourceClassificationCode)
+    public function getResources_IRC(\App\Entity\File $file, $resourceType, $resourceClassificationCode)
     {
 	$qb = $this->createQueryBuilder('r');
     $qb->where('r.file = :file')->setParameter('file', $file);
@@ -124,7 +126,7 @@ class ResourceRepository extends ServiceEntityRepository
     }
 
     // Retourne le nombre de ressources d'une classification externe
-    public function getResourcesCount_ERC($file, $resourceType, $resourceClassification)
+    public function getResourcesCount_ERC(\App\Entity\File $file, $resourceType, \App\Entity\ResourceClassification $resourceClassification)
     {
     $qb = $this->createQueryBuilder('r');
     $qb->select($qb->expr()->count('r'));
@@ -137,8 +139,8 @@ class ResourceRepository extends ServiceEntityRepository
     return $singleScalar;
     }
 
-    // Retourne les ressources d'une classification
-    public function getResources_ERC($file, $resourceType, $resourceClassification)
+    // Retourne les ressources d'une classification externe
+    public function getResources_ERC(\App\Entity\File $file, $resourceType, \App\Entity\ResourceClassification $resourceClassification)
     {
 	$qb = $this->createQueryBuilder('r');
     $qb->where('r.file = :file')->setParameter('file', $file);
@@ -149,16 +151,5 @@ class ResourceRepository extends ServiceEntityRepository
 	$query = $qb->getQuery();
 	$results = $query->getResult();
 	return $results;
-    }
-
-	// Affichage des réservations dans le calendrier
-	public function getCalendarBookings($file)
-    {
-    $qb = $this->createQueryBuilder('r');
-    $qb->where('r.file = :file')->setParameter('file', $file);
-   
-    $query = $qb->getQuery();
-    $results = $query->getResult();
-    return $results;
     }
 }

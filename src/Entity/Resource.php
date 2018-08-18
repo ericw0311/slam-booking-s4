@@ -41,7 +41,7 @@ class Resource
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\ResourceClassification", inversedBy="resources")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $classification;
 
@@ -172,21 +172,37 @@ class Resource
     $this->setFile($file);
     }
 
- public function getUserFile(): ?UserFile
- {
-     return $this->userFile;
- }
+    /**
+    * @ORM\PrePersist
+    */
+    public function createDate()
+    {
+        $this->createdAt = new \DateTime();
+    }
 
- public function setUserFile(?UserFile $userFile): self
- {
-     $this->userFile = $userFile;
-     $__EXTRA__LINE;
-     // set (or unset) the owning side of the relation if necessary
-     $newResource = $userFile === null ? null : $this;
-     if ($newResource !== $userFile->getResource()) {
-         $userFile->setResource($newResource);
-     }
-     $__EXTRA__LINE;
-     return $this;
- }
+    /**
+    * @ORM\PreUpdate
+    */
+    public function updateDate()
+    {
+		$this->updatedAt = new \DateTime();
+    }
+
+	public function getUserFile(): ?UserFile
+	{
+	return $this->userFile;
+	}
+
+	public function setUserFile(?UserFile $userFile): self
+	{
+	$this->userFile = $userFile;
+	$__EXTRA__LINE;
+	// set (or unset) the owning side of the relation if necessary
+	$newResource = $userFile === null ? null : $this;
+	if ($newResource !== $userFile->getResource()) {
+		$userFile->setResource($newResource);
+	}
+	$__EXTRA__LINE;
+	return $this;
+	}
 }

@@ -1,0 +1,56 @@
+{# templates/resource/edit.html.twig #}
+
+{% set resourceTypeIcons = constant('App\\Entity\\Constants::RESOURCE_TYPE_ICON') %}
+{% set resourceClassificationIcons = constant('App\\Entity\\Constants::RESOURCE_CLASSIFICATION_ICON') %}
+
+{% extends 'base.connected.html.twig' %}
+ 
+{% block body %}
+
+<legend>
+
+<img src="{{ asset('images/' ~ resourceTypeIcons[resource.type] ~ '-32.png') }}">&nbsp;{{ ('resourceType.singular.' ~ resource.type)|trans }}
+
+{% if resource.internal %}
+&nbsp;<img src="{{ asset('images/' ~ resourceClassificationIcons[resource.code] ~ '-32.png') }}">&nbsp;{{ ('resourceClassification.singular.' ~ resource.code)|trans }}
+{% else %}
+&nbsp;<img src="{{ asset('images/' ~ resourceTypeIcons[resource.type] ~ '-32.png') }}">&nbsp;{{ resource.classification.name }}
+{% endif %}
+
+{% if resourceContext.planificationPeriodsCount > 0 %}
+&nbsp;<img src="{{ asset('images/planification-16.png') }}">&nbsp;{{ 'resource.planified'|trans }}
+{% endif %}
+
+</legend>
+
+{% if resource.internal %}
+<p><img src="{{ asset('images/' ~ resourceClassificationIcons[resource.code] ~ '-32.png') }}">&nbsp;<strong>{{ resource.name }}</strong></p>
+{% else %}
+<p><img src="{{ asset('images/' ~ resourceTypeIcons[resource.type] ~ '-32.png') }}">&nbsp;<strong>{{ resource.name }}</strong></p>
+{% endif %}
+
+<div class="btn-group">
+
+<a href="{{ path('resource', { 'page': 1 }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'resource.back.to.list'|trans }}</a>
+<a href="{{ path('resource_modify', { 'resourceID': resource.ID }) }}" class="btn btn-primary"><i class="glyphicon glyphicon-pencil"></i> {{ 'modify'|trans }}</a>
+{% if resourceContext.planificationPeriodsCount > 0 %}
+	<a href="{{ path('resource_foreign', { 'resourceID': resource.ID }) }}" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> <del>{{ 'delete'|trans }}</del></a>
+{% else %}
+	<a href="{{ path('resource_delete', { 'resourceID': resource.ID }) }}" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> {{ 'delete'|trans }}</a>
+{% endif %}
+
+</div>
+
+{% endblock %}
+
+
+{% block message %}
+
+{% for flash_message in app.session.flashBag.get('notice') %}
+<div class="alert alert-success sb-message">
+	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+	{{ flash_message|trans }}
+</div>
+{% endfor %}
+
+{% endblock %}

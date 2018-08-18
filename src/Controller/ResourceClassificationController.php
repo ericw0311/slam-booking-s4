@@ -109,7 +109,7 @@ class ResourceClassificationController extends Controller
      * @Route("/resourceclassification/activateexternal/{resourceType}/{resourceClassificationID}", name="resource_classification_activate_external")
      * @ParamConverter("resourceClassification", options={"mapping": {"resourceClassificationID": "id"}})
      */
-    public function activate_external(Request $request, $resourceType, ResourceClassification $resourceClassification)
+    public function activate_external(Request $request, $resourceType, \App\Entity\ResourceClassification $resourceClassification)
     {
 	$connectedUser = $this->getUser();
 	$em = $this->getDoctrine()->getManager();
@@ -126,7 +126,7 @@ class ResourceClassificationController extends Controller
      * @Route("/resourceclassification/unactivateexternal/{resourceType}/{resourceClassificationID}", name="resource_classification_unactivate_external")
      * @ParamConverter("resourceClassification", options={"mapping": {"resourceClassificationID": "id"}})
      */
-    public function unactivate_external(Request $request, $resourceType, ResourceClassification $resourceClassification)
+    public function unactivate_external(Request $request, $resourceType, \App\Entity\ResourceClassification $resourceClassification)
     {
 	$connectedUser = $this->getUser();
 	$em = $this->getDoctrine()->getManager();
@@ -172,7 +172,7 @@ class ResourceClassificationController extends Controller
      * @Route("/resourceclassification/modify/{resourceType}/{resourceClassificationID}", name="resource_classification_modify")
      * @ParamConverter("resourceClassification", options={"mapping": {"resourceClassificationID": "id"}})
      */
-    public function modify(Request $request, $resourceType, ResourceClassification $resourceClassification)
+    public function modify(Request $request, $resourceType, \App\Entity\ResourceClassification $resourceClassification)
     {
 	$connectedUser = $this->getUser();
 	$em = $this->getDoctrine()->getManager();
@@ -197,7 +197,7 @@ class ResourceClassificationController extends Controller
      * @Route("/resourceclassification/delete/{resourceType}/{resourceClassificationID}", name="resource_classification_delete")
      * @ParamConverter("resourceClassification", options={"mapping": {"resourceClassificationID": "id"}})
      */
-    public function delete(Request $request, $resourceType, ResourceClassification $resourceClassification)
+    public function delete(Request $request, $resourceType, \App\Entity\ResourceClassification $resourceClassification)
     {
 	$connectedUser = $this->getUser();
 	$em = $this->getDoctrine()->getManager();
@@ -234,7 +234,7 @@ class ResourceClassificationController extends Controller
      * @Route("/resourceclassification/foreignexternal/{resourceType}/{resourceClassificationID}", name="resource_classification_foreign_external")
      * @ParamConverter("resourceClassification", options={"mapping": {"resourceClassificationID": "id"}})
      */
-    public function foreign_external($resourceType, $resourceClassificationID)
+    public function foreign_external($resourceType, \App\Entity\ResourceClassification $resourceClassification)
     {
 	$connectedUser = $this->getUser();
 	$em = $this->getDoctrine()->getManager();
