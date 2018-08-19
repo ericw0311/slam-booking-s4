@@ -9,11 +9,7 @@
 
 {{ form_start(form, {'action': path('resource_delete', { 'resourceID': resource.ID }), 'method': 'POST', 'class': 'form-horizontal'}) }}
 
-{% if resource.internal %}
-	<legend><img src="{{ asset('images/' ~ resourceClassificationIcons[resource.code] ~ '-32.png') }}">&nbsp;{{ ('resourceClassification.singular.' ~ resource.code)|trans }}</legend>
-{% else %}
-	<legend><img src="{{ asset('images/' ~ resourceTypeIcons[resource.type] ~ '-32.png') }}">&nbsp;{{ resourceClassification.name }}</legend>
-{% endif %}
+<legend><img src="{{ asset('images/' ~ resourceTypeIcons[resource.type] ~ '-32.png') }}">&nbsp;{{ resource.name }}</legend>
 
 <p>{{ 'resource.ask.delete'|trans({'%name%': resource.name}) }}</p>
 

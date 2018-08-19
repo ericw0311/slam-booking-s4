@@ -19,7 +19,7 @@ use App\Api\ResourceApi;
 class ResourceClassificationController extends Controller
 {
     /**
-     * @Route("/resourceclassification/{resourceType}", name="resource_classification")
+     * @Route("/resourceclassification/{resourceType}", name="resource_classification_index")
      */
     public function index($resourceType)
     {
@@ -74,7 +74,7 @@ class ResourceClassificationController extends Controller
 	}
 	$em->flush();
     $request->getSession()->getFlashBag()->add('notice', 'resourceClassification.activated.ok');
-    return $this->redirectToRoute('resource_classification', array('resourceType' => $resourceType));
+    return $this->redirectToRoute('resource_classification_index', array('resourceType' => $resourceType));
     }
 
     /**
@@ -102,7 +102,7 @@ class ResourceClassificationController extends Controller
 	}
 	$em->flush();
     $request->getSession()->getFlashBag()->add('notice', 'resourceClassification.unactivated.ok');
-    return $this->redirectToRoute('resource_classification', array('resourceType' => $resourceType));
+    return $this->redirectToRoute('resource_classification_index', array('resourceType' => $resourceType));
 	}
 
     /**
@@ -119,7 +119,7 @@ class ResourceClassificationController extends Controller
 	$em->flush();
     $request->getSession()->getFlashBag()->add('notice', 'resourceClassification.activated.ok');
     
-	return $this->redirectToRoute('resource_classification', array('resourceType' => $resourceType));
+	return $this->redirectToRoute('resource_classification_index', array('resourceType' => $resourceType));
     }
 
     /**
@@ -135,7 +135,7 @@ class ResourceClassificationController extends Controller
 	$resourceClassification->setActive(0);
 	$em->flush();
     $request->getSession()->getFlashBag()->add('notice', 'resourceClassification.unactivated.ok');
-    return $this->redirectToRoute('resource_classification', array('resourceType' => $resourceType));
+    return $this->redirectToRoute('resource_classification_index', array('resourceType' => $resourceType));
     }
 
     /**
@@ -159,7 +159,7 @@ class ResourceClassificationController extends Controller
 			$em->persist($resourceClassification);
 			$em->flush();
 			$request->getSession()->getFlashBag()->add('notice', 'resourceClassification.created.ok');
-		return $this->redirectToRoute('resource_classification', array('resourceType' => $resourceType));
+		return $this->redirectToRoute('resource_classification_index', array('resourceType' => $resourceType));
 		}
     }
 
@@ -185,7 +185,7 @@ class ResourceClassificationController extends Controller
 		if ($form->isSubmitted() && $form->isValid()) {
 			$em->flush();
 			$request->getSession()->getFlashBag()->add('notice', 'resourceClassification.updated.ok');
-			return $this->redirectToRoute('resource_classification', array('resourceType' => $resourceType));
+			return $this->redirectToRoute('resource_classification_index', array('resourceType' => $resourceType));
 		}
     }
 
@@ -211,7 +211,7 @@ class ResourceClassificationController extends Controller
 			$em->remove($resourceClassification);
 			$em->flush();
 			$request->getSession()->getFlashBag()->add('notice', 'resourceClassification.deleted.ok');
-			return $this->redirectToRoute('resource_classification', array('resourceType' => $resourceType));
+			return $this->redirectToRoute('resource_classification_index', array('resourceType' => $resourceType));
 		}
     }
 
@@ -227,7 +227,7 @@ class ResourceClassificationController extends Controller
 	$em = $this->getDoctrine()->getManager();
  	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
-	return $this->render('resource_classification/index.html.twig');
+	return $this->render('resource_classification/index.html.twig', array('userContext' => $userContext));
     }
 
     /**
@@ -240,6 +240,6 @@ class ResourceClassificationController extends Controller
 	$em = $this->getDoctrine()->getManager();
  	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
-	return $this->render('resource_classification/index.html.twig');
+	return $this->render('resource_classification/index.html.twig', array('userContext' => $userContext));
     }
 }

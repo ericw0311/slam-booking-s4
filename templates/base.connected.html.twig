@@ -20,7 +20,7 @@
 				<ul class="dropdown-menu">
 <li><a href="{{ path('user_file', { 'page': 1 }) }}"><img src="{{ asset('images/user-16.png') }}"> {{ 'users'|trans }}</a></li>
 <li><a href="{{ path('timetable', { 'page': 1 }) }}"><img src="{{ asset('images/time-16.png') }}"> {{ 'timetable.plural'|trans }}</a></li>
-<li><a href="{{ path('resource_classification', { 'resourceType': 'PLACE' }) }}"><img src="{{ asset('images/box-16.png') }}"> {{ 'resourceClassification.plural'|trans }}</a></li>
+<li><a href="{{ path('resource_classification_index', { 'resourceType': 'PLACE' }) }}"><img src="{{ asset('images/box-16.png') }}"> {{ 'resourceClassification.plural'|trans }}</a></li>
 <li><a href="{{ path('resource', { 'page': 1 }) }}"><img src="{{ asset('images/resource-16.png') }}"> {{ 'resource.plural'|trans }}</a></li>
 <li><a href="#"><img src="{{ asset('images/planification-16.png') }}"> {{ 'planification.plural'|trans }}</a></li>
 <li><a href="#"><img src="{{ asset('images/label-16.png') }}"> {{ 'labels'|trans }}</a></li>

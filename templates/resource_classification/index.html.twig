@@ -17,9 +17,9 @@
 {% for l_resourceType in resourceTypes %}
 <div class="row">
 {% if l_resourceType == resourceType %}
-<a href="{{ path('resource_classification', { 'resourceType': l_resourceType }) }}" class="list-group-item active"><img src="{{ asset('images/' ~ resourceTypeIcons[l_resourceType] ~ '-32.png') }}">&nbsp;{{ ('resourceType.plural.' ~ l_resourceType)|trans }}</a>
+<a href="{{ path('resource_classification_index', { 'resourceType': l_resourceType }) }}" class="list-group-item active"><img src="{{ asset('images/' ~ resourceTypeIcons[l_resourceType] ~ '-32.png') }}">&nbsp;{{ ('resourceType.plural.' ~ l_resourceType)|trans }}</a>
 {% else %}
-<a href="{{ path('resource_classification', { 'resourceType': l_resourceType }) }}" class="list-group-item"><img src="{{ asset('images/' ~ resourceTypeIcons[l_resourceType] ~ '-32.png') }}">&nbsp;{{ ('resourceType.plural.' ~ l_resourceType)|trans }}</a>
+<a href="{{ path('resource_classification_index', { 'resourceType': l_resourceType }) }}" class="list-group-item"><img src="{{ asset('images/' ~ resourceTypeIcons[l_resourceType] ~ '-32.png') }}">&nbsp;{{ ('resourceType.plural.' ~ l_resourceType)|trans }}</a>
 {% endif %}
 </div>
 {% endfor %}

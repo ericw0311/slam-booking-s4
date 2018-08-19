@@ -9,24 +9,24 @@
 
 <legend>
 
-<img src="{{ asset('images/' ~ resourceTypeIcons[resource.type] ~ '-32.png') }}">&nbsp;{{ ('resourceType.singular.' ~ resource.type)|trans }}
-
 {% if resource.internal %}
-&nbsp;<img src="{{ asset('images/' ~ resourceClassificationIcons[resource.code] ~ '-32.png') }}">&nbsp;{{ ('resourceClassification.singular.' ~ resource.code)|trans }}
+<img src="{{ asset('images/' ~ resourceClassificationIcons[resource.code] ~ '-32.png') }}">&nbsp;{{ resource.name }}
 {% else %}
-&nbsp;<img src="{{ asset('images/' ~ resourceTypeIcons[resource.type] ~ '-32.png') }}">&nbsp;{{ resource.classification.name }}
-{% endif %}
-
-{% if resourceContext.planificationPeriodsCount > 0 %}
-&nbsp;<img src="{{ asset('images/planification-16.png') }}">&nbsp;{{ 'resource.planified'|trans }}
+<img src="{{ asset('images/' ~ resourceTypeIcons[resource.type] ~ '-32.png') }}">&nbsp;{{ resource.name }}
 {% endif %}
 
 </legend>
 
+<p><img src="{{ asset('images/' ~ resourceTypeIcons[resource.type] ~ '-32.png') }}">&nbsp;{{ ('resourceType.singular.' ~ resource.type)|trans }}</p>
+
 {% if resource.internal %}
-<p><img src="{{ asset('images/' ~ resourceClassificationIcons[resource.code] ~ '-32.png') }}">&nbsp;<strong>{{ resource.name }}</strong></p>
+<p><img src="{{ asset('images/' ~ resourceClassificationIcons[resource.code] ~ '-32.png') }}">&nbsp;{{ ('resourceClassification.singular.' ~ resource.code)|trans }}</p>
 {% else %}
-<p><img src="{{ asset('images/' ~ resourceTypeIcons[resource.type] ~ '-32.png') }}">&nbsp;<strong>{{ resource.name }}</strong></p>
+<p><img src="{{ asset('images/' ~ resourceTypeIcons[resource.type] ~ '-32.png') }}">&nbsp;{{ resource.classification.name }}</p>
+{% endif %}
+
+{% if resourceContext.planificationPeriodsCount > 0 %}
+<p><img src="{{ asset('images/planification-16.png') }}">&nbsp;{{ 'resource.planified'|trans }}</p>
 {% endif %}
 
 <div class="btn-group">
