@@ -12,12 +12,14 @@ use App\Entity\UserFile;
 use App\Entity\UserParameter;
 use App\Entity\UserContext;
 use App\Entity\ListContext;
+use App\Entity\ResourceClassification;
 use App\Form\UserFileAddType;
 use App\Form\UserFileEmailType;
 use App\Form\UserFileType;
 use App\Form\UserFileAccountType;
 
 use App\Api\AdministrationApi;
+use App\Api\ResourceApi;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
@@ -126,7 +128,7 @@ class UserFileController extends Controller
     * @Route("/userfile/edit/{userFileID}", name="user_file_edit")
     * @ParamConverter("userFile", options={"mapping": {"userFileID": "id"}})
     */
-    public function edit(UserFile $userFile)
+    public function edit(\App\Entity\UserFile $userFile)
     {
 	$connectedUser = $this->getUser();
 	$em = $this->getDoctrine()->getManager();
@@ -137,6 +139,23 @@ class UserFileController extends Controller
     // L'utilisateur selectionne est-il le createur du dossier ?
     $selectedUserIsFileCreator = ($userFile->getUserCreated() and $userFile->getAccount() === $userContext->getCurrentFile()->getUser());
 	$atLeastOneUserClassification = false;
+	$resourceType = 'USER';
+	
+	// Premiere classification interne active (N si non trouvée)
+    $firstInternalResourceClassificationCode = ResourceApi::getFirstActiveInternalResourceClassification($em, $userContext->getCurrentFile(), $resourceType);
+	// Il existe au moins une classification interne active
+    if ($firstInternalResourceClassificationCode != "N") {
+		$atLeastOneUserClassification = true;
+	}
+    if (!$atLeastOneUserClassification) {
+		$rcRepository = $em->getRepository(ResourceClassification::Class);
+		// Premiere classification externe active
+		$firstExternalResourceClassification = $rcRepository->getFirsrActiveExternalResourceClassification($userContext->getCurrentFile(), $resourceType);
+		// Il existe au moins une classification externe active
+		if ($firstExternalResourceClassification !== null) {
+			$atLeastOneUserClassification = true;
+		}
+	}
 
 	return $this->render('user_file/edit.html.twig', array('userContext' => $userContext, 'userFile' => $userFile,
 		'connectedUserIsFileCreator' => $connectedUserIsFileCreator,
@@ -150,7 +169,7 @@ class UserFileController extends Controller
     * @Route("/userfile/modify/{userFileID}", name="user_file_modify")
     * @ParamConverter("userFile", options={"mapping": {"userFileID": "id"}})
     */
-    public function modify(Request $request, UserFile $userFile)
+    public function modify(Request $request, \App\Entity\UserFile $userFile)
     {
 	$connectedUser = $this->getUser();
 	$em = $this->getDoctrine()->getManager();
@@ -203,7 +222,7 @@ class UserFileController extends Controller
     * @Route("/userfile/delete/{userFileID}", name="user_file_delete")
     * @ParamConverter("userFile", options={"mapping": {"userFileID": "id"}})
     */
-	public function delete(Request $request, UserFile $userFile)
+	public function delete(Request $request, \App\Entity\UserFile $userFile)
 	{
 	$connectedUser = $this->getUser();
 	$em = $this->getDoctrine()->getManager();
@@ -230,4 +249,86 @@ class UserFileController extends Controller
 	}
 	return $this->render('user_file/delete.html.twig', array('userContext' => $userContext, 'userFile' => $userFile, 'form' => $form->createView()));
     }
+
+
+    //  Gestion des utilisateurs ressource
+    /**
+    * @Route("/userfile/resource/{userFileID}", name="user_file_resource")
+    * @ParamConverter("userFile", options={"mapping": {"userFileID": "id"}})
+    */
+	public function resource(Request $request, \App\Entity\UserFile $userFile)
+	{
+	$connectedUser = $this->getUser();
+	$em = $this->getDoctrine()->getManager();
+	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+	$resourceType = 'USER';
+	// Premiere classification interne active (N si non trouvée)
+    $firstInternalResourceClassificationCode = ResourceApi::getFirstActiveInternalResourceClassification($em, $userContext->getCurrentFile(), $resourceType);
+	// Il existe au moins une classification interne active
+    if ($firstInternalResourceClassificationCode != "N") {
+		return $this->redirectToRoute('user_file_resource_internal', array('userFileID' => $userFile->getID(), 'resourceClassificationCode' => $firstInternalResourceClassificationCode, 'yes' => 0));
+	}
+	$rcRepository = $em->getRepository(ResourceClassification::Class);
+	// Premiere classification externe active
+    $firstExternalResourceClassification = $rcRepository->getFirsrActiveExternalResourceClassification($userContext->getCurrentFile(), $resourceType);
+	// Il existe au moins une classification externe active
+	if ($firstExternalResourceClassification !== null) {
+		return $this->redirectToRoute('user_file_resource_external', array('userFileID' => $userFile->getID(), 'resourceClassificationID' => $firstExternalResourceClassification->getID(), 'yes' => 0));
+	}
+	// Cas ou aucune classification active. Normalement ce cas ne se produit pas (car dans ce cas on ne donne pas accès à la fonctionnalité utilisateur ressource)
+	return $this->redirectToRoute('user_file_resource_internal', array('userFileID' => $userFile->getID(), 'resourceClassificationCode' => $firstInternalResourceClassificationCode, 'yes' => 0));
+	}
+
+    /**
+    * @Route("/userfile/resourceinternal/{userFileID}/{resourceClassificationCode}/{yes}", name="user_file_resource_internal")
+    * @ParamConverter("userFile", options={"mapping": {"userFileID": "id"}})
+    */
+	public function resource_internal(Request $request, \App\Entity\UserFile $userFile, $resourceClassificationCode, $yes)
+	{
+	$connectedUser = $this->getUser();
+	$em = $this->getDoctrine()->getManager();
+	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+	$resourceType = 'USER';
+	$resourceClassificationID = 0;
+	// Classifications internes actives
+	$listActiveInternalRC = ResourceApi::getActiveInternalResourceClassifications($em, $userContext->getCurrentFile(), $resourceType);
+	$rcRepository = $em->getRepository(ResourceClassification::Class);
+	// Classifications externes actives
+    $listExternalRC = $rcRepository->getActiveExternalResourceClassifications($userContext->getCurrentFile(), $resourceType);
+	$yesOrNo = ($yes > 0) ? 'yes' :'no';
+
+    return $this->render('user_file/resource.'.$yesOrNo.'.html.twig',
+		array('userContext' => $userContext, 'userFile' => $userFile, 'resourceType' => $resourceType, 'yes' => $yes, 'internal' => 1,
+			'resourceClassificationCode' => $resourceClassificationCode, 'listActiveInternalRC' => $listActiveInternalRC,
+			'resourceClassificationID' => $resourceClassificationID, 'listExternalRC' => $listExternalRC));
+	}
+
+    /**
+    * @Route("/userfile/resourceexternal/{userFileID}/{resourceClassificationID}/{yes}", name="user_file_resource_external")
+    * @ParamConverter("userFile", options={"mapping": {"userFileID": "id"}})
+	* @ParamConverter("resourceClassification", options={"mapping": {"resourceClassificationID": "id"}})
+    */
+	public function resource_external(Request $request, \App\Entity\UserFile $userFile, \App\Entity\ResourceClassification $resourceClassification, $yes)
+	{
+	$connectedUser = $this->getUser();
+	$em = $this->getDoctrine()->getManager();
+	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+	$resourceType = 'USER';
+	$resourceClassificationCode = 'N';
+	// Classifications internes actives
+    $listActiveInternalRC = ResourceApi::getActiveExternalResourceClassifications($em, $userContext->getCurrentFile(), $resourceType);
+	$rcRepository = $em->getRepository(ResourceClassification::Class);
+	// Classifications externes actives
+    $listExternalRC = $rcRepository->getActiveExternalResourceClassifications($userContext->getCurrentFile(), $resourceType);
+
+	$yesOrNo = ($yes > 0) ? 'yes' :'no';
+
+    return $this->render('user_file/resource.'.$yesOrNo.'.html.twig',
+		array('userContext' => $userContext, 'userFile' => $userFile, 'resourceType' => $resourceType, 'yes' => $yes, 'internal' => 0,
+			'resourceClassificationCode' => $resourceClassificationCode, 'listActiveInternalRC' => $listActiveInternalRC,
+			'resourceClassificationID' => $resourceClassificationID, 'listExternalRC' => $listExternalRC));
+	}
 }

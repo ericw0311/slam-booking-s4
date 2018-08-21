@@ -71,6 +71,7 @@ sort.before: Trier avant
 summary: Synthèse
 to: A
 unactivate: Désactiver
+unactivate.not.allowed: Désactivation interdite
 update.not.allowed: Modification interdite
 user.account: Compte utilisateur
 validate: Valider

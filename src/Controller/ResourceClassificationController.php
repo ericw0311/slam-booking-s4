@@ -11,6 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 use App\Entity\UserContext;
 use App\Entity\ResourceClassification;
+use App\Entity\Resource;
 
 use App\Form\ResourceClassificationType;
 
@@ -227,18 +228,42 @@ class ResourceClassificationController extends Controller
 	$em = $this->getDoctrine()->getManager();
  	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
-	return $this->render('resource_classification/index.html.twig', array('userContext' => $userContext));
+	if ($resourceType == 'USER') {
+		$ufRepository = $em->getRepository(UserFile::Class);
+		$listUserFiles = $ufRepository->getUserFilesFrom_IRC($userContext->getCurrentFile(), $resourceClassificationCode);
+		return $this->render('resource_classification/foreign.user.html.twig',
+			array('userContext' => $userContext, 'resourceType' => $resourceType, 'action' => 'unactivate', 'listUserFiles' => $listUserFiles));
+	} else {
+		$rRepository = $em->getRepository(Resource::Class);
+		$listResources = $rRepository->getResources_IRC($userContext->getCurrentFile(), $resourceType, $resourceClassificationCode);
+                
+		return $this->render('resource_classification/foreign.internal.html.twig',
+	array('userContext' => $userContext, 'resourceClassificationCode' => $resourceClassificationCode, 'listResources' => $listResources));
+	}
     }
 
     /**
-     * @Route("/resourceclassification/foreignexternal/{resourceType}/{resourceClassificationID}", name="resource_classification_foreign_external")
+     * @Route("/resourceclassification/foreignexternal/{resourceType}/{resourceClassificationID}/{action}", name="resource_classification_foreign_external")
      * @ParamConverter("resourceClassification", options={"mapping": {"resourceClassificationID": "id"}})
      */
-    public function foreign_external($resourceType, \App\Entity\ResourceClassification $resourceClassification)
+    public function foreign_external($resourceType, \App\Entity\ResourceClassification $resourceClassification, $action)
     {
 	$connectedUser = $this->getUser();
 	$em = $this->getDoctrine()->getManager();
  	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+	if ($resourceType == 'USER') {
+		$ufRepository = $em->getRepository(UserFile::Class);
+		$listUserFiles = $ufRepository->getUserFilesFrom_ERC($userContext->getCurrentFile(), $resourceClassification);
+		return $this->render('resource_classification/foreign.user.html.twig',
+			array('userContext' => $userContext, 'resourceType' => $resourceType, 'action' => $action, 'listUserFiles' => $listUserFiles));
+	} else {
+		$rRepository = $em->getRepository(Resource::Class);
+		$listResources = $rRepository->getResources_ERC($userContext->getCurrentFile(), $resourceType, $resourceClassification);
+                
+		return $this->render('resource_classification/foreign.external.html.twig',
+			array('userContext' => $userContext, 'resourceType' => $resourceType, 'resourceClassification' => $resourceClassification, 'action' => $action, 'listResources' => $listResources));
+	}
 
 	return $this->render('resource_classification/index.html.twig', array('userContext' => $userContext));
     }

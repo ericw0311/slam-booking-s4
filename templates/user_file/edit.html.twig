@@ -36,6 +36,18 @@
 	<a href="{{ path('user_file_delete', { 'userFileID': userFile.ID }) }}" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> {{ 'delete'|trans }}</a>
 {% endif %}
 
+{% if atLeastOneUserClassification %}
+{% if userFile.resourceUser %}
+{% if userFile.resource.internal %}
+<a href="{{ path('user_file_resource_internal', { 'userFileID': userFile.ID, 'resourceClassificationCode': userFile.resource.code, 'yes': 1 }) }}" class="btn btn-default"><img src="{{ asset('images/resource-16.png') }}"> {{ 'resource.singular'|trans }}</a>
+{% else %}
+<a href="{{ path('user_file_resource_external', { 'userFileID': userFile.ID, 'resourceClassificationID': userFile.resource.classification.id, 'yes': 1 }) }}" class="btn btn-default"><img src="{{ asset('images/resource-16.png') }}"> {{ 'resource.singular'|trans }}</a>
+{% endif %}
+{% else %}
+<a href="{{ path('user_file_resource', { 'userFileID': userFile.ID }) }}" class="btn btn-default"><img src="{{ asset('images/resource-16.png') }}"> {{ 'resource.singular'|trans }}</a>
+{% endif %}
+{% endif %}
+
 </div>
 
 <!-- Modal -->

@@ -71,6 +71,7 @@ sort.before: Sort before
 summary: Summary
 to: To
 unactivate: Unactivate
+unactivate.not.allowed: Unactivate not allowed
 update.not.allowed: Update not allowed
 user.account: User account
 validate: Validate
