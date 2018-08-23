@@ -1,0 +1,22 @@
+{# templates/resource_classification/foreign.user.external.html.twig #}
+
+{% extends 'base.connected.html.twig' %}
+ 
+{% block body %}
+
+<legend><img src="{{ asset('images/user-32.png') }}">&nbsp;{{ resourceClassification.name }}:&nbsp;{{ ('resourceClassification.' ~ action ~ '.not.allowed')|trans }}</legend>
+
+<div class="panel panel-danger">
+
+{% for userFile in listUserFiles %}
+{% if userFile.administrator %} {% set image = 'administrator-32.png' %} {% else %} {% set image = 'user-32.png' %} {% endif %}
+{% if userFile.userCreated %}
+	<a href="{{ path('user_file_edit', { 'userFileID': userFile.ID }) }}" class="list-group-item"><img src="{{ asset('images/' ~ image) }}">&nbsp;{{ userFile.getFirstAndLastName() }}&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-user"></span>&nbsp;{{ userFile.username }}</a>
+{% else %}
+	<a href="{{ path('user_file_edit', { 'userFileID': userFile.ID }) }}" class="list-group-item list-group-item-warning"><img src="{{ asset('images/' ~ image) }}">&nbsp;{{ userFile.getFirstAndLastName() }}</a>
+{% endif %}
+{% endfor %}
+
+</div>
+
+{% endblock %}

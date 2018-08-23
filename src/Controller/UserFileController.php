@@ -13,6 +13,7 @@ use App\Entity\UserParameter;
 use App\Entity\UserContext;
 use App\Entity\ListContext;
 use App\Entity\ResourceClassification;
+use App\Entity\Resource;
 use App\Form\UserFileAddType;
 use App\Form\UserFileEmailType;
 use App\Form\UserFileType;
@@ -319,7 +320,7 @@ class UserFileController extends Controller
 	$resourceType = 'USER';
 	$resourceClassificationCode = 'N';
 	// Classifications internes actives
-    $listActiveInternalRC = ResourceApi::getActiveExternalResourceClassifications($em, $userContext->getCurrentFile(), $resourceType);
+    $listActiveInternalRC = ResourceApi::getActiveInternalResourceClassifications($em, $userContext->getCurrentFile(), $resourceType);
 	$rcRepository = $em->getRepository(ResourceClassification::Class);
 	// Classifications externes actives
     $listExternalRC = $rcRepository->getActiveExternalResourceClassifications($userContext->getCurrentFile(), $resourceType);
@@ -329,6 +330,110 @@ class UserFileController extends Controller
     return $this->render('user_file/resource.'.$yesOrNo.'.html.twig',
 		array('userContext' => $userContext, 'userFile' => $userFile, 'resourceType' => $resourceType, 'yes' => $yes, 'internal' => 0,
 			'resourceClassificationCode' => $resourceClassificationCode, 'listActiveInternalRC' => $listActiveInternalRC,
-			'resourceClassificationID' => $resourceClassificationID, 'listExternalRC' => $listExternalRC));
+			'resourceClassificationID' => $resourceClassification->getID(), 'listExternalRC' => $listExternalRC));
+	}
+
+
+    /**
+    * @Route("/userfile/resourcevalidateinternal/{userFileID}/{resourceClassificationCode}/{yes}", name="user_file_resource_validate_internal")
+    * @ParamConverter("userFile", options={"mapping": {"userFileID": "id"}})
+    */
+	public function resource_validate_internal(Request $request, \App\Entity\UserFile $userFile, $resourceClassificationCode, $yes)
+	{
+	$connectedUser = $this->getUser();
+	$em = $this->getDoctrine()->getManager();
+	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+	$resourceType = 'USER';
+	$rRepository = $em->getRepository(Resource::Class);
+	$resourceFound = false;
+	if ($userFile->getResource() !== null) {
+		$resource = $rRepository->findOneBy(array('id' => $userFile->getResource()));
+		if ($resource !== null) {
+			$resourceFound = true;
+		}
+	}
+	if ($yes > 0) {
+		$userFile->setResourceUser(1);
+	} else {
+		$userFile->setResourceUser(0);
+		$userFile->setResource(null);
+	}
+	
+	if ($userFile->getResourceUser() > 0) { // Création ou mise à jour de la ressource rattachée à l'utilisateur
+		if ($resourceFound) {
+			$resource->setInternal(1);
+			$resource->setCode($resourceClassificationCode);
+			$resource->setClassification(null);
+		} else {
+			$resource = new Resource($connectedUser, $userContext->getCurrentFile());
+			$resource->setInternal(1);
+			$resource->setType($resourceType);
+			$resource->setCode($resourceClassificationCode);
+			$resource->setName($userFile->getFirstAndLastName());
+			$em->persist($resource);
+			$userFile->setResource($resource);
+		}
+	} else {
+		if ($resourceFound) {
+			$em->remove($resource);
+		}
+	}
+	$em->persist($userFile);
+	$em->flush();
+	$request->getSession()->getFlashBag()->add('notice', 'userFile.resource.updated.ok');
+	return $this->redirectToRoute('user_file_edit', array('userFileID' => $userFile->getID()));
+	}
+
+    /**
+    * @Route("/userfile/resourcevalidateexternal/{userFileID}/{resourceClassificationID}/{yes}", name="user_file_resource_validate_external")
+    * @ParamConverter("userFile", options={"mapping": {"userFileID": "id"}})
+	* @ParamConverter("resourceClassification", options={"mapping": {"resourceClassificationID": "id"}})
+    */
+	public function resource_validate_external(Request $request, \App\Entity\UserFile $userFile, \App\Entity\ResourceClassification $resourceClassification, $yes)
+	{
+	$connectedUser = $this->getUser();
+	$em = $this->getDoctrine()->getManager();
+	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+	$resourceType = 'USER';
+	$rRepository = $em->getRepository(Resource::Class);
+	$resourceFound = false;
+	if ($userFile->getResource() !== null) {
+		$resource = $rRepository->findOneBy(array('id' => $userFile->getResource()));
+		if ($resource !== null) {
+			$resourceFound = true;
+		}
+	}
+	if ($yes > 0) {
+		$userFile->setResourceUser(1);
+	} else {
+		$userFile->setResourceUser(0);
+		$userFile->setResource(null);
+	}
+	
+	if ($userFile->getResourceUser() > 0) { // Création ou mise à jour de la ressource rattachée à l'utilisateur
+		if ($resourceFound) {
+			$resource->setInternal(0);
+			$resource->setClassification($resourceClassification);
+			$resource->setCode("");
+		} else {
+			$resource = new Resource($connectedUser, $userContext->getCurrentFile());
+			$resource->setInternal(0);
+			$resource->setType($resourceType);
+			$resource->setClassification($resourceClassification);
+			$resource->setName($userFile->getFirstAndLastName());
+			$em->persist($resource);
+			$userFile->setResource($resource);
+		}
+	} else { // Suppression de la ressource rattachée à l'utilisateur
+		if ($resourceFound) {
+			$em->remove($resource);
+		}
+	}
+	$em->persist($userFile);
+	$em->flush();
+	$request->getSession()->getFlashBag()->add('notice', 'userFile.resource.updated.ok');
+	return $this->redirectToRoute('user_file_edit', array('userFileID' => $userFile->getID()));
 	}
 }

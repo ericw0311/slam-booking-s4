@@ -11,6 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 use App\Entity\UserContext;
 use App\Entity\ResourceClassification;
+use App\Entity\UserFile;
 use App\Entity\Resource;
 
 use App\Form\ResourceClassificationType;
@@ -231,8 +232,8 @@ class ResourceClassificationController extends Controller
 	if ($resourceType == 'USER') {
 		$ufRepository = $em->getRepository(UserFile::Class);
 		$listUserFiles = $ufRepository->getUserFilesFrom_IRC($userContext->getCurrentFile(), $resourceClassificationCode);
-		return $this->render('resource_classification/foreign.user.html.twig',
-			array('userContext' => $userContext, 'resourceType' => $resourceType, 'action' => 'unactivate', 'listUserFiles' => $listUserFiles));
+		return $this->render('resource_classification/foreign.user.internal.html.twig',
+			array('userContext' => $userContext, 'resourceClassificationCode' => $resourceClassificationCode, 'action' => 'unactivate', 'listUserFiles' => $listUserFiles));
 	} else {
 		$rRepository = $em->getRepository(Resource::Class);
 		$listResources = $rRepository->getResources_IRC($userContext->getCurrentFile(), $resourceType, $resourceClassificationCode);
@@ -255,8 +256,8 @@ class ResourceClassificationController extends Controller
 	if ($resourceType == 'USER') {
 		$ufRepository = $em->getRepository(UserFile::Class);
 		$listUserFiles = $ufRepository->getUserFilesFrom_ERC($userContext->getCurrentFile(), $resourceClassification);
-		return $this->render('resource_classification/foreign.user.html.twig',
-			array('userContext' => $userContext, 'resourceType' => $resourceType, 'action' => $action, 'listUserFiles' => $listUserFiles));
+		return $this->render('resource_classification/foreign.user.external.html.twig',
+			array('userContext' => $userContext, 'resourceClassification' => $resourceClassification, 'action' => $action, 'listUserFiles' => $listUserFiles));
 	} else {
 		$rRepository = $em->getRepository(Resource::Class);
 		$listResources = $rRepository->getResources_ERC($userContext->getCurrentFile(), $resourceType, $resourceClassification);
