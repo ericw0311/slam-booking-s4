@@ -82,6 +82,7 @@ class User implements UserInterface, \Serializable
         $this->timetableLines = new ArrayCollection();
         $this->resourceClassifications = new ArrayCollection();
         $this->resources = new ArrayCollection();
+        $this->planifications = new ArrayCollection();
     }
 
     public function getId()
@@ -276,6 +277,11 @@ class User implements UserInterface, \Serializable
   * @ORM\OneToMany(targetEntity="App\Entity\Resource", mappedBy="user", orphanRemoval=true)
   */
  private $resources;
+
+ /**
+  * @ORM\OneToMany(targetEntity="App\Entity\Planification", mappedBy="user", orphanRemoval=true)
+  */
+ private $planifications;
 
 
 
@@ -489,6 +495,37 @@ class User implements UserInterface, \Serializable
             // set the owning side to null (unless already changed)
             if ($resource->getUser() === $this) {
                 $resource->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Planification[]
+     */
+    public function getPlanifications(): Collection
+    {
+        return $this->planifications;
+    }
+
+    public function addPlanification(Planification $planification): self
+    {
+        if (!$this->planifications->contains($planification)) {
+            $this->planifications[] = $planification;
+            $planification->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removePlanification(Planification $planification): self
+    {
+        if ($this->planifications->contains($planification)) {
+            $this->planifications->removeElement($planification);
+            // set the owning side to null (unless already changed)
+            if ($planification->getUser() === $this) {
+                $planification->setUser(null);
             }
         }
 

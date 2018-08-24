@@ -64,11 +64,17 @@ class Timetable
      */
     private $timetableLines;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\PlanificationLine", mappedBy="timetable")
+     */
+    private $planificationLines;
+
 	public function __construct(\App\Entity\User $user, \App\Entity\File $file)
     {
     $this->setUser($user);
     $this->setFile($file);
 	$this->timetableLines = new ArrayCollection();
+ $this->planificationLines = new ArrayCollection();
     }
 
     public function getId()
@@ -165,6 +171,37 @@ class Timetable
             // set the owning side to null (unless already changed)
             if ($timetableLine->getTimetable() === $this) {
                 $timetableLine->setTimetable(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|PlanificationLine[]
+     */
+    public function getPlanificationLines(): Collection
+    {
+        return $this->planificationLines;
+    }
+
+    public function addPlanificationLine(PlanificationLine $planificationLine): self
+    {
+        if (!$this->planificationLines->contains($planificationLine)) {
+            $this->planificationLines[] = $planificationLine;
+            $planificationLine->setTimetable($this);
+        }
+
+        return $this;
+    }
+
+    public function removePlanificationLine(PlanificationLine $planificationLine): self
+    {
+        if ($this->planificationLines->contains($planificationLine)) {
+            $this->planificationLines->removeElement($planificationLine);
+            // set the owning side to null (unless already changed)
+            if ($planificationLine->getTimetable() === $this) {
+                $planificationLine->setTimetable(null);
             }
         }
 

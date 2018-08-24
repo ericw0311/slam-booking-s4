@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -76,6 +78,11 @@ class Resource
      * @ORM\OneToOne(targetEntity="App\Entity\UserFile", mappedBy="resource", cascade={"persist", "remove"})
      */
     private $userFile;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\PlanificationResource", mappedBy="resource")
+     */
+    private $planificationResources;
 
     public function getId()
     {
@@ -170,6 +177,7 @@ class Resource
     {
     $this->setUser($user);
     $this->setFile($file);
+    $this->planificationResources = new ArrayCollection();
     }
 
     /**
@@ -205,4 +213,35 @@ class Resource
 	$__EXTRA__LINE;
 	return $this;
 	}
+ private $__EXTRA__LINE;
+ /**
+  * @return Collection|PlanificationResource[]
+  */
+ public function getPlanificationResources(): Collection
+ {
+     return $this->planificationResources;
+ }
+
+ public function addPlanificationResource(PlanificationResource $planificationResource): self
+ {
+     if (!$this->planificationResources->contains($planificationResource)) {
+         $this->planificationResources[] = $planificationResource;
+         $planificationResource->setResource($this);
+     }
+     $__EXTRA__LINE;
+     return $this;
+ }
+
+ public function removePlanificationResource(PlanificationResource $planificationResource): self
+ {
+     if ($this->planificationResources->contains($planificationResource)) {
+         $this->planificationResources->removeElement($planificationResource);
+         // set the owning side to null (unless already changed)
+         if ($planificationResource->getResource() === $this) {
+             $planificationResource->setResource(null);
+         }
+     }
+     $__EXTRA__LINE;
+     return $this;
+ }
 }

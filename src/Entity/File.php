@@ -64,6 +64,11 @@ class File
      */
     private $resources;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Planification", mappedBy="file", orphanRemoval=true)
+     */
+    private $planifications;
+
     public function __construct(\App\Entity\User $user)
     {
 		$this->setUser($user);
@@ -71,6 +76,7 @@ class File
         $this->timetables = new ArrayCollection();
         $this->resourceClassifications = new ArrayCollection();
         $this->resources = new ArrayCollection();
+        $this->planifications = new ArrayCollection();
     }
 
     public function getId()
@@ -236,6 +242,37 @@ class File
             // set the owning side to null (unless already changed)
             if ($resource->getFile() === $this) {
                 $resource->setFile(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Planification[]
+     */
+    public function getPlanifications(): Collection
+    {
+        return $this->planifications;
+    }
+
+    public function addPlanification(Planification $planification): self
+    {
+        if (!$this->planifications->contains($planification)) {
+            $this->planifications[] = $planification;
+            $planification->setFile($this);
+        }
+
+        return $this;
+    }
+
+    public function removePlanification(Planification $planification): self
+    {
+        if ($this->planifications->contains($planification)) {
+            $this->planifications->removeElement($planification);
+            // set the owning side to null (unless already changed)
+            if ($planification->getFile() === $this) {
+                $planification->setFile(null);
             }
         }
 
