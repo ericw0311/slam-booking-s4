@@ -51,15 +51,15 @@ class DoctrineSubscriber implements EventSubscriber
 
         if ($entity instanceof User) {
 			$this->getLogger()->info('DoctrineSubscriber postPersist 2 User');
-            $entityManager = $args->getEntityManager();
+            $em = $args->getEntityManager();
 
-			UserEvent::postPersist($entityManager, $entity);
+			UserEvent::postPersist($em, $entity);
 
 		} else if ($entity instanceof File) {
 			$this->getLogger()->info('DoctrineSubscriber postPersist 3 File');
-            $entityManager = $args->getEntityManager();
+            $em = $args->getEntityManager();
 
-			FileEvent::postPersist($entityManager, $this->getUser(), $entity, $this->getTranslator());
+			FileEvent::postPersist($em, $this->getUser(), $entity, $this->getTranslator());
 		}
 
     }
@@ -71,9 +71,9 @@ class DoctrineSubscriber implements EventSubscriber
 
         if ($entity instanceof User) {
 			$this->getLogger()->info('DoctrineSubscriber postUpdate 2 User');
-            $entityManager = $args->getEntityManager();
+            $em = $args->getEntityManager();
 
-			UserEvent::postUpdate($entityManager, $entity);
+			UserEvent::postUpdate($em, $entity);
 		}
-    }
+	}
 }
