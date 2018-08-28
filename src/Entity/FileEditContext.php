@@ -56,16 +56,14 @@ class FileEditContext
     {
     $ufRepository = $em->getRepository(UserFile::class);
     $this->setUserFilesCount($ufRepository->getUserFilesExceptFileCreatorCount($file));
-/*
+
     $lRepository = $em->getRepository(Label::class);
     $this->setLabelsCount($lRepository->getLabelsCount($file));
+
     $tRepository = $em->getRepository(Timetable::class);
     $this->setUserTimetablesCount($tRepository->getUserTimetablesCount($file));
+
     $rRepository = $em->getRepository(Resource::class);
     $this->setResourcesCount($rRepository->getResourcesCount($file));
-*/
-    $this->setLabelsCount(0);
-    $this->setUserTimetablesCount(0);
-    $this->setResourcesCount(0);
     }
 }

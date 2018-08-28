@@ -50,7 +50,8 @@ class UserFileRepository extends ServiceEntityRepository
 	$qb->select($qb->expr()->count('uf'));
 	$qb->where('uf.file = :file')->setParameter('file', $file);
 	$qb->andWhere($qb->expr()->not($qb->expr()->eq('uf.account', '?1')));
-	$qb->setParameter(1, $file->getUser()); 
+	$qb->setParameter(1, $file->getUser());
+
 	$query = $qb->getQuery();
 	$singleScalar = $query->getSingleScalarResult();
 	return $singleScalar;
@@ -60,8 +61,10 @@ class UserFileRepository extends ServiceEntityRepository
 	{
 	$qb = $this->createQueryBuilder('uf');
 	$qb->where('uf.file = :file')->setParameter('file', $file);
+/*
 	$qb->andWhere($qb->expr()->not($qb->expr()->eq('uf.account', '?1')));
 	$qb->setParameter(1, $file->getUser()); 
+*/
 	$qb->orderBy('uf.firstName', 'ASC');
 	$qb->addOrderBy('uf.lastName', 'ASC');
 

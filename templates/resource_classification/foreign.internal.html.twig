@@ -9,7 +9,7 @@
 
 <legend><img src="{{ asset('images/' ~ resourceClassificationIcons[resourceClassificationCode] ~ '-32.png') }}">&nbsp;{{ ('resourceClassification.plural.' ~ resourceClassificationCode)|trans }}:&nbsp;{{ 'unactivate.not.allowed'|trans }}</legend>
 
-<div class="panel panel-danger">
+<div class="panel">
 
 {% for resource in listResources %}
 	<a href="{{ path('resource_edit', { 'resourceID': resource.ID }) }}" class="list-group-item list-group-item-warning"><img src="{{ asset('images/' ~ resourceClassificationIcons[resource.code] ~ '-32.png') }}">&nbsp;{{ resource.name }}</a>

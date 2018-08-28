@@ -11,6 +11,11 @@ use App\Entity\File;
 use App\Entity\User;
 use App\Entity\UserContext;
 use App\Entity\ListContext;
+use App\Entity\UserFile;
+use App\Entity\Timetable;
+use App\Entity\Resource;
+use App\Entity\Label;
+
 use App\Form\FileType;
 use App\Api\AdministrationApi;
 
@@ -142,7 +147,21 @@ class FileController extends Controller
 	$em = $this->getDoctrine()->getManager();
  	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
-	return $this->render('file/foreign.html.twig', array('userContext' => $userContext, 'file' => $file));
+	$ufRepository = $em->getRepository(UserFile::Class);
+	$listUserFiles = $ufRepository->getUserFilesExceptFileCreator($file);
+
+    $tRepository = $em->getRepository(Timetable::Class);
+    $listUserTimetables = $tRepository->getUserTimetables($file);
+                
+    $rRepository = $em->getRepository(Resource::Class);
+    $listResources = $rRepository->getResources($file);
+
+    $lRepository = $em->getRepository(Label::Class);
+    $listLabels = $lRepository->getLabels($file);
+
+	return $this->render('file/foreign.html.twig', array('userContext' => $userContext, 'file' => $file,
+		'listUserFiles' => $listUserFiles, 'listUserTimetables' => $listUserTimetables,
+		'listResources' => $listResources, 'listLabels' => $listLabels));
     }
 
 

@@ -83,6 +83,7 @@ class User implements UserInterface, \Serializable
         $this->resourceClassifications = new ArrayCollection();
         $this->resources = new ArrayCollection();
         $this->planifications = new ArrayCollection();
+        $this->labels = new ArrayCollection();
     }
 
     public function getId()
@@ -282,6 +283,10 @@ class User implements UserInterface, \Serializable
   * @ORM\OneToMany(targetEntity="App\Entity\Planification", mappedBy="user", orphanRemoval=true)
   */
  private $planifications;
+ /**
+  * @ORM\OneToMany(targetEntity="App\Entity\Label", mappedBy="user", orphanRemoval=true)
+  */
+ private $labels;
 
 
 
@@ -484,7 +489,6 @@ class User implements UserInterface, \Serializable
             $this->resources[] = $resource;
             $resource->setUser($this);
         }
-
         return $this;
     }
 
@@ -497,7 +501,6 @@ class User implements UserInterface, \Serializable
                 $resource->setUser(null);
             }
         }
-
         return $this;
     }
 
@@ -515,7 +518,6 @@ class User implements UserInterface, \Serializable
             $this->planifications[] = $planification;
             $planification->setUser($this);
         }
-
         return $this;
     }
 
@@ -529,6 +531,35 @@ class User implements UserInterface, \Serializable
             }
         }
 
+        return $this;
+    }
+
+    /**
+     * @return Collection|Label[]
+     */
+    public function getLabels(): Collection
+    {
+        return $this->labels;
+    }
+
+    public function addLabel(Label $label): self
+    {
+        if (!$this->labels->contains($label)) {
+            $this->labels[] = $label;
+            $label->setUser($this);
+        }
+        return $this;
+    }
+
+    public function removeLabel(Label $label): self
+    {
+        if ($this->labels->contains($label)) {
+            $this->labels->removeElement($label);
+            // set the owning side to null (unless already changed)
+            if ($label->getUser() === $this) {
+                $label->setUser(null);
+            }
+        }
         return $this;
     }
 }
