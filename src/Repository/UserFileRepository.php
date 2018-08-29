@@ -44,12 +44,13 @@ class UserFileRepository extends ServiceEntityRepository
 	return $results;
 	}
 
+	// Sélection des utilisateurs à l'exception du créateur du dossier
 	public function getUserFilesExceptFileCreatorCount(\App\Entity\File $file)
 	{
 	$qb = $this->createQueryBuilder('uf');
 	$qb->select($qb->expr()->count('uf'));
 	$qb->where('uf.file = :file')->setParameter('file', $file);
-	$qb->andWhere($qb->expr()->not($qb->expr()->eq('uf.account', '?1')));
+	$qb->andWhere($qb->expr()->orX($qb->expr()->isNull('uf.account'), $qb->expr()->neq('uf.account', '?1')));
 	$qb->setParameter(1, $file->getUser());
 
 	$query = $qb->getQuery();
@@ -57,14 +58,15 @@ class UserFileRepository extends ServiceEntityRepository
 	return $singleScalar;
 	}
 
+	// Sélection des utilisateurs à l'exception du créateur du dossier
 	public function getUserFilesExceptFileCreator(\App\Entity\File $file)
 	{
 	$qb = $this->createQueryBuilder('uf');
 	$qb->where('uf.file = :file')->setParameter('file', $file);
-/*
-	$qb->andWhere($qb->expr()->not($qb->expr()->eq('uf.account', '?1')));
+
+	$qb->andWhere($qb->expr()->orX($qb->expr()->isNull('uf.account'), $qb->expr()->neq('uf.account', '?1')));
 	$qb->setParameter(1, $file->getUser()); 
-*/
+
 	$qb->orderBy('uf.firstName', 'ASC');
 	$qb->addOrderBy('uf.lastName', 'ASC');
 
