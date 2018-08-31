@@ -45,6 +45,12 @@ class PlanificationResource
      */
     private $updatedAt;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="planificationResources")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $user;
+
     public function getId()
     {
         return $this->id;
@@ -84,6 +90,13 @@ class PlanificationResource
         return $this;
     }
 
+	public function __construct(\App\Entity\User $user, \App\Entity\PlanificationPeriod $planificationPeriod, \App\Entity\Resource $resource)
+    {
+	$this->setUser($user);
+    $this->setPlanificationPeriod($planificationPeriod);
+    $this->setResource($resource);
+    }
+
     /**
     * @ORM\PrePersist
     */
@@ -98,5 +111,17 @@ class PlanificationResource
     public function updateDate()
     {
         $this->updatedAt = new \DateTime();
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
     }
 }

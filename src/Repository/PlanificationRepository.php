@@ -19,32 +19,91 @@ class PlanificationRepository extends ServiceEntityRepository
         parent::__construct($registry, Planification::class);
     }
 
-//    /**
-//     * @return Planification[] Returns an array of Planification objects
-//     */
-    /*
-    public function findByExampleField($value)
+    public function getPlanificationsCount($file)
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+    $queryBuilder = $this->createQueryBuilder('p');
+    $queryBuilder->select($queryBuilder->expr()->count('p'));
+    $queryBuilder->where('p.file = :file')->setParameter('file', $file);
 
-    /*
-    public function findOneBySomeField($value): ?Planification
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+    $query = $queryBuilder->getQuery();
+    $singleScalar = $query->getSingleScalarResult();
+    return $singleScalar;
     }
-    */
+	
+    public function getDisplayedPlanifications($file, $firstRecordIndex, $maxRecord)
+    {
+    $qb = $this->createQueryBuilder('p');
+    $qb->where('p.file = :file')->setParameter('file', $file);
+    $qb->orderBy('p.type', 'ASC');
+    $qb->addOrderBy('p.internal', 'DESC');
+    $qb->addOrderBy('p.code', 'ASC');
+    $qb->addOrderBy('p.name', 'ASC');
+    $qb->setFirstResult($firstRecordIndex);
+    $qb->setMaxResults($maxRecord);
+   
+    $query = $qb->getQuery();
+    $results = $query->getResult();
+    return $results;
+    }
+
+	// Retourne la première planification affichée dans le planning
+	public function getFirstPlanningPlanification($file, \Datetime $date)
+    {
+    $qb = $this->createQueryBuilder('p');
+    $qb->select('p.id planificationID');
+    $qb->addSelect('pp.id planificationPeriodID');
+    $qb->where('p.file = :file')->setParameter('file', $file);
+	$this->getPlanningPlanificationsPeriod($qb);
+	$this->getPlanningPlanificationsSort($qb);
+	$this->getPlanningPlanificationsPeriodParameters($qb, $date);
+
+	$qb->setMaxResults(1);
+    $query = $qb->getQuery();
+	$results = $query->getSingleResult();
+    return $results;
+    }
+
+    public function getPlanningPlanifications($file, \Datetime $date)
+    {
+    $qb = $this->createQueryBuilder('p');
+    $qb->select('p.id ID');
+    $qb->addSelect('p.type');
+    $qb->addSelect('p.name');
+    $qb->addSelect('p.internal');
+    $qb->addSelect('p.code');
+    $qb->addSelect('pp.id planificationPeriodID');
+    $qb->where('p.file = :file')->setParameter('file', $file);
+	$this->getPlanningPlanificationsPeriod($qb);
+	$this->getPlanningPlanificationsSort($qb);
+	$this->getPlanningPlanificationsPeriodParameters($qb, $date);
+
+    $query = $qb->getQuery();
+    $results = $query->getResult();
+    return $results;
+    }
+
+	// Planifications affichées dans le planning: période
+	public function getPlanningPlanificationsPeriod($qb)
+    {
+	$qb->innerJoin('p.planificationPeriods', 'pp', Expr\Join::WITH,
+		$qb->expr()->andX(
+			$qb->expr()->orX($qb->expr()->isNull('pp.beginningDate'), $qb->expr()->lte('pp.beginningDate', ':beginningDate')),
+			$qb->expr()->orX($qb->expr()->isNull('pp.endDate'), $qb->expr()->gte('pp.endDate', ':endDate'))));
+    }
+
+	// Planifications affichées dans le planning: paramètres de la période
+	public function getPlanningPlanificationsPeriodParameters($qb, \Datetime $date)
+    {
+	$qb->setParameter('beginningDate', $date->format('Ymd'));
+	$qb->setParameter('endDate', $date->format('Ymd'));
+    }
+
+	// Planifications affichées dans le planning: tri
+	public function getPlanningPlanificationsSort($qb)
+    {
+    $qb->orderBy('p.type', 'ASC');
+    $qb->addOrderBy('p.internal', 'DESC');
+    $qb->addOrderBy('p.code', 'ASC');
+    $qb->addOrderBy('p.name', 'ASC');
+    }
 }

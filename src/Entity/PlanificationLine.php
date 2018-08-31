@@ -33,7 +33,7 @@ class PlanificationLine
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Timetable", inversedBy="planificationLines")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $timetable;
 
@@ -56,6 +56,12 @@ class PlanificationLine
      * @ORM\Column(name="updated_at", type="datetime", nullable=true)
      */
     private $updatedAt;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="planificationLines")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $user;
 
     public function getId()
     {
@@ -122,6 +128,15 @@ class PlanificationLine
         return $this;
     }
 
+	public function __construct(\App\Entity\User $user, \App\Entity\PlanificationPeriod $planificationPeriod, $weekDay, $order)
+    {
+		$this->setUser($user);
+		$this->setPlanificationPeriod($planificationPeriod);
+		$this->setWeekDay($weekDay);
+		$this->setOrder($order);
+		$this->setActive(0);
+    }
+
     /**
     * @ORM\PrePersist
     */
@@ -136,5 +151,17 @@ class PlanificationLine
     public function updateDate()
     {
         $this->updatedAt = new \DateTime();
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
     }
 }

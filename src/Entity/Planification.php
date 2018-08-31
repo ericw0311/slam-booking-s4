@@ -71,9 +71,11 @@ class Planification
      */
     private $planificationPeriods;
 
-    public function __construct()
+	public function __construct(\App\Entity\User $user, \App\Entity\File $file)
     {
-        $this->planificationPeriods = new ArrayCollection();
+    $this->setUser($user);
+    $this->setFile($file);
+	$this->planificationPeriods = new ArrayCollection();
     }
 
     public function getId()
@@ -108,7 +110,7 @@ class Planification
         return $this->code;
     }
 
-    public function setCode(bool $code): self
+    public function setCode(string $code): self
     {
         $this->code = $code;
         return $this;

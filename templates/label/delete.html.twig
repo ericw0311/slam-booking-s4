@@ -1,0 +1,20 @@
+{# templates/label/delete.html.twig #}
+
+{% extends 'base.connected.html.twig' %}
+ 
+{% block body %}
+
+{{ form_start(form, {'action': path('label_delete', { 'labelID': label.ID }), 'method': 'POST', 'class': 'form-horizontal'}) }}
+
+<legend><img src="{{ asset('images/label-32.png') }}">&nbsp;</img>&nbsp;{{ label.name }}</legend>
+
+<p>{{ 'label.ask.delete'|trans({'%name%': label.name}) }}</p>
+
+<div class="btn-group">
+<a href="{{ path('label_edit', { 'labelID': label.ID }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
+<button type="submit" class="btn btn-danger"><i class="glyphicon glyphicon-ok"></i> {{ 'validate'|trans }}</button>
+</div>
+
+{{ form_end(form) }}
+
+{% endblock %}

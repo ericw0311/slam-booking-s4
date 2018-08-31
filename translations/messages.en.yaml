@@ -136,6 +136,7 @@ label.created.ok: The label has been created
 label.deleted.ok: The label has been deleted
 label.list.update: Modify labels list
 label.name: Label name
+label.new: New label
 label.no: No label
 label.plural: Labels
 label.select: Select label

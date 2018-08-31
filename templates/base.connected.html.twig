@@ -22,8 +22,8 @@
 <li><a href="{{ path('timetable', { 'page': 1 }) }}"><img src="{{ asset('images/time-16.png') }}"> {{ 'timetable.plural'|trans }}</a></li>
 <li><a href="{{ path('resource_classification_index', { 'resourceType': 'PLACE' }) }}"><img src="{{ asset('images/box-16.png') }}"> {{ 'resourceClassification.plural'|trans }}</a></li>
 <li><a href="{{ path('resource', { 'page': 1 }) }}"><img src="{{ asset('images/resource-16.png') }}"> {{ 'resource.plural'|trans }}</a></li>
-<li><a href="#"><img src="{{ asset('images/planification-16.png') }}"> {{ 'planification.plural'|trans }}</a></li>
-<li><a href="#"><img src="{{ asset('images/label-16.png') }}"> {{ 'labels'|trans }}</a></li>
+<li><a href="{{ path('planification', { 'page': 1 }) }}"><img src="{{ asset('images/planification-16.png') }}"> {{ 'planification.plural'|trans }}</a></li>
+<li><a href="{{ path('label', { 'page': 1 }) }}"><img src="{{ asset('images/label-16.png') }}"> {{ 'label.plural'|trans }}</a></li>
 				</ul>
 			</li>
 {% endif %}

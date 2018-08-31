@@ -9,6 +9,7 @@ use App\Entity\Constants;
 use App\Entity\ResourceClassification;
 use App\Entity\Resource;
 use App\Entity\UserFile;
+use App\Entity\PlanificationResource;
 
 class ResourceApi
 {

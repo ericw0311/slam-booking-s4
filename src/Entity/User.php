@@ -84,6 +84,9 @@ class User implements UserInterface, \Serializable
         $this->resources = new ArrayCollection();
         $this->planifications = new ArrayCollection();
         $this->labels = new ArrayCollection();
+        $this->planificationPeriods = new ArrayCollection();
+        $this->planificationResources = new ArrayCollection();
+        $this->planificationLines = new ArrayCollection();
     }
 
     public function getId()
@@ -287,6 +290,21 @@ class User implements UserInterface, \Serializable
   * @ORM\OneToMany(targetEntity="App\Entity\Label", mappedBy="user", orphanRemoval=true)
   */
  private $labels;
+ 
+ /**
+  * @ORM\OneToMany(targetEntity="App\Entity\PlanificationPeriod", mappedBy="user", orphanRemoval=true)
+  */
+ private $planificationPeriods;
+
+ /**
+  * @ORM\OneToMany(targetEntity="App\Entity\PlanificationResource", mappedBy="user", orphanRemoval=true)
+  */
+ private $planificationResources;
+
+ /**
+  * @ORM\OneToMany(targetEntity="App\Entity\PlanificationLine", mappedBy="user", orphanRemoval=true)
+  */
+ private $planificationLines;
 
 
 
@@ -560,6 +578,99 @@ class User implements UserInterface, \Serializable
                 $label->setUser(null);
             }
         }
+        return $this;
+    }
+
+    /**
+     * @return Collection|PlanificationPeriod[]
+     */
+    public function getPlanificationPeriods(): Collection
+    {
+        return $this->planificationPeriods;
+    }
+
+    public function addPlanificationPeriod(PlanificationPeriod $planificationPeriod): self
+    {
+        if (!$this->planificationPeriods->contains($planificationPeriod)) {
+            $this->planificationPeriods[] = $planificationPeriod;
+            $planificationPeriod->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removePlanificationPeriod(PlanificationPeriod $planificationPeriod): self
+    {
+        if ($this->planificationPeriods->contains($planificationPeriod)) {
+            $this->planificationPeriods->removeElement($planificationPeriod);
+            // set the owning side to null (unless already changed)
+            if ($planificationPeriod->getUser() === $this) {
+                $planificationPeriod->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|PlanificationResource[]
+     */
+    public function getPlanificationResources(): Collection
+    {
+        return $this->planificationResources;
+    }
+
+    public function addPlanificationResource(PlanificationResource $planificationResource): self
+    {
+        if (!$this->planificationResources->contains($planificationResource)) {
+            $this->planificationResources[] = $planificationResource;
+            $planificationResource->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removePlanificationResource(PlanificationResource $planificationResource): self
+    {
+        if ($this->planificationResources->contains($planificationResource)) {
+            $this->planificationResources->removeElement($planificationResource);
+            // set the owning side to null (unless already changed)
+            if ($planificationResource->getUser() === $this) {
+                $planificationResource->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|PlanificationLine[]
+     */
+    public function getPlanificationLines(): Collection
+    {
+        return $this->planificationLines;
+    }
+
+    public function addPlanificationLine(PlanificationLine $planificationLine): self
+    {
+        if (!$this->planificationLines->contains($planificationLine)) {
+            $this->planificationLines[] = $planificationLine;
+            $planificationLine->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removePlanificationLine(PlanificationLine $planificationLine): self
+    {
+        if ($this->planificationLines->contains($planificationLine)) {
+            $this->planificationLines->removeElement($planificationLine);
+            // set the owning side to null (unless already changed)
+            if ($planificationLine->getUser() === $this) {
+                $planificationLine->setUser(null);
+            }
+        }
+
         return $this;
     }
 }

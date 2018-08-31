@@ -1,0 +1,110 @@
+{# templates/planification/edit.html.twig #}
+
+{% set rtIcons = constant('App\\Entity\\Constants::RESOURCE_TYPE_ICON') %}
+{% set rcIcons = constant('App\\Entity\\Constants::RESOURCE_CLASSIFICATION_ICON') %}
+
+{% extends 'base.connected.html.twig' %}
+ 
+{% block body %}
+
+<legend>
+
+<img src="{{ asset('images/planification-32.png') }}">&nbsp;{{ planification.name }}&nbsp;
+<a href="{{ path('planification_modify', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID }) }}" class="glyphicon glyphicon-pencil" title="{{ 'modify'|trans }}"></a>
+
+{% if planificationContext.getPreviousPP() %}
+<a href="{{ path('planification_edit', { 'planificationID': planification.ID, 'planificationPeriodID': planificationContext.previousPlanificationPeriod.ID }) }}" class="glyphicon glyphicon-backward" title="{{ 'period.previous'|trans }}"></a>
+{% endif %}
+
+{% if planificationPeriod.beginningDate == '' and planificationPeriod.endDate != '' %}
+{{ 'period.until'|trans({'%endDate%': planificationPeriod.endDate|date('d/m/Y')}) }}
+{% elseif planificationPeriod.beginningDate != '' and planificationPeriod.endDate == '' %}
+{{ 'period.from'|trans({'%beginningDate%': planificationPeriod.beginningDate|date('d/m/Y')}) }}
+{% elseif planificationPeriod.beginningDate != '' and planificationPeriod.endDate != '' %}
+{{ 'period.from.to'|trans({'%beginningDate%': planificationPeriod.beginningDate|date('d/m/Y'), '%endDate%': planificationPeriod.endDate|date('d/m/Y')}) }}
+{% endif %}
+
+{% if planificationContext.getNextPP() %}
+<a href="{{ path('planification_edit', { 'planificationID': planification.ID, 'planificationPeriodID': planificationContext.nextPlanificationPeriod.ID }) }}" class="glyphicon glyphicon-forward" title="{{ 'period.next'|trans }}"></a>
+{% endif %}
+
+</legend>
+
+<div class="col-sm-6">
+
+{% if planificationResources|length > 0 %}
+<table class="table table-striped">
+    <thead>
+    <tr>
+    <th>{{ 'resource.plural'|trans }}&nbsp;
+<a href="{{ path('planification_update_resource', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceIDList': resourceIDList }) }}" class="glyphicon glyphicon-pencil" title="{{ 'modify'|trans }}"></a>
+    </th>
+    </tr>
+    </thead>
+    <tbody>
+{% for planificationResource in planificationResources %}
+<tr>
+{% if planificationResource.resource.internal %}
+	<td><img src="{{ asset('images/' ~ rcIcons[planificationResource.resource.code] ~ '-32.png') }}">&nbsp;{{ planificationResource.resource.name }}</td>
+{% else %}
+	<td><img src="{{ asset('images/' ~ rtIcons[planificationResource.resource.type] ~ '-32.png') }}">&nbsp;{{ planificationResource.resource.name }}</td>
+{% endif %}
+</tr>
+{% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
+</div>
+
+<div class="col-sm-6">
+
+{% if planificationLines|length > 0 %}
+<table class="table table-striped">
+    <thead>
+    <tr>
+    <th colspan=3>{{ 'timetable.plural'|trans }}&nbsp;
+<a href="{{ path('planification_line', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID }) }}" class="glyphicon glyphicon-pencil" title="{{ 'modify'|trans }}"></a>
+    </th>
+    </tr>
+    </thead>
+    <tbody>
+{% for planificationLine in planificationLines %}
+<tr>
+	<td><img src="{{ asset('images/time-32.png') }}">&nbsp;{{ ('day.' ~ planificationLine.weekDay)|trans }}</td>
+{% if planificationLine.active %}
+	<td><img src="{{ asset('images/green-check-32.png') }}"></td>
+	<td>{{ planificationLine.timetable.name }}</td>
+{% else %}
+	<td><img src="{{ asset('images/red-cross-32.png') }}"></td>
+	<td>&nbsp;</td>
+{% endif %}
+</tr>
+{% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
+</div>
+
+<div class="col-sm-12 well well-sm btn-group">
+<a href="{{ path('planification', { 'page': 1 }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'planification.back.to.list'|trans }}</a>
+<a href="{{ path('planification_delete', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID }) }}" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> {{ 'delete'|trans }}</a>
+</div>
+
+{% endblock %}
+
+{% block message %}
+
+<div class="col-sm-12">
+
+{% for flash_message in app.session.flashBag.get('notice') %}
+<div class="alert alert-success sb-message">
+	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+	{{ flash_message|trans }}
+</div>
+{% endfor %}
+
+</div>
+
+{% endblock %}

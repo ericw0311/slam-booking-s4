@@ -1,5 +1,6 @@
 <?php
 namespace App\Entity;
+
 class Constants
 {
 	const LIST_DEFAULT_NUMBER_COLUMNS = 2;
@@ -19,6 +20,7 @@ class Constants
 			'SPORT' => 'sport',
 			'USER' => 'user'
 		);
+
 	const RESOURCE_CLASSIFICATION = array(
 			'PLACE' => array('ROOM', 'FLAT', 'HOUSE', 'MOBILE-HOME', 'TENT'),
 			'VEHICLE' => array('CAR', 'TRUCK', 'TRACTOR', 'BIKE', 'MOTORBIKE', 'BOAT', 'PLANE', 'GLIDER'),
@@ -26,6 +28,7 @@ class Constants
 			'SPORT' => array('COURT', 'PITCH', 'GYMNASIUM', 'HORSE'),
 			'USER' => array('TEACHER', 'CONTRACTOR', 'DOCTOR', 'DENTIST')
 		);
+
 	const RESOURCE_CLASSIFICATION_ACTIVE = array(
 			'PLACE' => array('ROOM', 'HOUSE'),
 			'VEHICLE' => array('CAR'),
@@ -33,6 +36,7 @@ class Constants
 			'SPORT' => array('COURT', 'GYMNASIUM'),
 			'USER' => array('TEACHER')
 		);
+
 	const RESOURCE_CLASSIFICATION_ICON = array(
 			'BIKE' => 'bike',
 			'BOAT' => 'boat',
@@ -59,6 +63,7 @@ class Constants
 			'TRACTOR' => 'tractor',
 			'TRUCK' => 'truck'
 		);
+
 	const WEEK_DAY_CODE = array(
 			1 => 'MON',
 			2 => 'TUE',
@@ -67,8 +72,11 @@ class Constants
 			5 => 'FRI',
 			6 => 'SAT',
 			7 => 'SUN');
+
 	const MAXIMUM_NUMBER_BOOKING_LINES = 50; // Nombre maximum de lignes dans une réservation
+
 	const MAXIMUM_NUMBER_BOOKING_DATES_DISPLAYED = 5; // Nombre maximum de dates affichées (utilisé pour la mise a jour des périodes de début et de fin des réservations)
+
 	// Couleurs d'affichage des réservations dans le calendrier
 	const CALENDAR_COLOR = array('success' => '#dff0d8', 'warning' => '#fcf8e3', 'info' => '#d9edf7', 'danger' => '#f2dede');
 }

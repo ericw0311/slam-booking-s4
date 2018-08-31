@@ -1,0 +1,90 @@
+{# templates/planification/resource.html.twig #}
+
+{% extends 'base.connected.html.twig' %}
+ 
+{% block body %}
+
+{% block planification %}{% endblock %}
+
+<div class="col-sm-6">
+
+<table class="table table-striped">
+
+	<thead><tr>
+{% if selectedResources|length > 1 %}
+	<th colspan=4>
+{% else %}
+	<th colspan=2>
+{% endif %}
+	{{ 'planification.resource.selected'|trans }}</th></tr></thead>
+
+	<tbody>
+{% for resource in selectedResources %}
+	<tr>
+{% if selectedResources|length > 1 %}
+{% if loop.index > 1 %}
+	<td>{% block link_sortBefore %}{% endblock %}</td>
+{% else %}
+	<td></td>
+{% endif %}
+{% if loop.index < selectedResources|length %}
+	<td>{% block link_sortAfter %}{% endblock %}</td>
+{% else %}
+	<td></td>
+{% endif %}
+{% endif %}
+	<td><img src="{{ asset('images/' ~ resource.imageName) }}">&nbsp;{{ resource.name }}</td>
+	<td>{% block link_unselect %}{% endblock %}</td>
+	</tr>
+{% endfor %}
+	</tbody>
+</table>
+
+</div>
+
+<div class="col-sm-6">
+
+<table class="table table-striped">
+	<thead><tr><th colspan=2>{{ 'planification.resource.to.planify'|trans }}</th></tr></thead>
+	<tbody>
+{% for resource in availableResources %}
+	<tr>
+	<td>{% block link_select %}{% endblock %}</td>
+	<td><img src="{{ asset('images/' ~ resource.imageName) }}">&nbsp;{{ resource.name }}</td>
+	</tr>
+{% endfor %}
+	</tbody>
+</table>
+
+</div>
+
+<div class="col-sm-12 well well-sm btn-group">
+	{% block link_cancel %}{% endblock %}
+{% if selectedResources|length < 1 %}
+	<button type="button" class="btn btn-success" data-toggle="modal" data-target="#validateModal"><span class="glyphicon glyphicon-ok"></span> <del>{{ 'validate'|trans }}</del></button>
+{% else %}
+	{% block link_validate %}{% endblock %}
+{% endif %}
+</div>
+
+<!-- Modal -->
+<div id="validateModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">{{ 'validate.not.allowed'|trans }}</h4>
+      </div>
+      <div class="modal-body">
+        <p>{{ 'planification.validate.not.allowed'|trans }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'close'|trans }}</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

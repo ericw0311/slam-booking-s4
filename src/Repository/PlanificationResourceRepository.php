@@ -19,32 +19,43 @@ class PlanificationResourceRepository extends ServiceEntityRepository
         parent::__construct($registry, PlanificationResource::class);
     }
 
-//    /**
-//     * @return PlanificationResource[] Returns an array of PlanificationResource objects
-//     */
-    /*
-    public function findByExampleField($value)
+	// Recherche les ressources d'une periode de planification
+	public function getResources($planificationPeriod)
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+    $qb = $this->createQueryBuilder('pr');
+    $qb->where('pr.planificationPeriod = :planificationPeriod')->setParameter('planificationPeriod', $planificationPeriod);
+    $qb->orderBy('pr.oorder', 'ASC');
+   
+    $query = $qb->getQuery();
+    $results = $query->getResult();
+    return $results;
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?PlanificationResource
+	// Compte les periodes de planification d'une ressource
+    public function getPlanificationPeriodsCount($resource)
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+    $qb = $this->createQueryBuilder('pr');
+    $qb->select($qb->expr()->count('pr'));
+    $qb->where('pr.resource = :resource')->setParameter('resource', $resource);
+
+    $query = $qb->getQuery();
+    $singleScalar = $query->getSingleScalarResult();
+    return $singleScalar;
     }
-    */
+
+	// Construit le Query Builder d'une ressource planifiee
+	public function getResourcePlanifiedQB()
+    {
+    $qb = $this->createQueryBuilder('pr');
+    $qb->where('pr.resource = r.id');
+    return $qb;
+    }
+
+	// Construit le Query Builder d'une ressource planifiee en dehors de la periode transmise
+	public function getResourcePlanifiedExcludePeriodQB(\App\Entity\PlanificationPeriod $planificationPeriod)
+    {
+    $qb = $this->createQueryBuilder('pr');
+    $qb->where('pr.resource = r.id and pr.planificationPeriod <> '.$planificationPeriod->getID());
+    return $qb;
+    }
 }

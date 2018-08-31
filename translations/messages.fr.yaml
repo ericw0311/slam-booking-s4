@@ -136,6 +136,7 @@ label.created.ok: L'étiquette a bien été créée
 label.deleted.ok: L'étiquette a bien été supprimée
 label.list.update: Modifier la liste des étiquettes
 label.name: Nom de l'étiquette
+label.new: Nouvelle étiquette
 label.no: Pas d'étiquette
 label.plural: Etiquettes
 label.select: Sélectionner l'étiquette
