@@ -74,6 +74,11 @@ class File
      */
     private $labels;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Booking", mappedBy="file")
+     */
+    private $bookings;
+
     public function __construct(\App\Entity\User $user)
     {
 		$this->setUser($user);
@@ -83,6 +88,7 @@ class File
         $this->resources = new ArrayCollection();
         $this->planifications = new ArrayCollection();
         $this->labels = new ArrayCollection();
+        $this->bookings = new ArrayCollection();
     }
 
     public function getId()
@@ -98,7 +104,6 @@ class File
     public function setName(string $name): self
     {
         $this->name = $name;
-
         return $this;
     }
 
@@ -110,7 +115,6 @@ class File
     public function setUser(?User $user): self
     {
         $this->user = $user;
-
         return $this;
     }
 
@@ -144,7 +148,6 @@ class File
             $this->userFiles[] = $userFile;
             $userFile->setFile($this);
         }
-
         return $this;
     }
 
@@ -157,7 +160,6 @@ class File
                 $userFile->setFile(null);
             }
         }
-
         return $this;
     }
 
@@ -175,7 +177,6 @@ class File
             $this->timetables[] = $timetable;
             $timetable->setFile($this);
         }
-
         return $this;
     }
 
@@ -188,7 +189,6 @@ class File
                 $timetable->setFile(null);
             }
         }
-
         return $this;
     }
 
@@ -206,7 +206,6 @@ class File
             $this->resourceClassifications[] = $resourceClassification;
             $resourceClassification->setFile($this);
         }
-
         return $this;
     }
 
@@ -219,7 +218,6 @@ class File
                 $resourceClassification->setFile(null);
             }
         }
-
         return $this;
     }
 
@@ -237,7 +235,6 @@ class File
             $this->resources[] = $resource;
             $resource->setFile($this);
         }
-
         return $this;
     }
 
@@ -250,7 +247,6 @@ class File
                 $resource->setFile(null);
             }
         }
-
         return $this;
     }
 
@@ -268,7 +264,6 @@ class File
             $this->planifications[] = $planification;
             $planification->setFile($this);
         }
-
         return $this;
     }
 
@@ -281,7 +276,6 @@ class File
                 $planification->setFile(null);
             }
         }
-
         return $this;
     }
 
@@ -299,7 +293,6 @@ class File
             $this->labels[] = $label;
             $label->setFile($this);
         }
-
         return $this;
     }
 
@@ -312,7 +305,35 @@ class File
                 $label->setFile(null);
             }
         }
+        return $this;
+    }
 
+    /**
+     * @return Collection|Booking[]
+     */
+    public function getBookings(): Collection
+    {
+        return $this->bookings;
+    }
+
+    public function addBooking(Booking $booking): self
+    {
+        if (!$this->bookings->contains($booking)) {
+            $this->bookings[] = $booking;
+            $booking->setFile($this);
+        }
+        return $this;
+    }
+
+    public function removeBooking(Booking $booking): self
+    {
+        if ($this->bookings->contains($booking)) {
+            $this->bookings->removeElement($booking);
+            // set the owning side to null (unless already changed)
+            if ($booking->getFile() === $this) {
+                $booking->setFile(null);
+            }
+        }
         return $this;
     }
 }

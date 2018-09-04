@@ -1,6 +1,8 @@
 <?php
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -48,6 +50,11 @@ class Label
      */
     private $updatedAt;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\BookingLabel", mappedBy="label")
+     */
+    private $bookingLabels;
+
     public function getId()
     {
         return $this->id;
@@ -90,6 +97,7 @@ class Label
     {
 		$this->setUser($user);
 		$this->setFile($file);
+  $this->bookingLabels = new ArrayCollection();
     }
 
     /**
@@ -106,5 +114,36 @@ class Label
     public function updateDate()
     {
         $this->updatedAt = new \DateTime();
+    }
+
+    /**
+     * @return Collection|BookingLabel[]
+     */
+    public function getBookingLabels(): Collection
+    {
+        return $this->bookingLabels;
+    }
+
+    public function addBookingLabel(BookingLabel $bookingLabel): self
+    {
+        if (!$this->bookingLabels->contains($bookingLabel)) {
+            $this->bookingLabels[] = $bookingLabel;
+            $bookingLabel->setLabel($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBookingLabel(BookingLabel $bookingLabel): self
+    {
+        if ($this->bookingLabels->contains($bookingLabel)) {
+            $this->bookingLabels->removeElement($bookingLabel);
+            // set the owning side to null (unless already changed)
+            if ($bookingLabel->getLabel() === $this) {
+                $bookingLabel->setLabel(null);
+            }
+        }
+
+        return $this;
     }
 }

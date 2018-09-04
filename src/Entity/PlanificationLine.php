@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -62,6 +64,11 @@ class PlanificationLine
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\BookingLine", mappedBy="planificationLine")
+     */
+    private $bookingLines;
 
     public function getId()
     {
@@ -135,6 +142,7 @@ class PlanificationLine
 		$this->setWeekDay($weekDay);
 		$this->setOrder($order);
 		$this->setActive(0);
+  $this->bookingLines = new ArrayCollection();
     }
 
     /**
@@ -161,6 +169,37 @@ class PlanificationLine
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|BookingLine[]
+     */
+    public function getBookingLines(): Collection
+    {
+        return $this->bookingLines;
+    }
+
+    public function addBookingLine(BookingLine $bookingLine): self
+    {
+        if (!$this->bookingLines->contains($bookingLine)) {
+            $this->bookingLines[] = $bookingLine;
+            $bookingLine->setPlanificationLine($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBookingLine(BookingLine $bookingLine): self
+    {
+        if ($this->bookingLines->contains($bookingLine)) {
+            $this->bookingLines->removeElement($bookingLine);
+            // set the owning side to null (unless already changed)
+            if ($bookingLine->getPlanificationLine() === $this) {
+                $bookingLine->setPlanificationLine(null);
+            }
+        }
 
         return $this;
     }

@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -102,6 +104,11 @@ class UserFile
      * @ORM\OneToOne(targetEntity="App\Entity\Resource", inversedBy="userFile", cascade={"persist", "remove"})
      */
     private $resource;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\BookingUser", mappedBy="userFile")
+     */
+    private $bookingUsers;
 
     public function getId()
     {
@@ -273,6 +280,7 @@ class UserFile
     {
     $this->setUser($user);
     $this->setFile($file);
+    $this->bookingUsers = new ArrayCollection();
     }
 
 	/**
@@ -307,6 +315,37 @@ class UserFile
     public function setResource(?Resource $resource): self
     {
         $this->resource = $resource;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|BookingUser[]
+     */
+    public function getBookingUsers(): Collection
+    {
+        return $this->bookingUsers;
+    }
+
+    public function addBookingUser(BookingUser $bookingUser): self
+    {
+        if (!$this->bookingUsers->contains($bookingUser)) {
+            $this->bookingUsers[] = $bookingUser;
+            $bookingUser->setUserFile($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBookingUser(BookingUser $bookingUser): self
+    {
+        if ($this->bookingUsers->contains($bookingUser)) {
+            $this->bookingUsers->removeElement($bookingUser);
+            // set the owning side to null (unless already changed)
+            if ($bookingUser->getUserFile() === $this) {
+                $bookingUser->setUserFile(null);
+            }
+        }
 
         return $this;
     }

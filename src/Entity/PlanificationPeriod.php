@@ -65,12 +65,18 @@ class PlanificationPeriod
      */
     private $user;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\BookingLine", mappedBy="planificationPeriod")
+     */
+    private $bookingLines;
+
 	public function __construct(\App\Entity\User $user, \App\Entity\Planification $planification)
     {
 		$this->setUser($user);
 		$this->setPlanification($planification);
 		$this->planificationLines = new ArrayCollection();
 		$this->planificationResources = new ArrayCollection();
+  $this->bookingLines = new ArrayCollection();
     }
 
     public function getId()
@@ -200,6 +206,37 @@ class PlanificationPeriod
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|BookingLine[]
+     */
+    public function getBookingLines(): Collection
+    {
+        return $this->bookingLines;
+    }
+
+    public function addBookingLine(BookingLine $bookingLine): self
+    {
+        if (!$this->bookingLines->contains($bookingLine)) {
+            $this->bookingLines[] = $bookingLine;
+            $bookingLine->setPlanificationPeriod($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBookingLine(BookingLine $bookingLine): self
+    {
+        if ($this->bookingLines->contains($bookingLine)) {
+            $this->bookingLines->removeElement($bookingLine);
+            // set the owning side to null (unless already changed)
+            if ($bookingLine->getPlanificationPeriod() === $this) {
+                $bookingLine->setPlanificationPeriod(null);
+            }
+        }
 
         return $this;
     }

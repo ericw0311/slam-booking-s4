@@ -71,11 +71,23 @@ class Planification
      */
     private $planificationPeriods;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Booking", mappedBy="planification")
+     */
+    private $bookings;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\BookingLine", mappedBy="planification")
+     */
+    private $bookingLines;
+
 	public function __construct(\App\Entity\User $user, \App\Entity\File $file)
     {
     $this->setUser($user);
     $this->setFile($file);
 	$this->planificationPeriods = new ArrayCollection();
+ $this->bookings = new ArrayCollection();
+ $this->bookingLines = new ArrayCollection();
     }
 
     public function getId()
@@ -190,6 +202,68 @@ class Planification
             // set the owning side to null (unless already changed)
             if ($planificationPeriod->getPlanification() === $this) {
                 $planificationPeriod->setPlanification(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Booking[]
+     */
+    public function getBookings(): Collection
+    {
+        return $this->bookings;
+    }
+
+    public function addBooking(Booking $booking): self
+    {
+        if (!$this->bookings->contains($booking)) {
+            $this->bookings[] = $booking;
+            $booking->setPlanification($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBooking(Booking $booking): self
+    {
+        if ($this->bookings->contains($booking)) {
+            $this->bookings->removeElement($booking);
+            // set the owning side to null (unless already changed)
+            if ($booking->getPlanification() === $this) {
+                $booking->setPlanification(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|BookingLine[]
+     */
+    public function getBookingLines(): Collection
+    {
+        return $this->bookingLines;
+    }
+
+    public function addBookingLine(BookingLine $bookingLine): self
+    {
+        if (!$this->bookingLines->contains($bookingLine)) {
+            $this->bookingLines[] = $bookingLine;
+            $bookingLine->setPlanification($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBookingLine(BookingLine $bookingLine): self
+    {
+        if ($this->bookingLines->contains($bookingLine)) {
+            $this->bookingLines->removeElement($bookingLine);
+            // set the owning side to null (unless already changed)
+            if ($bookingLine->getPlanification() === $this) {
+                $bookingLine->setPlanification(null);
             }
         }
 

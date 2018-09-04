@@ -178,6 +178,8 @@ class Resource
     $this->setUser($user);
     $this->setFile($file);
     $this->planificationResources = new ArrayCollection();
+    $this->bookings = new ArrayCollection();
+    $this->bookingLines = new ArrayCollection();
     }
 
     /**
@@ -214,6 +216,16 @@ class Resource
 	return $this;
 	}
  private $__EXTRA__LINE;
+
+ /**
+  * @ORM\OneToMany(targetEntity="App\Entity\Booking", mappedBy="resource")
+  */
+ private $bookings;
+
+ /**
+  * @ORM\OneToMany(targetEntity="App\Entity\BookingLine", mappedBy="resource")
+  */
+ private $bookingLines;
  /**
   * @return Collection|PlanificationResource[]
   */
@@ -239,6 +251,68 @@ class Resource
          // set the owning side to null (unless already changed)
          if ($planificationResource->getResource() === $this) {
              $planificationResource->setResource(null);
+         }
+     }
+     $__EXTRA__LINE;
+     return $this;
+ }
+ 
+ /**
+  * @return Collection|Booking[]
+  */
+ public function getBookings(): Collection
+ {
+     return $this->bookings;
+ }
+ 
+ public function addBooking(Booking $booking): self
+ {
+     if (!$this->bookings->contains($booking)) {
+         $this->bookings[] = $booking;
+         $booking->setResource($this);
+     }
+     $__EXTRA__LINE;
+     return $this;
+ }
+ 
+ public function removeBooking(Booking $booking): self
+ {
+     if ($this->bookings->contains($booking)) {
+         $this->bookings->removeElement($booking);
+         // set the owning side to null (unless already changed)
+         if ($booking->getResource() === $this) {
+             $booking->setResource(null);
+         }
+     }
+     $__EXTRA__LINE;
+     return $this;
+ }
+
+ /**
+  * @return Collection|BookingLine[]
+  */
+ public function getBookingLines(): Collection
+ {
+     return $this->bookingLines;
+ }
+
+ public function addBookingLine(BookingLine $bookingLine): self
+ {
+     if (!$this->bookingLines->contains($bookingLine)) {
+         $this->bookingLines[] = $bookingLine;
+         $bookingLine->setResource($this);
+     }
+     $__EXTRA__LINE;
+     return $this;
+ }
+
+ public function removeBookingLine(BookingLine $bookingLine): self
+ {
+     if ($this->bookingLines->contains($bookingLine)) {
+         $this->bookingLines->removeElement($bookingLine);
+         // set the owning side to null (unless already changed)
+         if ($bookingLine->getResource() === $this) {
+             $bookingLine->setResource(null);
          }
      }
      $__EXTRA__LINE;

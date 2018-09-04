@@ -87,6 +87,10 @@ class User implements UserInterface, \Serializable
         $this->planificationPeriods = new ArrayCollection();
         $this->planificationResources = new ArrayCollection();
         $this->planificationLines = new ArrayCollection();
+        $this->bookings = new ArrayCollection();
+        $this->bookingUsers = new ArrayCollection();
+        $this->bookingLines = new ArrayCollection();
+        $this->bookingLabels = new ArrayCollection();
     }
 
     public function getId()
@@ -305,6 +309,26 @@ class User implements UserInterface, \Serializable
   * @ORM\OneToMany(targetEntity="App\Entity\PlanificationLine", mappedBy="user", orphanRemoval=true)
   */
  private $planificationLines;
+
+ /**
+  * @ORM\OneToMany(targetEntity="App\Entity\Booking", mappedBy="user")
+  */
+ private $bookings;
+
+ /**
+  * @ORM\OneToMany(targetEntity="App\Entity\BookingUser", mappedBy="user")
+  */
+ private $bookingUsers;
+
+ /**
+  * @ORM\OneToMany(targetEntity="App\Entity\BookingLine", mappedBy="user")
+  */
+ private $bookingLines;
+ private $__EXTRA__LINE;
+ /**
+  * @ORM\OneToMany(targetEntity="App\Entity\BookingLabel", mappedBy="user")
+  */
+ private $bookingLabels;
 
 
 
@@ -668,6 +692,130 @@ class User implements UserInterface, \Serializable
             // set the owning side to null (unless already changed)
             if ($planificationLine->getUser() === $this) {
                 $planificationLine->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Booking[]
+     */
+    public function getBookings(): Collection
+    {
+        return $this->bookings;
+    }
+
+    public function addBooking(Booking $booking): self
+    {
+        if (!$this->bookings->contains($booking)) {
+            $this->bookings[] = $booking;
+            $booking->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBooking(Booking $booking): self
+    {
+        if ($this->bookings->contains($booking)) {
+            $this->bookings->removeElement($booking);
+            // set the owning side to null (unless already changed)
+            if ($booking->getUser() === $this) {
+                $booking->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|BookingUser[]
+     */
+    public function getBookingUsers(): Collection
+    {
+        return $this->bookingUsers;
+    }
+
+    public function addBookingUser(BookingUser $bookingUser): self
+    {
+        if (!$this->bookingUsers->contains($bookingUser)) {
+            $this->bookingUsers[] = $bookingUser;
+            $bookingUser->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBookingUser(BookingUser $bookingUser): self
+    {
+        if ($this->bookingUsers->contains($bookingUser)) {
+            $this->bookingUsers->removeElement($bookingUser);
+            // set the owning side to null (unless already changed)
+            if ($bookingUser->getUser() === $this) {
+                $bookingUser->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|BookingLine[]
+     */
+    public function getBookingLines(): Collection
+    {
+        return $this->bookingLines;
+    }
+
+    public function addBookingLine(BookingLine $bookingLine): self
+    {
+        if (!$this->bookingLines->contains($bookingLine)) {
+            $this->bookingLines[] = $bookingLine;
+            $bookingLine->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBookingLine(BookingLine $bookingLine): self
+    {
+        if ($this->bookingLines->contains($bookingLine)) {
+            $this->bookingLines->removeElement($bookingLine);
+            // set the owning side to null (unless already changed)
+            if ($bookingLine->getUser() === $this) {
+                $bookingLine->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|BookingLabel[]
+     */
+    public function getBookingLabels(): Collection
+    {
+        return $this->bookingLabels;
+    }
+
+    public function addBookingLabel(BookingLabel $bookingLabel): self
+    {
+        if (!$this->bookingLabels->contains($bookingLabel)) {
+            $this->bookingLabels[] = $bookingLabel;
+            $bookingLabel->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBookingLabel(BookingLabel $bookingLabel): self
+    {
+        if ($this->bookingLabels->contains($bookingLabel)) {
+            $this->bookingLabels->removeElement($bookingLabel);
+            // set the owning side to null (unless already changed)
+            if ($bookingLabel->getUser() === $this) {
+                $bookingLabel->setUser(null);
             }
         }
 

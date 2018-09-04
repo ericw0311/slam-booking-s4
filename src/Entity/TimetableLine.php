@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\Validator\Constraints as Assert;
@@ -63,6 +65,11 @@ class TimetableLine
      * @ORM\Column(name="updated_at", type="datetime", nullable=true)
      */
     private $updatedAt;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\BookingLine", mappedBy="timetableLine")
+     */
+    private $bookingLines;
 
     public function getId()
     {
@@ -133,6 +140,7 @@ class TimetableLine
     {
     $this->setUser($user);
     $this->setTimetable($timetable);
+    $this->bookingLines = new ArrayCollection();
     }
 
 	/**
@@ -158,5 +166,36 @@ class TimetableLine
     public function updateDate()
     {
         $this->updatedAt = new \DateTime();
+    }
+
+    /**
+     * @return Collection|BookingLine[]
+     */
+    public function getBookingLines(): Collection
+    {
+        return $this->bookingLines;
+    }
+
+    public function addBookingLine(BookingLine $bookingLine): self
+    {
+        if (!$this->bookingLines->contains($bookingLine)) {
+            $this->bookingLines[] = $bookingLine;
+            $bookingLine->setTimetableLine($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBookingLine(BookingLine $bookingLine): self
+    {
+        if ($this->bookingLines->contains($bookingLine)) {
+            $this->bookingLines->removeElement($bookingLine);
+            // set the owning side to null (unless already changed)
+            if ($bookingLine->getTimetableLine() === $this) {
+                $bookingLine->setTimetableLine(null);
+            }
+        }
+
+        return $this;
     }
 }
