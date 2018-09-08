@@ -1,0 +1,50 @@
+{# templates/booking/period.end.html.twig #}
+
+{% extends 'booking/booking.html.twig' %}
+
+{% block booking_details %}
+
+<ul class="nav nav-pills">
+
+{% if previousFirstDateNumber > 0 %}
+	<li>{% block previousFirstDateNumberLink %}{% endblock %}</li>
+{% endif %}
+
+{% for endPeriod in endPeriods %}
+{% if loop.index <= 1 %}
+	<li class="active"><a data-toggle="pill" href="#{{ endPeriod.date|date('Ymd') }}">{{ dateCourte(endPeriod.date) }}</a></li>
+{% else %}
+	<li><a data-toggle="pill" href="#{{ endPeriod.date|date('Ymd') }}">{{ dateCourte(endPeriod.date) }}</a></li>
+{% endif %}
+{% endfor %}
+
+{% if nextFirstDateNumber > 0 %}
+	<li>{% block nextFirstDateNumberLink %}{% endblock %}</li>
+{% endif %}
+
+</ul>
+
+<div class="tab-content">
+
+{% for endPeriod in endPeriods %}
+{% if loop.index <= 1 %}
+	<div id="{{ endPeriod.date|date('Ymd') }}" class="tab-pane fade in active">
+{% else %}
+	<div id="{{ endPeriod.date|date('Ymd') }}" class="tab-pane fade">
+{% endif %}
+
+{% for period in endPeriod.periods %}
+
+{% if period.status == 'OK' %}
+	{% block createOrUpdateBookingLink %}{% endblock %}
+{% else %}
+<a href="#" class="list-group-item list-group-item-warning"><img src="{{ asset('images/forbidden-32.png') }}">&nbsp;{{ dateLongue(endPeriod.date) }}&nbsp;&rarr;&nbsp;{{ timetableLine(period.timetableLine) }}</a>
+{% endif %}
+
+{% endfor %}
+	</div>
+{% endfor %}
+
+</div>
+
+{% endblock %}

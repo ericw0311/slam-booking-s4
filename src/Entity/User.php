@@ -324,7 +324,7 @@ class User implements UserInterface, \Serializable
   * @ORM\OneToMany(targetEntity="App\Entity\BookingLine", mappedBy="user")
   */
  private $bookingLines;
- private $__EXTRA__LINE;
+
  /**
   * @ORM\OneToMany(targetEntity="App\Entity\BookingLabel", mappedBy="user")
   */

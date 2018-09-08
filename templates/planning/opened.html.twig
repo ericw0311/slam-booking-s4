@@ -1,0 +1,72 @@
+{# templates/planning/opened.html.twig #}
+
+<table class="table table-bordered table-striped">
+	<thead>
+	<tr>
+	<th></th>
+{% for planificationResource in planificationResources %}
+	<th>
+{% if planificationResource.resource.internal %}
+	<img src="{{ asset('images/' ~ rcIcons[planificationResource.resource.code] ~ '-16.png') }}">&nbsp;{{ planificationResource.resource.name }}
+{% else %}
+	<img src="{{ asset('images/' ~ rtIcons[planificationResource.resource.type] ~ '-16.png') }}">&nbsp;{{ planificationResource.resource.name }}
+{% endif %}
+	</th>
+{% endfor %}
+	</tr>
+	</thead>
+	<tbody>
+{% for timetableLine in timetableLines %}
+<tr>
+	<td>{{ timetableLine(timetableLine) }}</td>
+{% for planificationResource in planificationResources %}
+
+{% set key = date|date('Ymd') ~ '-' ~ planification.ID ~ '-' ~ planificationPeriod.ID ~ '-' ~ planificationLine.ID ~ '-' ~ planificationResource.resource.ID ~ '-' ~ timetableLine.timetable.ID ~ '-' ~ timetableLine.ID %}
+
+{% if bookings[key] is defined %}
+{% if bookings[key].type == 'H' %}
+{% if bookings[key].numberTimetableLines > 1 %}
+		<td class="{{ bookings[key].cellClass }}" rowspan={{ bookings[key].numberTimetableLines }}>
+{% else %}
+		<td class="{{ bookings[key].cellClass }}">
+{% endif %}
+
+<table><tr><td>
+<img src="{{ asset('images/user-16.png') }}">&nbsp;
+{{ bookings[key].userNamesString }}
+{% if bookings[key].getMultiLigne() %}
+</td></tr><tr><td>
+{% else %}
+&nbsp;
+{% endif %}
+{% if bookings[key].getLabel() %}
+<img src="{{ asset('images/label-16.png') }}">&nbsp;
+{{ bookings[key].labelNamesString }}&nbsp;
+{% endif %}
+{% if bookings[key].getNoteExists() %}
+<img src="{{ asset('images/note-16.png') }}" title="{{ bookings[key].note }}">&nbsp;
+{% endif %}
+<a href="{{ path(booking_update, { 'bookingID': bookings[key].id, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': planificationResource.resource.ID, 'date': date|date('Ymd') }) }}" class="glyphicon glyphicon-pencil" title="{{ 'modify'|trans }}"></a>&nbsp;
+<a href="{{ path(booking_delete, { 'bookingID': bookings[key].id, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': planificationResource.resource.ID, 'date': date|date('Ymd') }) }}" class="glyphicon glyphicon-trash" title="{{ 'delete'|trans }}"></a>
+</td></tr></table>
+
+		</td>
+{% endif %}
+{% else %}
+		<td>
+<a href="{{ path(booking_create, { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': planificationResource.resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': (date|date('Ymd') ~ '+' ~ timetableLine.timetable.ID ~ '+' ~ timetableLine.ID), 'userFileIDList': userContext.getCurrentUserFile().getID(), 'labelIDList': 0, 'noteID': 0 }) }}" class="glyphicon glyphicon-plus" title="{{ 'booking.create'|trans }}"></a>
+		</td>
+{% endif %}
+{% endfor %}
+</tr>
+
+{% endfor %}
+	</tbody>
+</table>
+
+{% for flash_message in app.session.flashBag.get('notice') %}
+<div class="alert alert-success sb-message">
+<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    {{ flash_message|trans }}
+</div>
+{% endfor %}

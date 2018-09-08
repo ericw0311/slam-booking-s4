@@ -1,11 +1,14 @@
 <?php
 
 namespace App\Entity;
-
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 /**
+ * @ORM\Table(name="booking_label", uniqueConstraints={@ORM\UniqueConstraint(name="uk_booking_label",columns={"booking_id", "label_id"})})
  * @ORM\Entity(repositoryClass="App\Repository\BookingLabelRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class BookingLabel
 {
@@ -29,7 +32,7 @@ class BookingLabel
     private $label;
 
     /**
-     * @ORM\Column(type="smallint")
+     * @ORM\Column(type="smallint", nullable=false)
      */
     private $oorder;
 
@@ -38,6 +41,23 @@ class BookingLabel
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
+
+	/**
+     * @ORM\Column(name="created_at", type="datetime", nullable=false)
+     */
+    private $createdAt;
+
+	/**
+     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
+     */
+    private $updatedAt;
+
+	public function __construct(\App\Entity\User $user, \App\Entity\Booking $booking, \App\Entity\Label $label)
+	{
+	$this->setUser($user);
+	$this->setBooking($booking);
+	$this->setLabel($label);
+	}
 
     public function getId()
     {
@@ -52,7 +72,6 @@ class BookingLabel
     public function setBooking(?Booking $booking): self
     {
         $this->booking = $booking;
-
         return $this;
     }
 
@@ -64,19 +83,17 @@ class BookingLabel
     public function setLabel(?Label $label): self
     {
         $this->label = $label;
-
         return $this;
     }
 
-    public function getOorder(): ?int
+    public function getOrder(): ?int
     {
         return $this->oorder;
     }
 
-    public function setOorder(int $oorder): self
+    public function setOrder(int $oorder): self
     {
         $this->oorder = $oorder;
-
         return $this;
     }
 
@@ -88,7 +105,22 @@ class BookingLabel
     public function setUser(?User $user): self
     {
         $this->user = $user;
-
         return $this;
+    }
+
+	/**
+    * @ORM\PrePersist
+    */
+    public function createDate()
+    {
+        $this->createdAt = new \DateTime();
+    }
+
+    /**
+    * @ORM\PreUpdate
+    */
+    public function updateDate()
+    {
+        $this->updatedAt = new \DateTime();
     }
 }

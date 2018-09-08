@@ -14,6 +14,15 @@
 		<ul class="nav navbar-nav">
 			<li><a href="{{ path('file', { 'page': 1 }) }}"><img src="{{ asset('images/file-16.png') }}"> {{ 'file.plural'|trans }}</a></li>
 
+
+{% if (userContext.getCurrentFileID() > 0) %}
+			<li class="dropdown">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img src="{{ asset('images/booking-16.png') }}"> Slam Booking<span class="caret"></span></a>
+				<ul class="dropdown-menu">
+<li><a href="{{ path('planning') }}"><img src="{{ asset('images/planning-16.png') }}"> {{ 'planning'|trans }}</a></li>
+				</ul>
+			</li>
+{% endif %}
 {% if userContext.getCurrentUserFileAdministrator() %}
 			<li class="dropdown">
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img src="{{ asset('images/administration-16.png') }}"> {{ 'administration'|trans }}<span class="caret"></span></a>

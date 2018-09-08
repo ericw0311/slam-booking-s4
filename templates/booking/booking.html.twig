@@ -1,0 +1,42 @@
+{# templates/booking/booking.html.twig #}
+
+{% set rtIcons = constant('App\\Entity\\Constants::RESOURCE_TYPE_ICON') %}
+{% set rcIcons = constant('App\\Entity\\Constants::RESOURCE_CLASSIFICATION_ICON') %}
+
+{% extends 'base.connected.html.twig' %}
+ 
+{% block body %}
+
+{% block form_start %}{% endblock %}
+
+<div class="panel panel-default">
+
+<div class="panel-heading">
+
+{% if resource.internal %}
+	<p><img src="{{ asset('images/' ~ rcIcons[resource.code] ~ '-32.png') }}">&nbsp;{{ resource.name }}</p>
+{% else %}
+	<p><img src="{{ asset('images/' ~ rtIcons[resource.type] ~ '-32.png') }}">&nbsp;{{ resource.name }}</p>
+{% endif %}
+
+</div>
+
+<div class="panel-body">
+
+{% block booking_details %}{% endblock %}
+
+</div>
+
+<div class="panel-footer">
+<div class="btn-group">
+{% block booking_buttons %}{% endblock %}
+</div>
+</div>
+
+</div>
+
+{% block form_end %}{% endblock %}
+
+{% block javascript %}{% endblock %}
+
+{% endblock %}

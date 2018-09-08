@@ -47,6 +47,10 @@ services:
         tags:
             - { name: validator.constraint_validator, alias: timetableLineEndTime }
 
+    # sd.twig.sb_extension:
+    App\Api\SB_TwigExtension:
+        arguments: ["@translator"]
+
     App\Event\RegistrationNotifySubscriber:
         # le nom de la variable que l'on utilisera dans le service
         $sender: '%app.notifications.email_sender%'

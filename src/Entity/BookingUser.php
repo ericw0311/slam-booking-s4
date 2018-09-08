@@ -1,11 +1,14 @@
 <?php
-
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 /**
+ * @ORM\Table(name="booking_user", uniqueConstraints={@ORM\UniqueConstraint(name="uk_booking_user",columns={"booking_id", "user_file_id"})})
  * @ORM\Entity(repositoryClass="App\Repository\BookingUserRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class BookingUser
 {
@@ -29,8 +32,9 @@ class BookingUser
     private $userFile;
 
     /**
-     * @ORM\Column(type="smallint")
+     * @ORM\Column(type="smallint", nullable=false)
      */
+
     private $oorder;
 
     /**
@@ -38,6 +42,24 @@ class BookingUser
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
+
+	/**
+     * @ORM\Column(name="created_at", type="datetime", nullable=false)
+     */
+    private $createdAt;
+
+	/**
+     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
+     */
+    private $updatedAt;
+
+
+	public function __construct(\App\Entity\User $user, \App\Entity\Booking $booking, \App\Entity\UserFile $userFile)
+	{
+	$this->setUser($user);
+	$this->setBooking($booking);
+	$this->setUserFile($userFile);
+	}
 
     public function getId()
     {
@@ -52,7 +74,6 @@ class BookingUser
     public function setBooking(?Booking $booking): self
     {
         $this->booking = $booking;
-
         return $this;
     }
 
@@ -64,19 +85,17 @@ class BookingUser
     public function setUserFile(?UserFile $userFile): self
     {
         $this->userFile = $userFile;
-
         return $this;
     }
 
-    public function getOorder(): ?int
+    public function getOrder(): ?int
     {
         return $this->oorder;
     }
 
-    public function setOorder(int $oorder): self
+    public function setOrder(int $oorder): self
     {
         $this->oorder = $oorder;
-
         return $this;
     }
 
@@ -88,7 +107,22 @@ class BookingUser
     public function setUser(?User $user): self
     {
         $this->user = $user;
-
         return $this;
+    }
+
+	/**
+    * @ORM\PrePersist
+    */
+    public function createDate()
+    {
+        $this->createdAt = new \DateTime();
+    }
+
+    /**
+    * @ORM\PreUpdate
+    */
+    public function updateDate()
+    {
+        $this->updatedAt = new \DateTime();
     }
 }

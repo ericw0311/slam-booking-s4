@@ -19,32 +19,29 @@ class BookingLineRepository extends ServiceEntityRepository
         parent::__construct($registry, BookingLine::class);
     }
 
-//    /**
-//     * @return BookingLine[] Returns an array of BookingLine objects
-//     */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('b')
-            ->andWhere('b.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('b.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?BookingLine
-    {
-        return $this->createQueryBuilder('b')
-            ->andWhere('b.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
+	public function getBookingLines(\App\Entity\Booking $booking)
+	{
+	$qb = $this->createQueryBuilder('bl');
+	$qb->select('bl.ddate date');
+	$qb->addSelect('p.id planificationID');
+	$qb->addSelect('pp.id planificationPeriodID');
+	$qb->addSelect('pl.id planificationLineID');
+	$qb->addSelect('t.id timetableID');
+	$qb->addSelect('tl.id timetableLineID');
+	$qb->where('bl.booking = :booking')->setParameter('booking', $booking);
+	$qb->innerJoin('bl.planification', 'p');
+	$qb->innerJoin('bl.planificationPeriod', 'pp');
+	$qb->innerJoin('bl.planificationLine', 'pl');
+	$qb->innerJoin('bl.timetable', 't');
+	$qb->innerJoin('bl.timetableLine', 'tl');
+	$qb->orderBy('bl.ddate', 'ASC');
+	$qb->addOrderBy('p.id', 'ASC');
+	$qb->addOrderBy('pp.id', 'ASC');
+	$qb->addOrderBy('pl.id', 'ASC');
+	$qb->addOrderBy('t.id', 'ASC');
+	$qb->addOrderBy('tl.id', 'ASC');
+	$query = $qb->getQuery();
+	$results = $query->getResult();
+	return $results;
+	}
 }

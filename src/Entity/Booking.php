@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -7,7 +6,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * @ORM\Table(name="booking")
  * @ORM\Entity(repositoryClass="App\Repository\BookingRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Booking
 {
@@ -48,12 +49,12 @@ class Booking
     private $file;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(name="beginning_date", type="datetime", nullable=false)
      */
     private $beginningDate;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(name="end_date", type="datetime", nullable=false)
      */
     private $endDate;
 
@@ -61,6 +62,16 @@ class Booking
      * @ORM\OneToOne(targetEntity="App\Entity\Note", inversedBy="booking", cascade={"persist", "remove"})
      */
     private $formNote;
+
+	/**
+     * @ORM\Column(name="created_at", type="datetime", nullable=false)
+     */
+    private $createdAt;
+
+	/**
+     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
+     */
+    private $updatedAt;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\BookingUser", mappedBy="booking", orphanRemoval=true)
@@ -77,21 +88,26 @@ class Booking
      */
     private $bookingLabels;
 
-    public function __construct()
+
+    public function __construct(\App\Entity\User $user, \App\Entity\File $file, \App\Entity\Planification $planification, \App\Entity\Resource $resource)
     {
-        $this->bookingUsers = new ArrayCollection();
-        $this->bookingLines = new ArrayCollection();
-        $this->bookingLabels = new ArrayCollection();
+	$this->setUser($user);
+	$this->setFile($file);
+	$this->setPlanification($planification);
+	$this->setResource($resource);
+	$this->bookingUsers = new ArrayCollection();
+	$this->bookingLines = new ArrayCollection();
+	$this->bookingLabels = new ArrayCollection();
     }
 
     public function getId()
     {
-        return $this->id;
+	return $this->id;
     }
 
     public function getPlanification(): ?Planification
     {
-        return $this->planification;
+	return $this->planification;
     }
 
     public function setPlanification(?Planification $planification): self
@@ -177,6 +193,28 @@ class Booking
         return $this;
     }
 
+	public function setNullFormNote()
+	{
+		$this->formNote = null;
+		return $this;
+    }
+
+	/**
+    * @ORM\PrePersist
+    */
+    public function createDate()
+    {
+        $this->createdAt = new \DateTime();
+    }
+
+    /**
+    * @ORM\PreUpdate
+    */
+    public function updateDate()
+    {
+        $this->updatedAt = new \DateTime();
+    }
+
     /**
      * @return Collection|BookingUser[]
      */
@@ -191,7 +229,6 @@ class Booking
             $this->bookingUsers[] = $bookingUser;
             $bookingUser->setBooking($this);
         }
-
         return $this;
     }
 
@@ -204,7 +241,6 @@ class Booking
                 $bookingUser->setBooking(null);
             }
         }
-
         return $this;
     }
 
@@ -222,7 +258,6 @@ class Booking
             $this->bookingLines[] = $bookingLine;
             $bookingLine->setBooking($this);
         }
-
         return $this;
     }
 
@@ -235,7 +270,6 @@ class Booking
                 $bookingLine->setBooking(null);
             }
         }
-
         return $this;
     }
 
@@ -253,7 +287,6 @@ class Booking
             $this->bookingLabels[] = $bookingLabel;
             $bookingLabel->setBooking($this);
         }
-
         return $this;
     }
 
@@ -266,7 +299,6 @@ class Booking
                 $bookingLabel->setBooking(null);
             }
         }
-
         return $this;
     }
 }
