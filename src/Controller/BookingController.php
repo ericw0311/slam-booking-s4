@@ -7,7 +7,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 use Psr\Log\LoggerInterface;
-use Psr\Log\NullLogger;
 
 use App\Entity\Constants;
 use App\Entity\UserContext;
@@ -131,7 +130,9 @@ class BookingController extends Controller
 
     // Mise a jour de la liste des utilisateurs (en création de réservation)
     /**
-     * @Route("/bookingmany/userscreate/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{labelIDList}/{noteID}/{userFileIDInitialList}/{userFileIDList}", name="booking_many_users_create")
+     * @Route("/bookingmany/userscreate/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{labelIDList}/{noteID}/{userFileIDInitialList}/{userFileIDList}",
+     * defaults={"userFileIDList" = null},
+     * name="booking_many_users_create")
 	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
 	 * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
 	 * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
@@ -144,7 +145,9 @@ class BookingController extends Controller
 
     // Mise a jour de la liste des utilisateurs (en création de réservation)
     /**
-     * @Route("/bookingone/userscreate/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{labelIDList}/{noteID}/{userFileIDInitialList}/{userFileIDList}", name="booking_one_users_create")
+     * @Route("/bookingone/userscreate/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{labelIDList}/{noteID}/{userFileIDInitialList}/{userFileIDList}",
+     * defaults={"userFileIDList" = null},
+     * name="booking_one_users_create")
 	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
 	 * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
 	 * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
@@ -322,9 +325,9 @@ class BookingController extends Controller
 	 * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
 	 * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
      */
-    public function many_validate_create(Request $request, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID)
+    public function many_validate_create(Request $request, LoggerInterface $logger, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID)
     {
-	return BookingController::validate_create($request, $planification, $planificationPeriod, $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, 1);
+	return BookingController::validate_create($request, $logger, $planification, $planificationPeriod, $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, 1);
     }
 
     // Validation de la création d'une réservation
@@ -334,15 +337,14 @@ class BookingController extends Controller
 	 * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
 	 * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
      */
-    public function one_validate_create(Request $request, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID)
+    public function one_validate_create(Request $request, LoggerInterface $logger, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID)
     {
-	return BookingController::validate_create($request, $planification, $planificationPeriod, $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, 0);
+	return BookingController::validate_create($request, $logger, $planification, $planificationPeriod, $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, 0);
     }
 
 	// Validation de la création d'une réservation
-    public function validate_create(Request $request, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, $many)
+    public function validate_create(Request $request, LoggerInterface $logger, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, $many)
     {
-	$logger = new NullLogger(); // $logger = $this->get('logger');
 	$logger->info('DBG 1');
 	$connectedUser = $this->getUser();
 	$em = $this->getDoctrine()->getManager();
@@ -575,7 +577,9 @@ class BookingController extends Controller
 
     // Mise a jour de la liste des utilisateurs (en mise a jour de réservation)
     /**
-     * @Route("/bookingmany/usersupdate/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{labelIDList}/{noteID}/{userFileIDInitialList}/{userFileIDList}", name="booking_many_users_update")
+     * @Route("/bookingmany/usersupdate/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{labelIDList}/{noteID}/{userFileIDInitialList}/{userFileIDList}",
+     * defaults={"userFileIDList" = null},
+     * name="booking_many_users_update")
 	 * @ParamConverter("booking", options={"mapping": {"bookingID": "id"}})
 	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
      * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
@@ -589,7 +593,9 @@ class BookingController extends Controller
 
     // Mise a jour de la liste des utilisateurs (en mise a jour de réservation)
     /**
-     * @Route("/bookingone/usersupdate/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{labelIDList}/{noteID}/{userFileIDInitialList}/{userFileIDList}", name="booking_one_users_update")
+     * @Route("/bookingone/usersupdate/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{labelIDList}/{noteID}/{userFileIDInitialList}/{userFileIDList}",
+     * defaults={"userFileIDList" = null},
+     * name="booking_one_users_update")
 	 * @ParamConverter("booking", options={"mapping": {"bookingID": "id"}})
 	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
      * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
@@ -690,7 +696,7 @@ class BookingController extends Controller
     }
 
 	// Mise a jour de la note (en mise à jour de réservation)
-    public function note_update(Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, Request $request, $many)
+    public function note_update(Request $request, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, $many)
     {
 	$connectedUser = $this->getUser();
 	$em = $this->getDoctrine()->getManager();

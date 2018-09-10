@@ -45,6 +45,11 @@ class Note
      */
     private $booking;
 
+    public function __construct(\App\Entity\User $user)
+    {
+    $this->setUser($user);
+    }
+
     public function getId()
     {
         return $this->id;
