@@ -41,7 +41,7 @@ class Note
     private $updatedAt;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Booking", mappedBy="formNote", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="App\Entity\Booking", mappedBy="formNote")
      */
     private $booking;
 

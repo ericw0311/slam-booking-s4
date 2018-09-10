@@ -479,9 +479,12 @@ class BookingController extends Controller
      * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
 	 * @ParamConverter("date", options={"format": "Ymd"})
      */
-    public function many_update(Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $labelIDList, $noteID)
+    public function many_update(LoggerInterface $logger, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $labelIDList, $noteID)
     {
-	return BookingController::update($booking, $planification, $planificationPeriod, $resource, $date, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, 1);
+	$logger->info('BookingController.many_update DBG 1');
+	$logger->info('BookingController.many_update DBG 2 _'.$booking->getID().'_');
+
+	return BookingController::update($logger, $booking, $planification, $planificationPeriod, $resource, $date, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, 1);
     }
 
     // Mise à jour de réservation
@@ -493,13 +496,13 @@ class BookingController extends Controller
      * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
 	 * @ParamConverter("date", options={"format": "Ymd"})
      */
-    public function one_update(Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $labelIDList, $noteID)
+    public function one_update(LoggerInterface $logger, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $labelIDList, $noteID)
     {
-	return BookingController::update($booking, $planification, $planificationPeriod, $resource, $date, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, 0);
+	return BookingController::update($logger, $booking, $planification, $planificationPeriod, $resource, $date, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, 0);
     }
 
     // Mise à jour de réservation
-    public function update(Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, $many)
+    public function update(LoggerInterface $logger, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, $many)
     {
     $connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
@@ -736,9 +739,9 @@ class BookingController extends Controller
 	 * @ParamConverter("date", options={"format": "Ymd"})
 	 * @ParamConverter("note", options={"mapping": {"noteID": "id"}})
      */
-    public function many_note_delete_update(Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $labelIDList, Note $note)
+    public function many_note_delete_update(LoggerInterface $logger, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $labelIDList, Note $note)
     {
-	return BookingController::note_delete_update($booking, $planification, $planificationPeriod, $resource, $date, $timetableLinesList, $userFileIDList, $labelIDList, $note, 1);
+	return BookingController::note_delete_update($logger, $booking, $planification, $planificationPeriod, $resource, $date, $timetableLinesList, $userFileIDList, $labelIDList, $note, 1);
     }
 
 	// Suppression de la note (en mise à jour de réservation)
@@ -751,14 +754,16 @@ class BookingController extends Controller
 	 * @ParamConverter("date", options={"format": "Ymd"})
 	 * @ParamConverter("note", options={"mapping": {"noteID": "id"}})
      */
-    public function one_note_delete_update(Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $labelIDList, Note $note)
+    public function one_note_delete_update(LoggerInterface $logger, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $labelIDList, Note $note)
     {
-	return BookingController::note_delete_update($booking, $planification, $planificationPeriod, $resource, $date, $timetableLinesList, $userFileIDList, $labelIDList, $note, 0);
+	return BookingController::note_delete_update($logger, $booking, $planification, $planificationPeriod, $resource, $date, $timetableLinesList, $userFileIDList, $labelIDList, $note, 0);
     }
 
 	// Suppression de la note (en mise à jour de réservation)
-    public function note_delete_update(Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $labelIDList, Note $note, $many)
+    public function note_delete_update(LoggerInterface $logger, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $labelIDList, Note $note, $many)
     {
+	$logger->info('BookingController.note_delete_update DBG 1');
+	$logger->info('BookingController.note_delete_update DBG 2 _'.$booking->getID().'_');
 	$connectedUser = $this->getUser();
 	$em = $this->getDoctrine()->getManager();
 	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
