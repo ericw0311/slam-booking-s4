@@ -91,6 +91,7 @@ class User implements UserInterface, \Serializable
         $this->bookingUsers = new ArrayCollection();
         $this->bookingLines = new ArrayCollection();
         $this->bookingLabels = new ArrayCollection();
+        $this->queryBookings = new ArrayCollection();
     }
 
     public function getId()
@@ -329,6 +330,11 @@ class User implements UserInterface, \Serializable
   * @ORM\OneToMany(targetEntity="App\Entity\BookingLabel", mappedBy="user")
   */
  private $bookingLabels;
+
+ /**
+  * @ORM\OneToMany(targetEntity="App\Entity\QueryBooking", mappedBy="user", orphanRemoval=true)
+  */
+ private $queryBookings;
 
 
 
@@ -572,7 +578,6 @@ class User implements UserInterface, \Serializable
                 $planification->setUser(null);
             }
         }
-
         return $this;
     }
 
@@ -619,7 +624,6 @@ class User implements UserInterface, \Serializable
             $this->planificationPeriods[] = $planificationPeriod;
             $planificationPeriod->setUser($this);
         }
-
         return $this;
     }
 
@@ -632,7 +636,6 @@ class User implements UserInterface, \Serializable
                 $planificationPeriod->setUser(null);
             }
         }
-
         return $this;
     }
 
@@ -650,7 +653,6 @@ class User implements UserInterface, \Serializable
             $this->planificationResources[] = $planificationResource;
             $planificationResource->setUser($this);
         }
-
         return $this;
     }
 
@@ -663,7 +665,6 @@ class User implements UserInterface, \Serializable
                 $planificationResource->setUser(null);
             }
         }
-
         return $this;
     }
 
@@ -681,7 +682,6 @@ class User implements UserInterface, \Serializable
             $this->planificationLines[] = $planificationLine;
             $planificationLine->setUser($this);
         }
-
         return $this;
     }
 
@@ -694,7 +694,6 @@ class User implements UserInterface, \Serializable
                 $planificationLine->setUser(null);
             }
         }
-
         return $this;
     }
 
@@ -712,7 +711,6 @@ class User implements UserInterface, \Serializable
             $this->bookings[] = $booking;
             $booking->setUser($this);
         }
-
         return $this;
     }
 
@@ -725,7 +723,6 @@ class User implements UserInterface, \Serializable
                 $booking->setUser(null);
             }
         }
-
         return $this;
     }
 
@@ -743,7 +740,6 @@ class User implements UserInterface, \Serializable
             $this->bookingUsers[] = $bookingUser;
             $bookingUser->setUser($this);
         }
-
         return $this;
     }
 
@@ -756,7 +752,6 @@ class User implements UserInterface, \Serializable
                 $bookingUser->setUser(null);
             }
         }
-
         return $this;
     }
 
@@ -774,7 +769,6 @@ class User implements UserInterface, \Serializable
             $this->bookingLines[] = $bookingLine;
             $bookingLine->setUser($this);
         }
-
         return $this;
     }
 
@@ -787,7 +781,6 @@ class User implements UserInterface, \Serializable
                 $bookingLine->setUser(null);
             }
         }
-
         return $this;
     }
 
@@ -805,7 +798,6 @@ class User implements UserInterface, \Serializable
             $this->bookingLabels[] = $bookingLabel;
             $bookingLabel->setUser($this);
         }
-
         return $this;
     }
 
@@ -818,7 +810,35 @@ class User implements UserInterface, \Serializable
                 $bookingLabel->setUser(null);
             }
         }
+        return $this;
+    }
 
+    /**
+     * @return Collection|QueryBooking[]
+     */
+    public function getQueryBookings(): Collection
+    {
+        return $this->queryBookings;
+    }
+
+    public function addQueryBooking(QueryBooking $queryBooking): self
+    {
+        if (!$this->queryBookings->contains($queryBooking)) {
+            $this->queryBookings[] = $queryBooking;
+            $queryBooking->setUser($this);
+        }
+        return $this;
+    }
+
+    public function removeQueryBooking(QueryBooking $queryBooking): self
+    {
+        if ($this->queryBookings->contains($queryBooking)) {
+            $this->queryBookings->removeElement($queryBooking);
+            // set the owning side to null (unless already changed)
+            if ($queryBooking->getUser() === $this) {
+                $queryBooking->setUser(null);
+            }
+        }
         return $this;
     }
 }

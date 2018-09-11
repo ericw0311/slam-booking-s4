@@ -190,6 +190,7 @@ queryBooking.create: Créer une requête
 queryBooking.created.ok: La requête a bien été créée
 queryBooking.deleted.ok: La requête a bien été supprimée
 queryBooking.name: Nom de requête
+queryBooking.new: Nouvelle requête
 queryBooking.plural: Requêtes
 queryBooking.singular: Requête
 queryBooking.updated.ok: La requête a bien été modifiée

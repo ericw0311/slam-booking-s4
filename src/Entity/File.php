@@ -79,6 +79,11 @@ class File
      */
     private $bookings;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\QueryBooking", mappedBy="file", orphanRemoval=true)
+     */
+    private $queryBookings;
+
     public function __construct(\App\Entity\User $user)
     {
 		$this->setUser($user);
@@ -89,6 +94,7 @@ class File
         $this->planifications = new ArrayCollection();
         $this->labels = new ArrayCollection();
         $this->bookings = new ArrayCollection();
+        $this->queryBookings = new ArrayCollection();
     }
 
     public function getId()
@@ -334,6 +340,37 @@ class File
                 $booking->setFile(null);
             }
         }
+        return $this;
+    }
+
+    /**
+     * @return Collection|QueryBooking[]
+     */
+    public function getQueryBookings(): Collection
+    {
+        return $this->queryBookings;
+    }
+
+    public function addQueryBooking(QueryBooking $queryBooking): self
+    {
+        if (!$this->queryBookings->contains($queryBooking)) {
+            $this->queryBookings[] = $queryBooking;
+            $queryBooking->setFile($this);
+        }
+
+        return $this;
+    }
+
+    public function removeQueryBooking(QueryBooking $queryBooking): self
+    {
+        if ($this->queryBookings->contains($queryBooking)) {
+            $this->queryBookings->removeElement($queryBooking);
+            // set the owning side to null (unless already changed)
+            if ($queryBooking->getFile() === $this) {
+                $queryBooking->setFile(null);
+            }
+        }
+
         return $this;
     }
 }

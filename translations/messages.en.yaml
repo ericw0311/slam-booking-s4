@@ -190,6 +190,7 @@ queryBooking.create: Create a query
 queryBooking.created.ok: The query has been created
 queryBooking.deleted.ok: The query has been deleted
 queryBooking.name: Query name
+queryBooking.new: New query
 queryBooking.plural: Queries
 queryBooking.singular: Query
 queryBooking.updated.ok: The query has been updated

@@ -1,0 +1,32 @@
+{# templates/query_booking/modify.html.twig #}
+
+{% extends 'base.connected.html.twig' %}
+ 
+{% block body %}
+
+{{ form_start(form, {'action': path('query_booking_modify', { 'queryBookingID': queryBooking.ID }), 'method': 'POST', 'class': 'form-horizontal'}) }}
+
+<fieldset>
+	<legend><img src="{{ asset('images/dashboard-32.png') }}">&nbsp;</img>&nbsp;{{ queryBooking.name }}</legend>
+	{{ form_errors(form) }}
+	{{ form_row(form.name) }}
+	{{ form_row(form.periodType) }}
+	{{ form_row(form.beginningDate) }}
+	{{ form_row(form.endDate) }}
+	{{ form_rest(form) }}
+</fieldset>
+
+<div class="btn-group">
+<a href="{{ path('query_booking_edit', { 'queryBookingID': queryBooking.ID }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
+<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> {{ 'validate'|trans }}</button>
+</div>
+
+{{ form_end(form) }}
+
+{% endblock %}
+
+{% block javascripts %}
+
+<script src="{{ asset('scripts/queryBooking.js') }}"></script>
+
+{% endblock %}
