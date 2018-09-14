@@ -38,7 +38,6 @@ class FileFixtures extends Fixture implements DependentFixtureInterface
 [538, 1095, 'Aeroclub de  Gray'],
 [550, 1139, 'Le Plan B.'],
 [555, 1160, 'ACSRC reservations'],
-[598, 1323, 'RESERVATION de SALLES'],
 [612, 1408, 'SQUASH'],
 [614, 1418, 'Gestion'],
 [690, 1602, 'SallereunionLevallois'],
