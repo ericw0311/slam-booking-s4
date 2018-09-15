@@ -14,7 +14,7 @@ class UserFileFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager)
     {
-	foreach ($this->getNonResourceData() as [$accountID, $fileID, $administrator, $userFileID, $active, $userResource]) {
+	foreach ($this->getNonResourceData() as [$accountID, $fileID, $administrator, $userFileID, $active, $resourceID]) {
 
 		$user = $this->getReference('user-1');
 		$file = $this->getReference('file-'.$fileID);
@@ -32,6 +32,32 @@ class UserFileFixtures extends Fixture implements DependentFixtureInterface
 		$userFile->setUserCreated(true);
 		$userFile->setUsername($account->getUsername());
 		$userFile->setResourceUser(false);
+		$manager->persist($userFile);
+		$manager->flush();
+
+		$this->addReference('userFile-'.$userFileID, $userFile);
+	}
+
+	foreach ($this->getResourceData() as [$accountID, $fileID, $administrator, $userFileID, $active, $resourceID]) {
+
+		$user = $this->getReference('user-1');
+		$file = $this->getReference('file-'.$fileID);
+		$account = $this->getReference('user-'.$accountID);
+		$resource = $this->getReference('resource-'.$resourceID);
+
+		$userFile = new UserFile($user, $file);
+		$userFile->setAdministrator($administrator);
+		$userFile->setActive($active);
+		$userFile->setAccount($account);
+		$userFile->setEmail($account->getEmail());
+		$userFile->setAccountType($account->getAccountType());
+		$userFile->setLastName($account->getLastName());
+		$userFile->setFirstName($account->getFirstName());
+		$userFile->setUniqueName($account->getUniqueName());
+		$userFile->setUserCreated(true);
+		$userFile->setUsername($account->getUsername());
+		$userFile->setResourceUser(true);
+		$userFile->setResource($resource);
 		$manager->persist($userFile);
 		$manager->flush();
 
@@ -700,9 +726,18 @@ class UserFileFixtures extends Fixture implements DependentFixtureInterface
 [1418, 614, 1, 1302, 1, 0],
 	];
     }
-	
+
+	private function getResourceData(): array
+    {
+	return [
+		// $data = [?]
+[552, 321, 0, 279, 1, 654],
+[1128, 538, 0, 987, 1, 1567],
+	];
+    }
+
 	public function getDependencies()
 	{
-		return array(FileFixtures::class, UserFixtures::class);
+		return array(FileFixtures::class, UserFixtures::class, ResourceClassificationFixtures::class, ResourceFixtures::class);
     }
 }

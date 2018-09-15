@@ -79,8 +79,8 @@ class Timetable
     $this->setUser($user);
     $this->setFile($file);
 	$this->timetableLines = new ArrayCollection();
- $this->planificationLines = new ArrayCollection();
- $this->bookingLines = new ArrayCollection();
+	$this->planificationLines = new ArrayCollection();
+	$this->bookingLines = new ArrayCollection();
     }
 
     public function getId()
