@@ -8,12 +8,16 @@
 
 <legend><img src="{{ asset('images/' ~ resourceTypeIcons[resourceType] ~ '-32.png') }}">&nbsp;{{ ('resourceClassification.' ~ action ~ '.not.allowed')|trans }}</legend>
 
-<div class="panel panel-danger">
+<div class="panel">
 
 {% for resource in listResources %}
 	<a href="{{ path('resource_edit', { 'resourceID': resource.ID }) }}" class="list-group-item list-group-item-warning"><img src="{{ asset('images/' ~ resourceTypeIcons[resourceType] ~ '-32.png') }}">&nbsp;{{ resource.name }}</a>
 {% endfor %}
 
+</div>
+
+<div class="btn-group">
+	<a href="{{ path('resource_classification_index', { 'resourceType': resourceType }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
 </div>
 
 {% endblock %}

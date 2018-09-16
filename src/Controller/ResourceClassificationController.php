@@ -233,13 +233,14 @@ class ResourceClassificationController extends Controller
 		$ufRepository = $em->getRepository(UserFile::Class);
 		$listUserFiles = $ufRepository->getUserFilesFrom_IRC($userContext->getCurrentFile(), $resourceClassificationCode);
 		return $this->render('resource_classification/foreign.user.internal.html.twig',
-			array('userContext' => $userContext, 'resourceClassificationCode' => $resourceClassificationCode, 'action' => 'unactivate', 'listUserFiles' => $listUserFiles));
+			array('userContext' => $userContext, 'resourceType' => $resourceType, 'resourceClassificationCode' => $resourceClassificationCode,
+				'action' => 'unactivate', 'listUserFiles' => $listUserFiles));
 	} else {
 		$rRepository = $em->getRepository(Resource::Class);
 		$listResources = $rRepository->getResources_IRC($userContext->getCurrentFile(), $resourceType, $resourceClassificationCode);
                 
 		return $this->render('resource_classification/foreign.internal.html.twig',
-	array('userContext' => $userContext, 'resourceClassificationCode' => $resourceClassificationCode, 'listResources' => $listResources));
+	array('userContext' => $userContext, 'resourceType' => $resourceType, 'resourceClassificationCode' => $resourceClassificationCode, 'listResources' => $listResources));
 	}
     }
 
@@ -257,13 +258,15 @@ class ResourceClassificationController extends Controller
 		$ufRepository = $em->getRepository(UserFile::Class);
 		$listUserFiles = $ufRepository->getUserFilesFrom_ERC($userContext->getCurrentFile(), $resourceClassification);
 		return $this->render('resource_classification/foreign.user.external.html.twig',
-			array('userContext' => $userContext, 'resourceClassification' => $resourceClassification, 'action' => $action, 'listUserFiles' => $listUserFiles));
+			array('userContext' => $userContext, 'resourceType' => $resourceType, 'resourceClassification' => $resourceClassification,
+				'action' => $action, 'listUserFiles' => $listUserFiles));
 	} else {
 		$rRepository = $em->getRepository(Resource::Class);
 		$listResources = $rRepository->getResources_ERC($userContext->getCurrentFile(), $resourceType, $resourceClassification);
                 
 		return $this->render('resource_classification/foreign.external.html.twig',
-			array('userContext' => $userContext, 'resourceType' => $resourceType, 'resourceClassification' => $resourceClassification, 'action' => $action, 'listResources' => $listResources));
+			array('userContext' => $userContext, 'resourceType' => $resourceType, 'resourceClassification' => $resourceClassification,
+				'action' => $action, 'listResources' => $listResources)	);
 	}
 
 	return $this->render('resource_classification/index.html.twig', array('userContext' => $userContext));

@@ -7,7 +7,11 @@
  
 {% block body %}
 
-{{ form_start(form, {'action': path('planning_many_pp', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': date|date('Ymd') }), 'method': 'POST', 'class': 'form-horizontal'}) }}
+{{ form_start(form, {'attr': {
+						'class': 'form-inline',
+	'action': path('planning_many_pp', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': date|date('Ymd') }),
+						'method': 'POST',
+					}}) }}
 
 <div class="col-sm-3">
 
@@ -39,32 +43,18 @@
 
 <div class="col-sm-9">
 
-<nav class="navbar navbar-default">
-	<div class="container-fluid">
-		<ul class="nav navbar-nav">
-	<a href="{{ path('planning_one_pp', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': date|date('Ymd') }) }}" title="{{ 'planning.stretched.out'|trans }}"><span class="glyphicon glyphicon-resize-full"></span></a>
-		</ul>
-	</div>
-</nav>
+<legend>
 
-<div class="well well-sm" style="color:blue">
-<div class="row">
-
-<div class="col-sm-6">
-	{{ form_widget(form.date) }}
+<a href="{{ path('planning_many', { 'planificationID': planification.ID, 'date': previousDate|date('Ymd') }) }}" class="glyphicon glyphicon-chevron-left" title="{{ 'day.previous'|trans }}"></a>
+<span style="color:blue">{{ dateLongue(date) }}</span>
+<a href="{{ path('planning_many', { 'planificationID': planification.ID, 'date': nextDate|date('Ymd') }) }}" class="glyphicon glyphicon-chevron-right" title="{{ 'day.next'|trans }}"></a>
+{{ form_widget(form.date) }}
 <button type="submit" class="btn btn-default">
 	<span class="glyphicon glyphicon-th"></span>
 </button>
-</div>
+<a href="{{ path('planning_one_pp', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': date|date('Ymd') }) }}" title="{{ 'planning.stretched.out'|trans }}"><span class="glyphicon glyphicon-resize-full"></span></a>
 
-<div class="col-sm-6">
-<a href="{{ path('planning_many', { 'planificationID': planification.ID, 'date': previousDate|date('Ymd') }) }}" class="glyphicon glyphicon-chevron-left" title="{{ 'day.previous'|trans }}"></a>
-	{{ ('day.' ~ (date|date("D")|upper))|trans }}&nbsp;{{ date|date("j") }}&nbsp;{{ (('month.' ~ (date|date("M")|upper))|trans)|lower }}&nbsp;{{ date|date("Y") }}&nbsp;
-<a href="{{ path('planning_many', { 'planificationID': planification.ID, 'date': nextDate|date('Ymd') }) }}" class="glyphicon glyphicon-chevron-right" title="{{ 'day.next'|trans }}"></a>
-</div>
-
-</div>
-</div>
+</legend>
 
 {% block planning %}{% endblock %}
 

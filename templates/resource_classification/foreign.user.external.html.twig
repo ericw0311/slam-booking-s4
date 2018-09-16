@@ -6,7 +6,7 @@
 
 <legend><img src="{{ asset('images/user-32.png') }}">&nbsp;{{ resourceClassification.name }}:&nbsp;{{ ('resourceClassification.' ~ action ~ '.not.allowed')|trans }}</legend>
 
-<div class="panel panel-danger">
+<div class="panel">
 
 {% for userFile in listUserFiles %}
 {% if userFile.administrator %} {% set image = 'administrator-32.png' %} {% else %} {% set image = 'user-32.png' %} {% endif %}
@@ -17,6 +17,10 @@
 {% endif %}
 {% endfor %}
 
+</div>
+
+<div class="btn-group">
+	<a href="{{ path('resource_classification_index', { 'resourceType': resourceType }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
 </div>
 
 {% endblock %}

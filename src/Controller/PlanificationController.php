@@ -116,7 +116,11 @@ class PlanificationController extends Controller
 		$em->persist($planificationResource);
 	}
 	$planification->setInternal($internal);
-	$planification->setCode($classificationCode);
+	if ($internal > 0) {
+		$planification->setCode($classificationCode);
+	} else {
+		$planification->setCodeNull();
+	}
 	$em->persist($planification);
 	$em->flush();
 	$request->getSession()->getFlashBag()->add('notice', 'planification.created.ok');

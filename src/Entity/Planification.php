@@ -128,6 +128,12 @@ class Planification
         return $this;
     }
 
+    public function setCodeNull(): self
+    {
+        $this->code = null;
+        return $this;
+    }
+
     public function getInternal(): ?bool
     {
         return $this->internal;

@@ -8,19 +8,61 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 use App\Entity\File;
 use App\Entity\User;
+use App\Entity\Timetable;
+use App\Entity\TimetableLine;
 
 class FileFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager)
     {
 	foreach ($this->getData() as [$id, $accountID, $name]) {
-		$accountReference = 'user-'.$accountID;
-		$file = new File($this->getReference($accountReference));
+
+		$user = $this->getReference('user-1');
+		$account = $this->getReference('user-'.$accountID);
+
+		$file = new File($account);
 		$file->setName($name);
 		$manager->persist($file);
 		$manager->flush();
-		$reference = 'file-'.$id;
-		$this->addReference($reference, $file);
+		$this->addReference('file-'.$id, $file);
+
+		$timetable = new Timetable($user, $file);
+		$timetable->setName('Journée');
+		$timetable->setType('D');
+		$manager->persist($timetable);
+		$manager->flush();
+		$this->addReference('timetable-D-'.$id, $timetable);
+
+		$timetableLine = new TimetableLine($user, $timetable);
+		$timetableLine->setBeginningTime(date_create_from_format('H:i:s','00:00:00'));
+		$timetableLine->setEndTime(date_create_from_format('H:i:s','23:59:00'));
+		$timetableLine->setType('D');
+		$manager->persist($timetableLine);
+		$manager->flush();
+		$this->addReference('timetableLine-D-'.$id, $timetableLine);
+
+		$timetable = new Timetable($user, $file);
+		$timetable->setName('Demi-journée');
+		$timetable->setType('HD');
+		$manager->persist($timetable);
+		$manager->flush();
+		$this->addReference('timetable-HD-'.$id, $timetable);
+
+		$timetableLine = new TimetableLine($user, $timetable);
+		$timetableLine->setBeginningTime(date_create_from_format('H:i:s','00:00:00'));
+		$timetableLine->setEndTime(date_create_from_format('H:i:s','12:00:00'));
+		$timetableLine->setType('AM');
+		$manager->persist($timetableLine);
+		$manager->flush();
+		$this->addReference('timetableLine-AM-'.$id, $timetableLine);
+
+		$timetableLine = new TimetableLine($user, $timetable);
+		$timetableLine->setBeginningTime(date_create_from_format('H:i:s','12:00:00'));
+		$timetableLine->setEndTime(date_create_from_format('H:i:s','23:59:00'));
+		$timetableLine->setType('PM');
+		$manager->persist($timetableLine);
+		$manager->flush();
+		$this->addReference('timetableLine-PM-'.$id, $timetableLine);
 	}
     }
 

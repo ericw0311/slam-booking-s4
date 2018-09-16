@@ -416,7 +416,7 @@ class UserFileController extends Controller
 		if ($resourceFound) {
 			$resource->setInternal(0);
 			$resource->setClassification($resourceClassification);
-			$resource->setCode(null);
+			$resource->setCodeNull();
 		} else {
 			$resource = new Resource($connectedUser, $userContext->getCurrentFile());
 			$resource->setInternal(0);
