@@ -9,30 +9,23 @@
 
 {% block form_start %}{% endblock %}
 
-<div class="panel panel-default">
-
-<div class="panel-heading">
+<legend>
 
 {% if resource.internal %}
-	<p><img src="{{ asset('images/' ~ rcIcons[resource.code] ~ '-32.png') }}">&nbsp;{{ resource.name }}</p>
+<img src="{{ asset('images/' ~ rcIcons[resource.code] ~ '-32.png') }}">
 {% else %}
-	<p><img src="{{ asset('images/' ~ rtIcons[resource.type] ~ '-32.png') }}">&nbsp;{{ resource.name }}</p>
+<img src="{{ asset('images/' ~ rtIcons[resource.type] ~ '-32.png') }}">
 {% endif %}
+{{ resource.name }}
 
-</div>
+</legend>
 
-<div class="panel-body">
-
+<div>
 {% block booking_details %}{% endblock %}
-
 </div>
 
-<div class="panel-footer">
 <div class="btn-group">
 {% block booking_buttons %}{% endblock %}
-</div>
-</div>
-
 </div>
 
 {% block form_end %}{% endblock %}
