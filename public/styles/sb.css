@@ -16,3 +16,20 @@
     color: white;
     background-color: #286090;
 }
+
+/* Blocs (debug) */
+
+.sb-border-red {
+    border-style: solid;
+    border-color: red;
+}
+
+.sb-border-blue {
+    border-style: solid;
+    border-color: blue;
+}
+
+.sb-border-green {
+    border-style: solid;
+    border-color: green;
+}
