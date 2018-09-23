@@ -1,0 +1,29 @@
+{# templates/default/summary.html.twig #}
+
+{% extends 'base.connected.html.twig' %}
+ 
+{% block body %}
+
+{% if userContext.getCurrentUserFileAdministrator() %}
+
+<ul class="nav nav-pills">
+	<li class="active"><a data-toggle="pill" href="#summary">{{ 'summary'|trans }}</a></li>
+	<li><a data-toggle="pill" href="#administration">{{ 'administration'|trans }}</a></li>
+</ul>
+
+<div class="tab-content">
+	<div id="summary" class="tab-pane fade in active">
+{{ include('default/flow.html.twig') }}
+	</div>
+	<div id="administration" class="tab-pane fade">
+{{ include('default/administration.html.twig') }}
+	</div>
+</div>
+
+{% else %}
+
+{{ include('default/flow.html.twig') }}
+
+{% endif %}
+
+{% endblock %}

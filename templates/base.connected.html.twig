@@ -6,9 +6,9 @@
 	<div class="container-fluid">
 		<div class="navbar-header">
 {% if userContext.getCurrentUserFileAdministrator() %}
-			<a class="navbar-brand" href="#"><span class="label label-success">{{ userContext.getCurrentFileName() }}</span></a>
+			<a class="navbar-brand" href="{{ path('default') }}"><span class="label label-success">{{ userContext.getCurrentFileName() }}</span></a>
 {% else %}
-			<a class="navbar-brand" href="#"><span class="label label-warning">{{ userContext.getCurrentFileName() }}</span></a>
+			<a class="navbar-brand" href="{{ path('default') }}"><span class="label label-warning">{{ userContext.getCurrentFileName() }}</span></a>
 {% endif %}
 		</div>
 		<ul class="nav navbar-nav">

@@ -1,0 +1,17 @@
+{# templates/default/administration.html.twig #}
+
+<div class="list-group">
+	<a href="{{ path('user_file', { 'page': 1 }) }}" class="list-group-item list-group-item-success"><img src="{{ asset('images/user-32.png') }}"> {{ 'users'|trans }} <span class="badge">{{ fileContext.userFileCount }}</span></a>
+	<a href="{{ path('timetable', { 'page': 1 }) }}" class="list-group-item list-group-item-success"><img src="{{ asset('images/time-32.png') }}"> {{ 'timetable.plural'|trans }} <span class="badge">{{ fileContext.timetableCount }}</span></a>
+	<a href="{{ path('label', { 'page': 1 }) }}" class="list-group-item list-group-item-success"><img src="{{ asset('images/label-32.png') }}"> {{ 'label.plural'|trans }} <span class="badge">{{ fileContext.labelCount }}</span></a>
+{% if fileContext.resourceCount > 0 %}
+	<a href="{{ path('resource', { 'page': 1 }) }}" class="list-group-item list-group-item-success"><img src="{{ asset('images/resource-32.png') }}"> {{ 'resource.plural'|trans }} <span class="badge">{{ fileContext.resourceCount }}</span></a>
+{% else %}
+	<a href="{{ path('resource', { 'page': 1 }) }}" class="list-group-item list-group-item-warning"><img src="{{ asset('images/resource-32.png') }}"> {{ 'resource.plural'|trans }} <span class="badge">{{ fileContext.resourceCount }}</span></a>
+{% endif %}
+{% if fileContext.planificationCount > 0 %}
+	<a href="{{ path('planification', { 'page': 1 }) }}" class="list-group-item list-group-item-success"><img src="{{ asset('images/planification-32.png') }}"> {{ 'planification.plural'|trans }} <span class="badge">{{ fileContext.planificationCount }}</span></a>
+{% else %}
+	<a href="{{ path('planification', { 'page': 1 }) }}" class="list-group-item list-group-item-warning"><img src="{{ asset('images/planification-32.png') }}"> {{ 'planification.plural'|trans }} <span class="badge">{{ fileContext.planificationCount }}</span></a>
+{% endif %}
+</div>

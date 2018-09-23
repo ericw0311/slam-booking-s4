@@ -183,6 +183,7 @@ planning.calendar: Calendar
 planning.global: Global planning
 planning.stretched.out: Stretched out planning
 planning.timetable: Timetable
+planning.display.date: Display planning at selected date
 
 queryBooking.ask.delete: Do you really want to delete query %name% ?
 queryBooking.back.to.list: Back to queries list

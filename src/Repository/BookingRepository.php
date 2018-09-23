@@ -198,14 +198,14 @@ class BookingRepository extends ServiceEntityRepository
 	{
 	$qb->innerJoin('b.planification', 'p');
 	$qb->innerJoin('b.resource', 'r');
-	$qb->innerJoin('b.bookingUserFiles', 'bu', Expr\Join::WITH, $qb->expr()->eq('bu.order', ':order'))->setParameter('order', 1);
+	$qb->innerJoin('b.bookingUsers', 'bu', Expr\Join::WITH, $qb->expr()->eq('bu.oorder', ':order'))->setParameter('order', 1);
 	$qb->innerJoin('bu.userFile', 'uf');
 	}
 	
 	// Jointure pour sélection de l'utilisateur transmis
 	public function getUserFileJoin($qb, \App\Entity\UserFile $userFile)
 	{
-	$qb->innerJoin('b.bookingUserFiles', 'bu', Expr\Join::WITH, $qb->expr()->eq('bu.userFile', ':userFile'))->setParameter('userFile', $userFile);
+	$qb->innerJoin('b.bookingUsers', 'bu', Expr\Join::WITH, $qb->expr()->eq('bu.userFile', ':userFile'))->setParameter('userFile', $userFile);
 	}
 	
 	// Listes de réservations: partie Jointure avec sélection de l'utilisateur transmis

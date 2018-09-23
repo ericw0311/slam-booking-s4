@@ -49,7 +49,7 @@
 <span style="color:blue">{{ dateLongue(date) }}</span>
 <a href="{{ path('planning_many', { 'planificationID': planification.ID, 'date': nextDate|date('Ymd') }) }}" class="glyphicon glyphicon-chevron-right" title="{{ 'day.next'|trans }}"></a>
 {{ form_widget(form.date) }}
-<button type="submit" class="btn btn-default">
+<button type="submit" class="btn btn-default" title="{{ 'planning.display.date'|trans }}">
 	<span class="glyphicon glyphicon-th"></span>
 </button>
 <a href="{{ path('planning_one_pp', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': date|date('Ymd') }) }}" title="{{ 'planning.stretched.out'|trans }}"><span class="glyphicon glyphicon-resize-full"></span></a>

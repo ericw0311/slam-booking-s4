@@ -14,7 +14,7 @@
 	<a href="{{ path('planification_init_resource', { 'type': rt.type }) }}" class="list-group-item"><img src="{{ asset('images/' ~ rtIcons[rt.type] ~ '-32.png') }}">&nbsp;{{ ('resourceType.plural.' ~ rt.type)|trans }}<span class="badge">{{ rt.1 }}</span></a>
 {% endfor %}
 
-<div class="well well-sm">
+<div class="btn-group">
 	<a href="{{ path('planification', { 'page': 1 }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
 </div>
 

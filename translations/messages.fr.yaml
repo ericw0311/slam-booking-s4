@@ -183,6 +183,7 @@ planning.calendar: Calendrier
 planning.global: Planning global
 planning.stretched.out: Planning étendu
 planning.timetable: Grille horaire
+planning.display.date: Afficher le planning pour la date sélectionnée
 
 queryBooking.ask.delete: Voulez-vous vraiment supprimer la requête %name% ?
 queryBooking.back.to.list: Retour à la liste des requêtes
