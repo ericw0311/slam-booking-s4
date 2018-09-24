@@ -6,6 +6,14 @@
 
 <p><img src="{{ asset('images/administrator-32.png') }}"></img>&nbsp;{{ 'file.created.by'|trans }}&nbsp;{{ file.user.getFirstAndLastName() }}</p>
 
+<div>
+{% if fileEditContext.bookingsCount > 1 %}
+<a href="#"><img src="{{ asset('images/booking-32.png') }}"> {{ 'booking.plural'|trans }} <span class="badge">{{ fileEditContext.bookingsCount }}</span></a>
+{% else %}
+<img src="{{ asset('images/booking-32.png') }}"> {{ 'booking.plural'|trans }} <span class="badge">{{ fileEditContext.bookingsCount }}</span>
+{% endif %}
+</div>
+
 <div class="btn-group">
 
 <a href="{{ path('file', { 'page': 1 }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'file.back.to.list'|trans }}</a>

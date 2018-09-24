@@ -1,4 +1,5 @@
 <?php
+// Utilisé pour la page résumé du dossier: default/summary
 namespace App\Entity;
 
 class FileContext

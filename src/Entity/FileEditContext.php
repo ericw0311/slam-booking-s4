@@ -1,4 +1,5 @@
 <?php
+// Utilisé pour la page d'édition du dossier
 namespace App\Entity;
 
 class FileEditContext
@@ -7,6 +8,7 @@ class FileEditContext
     protected $userTimetablesCount; // Nombre de grilles horaires saisies par l'utilisateur (type = T)
     protected $labelsCount;
     protected $resourcesCount;
+    protected $bookingsCount;
 
     public function setUserFilesCount($userFilesCount)
     {
@@ -52,6 +54,17 @@ class FileEditContext
     return $this->resourcesCount;
     }
 
+    public function setBookingsCount($bookingsCount)
+    {
+    $this->bookingsCount = $bookingsCount;
+    return $this;
+    }
+
+    public function getBookingsCount()
+    {
+    return $this->bookingsCount;
+    }
+
     function __construct($em, \App\Entity\File $file)
     {
     $ufRepository = $em->getRepository(UserFile::class);
@@ -65,5 +78,8 @@ class FileEditContext
 
     $rRepository = $em->getRepository(Resource::class);
     $this->setResourcesCount($rRepository->getResourcesCount($file));
+
+    $bRepository = $em->getRepository(Booking::class);
+    $this->setBookingsCount($bRepository->getAllBookingsCount($file));
     }
 }
