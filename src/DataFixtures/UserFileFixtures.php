@@ -738,6 +738,6 @@ class UserFileFixtures extends Fixture implements DependentFixtureInterface
 
 	public function getDependencies()
 	{
-		return array(FileFixtures::class, UserFixtures::class, ResourceClassificationFixtures::class, ResourceFixtures::class);
+		return array(FileFixtures::class, UserFixtures::class, ResourceFixtures::class);
     }
 }

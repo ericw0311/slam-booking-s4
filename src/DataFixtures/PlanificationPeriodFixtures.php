@@ -119,8 +119,11 @@ class PlanificationPeriodFixtures extends Fixture implements DependentFixtureInt
 [478, 1, 440],
 [526, 1, 480],
 [536, 1, 488],
+[540, 1, 491],
 [541, 1, 492],
 [542, 1, 493],
+[543, 1, 494],
+[544, 1, 495],
 [558, 1, 508],
 [578, 1, 525],
 [591, 1, 532],
@@ -134,6 +137,7 @@ class PlanificationPeriodFixtures extends Fixture implements DependentFixtureInt
 [678, 1, 583],
 [680, 1, 584],
 [681, 1, 585],
+[689, 1, 590],
 [704, 1, 604],
 [708, 1, 606],
 [726, 1, 609],
@@ -167,6 +171,7 @@ class PlanificationPeriodFixtures extends Fixture implements DependentFixtureInt
 [717, 1, 293, '23/09/2014'],
 [718, 1, 253, '13/01/2018'],
 [725, 1, 311, '24/03/2017'],
+[728, 1, 477, '10/11/2018'],
 	];
     }
 	
@@ -196,6 +201,7 @@ class PlanificationPeriodFixtures extends Fixture implements DependentFixtureInt
 [436, 1, 408, '04/10/2017'],
 [437, 1, 409, '25/06/2015'],
 [451, 1, 421, '03/07/2015'],
+[523, 1, 477, '06/07/2017'],
 [524, 1, 478, '10/10/2017'],
 [528, 1, 482, '19/11/2015'],
 [609, 1, 543, '16/03/2018'],
@@ -219,6 +225,7 @@ class PlanificationPeriodFixtures extends Fixture implements DependentFixtureInt
 [592, 1, 482, '09/03/2016', '07/04/2016'],
 [597, 1, 482, '08/04/2016', '22/05/2016'],
 [621, 1, 409, '24/09/2016', '14/10/2017'],
+[655, 1, 477, '07/07/2017', '09/11/2018'],
 [670, 1, 409, '15/10/2017', '24/10/2017'],
 	];
     }

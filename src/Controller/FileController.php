@@ -14,10 +14,12 @@ use App\Entity\ListContext;
 use App\Entity\UserFile;
 use App\Entity\Timetable;
 use App\Entity\Resource;
+use App\Entity\Booking;
 use App\Entity\Label;
 
 use App\Form\FileType;
 use App\Api\AdministrationApi;
+use App\Api\PlanningApi;
 
 use App\Entity\FileEditContext;
 
@@ -181,5 +183,31 @@ class FileController extends Controller
 	$userContext->setCurrentFile($file); // Mettre a jour le dossier en cours dans le contexte utilisateur
     $request->getSession()->getFlashBag()->add('notice', 'file.current.updated.ok');
     return $this->redirectToRoute('file_edit', array('fileID' => $file->getId()));
+    }
+
+
+
+    /**
+     * @Route("/file/bookinglist/{fileID}/{page}", name="file_booking_list", requirements={"page"="\d+"})
+     * @ParamConverter("file", options={"mapping": {"fileID": "id"}})
+     */
+	public function booking_list(File $file, $page)
+	{
+	$connectedUser = $this->getUser();
+	$em = $this->getDoctrine()->getManager();
+	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+    $bRepository = $em->getRepository(Booking::Class);
+    $numberRecords = $bRepository->getAllBookingsCount($file);
+    $listContext = new ListContext($em, $connectedUser, 'booking', 'booking', $page, $numberRecords);
+    $listBookings = $bRepository->getAllBookings($file, $listContext->getFirstRecordIndex(), $listContext->getMaxRecords());
+                
+	$planning_path = 'planning_one'; // La route du planning est "one" ou "many" selon le nombre de planifications actives à la date du jour
+	$numberPlanifications = PlanningApi::getNumberOfPlanifications($em, $file);
+	if ($numberPlanifications > 1) {
+		$planning_path = 'planning_many';
+	}
+	return $this->render('planning/booking.list.html.twig',
+		array('userContext' => $userContext, 'listContext' => $listContext, 'listBookings' => $listBookings, 'list_path' => 'file_booking_list', 'planning_path' => $planning_path));
     }
 }

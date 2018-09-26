@@ -103,7 +103,7 @@ class PlanningController extends Controller
 		$planning_path = 'planning_many';
 	}
 	return $this->render('planning/booking.list.html.twig',
-		array('userContext' => $userContext, 'listContext' => $listContext, 'listBookings' => $listBookings, 'list_path' => 'planning_all_booking_list', 'planning_path' => $planning_path));
+		array('userContext' => $userContext, 'listContext' => $listContext, 'listBookings' => $listBookings, 'list_path' => 'planning_current_user_booking_list', 'planning_path' => $planning_path));
     }
 
     /**
@@ -127,7 +127,7 @@ class PlanningController extends Controller
 	}
 
 	return $this->render('planning/booking.list.html.twig',
-		array('userContext' => $userContext, 'listContext' => $listContext, 'listBookings' => $listBookings, 'list_path' => 'planning_all_booking_list', 'planning_path' => $planning_path));
+		array('userContext' => $userContext, 'listContext' => $listContext, 'listBookings' => $listBookings, 'list_path' => 'planning_in_progress_booking_list', 'planning_path' => $planning_path));
     }
 
     /**
@@ -151,7 +151,7 @@ class PlanningController extends Controller
 	}
 
 	return $this->render('planning/booking.list.html.twig',
-		array('userContext' => $userContext, 'listContext' => $listContext, 'listBookings' => $listBookings, 'list_path' => 'planning_all_booking_list', 'planning_path' => $planning_path));
+		array('userContext' => $userContext, 'listContext' => $listContext, 'listBookings' => $listBookings, 'list_path' => 'planning_current_user_in_progress_booking_list', 'planning_path' => $planning_path));
     }
 
     // Affichage de la grille horaire journaliere pour plusieurs planifications
