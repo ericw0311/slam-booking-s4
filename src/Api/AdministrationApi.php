@@ -3,6 +3,8 @@
 namespace App\Api;
 use App\Entity\File;
 use App\Entity\UserParameter;
+use App\Entity\Constants;
+
 class AdministrationApi
 {
 	// Retourne le dossier en cours d'un utilisateur
@@ -95,5 +97,59 @@ class AdministrationApi
 	if ($doFlush) {
 		$em->flush();
 	}
+	}
+
+	// Retourne le nombre de lignes affichées dans les listes pour une entité donnée
+	static function getNumberLines($em, \App\Entity\User $user, $entityCode)
+	{
+	$upRepository = $em->getRepository(UserParameter::Class);
+
+	$userParameter = $upRepository->findOneBy(array('user' => $user, 'parameterGroup' => ($entityCode.'.number.lines.columns'), 'parameter' => ($entityCode.'.number.lines')));
+	if ($userParameter != null) { $numberLines = $userParameter->getIntegerValue(); } else { $numberLines =  constant(Constants::class.'::LIST_DEFAULT_NUMBER_LINES'); }
+
+	return $numberLines;
+	}
+
+	// Met à jour le nombre de lignes affichées dans les listes pour une entité donnée
+	static function setNumberLines($em, \App\Entity\User $user, $entityCode, $numberLines)
+	{
+	$upRepository = $em->getRepository(UserParameter::Class);
+
+	$userParameter = $upRepository->findOneBy(array('user' => $user, 'parameterGroup' => ($entityCode.'.number.lines.columns'), 'parameter' => ($entityCode.'.number.lines')));
+	if ($userParameter != null) {
+		$userParameter->setSBIntegerValue($numberLines);
+	} else { 
+		$userParameter = new UserParameter($user, $entityCode.'.number.lines.columns', $entityCode.'.number.lines');
+		$userParameter->setSBIntegerValue($numberLines);
+		$em->persist($userParameter);
+	}
+	$em->flush();
+	}
+
+	// Retourne le nombre de colonnes affichées dans les listes pour une entité donnée
+	static function getNumberColumns($em, \App\Entity\User $user, $entityCode)
+	{
+	$upRepository = $em->getRepository(UserParameter::Class);
+
+	$userParameter = $upRepository->findOneBy(array('user' => $user, 'parameterGroup' => ($entityCode.'.number.lines.columns'), 'parameter' => ($entityCode.'.number.columns')));
+	if ($userParameter != null) { $numberColumns = $userParameter->getIntegerValue(); } else { $numberColumns =  constant(Constants::class.'::LIST_DEFAULT_NUMBER_LINES'); }
+
+	return $numberColumns;
+	}
+
+	// Met à jour le nombre de colonnes affichées dans les listes pour une entité donnée
+	static function setNumberColumns($em, \App\Entity\User $user, $entityCode, $numberColumns)
+	{
+	$upRepository = $em->getRepository(UserParameter::Class);
+
+	$userParameter = $upRepository->findOneBy(array('user' => $user, 'parameterGroup' => ($entityCode.'.number.lines.columns'), 'parameter' => ($entityCode.'.number.columns')));
+	if ($userParameter != null) {
+		$userParameter->setSBIntegerValue($numberColumns);
+	} else { 
+		$userParameter = new UserParameter($user, $entityCode.'.number.lines.columns', $entityCode.'.number.columns');
+		$userParameter->setSBIntegerValue($numberColumns);
+		$em->persist($userParameter);
+	}
+	$em->flush();
 	}
 }

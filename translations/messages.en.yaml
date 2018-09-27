@@ -58,6 +58,7 @@ month.abbr.DEC: Dec
 no: No
 number.columns: Number of columns
 number.lines: Number of lines
+number.lines.columns: Number of lines and columns
 number.lines.columns.updated.ok: Number of lines and columns displayed have been updated
 open: Open
 parameters: Parameters

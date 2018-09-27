@@ -1,0 +1,65 @@
+{% extends 'base.connected.html.twig' %}
+
+{% block body %}
+
+<legend><img src="{{ asset('images/' ~ listContext.image ~ '-32.png') }}">&nbsp;</img>{{ (listContext.entityCode ~ '.plural')|trans }}</legend>
+
+<div class="btn-group sb-list-header">
+
+{% block number_lines_and_columns_link %}{% endblock %}
+
+{% if (listContext.numberPages > 1) %}
+  
+{% if listContext.page > 2 %}
+	{% block page_1_link %}{% endblock %}
+{% endif %}
+{% if listContext.page > 1 %}
+	{% block page_minus_1_link %}{% endblock %}
+{% endif %}
+	{% block page_link %}{% endblock %}
+{% if listContext.page < listContext.numberPages %}
+	{% block page_plus_1_link %}{% endblock %}
+{% endif %}
+{% if listContext.page < (listContext.numberPages-1) %}
+	{% block last_page_link %}{% endblock %}
+{% endif %}
+
+{% endif %}
+</div>
+
+<div class="row">
+
+{% for i in 0..listContext.numberColumnsDisplayed-1 if listContext.numberColumnsDisplayed > 0 %}
+    <div class="col-sm-{{ (12/listContext.numberColumnsDisplayed) }}">
+	{% for j in 0..listContext.numberLinesDisplayed-1 if (i*listContext.numberLinesDisplayed+j) < listContext.numberRecordsDisplayed %}
+
+	{% if listBookings[i*listContext.numberLinesDisplayed+j].resource_internal %}
+	{% set resource_image = rcIcons[listBookings[i*listContext.numberLinesDisplayed+j].resource_code] %}
+	{% else %}
+	{% set resource_image = rtIcons[listBookings[i*listContext.numberLinesDisplayed+j].resource_type] %}
+	{% endif %}
+
+	{% if listBookings[i*listContext.numberLinesDisplayed+j].administrator %}
+	{% set user_image = 'administrator' %}
+	{% else %}
+	{% set user_image = 'user' %}
+	{% endif %}
+<a href="{{ path(planning_path, { 'planificationID': listBookings[i*listContext.numberLinesDisplayed+j].planificationID, 'date': listBookings[i*listContext.numberLinesDisplayed+j].beginningDate|date('Ymd') }) }}" class="list-group-item"><img src="{{ asset('images/' ~ resource_image ~ '-32.png') }}">&nbsp;{{ listBookings[i*listContext.numberLinesDisplayed+j].resource_name }}&nbsp;<img src="{{ asset('images/time-16.png') }}">&nbsp;{{ periode(listBookings[i*listContext.numberLinesDisplayed+j].beginningDate, listBookings[i*listContext.numberLinesDisplayed+j].endDate) }}&nbsp;<img src="{{ asset('images/' ~ user_image ~ '-16.png') }}">&nbsp;{{ listBookings[i*listContext.numberLinesDisplayed+j].user_first_name }}&nbsp;{{ listBookings[i*listContext.numberLinesDisplayed+j].user_last_name }}</a>
+	{% endfor %}
+    </div>
+{% endfor %}
+
+</div>
+
+{% endblock %}
+
+{% block message %}
+
+{% for flash_message in app.session.flashBag.get('notice') %}
+<div class="alert alert-success sb-message">
+<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    {{ flash_message|trans }}
+</div>
+{% endfor %}
+
+{% endblock %}

@@ -1,0 +1,30 @@
+{# templates/file/booking.list.html.twig #}
+
+{% set rtIcons = constant('App\\Entity\\Constants::RESOURCE_TYPE_ICON') %}
+{% set rcIcons = constant('App\\Entity\\Constants::RESOURCE_CLASSIFICATION_ICON') %}
+
+{% extends 'booking.list.html.twig' %}
+
+{% block number_lines_and_columns_link %}
+	<a href="{{ path('file_number_lines_and_columns', { 'fileID': file.ID, 'page': listContext.page }) }}" class="btn btn-default"><i class="glyphicon glyphicon-wrench"></i> {{ 'parameters'|trans }}</a>
+{% endblock %}
+
+{% block page_1_link %}
+	<a href="{{ path('file_booking_list', { 'fileID': file.ID, 'page': 1 }) }}" class="btn btn-default sb-page">1</a>
+{% endblock %}
+
+{% block page_minus_1_link %}
+	<a href="{{ path('file_booking_list', { 'fileID': file.ID, 'page': (listContext.page-1) }) }}" class="btn btn-default sb-page">{{ (listContext.page-1) }}</a>
+{% endblock %}
+
+{% block page_plus_1_link %}
+	<a href="{{ path('file_booking_list', { 'fileID': file.ID, 'page': (listContext.page+1) }) }}" class="btn btn-default sb-page">{{ (listContext.page+1) }}</a>
+{% endblock %}
+
+{% block page_link %}
+	<a href="{{ path('file_booking_list', { 'fileID': file.ID, 'page': listContext.page }) }}" class="btn btn-default sb-current-page">{{ listContext.page }}</a>
+{% endblock %}
+
+{% block last_page_link %}
+	<a href="{{ path('file_booking_list', { 'fileID': file.ID, 'page': listContext.numberPages }) }}" class="btn btn-default sb-page">{{ listContext.numberPages }}</a>
+{% endblock %}
