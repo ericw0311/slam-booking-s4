@@ -19,7 +19,7 @@ class IndexController extends Controller
     }
  
     /**
-     * @Route("/nadmin", name="admin")
+     * @Route("/admin", name="admin")
      */
     public function admin()
     {

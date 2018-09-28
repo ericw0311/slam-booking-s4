@@ -4,7 +4,7 @@
 
 <legend><img src="{{ asset('images/' ~ listContext.image ~ '-32.png') }}">&nbsp;</img>{{ (listContext.entityCode ~ '.plural')|trans }}</legend>
 
-<div class="btn-group sb-list-header">
+<div class="btn-group sb-margin-bottom">
 
 {% block number_lines_and_columns_link %}{% endblock %}
 
@@ -49,6 +49,10 @@
     </div>
 {% endfor %}
 
+</div>
+
+<div class="btn-group sb-margin-top">
+	{% block back_link %}{% endblock %}
 </div>
 
 {% endblock %}

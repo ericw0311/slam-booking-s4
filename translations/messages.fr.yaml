@@ -112,6 +112,7 @@ dashboard.plural: Tableaux de bord
 dashboard.singular: Tableau de bord
 
 file.ask.delete: Voulez-vous vraiment supprimer le dossier %name% ?
+file.back: Retour au dossier
 file.back.to.list: Retour à la liste des dossiers
 file.create: Créer un dossier
 file.created.by: Dossier créé par

@@ -112,6 +112,7 @@ dashboard.plural: Dashboards
 dashboard.singular: Dashboard
 
 file.ask.delete: Do you really want to delete file %name% ?
+file.back: Back to file
 file.back.to.list: Back to file list
 file.create: Create a file
 file.created.by: File created by

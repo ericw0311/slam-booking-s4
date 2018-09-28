@@ -28,3 +28,7 @@
 {% block last_page_link %}
 	<a href="{{ path('file_booking_list', { 'fileID': file.ID, 'page': listContext.numberPages }) }}" class="btn btn-default sb-page">{{ listContext.numberPages }}</a>
 {% endblock %}
+
+{% block back_link %}
+	<a href="{{ path('file_edit', { 'fileID': file.ID }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'file.back'|trans }}</a>
+{% endblock %}

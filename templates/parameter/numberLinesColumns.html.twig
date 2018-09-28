@@ -5,12 +5,16 @@
 {{ form_start(form, {'action': path('parameter_numberLinesColumns', { 'entityCode': entityCode, 'listPath': listPath }), 'method': 'POST', 'class': 'form-horizontal'}) }}
 
 <fieldset>
-	<legend>Inscription</legend>
+	<legend><i class="glyphicon glyphicon-wrench"></i>&nbsp;{{ 'number.lines.columns'|trans }}</legend>
 	{{ form_row(form.numberLines) }}
 	{{ form_row(form.numberColumns) }}
 	{{ form_rest(form) }}
-	<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> Valider</button>
 </fieldset>
+
+<div class="btn-group">
+	<a href="{{ path(listPath, { 'page': 1 }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
+	<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> {{ 'validate'|trans }}</button>
+</div>
 
 {{ form_end(form) }}
 

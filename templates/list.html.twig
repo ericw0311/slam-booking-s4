@@ -4,7 +4,7 @@
 
 <legend><img src="{{ asset('images/' ~ listContext.image ~ '-32.png') }}">&nbsp;</img>{{ (listContext.entityCode ~ '.plural')|trans }}</legend>
 
-<div class="btn-group sb-list-header">
+<div class="btn-group sb-margin-bottom">
 {% if display_create_path %}
 <a href="{{ path(create_path) }}" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> {{ (listContext.entityCode ~ '.create')|trans }}</a>
 {% endif %}

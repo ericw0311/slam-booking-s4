@@ -4,8 +4,12 @@
 
 /* Listes */
 
-.sb-list-header {
+.sb-margin-bottom {
     margin-bottom: 10px;
+}
+
+.sb-margin-top {
+    margin-top: 10px;
 }
 
 .sb-page {
