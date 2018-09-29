@@ -1,5 +1,6 @@
 <?php
 // App/DataFixtures/PlanificationPeriodFixtures.php
+
 namespace App\DataFixtures;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -7,6 +8,7 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use App\Entity\User;
 use App\Entity\Planification;
 use App\Entity\PlanificationPeriod;
+
 class PlanificationPeriodFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager)
