@@ -356,6 +356,8 @@ users.selected: Selected users
 
 userFile.administrator.rights: The user has administrator rights on file
 userFile.ask.delete: Do you really want to remove user %name% from file ?
+userFile.create: Add a user
+userFile.back: Back to user
 userFile.back.to.list: Back to users list
 userFile.create: Add a user to file
 userFile.created.ok: The user has been added to file

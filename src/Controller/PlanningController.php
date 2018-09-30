@@ -96,7 +96,7 @@ class PlanningController extends Controller
     $numberRecords = $bRepository->getUserFileBookingsCount($userContext->getCurrentFile(), $userContext->getCurrentUserFile());
     $listContext = new ListContext($em, $connectedUser, 'booking', 'booking', $page, $numberRecords);
     $listBookings = $bRepository->getUserFileBookings($userContext->getCurrentFile(), $userContext->getCurrentUserFile(), $listContext->getFirstRecordIndex(), $listContext->getMaxRecords());
-                
+
 	$planning_path = 'planning_one'; // La route du planning est "one" ou "many" selon le nombre de planifications actives à la date du jour
 	$numberPlanifications = PlanningApi::getNumberOfPlanifications($em, $userContext->getCurrentFile());
 	if ($numberPlanifications > 1) {

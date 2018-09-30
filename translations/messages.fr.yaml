@@ -357,6 +357,7 @@ users.selected: Utilisateurs sélectionnés
 userFile.administrator.rights: L'utilisateur a les droits d'administrateur sur le dossier
 userFile.ask.delete: Voulez-vous vraiment retirer l'utilisateur %name% du dossier ?
 userFile.create: Ajouter un utilisateur
+userFile.back: Retour à l'utilisateur
 userFile.back.to.list: Retour à la liste des utilisateurs
 userFile.created.ok: L'utilisateur a bien été ajouté au dossier.
 userFile.delete.not.allowed: Le créateur d'un dossier ne peut pas être supprimé du dossier

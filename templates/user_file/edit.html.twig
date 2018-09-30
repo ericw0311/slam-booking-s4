@@ -2,7 +2,7 @@
  
 {% set resourceClassificationIcons = constant('App\\Entity\\Constants::RESOURCE_CLASSIFICATION_ICON') %}
  
- {% block body %}
+{% block body %}
 
 {% if userFile.administrator %}
 <legend><img src="{{ asset('images/administrator-32.png') }}">&nbsp;</img>&nbsp;{{ userFile.getFirstAndLastName() }}</legend>
@@ -27,7 +27,15 @@
 {% endif %}
 {% endif %}
 
-<div class="btn-group">
+<div>
+{% if numberBookings > 0 %}
+<a href="{{ path('user_file_booking_list', { 'userFileID': userFile.ID, 'page': 1 }) }}"><img src="{{ asset('images/booking-32.png') }}"> {{ 'booking.plural'|trans }} <span class="badge">{{ numberBookings }}</span></a>
+{% else %}
+<img src="{{ asset('images/booking-32.png') }}"> {{ 'booking.plural'|trans }} <span class="badge">{{ numberBookings }}</span>
+{% endif %}
+</div>
+
+<div class="btn-group sb-margin-top">
 
 <a href="{{ path('user_file', { 'page': 1 }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'userFile.back.to.list'|trans }}</a>
 {% if selectedUserIsFileCreator %}

@@ -7,8 +7,7 @@
 <p><img src="{{ asset('images/administrator-32.png') }}"></img>&nbsp;{{ 'file.created.by'|trans }}&nbsp;{{ file.user.getFirstAndLastName() }}</p>
 
 <div>
-
-{% if file.ID == userContext.currentFileID and fileEditContext.bookingsCount > 1 %}
+{% if file.ID == userContext.currentFileID and fileEditContext.bookingsCount > 0 %}
 <a href="{{ path('file_booking_list', { 'fileID': file.ID, 'page': 1 }) }}"><img src="{{ asset('images/booking-32.png') }}"> {{ 'booking.plural'|trans }} <span class="badge">{{ fileEditContext.bookingsCount }}</span></a>
 {% else %}
 <img src="{{ asset('images/booking-32.png') }}"> {{ 'booking.plural'|trans }} <span class="badge">{{ fileEditContext.bookingsCount }}</span>
