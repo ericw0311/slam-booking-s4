@@ -5,18 +5,10 @@
 <a href="{{ path('timetable', { 'page': 1 }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'timetable.back.to.list'|trans }}</a>
 
 {% if timetable.type == 'D' %}
-	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateModal1"><span class="glyphicon glyphicon-pencil"></span> <del>{{ 'modify'|trans }}</del></button>
-{% elseif timetable.type == 'HD' %}
-	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateModal2"><span class="glyphicon glyphicon-pencil"></span> <del>{{ 'modify'|trans }}</del></button>
-{% else %}
-	<a href="{{ path('timetable_modify', { 'timetableID': timetable.ID }) }}" class="btn btn-primary"><i class="glyphicon glyphicon-pencil"></i> {{ 'modify'|trans }}</a>
-{% endif %}
-
-{% if timetable.type == 'D' %}
 	<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal1"><span class="glyphicon glyphicon-trash"></span> <del>{{ 'delete'|trans }}</del></button>
 {% elseif timetable.type == 'HD' %}
 	<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal2"><span class="glyphicon glyphicon-trash"></span> <del>{{ 'delete'|trans }}</del></button>
-{% elseif timetableContext.planificationPeriodsCount > 0 %}
+{% elseif timetableContext.planificationsCount > 0 %}
 	<a href="{{ path('timetable_foreign_delete', { 'timetableID': timetable.ID }) }}" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> <del>{{ 'delete'|trans }}</del></a>
 {% else %}
 	<a href="{{ path('timetable_delete', { 'timetableID': timetable.ID }) }}" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> {{ 'delete'|trans }}</a>
@@ -26,7 +18,7 @@
 	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateModal1"><span class="glyphicon glyphicon-plus"></span> <del>{{ 'timetableLine.create'|trans }}</del></button>
 {% elseif timetable.type == 'HD' %}
 	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateModal2"><span class="glyphicon glyphicon-plus"></span> <del>{{ 'timetableLine.create'|trans }}</del></button>
-{% elseif timetableContext.planificationPeriodsCount > 0 %}
+{% elseif timetableContext.planificationsCount > 0 %}
 	<a href="{{ path('timetable_foreign_update', { 'timetableID': timetable.ID }) }}" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> <del>{{ 'timetableLine.create'|trans }}</del></a>
 {% else %}
 	<a href="{{ path('timetable_add_line', { 'timetableID': timetable.ID }) }}" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> {{ ('timetableLine.create')|trans }}</a>

@@ -3,26 +3,23 @@ namespace App\Entity;
 
 class TimetableContext
 {
-    protected $planificationPeriodsCount;
+    protected $planificationsCount;
 
-    public function setPlanificationPeriodsCount($planificationPeriodsCount)
+    public function setPlanificationsCount($planificationsCount)
     {
-    $this->planificationPeriodsCount = $planificationPeriodsCount;
+    $this->planificationsCount = $planificationsCount;
     return $this;
     }
 
-    public function getPlanificationPeriodsCount()
+    public function getPlanificationsCount()
     {
-    return $this->planificationPeriodsCount;
+    return $this->planificationsCount;
     }
 
-    function __construct($em, \App\Entity\Timetable $timetable)
+    function __construct($em, \App\Entity\File $file, \App\Entity\Timetable $timetable)
     {
-/* TPRR
-    $plRepository = $em->getRepository(PlanificationLine::Class);
-    $this->setPlanificationPeriodsCount($plRepository->getPlanificationPeriodsCount($timetable));
-*/
-    $this->setPlanificationPeriodsCount(0);
+    $pRepository = $em->getRepository(Planification::Class);
+    $this->setPlanificationsCount($pRepository->getTimetablePlanificationsCount($file, $timetable));
     return $this;
     }
 }

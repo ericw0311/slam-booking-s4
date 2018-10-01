@@ -1,5 +1,7 @@
 {# templates/timetable/foreign.delete.html.twig #}
 
-{% extends 'foreign.html.twig' %}
+{% extends 'timetable/foreign.html.twig' %}
 
-{% block foreign_message %}{{ 'timetable.delete.not.allowed.3'|trans }}{% endblock %}
+{% block legend %}
+	<legend><img src="{{ asset('images/time-32.png') }}"></img>&nbsp;{{ timetable.name }}:&nbsp;{{ 'delete.not.allowed'|trans }}</legend>
+{% endblock %}

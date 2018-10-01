@@ -4,7 +4,13 @@
 
 {% block body %}
 
-<legend><img src="{{ asset('images/time-32.png') }}"></img>&nbsp;{{ timetable.name }}</legend>
+<legend>
+
+<img src="{{ asset('images/time-32.png') }}"></img>&nbsp;{{ timetable.name }}
+{% if timetable.type == 'T' %}
+	<a href="{{ path('timetable_modify', { 'timetableID': timetable.ID }) }}" class="glyphicon glyphicon-pencil" title="{{ 'modify'|trans }}"></a>
+{% endif %}
+</legend>
 
 {% if listTimetableLines|length > numberLinesDualButtons %}
 {{ include('timetable/edit.button.html.twig') }}
@@ -29,7 +35,7 @@
 		<td>{{ timetableLine.endTime|date("H:i") }}</td>
 {% if timetable.type == 'T' %}
 		<td><a href="{{ path('timetable_modify_line', { 'timetableID': timetable.ID, 'timetableLineID': timetableLine.ID }) }}" class="glyphicon glyphicon-pencil"></a></td>
-{% if timetableContext.planificationPeriodsCount > 0 %}
+{% if timetableContext.planificationsCount > 0 %}
 		<td><a href="{{ path('timetable_foreign_update', { 'timetableID': timetable.ID }) }}" class="glyphicon glyphicon-trash" style="color:red"></a></td>
 {% else %}
 		<td><a href="{{ path('timetable_delete_line', { 'timetableID': timetable.ID, 'timetableLineID': timetableLine.ID }) }}" class="glyphicon glyphicon-trash"></a></td>

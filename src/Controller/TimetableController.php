@@ -15,6 +15,7 @@ use App\Entity\Timetable;
 use App\Entity\TimetableLine;
 use App\Entity\Constants;
 use App\Entity\TimetableContext;
+use App\Entity\Planification;
 
 use App\Form\TimetableType;
 use App\Form\TimetableLineType;
@@ -84,9 +85,10 @@ class TimetableController extends Controller
     $tlRepository = $em->getRepository(TimetableLine::Class);
     $listTimetableLines = $tlRepository->getTimetableLines($timetable);
 
-    $timetableContext = new TimetableContext($em, $timetable); // contexte grille horaire
+    $timetableContext = new TimetableContext($em, $userContext->getCurrentFile(), $timetable); // contexte grille horaire
 
-	return $this->render('timetable/edit.html.twig', array('userContext' => $userContext, 'timetable' => $timetable, 'listTimetableLines' => $listTimetableLines, 'timetableContext' => $timetableContext));
+	return $this->render('timetable/edit.html.twig', 
+		array('userContext' => $userContext, 'timetable' => $timetable, 'listTimetableLines' => $listTimetableLines, 'timetableContext' => $timetableContext));
     }
 
 	// Modification d'un dossier
@@ -149,10 +151,10 @@ class TimetableController extends Controller
 	$em = $this->getDoctrine()->getManager();
  	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
-    $ppRepository = $em->getRepository(PlanificationPeriod::Class);
-    $listPlanificationPeriod = $ppRepository->getTimetablePlanificationPeriods($timetable);
+    $pRepository = $em->getRepository(Planification::Class);
+    $listPlanifications = $pRepository->getTimetablePlanificationsList($userContext->getCurrentFile(), $timetable);
 
-	return $this->render('timetable/foreign.delete.html.twig', array('userContext' => $userContext, 'timetable' => $timetable, 'listPlanificationPeriod' => $listPlanificationPeriod));
+	return $this->render('timetable/foreign.delete.html.twig', array('userContext' => $userContext, 'timetable' => $timetable, 'listPlanifications' => $listPlanifications));
     }
 
 	
@@ -167,10 +169,10 @@ class TimetableController extends Controller
 	$em = $this->getDoctrine()->getManager();
  	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
-    $ppRepository = $em->getRepository(PlanificationPeriod::Class);
-    $listPlanificationPeriod = $ppRepository->getTimetablePlanificationPeriods($timetable);
+    $pRepository = $em->getRepository(Planification::Class);
+    $listPlanifications = $pRepository->getTimetablePlanificationsList($userContext->getCurrentFile(), $timetable);
 
-	return $this->render('timetable/foreign.update.html.twig', array('userContext' => $userContext, 'timetable' => $timetable, 'listPlanificationPeriod' => $listPlanificationPeriod));
+	return $this->render('timetable/foreign.update.html.twig', array('userContext' => $userContext, 'timetable' => $timetable, 'listPlanifications' => $listPlanifications));
     }
 	
 	// Ajout d'un creneau horaire

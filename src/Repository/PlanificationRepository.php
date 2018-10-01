@@ -108,4 +108,41 @@ class PlanificationRepository extends ServiceEntityRepository
     $qb->addOrderBy('p.code', 'ASC');
     $qb->addOrderBy('p.name', 'ASC');
     }
+
+
+	// Planifications faisant référence à une grille horaire
+
+    public function getTimetablePlanificationsCount($file, $timetable)
+    {
+    $qb = $this->createQueryBuilder('p');
+    $qb->select($qb->expr()->count('p'));
+    $qb->where('p.file = :file')->setParameter('file', $file);
+	$this->getTimetablePlanifications($qb, $timetable);
+
+    $query = $qb->getQuery();
+    $singleScalar = $query->getSingleScalarResult();
+    return $singleScalar;
+    }
+	
+    public function getTimetablePlanificationsList($file, $timetable)
+    {
+    $qb = $this->createQueryBuilder('p');
+    $qb->where('p.file = :file')->setParameter('file', $file);
+	$this->getTimetablePlanifications($qb, $timetable);
+    $qb->orderBy('p.type', 'ASC');
+    $qb->addOrderBy('p.internal', 'DESC');
+    $qb->addOrderBy('p.code', 'ASC');
+    $qb->addOrderBy('p.name', 'ASC');
+   
+    $query = $qb->getQuery();
+    $results = $query->getResult();
+    return $results;
+    }
+
+	public function getTimetablePlanifications($qb, $timetable)
+    {
+	$qb->innerJoin('p.planificationPeriods', 'pp');
+	$qb->innerJoin('pp.planificationLines', 'pl', Expr\Join::WITH, $qb->expr()->eq('pl.timetable', ':t'));
+    $qb->setParameter('t', $timetable);
+    }
 }

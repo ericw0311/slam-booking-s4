@@ -1,9 +1,21 @@
+{# templates/timetable/foreign.html.twig #}
+
 {% extends 'base.connected.html.twig' %}
  
 {% block body %}
 
-<legend><img src="{{ asset('images/time-32.png') }}"></img>&nbsp;{{ timetable.name }}</legend>
+{% block legend %}{% endblock %}
 
-<p>{% block foreign_message %}{% endblock %}</p>
+<div class="panel">
+
+{% for planification in listPlanifications %}
+	<a href="{{ path('planification_edit_lp', { 'planificationID': planification.ID }) }}" class="list-group-item list-group-item-warning"><img src="{{ asset('images/planification-32.png') }}">&nbsp;{{ planification.name }}</a>
+{% endfor %}
+
+</div>
+
+<div class="btn-group">
+	<a href="{{ path('timetable_edit', { 'timetableID': timetable.ID }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'timetable.back'|trans }}</a>
+</div>
 
 {% endblock %}
