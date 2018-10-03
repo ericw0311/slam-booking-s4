@@ -21,6 +21,8 @@ class PlanificationRepository extends ServiceEntityRepository
         parent::__construct($registry, Planification::class);
     }
 
+	// 1) Toutes les planifications
+
     public function getPlanificationsCount($file)
     {
     $queryBuilder = $this->createQueryBuilder('p');
@@ -48,6 +50,8 @@ class PlanificationRepository extends ServiceEntityRepository
     return $results;
     }
 
+	// 2) Planifications affichées dans le planning
+
 	// Retourne la première planification affichée dans le planning
 	public function getFirstPlanningPlanification($file, \Datetime $date)
     {
@@ -56,7 +60,7 @@ class PlanificationRepository extends ServiceEntityRepository
     $qb->addSelect('pp.id planificationPeriodID');
     $qb->where('p.file = :file')->setParameter('file', $file);
 	$this->getPlanningPlanificationsPeriod($qb);
-	$this->getPlanningPlanificationsSort($qb);
+	$this->getPlanificationsSort($qb);
 	$this->getPlanningPlanificationsPeriodParameters($qb, $date);
 
 	$qb->setMaxResults(1);
@@ -76,7 +80,7 @@ class PlanificationRepository extends ServiceEntityRepository
     $qb->addSelect('pp.id planificationPeriodID');
     $qb->where('p.file = :file')->setParameter('file', $file);
 	$this->getPlanningPlanificationsPeriod($qb);
-	$this->getPlanningPlanificationsSort($qb);
+	$this->getPlanificationsSort($qb);
 	$this->getPlanningPlanificationsPeriodParameters($qb, $date);
 
     $query = $qb->getQuery();
@@ -100,17 +104,7 @@ class PlanificationRepository extends ServiceEntityRepository
 	$qb->setParameter('endDate', $date->format('Ymd'));
     }
 
-	// Planifications affichées dans le planning: tri
-	public function getPlanningPlanificationsSort($qb)
-    {
-    $qb->orderBy('p.type', 'ASC');
-    $qb->addOrderBy('p.internal', 'DESC');
-    $qb->addOrderBy('p.code', 'ASC');
-    $qb->addOrderBy('p.name', 'ASC');
-    }
-
-
-	// Planifications faisant référence à une grille horaire
+	// 3) Planifications faisant référence à une grille horaire
 
     public function getTimetablePlanificationsCount($file, $timetable)
     {
@@ -129,10 +123,7 @@ class PlanificationRepository extends ServiceEntityRepository
     $qb = $this->createQueryBuilder('p');
     $qb->where('p.file = :file')->setParameter('file', $file);
 	$this->getTimetablePlanifications($qb, $timetable);
-    $qb->orderBy('p.type', 'ASC');
-    $qb->addOrderBy('p.internal', 'DESC');
-    $qb->addOrderBy('p.code', 'ASC');
-    $qb->addOrderBy('p.name', 'ASC');
+	$this->getPlanificationsSort($qb);
    
     $query = $qb->getQuery();
     $results = $query->getResult();
@@ -144,5 +135,47 @@ class PlanificationRepository extends ServiceEntityRepository
 	$qb->innerJoin('p.planificationPeriods', 'pp');
 	$qb->innerJoin('pp.planificationLines', 'pl', Expr\Join::WITH, $qb->expr()->eq('pl.timetable', ':t'));
     $qb->setParameter('t', $timetable);
+    }
+
+	// 4) Planifications faisant référence à une ressource
+
+    public function getResourcePlanificationsCount($file, $resource)
+    {
+    $qb = $this->createQueryBuilder('p');
+    $qb->select($qb->expr()->count('p'));
+    $qb->where('p.file = :file')->setParameter('file', $file);
+	$this->getResourcePlanifications($qb, $resource);
+
+    $query = $qb->getQuery();
+    $singleScalar = $query->getSingleScalarResult();
+    return $singleScalar;
+    }
+	
+    public function getResourcePlanificationsList($file, $resource)
+    {
+    $qb = $this->createQueryBuilder('p');
+    $qb->where('p.file = :file')->setParameter('file', $file);
+	$this->getResourcePlanifications($qb, $resource);
+	$this->getPlanificationsSort($qb);
+   
+    $query = $qb->getQuery();
+    $results = $query->getResult();
+    return $results;
+    }
+
+	public function getResourcePlanifications($qb, $resource)
+    {
+	$qb->innerJoin('p.planificationPeriods', 'pp');
+	$qb->innerJoin('pp.planificationResources', 'pr', Expr\Join::WITH, $qb->expr()->eq('pr.resource', ':r'));
+    $qb->setParameter('r', $resource);
+    }
+
+	// Tri des planifications
+	public function getPlanificationsSort($qb)
+    {
+    $qb->orderBy('p.type', 'ASC');
+    $qb->addOrderBy('p.internal', 'DESC');
+    $qb->addOrderBy('p.code', 'ASC');
+    $qb->addOrderBy('p.name', 'ASC');
     }
 }

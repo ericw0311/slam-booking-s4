@@ -3,26 +3,23 @@ namespace App\Entity;
 
 class ResourceContext
 {
-	protected $planificationPeriodsCount;
+    protected $planificationsCount;
 
-    public function setPlanificationPeriodsCount($planificationPeriodsCount)
+    public function setPlanificationsCount($planificationsCount)
     {
-    $this->planificationPeriodsCount = $planificationPeriodsCount;
+    $this->planificationsCount = $planificationsCount;
     return $this;
     }
-    
-    public function getPlanificationPeriodsCount()
+
+    public function getPlanificationsCount()
     {
-    return $this->planificationPeriodsCount;
+    return $this->planificationsCount;
     }
-    
-    function __construct($em, \App\Entity\Resource $resource)
+
+    function __construct($em, \App\Entity\File $file, \App\Entity\Resource $resource)
     {
-	/*
-    $prRepository = $em->getRepository(PlanificationResource::Class);
-    $this->setPlanificationPeriodsCount($prRepository->getPlanificationPeriodsCount($resource));
-	*/
-    $this->setPlanificationPeriodsCount(0);
+    $pRepository = $em->getRepository(Planification::Class);
+    $this->setPlanificationsCount($pRepository->getResourcePlanificationsCount($file, $resource));
     return $this;
     }
 }

@@ -119,15 +119,15 @@ file.created.by: Dossier créé par
 file.created.ok: Le dossier a bien été créé
 file.current: En cours
 file.current.updated.ok: Le dossier en cours a été modifié
-file.delete.not.allowed: Seul le créateur d'un dossier est autorisé à le supprimer
-file.delete.not.allowed.2: Le dossier est référencé. Suppression impossible
 file.deleted.ok: Le dossier a bien été supprimé
+file.dna.booking: Le dossier %name% a des réservations. Suppression impossible
+file.dna.creator: Seul le créateur d'un dossier est autorisé à le supprimer
 file.name: Nom du dossier
 file.new: Nouveau dossier
 file.plural: Dossiers
 file.set.as.current: Positionner comme dossier en cours
 file.singular: Dossier
-file.update.not.allowed: Seul le créateur d'un dossier est autorisé à le modifier
+file.una.creator: Seul le créateur d'un dossier est autorisé à le modifier
 file.updated.ok: Le dossier a bien été modifié
 
 label: Etiquette
@@ -199,6 +199,7 @@ queryBooking.singular: Requête
 queryBooking.updated.ok: La requête a bien été modifiée
 
 resource.ask.delete: Voulez-vous vraiment supprimer la ressource %name% ?
+resource.back: Retour à la ressource
 resource.back.to.list: Retour à la liste des ressources
 resource.create: Créer une ressource
 resource.created.ok: La ressource a bien été créée

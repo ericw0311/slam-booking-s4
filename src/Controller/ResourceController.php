@@ -16,9 +16,13 @@ use App\Entity\Resource;
 use App\Entity\File;
 use App\Entity\ResourceClassificationNDB;
 use App\Entity\ResourceContext;
+use App\Entity\Planification;
+use App\Entity\Booking;
 
 use App\Form\ResourceType;
 use App\Form\ResourceAddType;
+
+use App\Api\PlanningApi;
 
 class ResourceController extends Controller
 {
@@ -168,9 +172,13 @@ class ResourceController extends Controller
 	$em = $this->getDoctrine()->getManager();
 	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
-	$resourceContext = new ResourceContext($em, $resource); // contexte ressource
+	$resourceContext = new ResourceContext($em, $userContext->getCurrentFile(), $resource); // contexte ressource
 
-	return $this->render('resource/edit.html.twig', array('userContext' => $userContext, 'resource' => $resource, 'resourceContext' => $resourceContext));
+	$bRepository = $em->getRepository(Booking::Class);
+	$numberBookings = $bRepository->getResourceBookingsCount($userContext->getCurrentFile(), $resource);
+
+	return $this->render('resource/edit.html.twig',
+	array('userContext' => $userContext, 'resource' => $resource, 'resourceContext' => $resourceContext, 'numberBookings' => $numberBookings));
     }
 
 
@@ -226,7 +234,6 @@ class ResourceController extends Controller
 	return $this->render('resource/delete.html.twig', array('userContext' => $userContext, 'resource' => $resource, 'form' => $form->createView()));
     }
 
-
 	/**
      * @Route("/resource/foreign/{resourceID}", name="resource_foreign")
      * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
@@ -237,6 +244,76 @@ class ResourceController extends Controller
 	$em = $this->getDoctrine()->getManager();
  	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
-	return $this->render('resource/foreign.html.twig', array('userContext' => $userContext, 'resource' => $resource));
+    $pRepository = $em->getRepository(Planification::Class);
+    $listPlanifications = $pRepository->getResourcePlanificationsList($userContext->getCurrentFile(), $resource);
+
+	return $this->render('resource/foreign.html.twig', array('userContext' => $userContext, 'resource' => $resource, 'listPlanifications' => $listPlanifications));
     }
+
+    /**
+     * @Route("/resource/bookinglist/{resourceID}/{page}", name="resource_booking_list", requirements={"page"="\d+"})
+     * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
+     */
+	public function booking_list(Resource $resource, $page)
+	{
+	$connectedUser = $this->getUser();
+	$em = $this->getDoctrine()->getManager();
+	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+	$bRepository = $em->getRepository(Booking::Class);
+	$numberRecords = $bRepository->getResourceBookingsCount($userContext->getCurrentFile(), $resource);
+
+    $listContext = new ListContext($em, $connectedUser, 'booking', 'booking', $page, $numberRecords);
+    $listBookings = $bRepository->getResourceBookings($userContext->getCurrentFile(), $resource, $listContext->getFirstRecordIndex(), $listContext->getMaxRecords());
+
+	$planning_path = 'planning_one'; // La route du planning est "one" ou "many" selon le nombre de planifications actives à la date du jour
+	$numberPlanifications = PlanningApi::getNumberOfPlanifications($em, $userContext->getCurrentFile());
+	if ($numberPlanifications > 1) {
+		$planning_path = 'planning_many';
+	}
+	return $this->render('resource/booking.list.html.twig',
+		array('userContext' => $userContext, 'listContext' => $listContext, 'resource' => $resource, 'listBookings' => $listBookings, 'planning_path' => $planning_path));
+    }
+
+
+	// Met à jour le nombre de lignes et colonnes d'affichage des listes
+	/**
+     * @Route("/resource/numberLinesColumns/{resourceID}/{page}", name="resource_number_lines_and_columns", requirements={"page"="\d+"})
+     * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
+     */
+	public function number_lines_and_columns(Request $request, Resource $resource, $page)
+	{
+	$connectedUser = $this->getUser();
+	$em = $this->getDoctrine()->getManager();
+
+	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+	$numberLines = AdministrationApi::getNumberLines($em, $connectedUser, 'booking');
+	$numberColumns = AdministrationApi::getNumberColumns($em, $connectedUser, 'booking');
+
+	$upRepository = $em->getRepository(UserParameter::Class);
+	$userParameterNLC = new UserParameterNLC($numberLines, $numberColumns);
+	$form = $this->createForm(UserParameterNLCType::class, $userParameterNLC);
+
+	if ($request->isMethod('POST')) {
+		$form->submit($request->request->get($form->getName()));
+
+		if ($form->isSubmitted() && $form->isValid()) {
+
+			AdministrationApi::setNumberLines($em, $connectedUser, 'booking', $userParameterNLC->getNumberLines());
+			AdministrationApi::setNumberColumns($em, $connectedUser, 'booking', $userParameterNLC->getNumberColumns());
+			$request->getSession()->getFlashBag()->add('notice', 'number.lines.columns.updated.ok');
+			return $this->redirectToRoute('resource_booking_list', array('resourceID' => $resource->getId(), 'page' => 1));
+		}
+	}
+
+	return $this->render('resource/number.lines.and.columns.html.twig',
+	array('userContext' => $userContext, 'resource' => $resource, 'page' => $page, 'form' => $form->createView()));
+	}
+
+
+
+
+
+
 }

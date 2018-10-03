@@ -1,16 +1,28 @@
 {# templates/resource/foreign.html.twig #}
 
-{% set resourceTypeIcons = constant('App\\Entity\\Constants::RESOURCE_TYPE_ICON') %}
-{% set resourceClassificationIcons = constant('App\\Entity\\Constants::RESOURCE_CLASSIFICATION_ICON') %}
+{% set rtIcons = constant('App\\Entity\\Constants::RESOURCE_TYPE_ICON') %}
+{% set rcIcons = constant('App\\Entity\\Constants::RESOURCE_CLASSIFICATION_ICON') %}
 
 {% extends 'base.connected.html.twig' %}
  
 {% block body %}
 
 {% if resource.internal %}
-	<legend><img src="{{ asset('images/' ~ resourceClassificationIcons[resource.code] ~ '-32.png') }}">&nbsp;{{ ('resourceClassification.singular.' ~ resource.code)|trans }}</legend>
+	<legend><img src="{{ asset('images/' ~ rcIcons[resource.code] ~ '-32.png') }}">&nbsp;{{ ('resourceClassification.singular.' ~ resource.code)|trans }}:&nbsp;{{ 'delete.not.allowed'|trans }}</legend>
 {% else %}
-	<legend><img src="{{ asset('images/' ~ resourceTypeIcons[resource.type] ~ '-32.png') }}">&nbsp;{{ resource.classification.name }}</legend>
+	<legend><img src="{{ asset('images/' ~ rtIcons[resource.type] ~ '-32.png') }}">&nbsp;{{ resource.classification.name }}:&nbsp;{{ 'delete.not.allowed'|trans }}</legend>
 {% endif %}
+
+<div class="panel">
+
+{% for planification in listPlanifications %}
+	<a href="{{ path('planification_edit_lp', { 'planificationID': planification.ID }) }}" class="list-group-item list-group-item-warning"><img src="{{ asset('images/planification-32.png') }}">&nbsp;{{ planification.name }}</a>
+{% endfor %}
+
+</div>
+
+<div class="btn-group">
+	<a href="{{ path('resource_edit', { 'resourceID': resource.ID }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'resource.back'|trans }}</a>
+</div>
 
 {% endblock %}

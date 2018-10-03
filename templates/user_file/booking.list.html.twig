@@ -10,23 +10,23 @@
 {% endblock %}
 
 {% block page_1_link %}
-	<a href="{{ path('file_booking_list', { 'userFileID': userFile.ID, 'page': 1 }) }}" class="btn btn-default sb-page">1</a>
+	<a href="{{ path('user_file_booking_list', { 'userFileID': userFile.ID, 'page': 1 }) }}" class="btn btn-default sb-page">1</a>
 {% endblock %}
 
 {% block page_minus_1_link %}
-	<a href="{{ path('file_booking_list', { 'userFileID': userFile.ID, 'page': (listContext.page-1) }) }}" class="btn btn-default sb-page">{{ (listContext.page-1) }}</a>
+	<a href="{{ path('user_file_booking_list', { 'userFileID': userFile.ID, 'page': (listContext.page-1) }) }}" class="btn btn-default sb-page">{{ (listContext.page-1) }}</a>
 {% endblock %}
 
 {% block page_plus_1_link %}
-	<a href="{{ path('file_booking_list', { 'userFileID': userFile.ID, 'page': (listContext.page+1) }) }}" class="btn btn-default sb-page">{{ (listContext.page+1) }}</a>
+	<a href="{{ path('user_file_booking_list', { 'userFileID': userFile.ID, 'page': (listContext.page+1) }) }}" class="btn btn-default sb-page">{{ (listContext.page+1) }}</a>
 {% endblock %}
 
 {% block page_link %}
-	<a href="{{ path('file_booking_list', { 'userFileID': userFile.ID, 'page': listContext.page }) }}" class="btn btn-default sb-current-page">{{ listContext.page }}</a>
+	<a href="{{ path('user_file_booking_list', { 'userFileID': userFile.ID, 'page': listContext.page }) }}" class="btn btn-default sb-current-page">{{ listContext.page }}</a>
 {% endblock %}
 
 {% block last_page_link %}
-	<a href="{{ path('file_booking_list', { 'userFileID': userFile.ID, 'page': listContext.numberPages }) }}" class="btn btn-default sb-page">{{ listContext.numberPages }}</a>
+	<a href="{{ path('user_file_booking_list', { 'userFileID': userFile.ID, 'page': listContext.numberPages }) }}" class="btn btn-default sb-page">{{ listContext.numberPages }}</a>
 {% endblock %}
 
 {% block back_link %}

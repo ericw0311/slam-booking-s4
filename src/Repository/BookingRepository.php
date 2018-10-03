@@ -176,7 +176,34 @@ class BookingRepository extends ServiceEntityRepository
     $results = $query->getResult();
     return $results;
 	}
+
+	// Les réservations d'un dossier et d'une ressource
+	public function getResourceBookingsCount(\App\Entity\File $file, \App\Entity\Resource $resource)
+	{
+	$qb = $this->createQueryBuilder('b');
+	$qb->select($qb->expr()->count('b'));
+	$qb->where('b.file = :file')->setParameter('file', $file);
+	$qb->andWhere('b.resource = :resource')->setParameter('resource', $resource);
+	$query = $qb->getQuery();
+	$singleScalar = $query->getSingleScalarResult();
+	return $singleScalar;
+	}
 	
+	public function getResourceBookings(\App\Entity\File $file, \App\Entity\Resource $resource, $firstRecordIndex, $maxRecord)
+	{
+	$qb = $this->createQueryBuilder('b');
+	$this->getListSelect($qb);
+	$qb->where('b.file = :file')->setParameter('file', $file);
+	$qb->andWhere('b.resource = :resource')->setParameter('resource', $resource);
+	$this->getListJoin_1($qb);
+	$this->getListSort($qb);
+    $qb->setFirstResult($firstRecordIndex);
+    $qb->setMaxResults($maxRecord);
+    $query = $qb->getQuery();
+    $results = $query->getResult();
+    return $results;
+	}
+
 	// Listes de réservations: partie Select
 	public function getListSelect($qb)
 	{

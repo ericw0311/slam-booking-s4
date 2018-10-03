@@ -25,15 +25,23 @@
 <p><img src="{{ asset('images/' ~ rtIcons[resource.type] ~ '-32.png') }}">&nbsp;{{ resource.classification.name }}</p>
 {% endif %}
 
-{% if resourceContext.planificationPeriodsCount > 0 %}
-<p><img src="{{ asset('images/planification-16.png') }}">&nbsp;{{ 'resource.planified'|trans }}</p>
+{% if resourceContext.planificationsCount > 0 %}
+<p><img src="{{ asset('images/planification-32.png') }}">&nbsp;{{ 'resource.planified'|trans }}</p>
 {% endif %}
 
-<div class="btn-group">
+<div>
+{% if numberBookings > 0 %}
+<a href="{{ path('resource_booking_list', { 'resourceID': resource.ID, 'page': 1 }) }}"><img src="{{ asset('images/booking-32.png') }}"> {{ 'booking.plural'|trans }} <span class="badge">{{ numberBookings }}</span></a>
+{% else %}
+<img src="{{ asset('images/booking-32.png') }}"> {{ 'booking.plural'|trans }} <span class="badge">{{ numberBookings }}</span>
+{% endif %}
+</div>
+
+<div class="btn-group sb-margin-top">
 
 <a href="{{ path('resource', { 'page': 1 }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'resource.back.to.list'|trans }}</a>
 <a href="{{ path('resource_modify', { 'resourceID': resource.ID }) }}" class="btn btn-primary"><i class="glyphicon glyphicon-pencil"></i> {{ 'modify'|trans }}</a>
-{% if resourceContext.planificationPeriodsCount > 0 %}
+{% if resourceContext.planificationsCount > 0 %}
 	<a href="{{ path('resource_foreign', { 'resourceID': resource.ID }) }}" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> <del>{{ 'delete'|trans }}</del></a>
 {% else %}
 	<a href="{{ path('resource_delete', { 'resourceID': resource.ID }) }}" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> {{ 'delete'|trans }}</a>

@@ -119,9 +119,9 @@ file.created.by: File created by
 file.created.ok: The file has been created
 file.current: Current file
 file.current.updated.ok: Current file has been updated
-file.delete.not.allowed: Only the creator of the file ia allowed to delete it
-file.delete.not.allowed.2: File is referenced. Delete not allowed
 file.deleted.ok: The file has been deleted
+file.dna.booking: File %name% has bookings. Delete not allowed
+file.dna.creator: Only the creator of the file ia allowed to delete it
 file.name: File name
 file.new: New file
 file.plural: Files
@@ -199,6 +199,7 @@ queryBooking.singular: Query
 queryBooking.updated.ok: The query has been updated
 
 resource.ask.delete: Do you really want to delete resource %name% ?
+resource.back: Back to resource
 resource.back.to.list: Back to resources list
 resource.create: Create a resource
 resource.created.ok: The resource has been created
