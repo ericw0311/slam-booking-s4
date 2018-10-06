@@ -5,9 +5,11 @@
 <a href="{{ path('timetable', { 'page': 1 }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'timetable.back.to.list'|trans }}</a>
 
 {% if timetable.type == 'D' %}
-	<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal1"><span class="glyphicon glyphicon-trash"></span> <del>{{ 'delete'|trans }}</del></button>
+	<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#dnaDay"><span class="glyphicon glyphicon-trash"></span> <del>{{ 'delete'|trans }}</del></button>
 {% elseif timetable.type == 'HD' %}
-	<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal2"><span class="glyphicon glyphicon-trash"></span> <del>{{ 'delete'|trans }}</del></button>
+	<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#dnaHalfDay"><span class="glyphicon glyphicon-trash"></span> <del>{{ 'delete'|trans }}</del></button>
+{% elseif timetableContext.bookingsCount > 0 %}
+	<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#dnaBooking"><span class="glyphicon glyphicon-trash"></span> <del>{{ 'delete'|trans }}</del></button>
 {% elseif timetableContext.planificationsCount > 0 %}
 	<a href="{{ path('timetable_foreign_delete', { 'timetableID': timetable.ID }) }}" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> <del>{{ 'delete'|trans }}</del></a>
 {% else %}
@@ -15,9 +17,11 @@
 {% endif %}
 
 {% if timetable.type == 'D' %}
-	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateModal1"><span class="glyphicon glyphicon-plus"></span> <del>{{ 'timetableLine.create'|trans }}</del></button>
+	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#unaDay"><span class="glyphicon glyphicon-plus"></span> <del>{{ 'timetableLine.create'|trans }}</del></button>
 {% elseif timetable.type == 'HD' %}
-	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateModal2"><span class="glyphicon glyphicon-plus"></span> <del>{{ 'timetableLine.create'|trans }}</del></button>
+	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#unaHalfDay"><span class="glyphicon glyphicon-plus"></span> <del>{{ 'timetableLine.create'|trans }}</del></button>
+{% elseif timetableContext.bookingsCount > 0 %}
+	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#unaBooking"><span class="glyphicon glyphicon-plus"></span> <del>{{ 'timetableLine.create'|trans }}</del></button>
 {% elseif timetableContext.planificationsCount > 0 %}
 	<a href="{{ path('timetable_foreign_update', { 'timetableID': timetable.ID }) }}" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> <del>{{ 'timetableLine.create'|trans }}</del></a>
 {% else %}

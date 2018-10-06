@@ -1,10 +1,10 @@
-{# templates/resource/number.lines.and.columns.html.twig #}
+{# templates/timetable/number.lines.and.columns.html.twig #}
 
 {% extends 'base.connected.html.twig' %}
  
 {% block body %}
 
-{{ form_start(form, {'action': path('resource_number_lines_and_columns', { 'resourceID': resource.ID, 'page': page }), 'method': 'POST', 'class': 'form-horizontal'}) }}
+{{ form_start(form, {'action': path('timetable_number_lines_and_columns', { 'timetableID': timetable.ID, 'page': page }), 'method': 'POST', 'class': 'form-horizontal'}) }}
 
 <fieldset>
 	<legend><i class="glyphicon glyphicon-wrench"></i>&nbsp;{{ 'number.lines.columns'|trans }}</legend>
@@ -14,7 +14,7 @@
 </fieldset>
 
 <div class="btn-group">
-	<a href="{{ path('resource_booking_list', { 'resourceID': resource.ID, 'page': page }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
+	<a href="{{ path('timetable_booking_list', { 'timetableID': timetable.ID, 'page': page }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
 	<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> {{ 'validate'|trans }}</button>
 </div>
 

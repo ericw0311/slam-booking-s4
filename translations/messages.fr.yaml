@@ -312,19 +312,18 @@ timetable.back.to.list: Retour à la liste des grilles horaires
 timetable.create: Créer une grille horaire
 timetable.created.ok: La grille horaire a bien été créée. Veuillez saisir un premier créneau horaire
 timetable.day: Journée
-timetable.delete.not.allowed.1: La grille horaire journée ne peut pas être suprimée
-timetable.delete.not.allowed.2: La grille horaire demi-journée ne peut pas être suprimée
-timetable.delete.not.allowed.3: La grille horaire est référencée. Suppression impossible
 timetable.deleted.ok: La grille horaire a bien été supprimée
+timetable.dna.day: La grille horaire journée ne peut pas être suprimée
+timetable.dna.half.day: La grille horaire demi-journée ne peut pas être suprimée
 timetable.dna.booking: La grille horaire %name% est référencée par des réservations. Suppression impossible
 timetable.half.day: Demi journée
 timetable.name: Nom de la grille horaire
 timetable.new: Nouvelle grille horaire
 timetable.plural: Grilles horaires
 timetable.singular: Grille horaire
-timetable.update.not.allowed.1: La grille horaire journée ne peut pas être modifiée
-timetable.update.not.allowed.2: La grille horaire demi-journée ne peut pas être modifiée
-timetable.update.not.allowed.3: La grille horaire est référencée. Modification impossible
+timetable.una.day: La grille horaire journée ne peut pas être modifiée
+timetable.una.half.day: La grille horaire demi-journée ne peut pas être modifiée
+timetable.una.booking: La grille horaire %name% est référencée par des réservations. Modification impossible
 timetable.updated.ok: La grille horaire a bien été modifiée
 
 timetableLine.create: Ajouter un créneau horaire

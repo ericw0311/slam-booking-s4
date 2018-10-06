@@ -16,12 +16,16 @@ use App\Entity\Resource;
 use App\Entity\File;
 use App\Entity\ResourceClassificationNDB;
 use App\Entity\ResourceContext;
+use App\Entity\UserParameterNLC;
+use App\Entity\UserParameter;
 use App\Entity\Planification;
 use App\Entity\Booking;
 
 use App\Form\ResourceType;
 use App\Form\ResourceAddType;
+use App\Form\UserParameterNLCType;
 
+use App\Api\AdministrationApi;
 use App\Api\PlanningApi;
 
 class ResourceController extends Controller
@@ -310,10 +314,4 @@ class ResourceController extends Controller
 	return $this->render('resource/number.lines.and.columns.html.twig',
 	array('userContext' => $userContext, 'resource' => $resource, 'page' => $page, 'form' => $form->createView()));
 	}
-
-
-
-
-
-
 }

@@ -312,19 +312,18 @@ timetable.back.to.list: Back to timetables list
 timetable.create: Create a timetable
 timetable.created.ok: The timetable has been created. Please enter a first timeslot
 timetable.day: Day
-timetable.delete.not.allowed.1: The timetable Day cannot be deleted
-timetable.delete.not.allowed.2: The timetable Half day cannot be deleted
-timetable.delete.not.allowed.3: Timetable is referenced. Delete not allowed
 timetable.deleted.ok: The timetable has been deleted
+timetable.dna.day: The timetable Day cannot be deleted
+timetable.dna.half.day: The timetable Half day cannot be deleted
 timetable.dna.booking: La grille horaire %name% est référencée par des réservations. Suppression impossible
 timetable.half.day: Half day
 timetable.name: Timetable name
 timetable.new: New timetable
 timetable.plural: Timetables
 timetable.singular: Timetable
-timetable.update.not.allowed.1: The timetable Day cannot be updated
-timetable.update.not.allowed.2: The timetable Half day cannot be updated
-timetable.update.not.allowed.3: Timetable is referenced. Update not allowed
+timetable.una.day: The timetable Day cannot be updated
+timetable.una.half.day: The timetable Half day cannot be updated
+timetable.una.booking: La grille horaire %name% est référencée par des réservations. Modification impossible
 timetable.updated.ok: The timetable has been updated
 
 timetableLine.create: Add a timetable slot

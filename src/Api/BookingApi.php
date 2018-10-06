@@ -370,12 +370,12 @@ class BookingApi
 	return $timetableLineArray;
 	}
 
-	static function getTimetableBookings($em, \App\Entity\File $file, \Datetime $date, \App\Entity\Planification $planification, \App\Entity\PlanificationPeriod $planificationPeriod, \App\Entity\UserFile $currentUserFile)
+	static function getPlanningBookings($em, \App\Entity\File $file, \Datetime $date, \App\Entity\Planification $planification, \App\Entity\PlanificationPeriod $planificationPeriod, \App\Entity\UserFile $currentUserFile)
 	{
 	$bRepository = $em->getRepository(Booking::Class);
 	$buRepository = $em->getRepository(BookingUser::Class);
 	$blRepository = $em->getRepository(BookingLabel::Class);
-	$bookingsDB = $bRepository->getTimetableBookings($file, $date, $planification, $planificationPeriod);
+	$bookingsDB = $bRepository->getPlanningBookings($file, $date, $planification, $planificationPeriod);
 	$bookings = array();
 	if (count($bookingsDB) <= 0) {
 		return $bookings;

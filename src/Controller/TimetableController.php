@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Controller;
 
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,10 +15,16 @@ use App\Entity\TimetableLine;
 use App\Entity\Constants;
 use App\Entity\TimetableContext;
 use App\Entity\Planification;
+use App\Entity\UserParameterNLC;
+use App\Entity\Booking;
 
 use App\Form\TimetableType;
 use App\Form\TimetableLineType;
 use App\Form\TimetableLineAddType;
+use App\Form\UserParameterNLCType;
+
+use App\Api\AdministrationApi;
+use App\Api\PlanningApi;
 
 class TimetableController extends Controller
 {
@@ -262,5 +267,66 @@ class TimetableController extends Controller
     $request->getSession()->getFlashBag()->add('notice', 'timetableLine.deleted.ok');
 
 	return $this->redirectToRoute('timetable_edit', array('timetableID' => $timetableID));
+	}
+
+    /**
+     * @Route("/timetable/bookinglist/{timetableID}/{page}", name="timetable_booking_list", requirements={"page"="\d+"})
+     * @ParamConverter("timetable", options={"mapping": {"timetableID": "id"}})
+     */
+	public function booking_list(Timetable $timetable, $page)
+	{
+	$connectedUser = $this->getUser();
+	$em = $this->getDoctrine()->getManager();
+	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+	$bRepository = $em->getRepository(Booking::Class);
+	$numberRecords = $bRepository->getTimetableBookingsCount($userContext->getCurrentFile(), $timetable);
+
+    $listContext = new ListContext($em, $connectedUser, 'booking', 'booking', $page, $numberRecords);
+    $listBookings = $bRepository->getTimetableBookings($userContext->getCurrentFile(), $timetable, $listContext->getFirstRecordIndex(), $listContext->getMaxRecords());
+
+	$planning_path = 'planning_one'; // La route du planning est "one" ou "many" selon le nombre de planifications actives à la date du jour
+	$numberPlanifications = PlanningApi::getNumberOfPlanifications($em, $userContext->getCurrentFile());
+	if ($numberPlanifications > 1) {
+		$planning_path = 'planning_many';
+	}
+	return $this->render('timetable/booking.list.html.twig',
+		array('userContext' => $userContext, 'listContext' => $listContext, 'timetable' => $timetable, 'listBookings' => $listBookings, 'planning_path' => $planning_path));
+    }
+
+
+	// Met à jour le nombre de lignes et colonnes d'affichage des listes
+	/**
+     * @Route("/timetable/numberLinesColumns/{timetableID}/{page}", name="timetable_number_lines_and_columns", requirements={"page"="\d+"})
+     * @ParamConverter("timetable", options={"mapping": {"timetableID": "id"}})
+     */
+	public function number_lines_and_columns(Request $request, Timetable $timetable, $page)
+	{
+	$connectedUser = $this->getUser();
+	$em = $this->getDoctrine()->getManager();
+
+	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+	$numberLines = AdministrationApi::getNumberLines($em, $connectedUser, 'booking');
+	$numberColumns = AdministrationApi::getNumberColumns($em, $connectedUser, 'booking');
+
+	$upRepository = $em->getRepository(UserParameter::Class);
+	$userParameterNLC = new UserParameterNLC($numberLines, $numberColumns);
+	$form = $this->createForm(UserParameterNLCType::class, $userParameterNLC);
+
+	if ($request->isMethod('POST')) {
+		$form->submit($request->request->get($form->getName()));
+
+		if ($form->isSubmitted() && $form->isValid()) {
+
+			AdministrationApi::setNumberLines($em, $connectedUser, 'booking', $userParameterNLC->getNumberLines());
+			AdministrationApi::setNumberColumns($em, $connectedUser, 'booking', $userParameterNLC->getNumberColumns());
+			$request->getSession()->getFlashBag()->add('notice', 'number.lines.columns.updated.ok');
+			return $this->redirectToRoute('timetable_booking_list', array('timetableID' => $timetable->getId(), 'page' => 1));
+		}
+	}
+
+	return $this->render('timetable/number.lines.and.columns.html.twig',
+	array('userContext' => $userContext, 'timetable' => $timetable, 'page' => $page, 'form' => $form->createView()));
 	}
 }

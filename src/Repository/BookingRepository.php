@@ -23,8 +23,8 @@ class BookingRepository extends ServiceEntityRepository
         parent::__construct($registry, Booking::class);
     }
 
-	// Affichage des réservations dans la grille horaire journalière
-	public function getTimetableBookings(\App\Entity\File $file, \Datetime $date, \App\Entity\Planification $planification, \App\Entity\PlanificationPeriod $planificationPeriod)
+	// Affichage des réservations dans le planning
+	public function getPlanningBookings(\App\Entity\File $file, \Datetime $date, \App\Entity\Planification $planification, \App\Entity\PlanificationPeriod $planificationPeriod)
 	{
 	$qb = $this->createQueryBuilder('b');
     $qb->select('b.id bookingID');
@@ -191,6 +191,33 @@ class BookingRepository extends ServiceEntityRepository
     return $results;
 	}
 
+	// Les réservations d'un dossier et d'une grille horaire
+	public function getTimetableBookingsCount(\App\Entity\File $file, \App\Entity\Timetable $timetable)
+	{
+	$qb = $this->createQueryBuilder('b');
+	$qb->select($qb->expr()->count('b'));
+	$qb->where('b.file = :file')->setParameter('file', $file);
+	$this->getTimetableJoin($qb, $timetable);
+	$query = $qb->getQuery();
+	$singleScalar = $query->getSingleScalarResult();
+	return $singleScalar;
+	}
+	
+	public function getTimetableBookings(\App\Entity\File $file, \App\Entity\Timetable $timetable, $firstRecordIndex, $maxRecord)
+	{
+	$qb = $this->createQueryBuilder('b');
+	$this->getListSelect($qb);
+	$qb->where('b.file = :file')->setParameter('file', $file);
+	$this->getTimetableJoin($qb, $timetable);
+	$this->getListJoin_1($qb);
+	$this->getListSort($qb);
+    $qb->setFirstResult($firstRecordIndex);
+    $qb->setMaxResults($maxRecord);
+    $query = $qb->getQuery();
+    $results = $query->getResult();
+    return $results;
+	}
+
 	// Listes de réservations: partie Select
 	public function getListSelect($qb)
 	{
@@ -231,6 +258,13 @@ class BookingRepository extends ServiceEntityRepository
 	$qb->innerJoin('bu.userFile', 'uf');
 	}
 	
+	// Jointure pour sélection d'une grille horaire
+	public function getTimetableJoin($qb, \App\Entity\Timetable $timetable)
+	{
+	$qb->innerJoin('b.bookingLines', 'bl', Expr\Join::WITH, $qb->expr()->eq('bl.timetable', ':t'));
+	$qb->setParameter('t', $timetable);
+	}
+
 	// Listes de réservations: partie Tri
 	public function getListSort($qb)
 	{
