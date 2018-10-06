@@ -1,5 +1,5 @@
 <?php
-// App/DataFixtures/BookingLine_500Fixtures.php
+// App/DataFixtures/BookingLine_550Fixtures.php
 
 namespace App\DataFixtures;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -16,7 +16,7 @@ use App\Entity\PlanificationLine;
 use App\Entity\Booking;
 use App\Entity\BookingLine;
 
-class BookingLine_500Fixtures extends Fixture implements DependentFixtureInterface
+class BookingLine_550Fixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager)
     {
@@ -2113,6 +2113,6 @@ foreach ($this->getData() as [$bookingHeaderID, $userID, $fileID, $resourceID, $
 	public function getDependencies()
 	{
 		return array(FileFixtures::class, UserFixtures::class, ResourceFixtures::class, TimetableFixtures::class, TimetableLineFixtures::class, 
-			PlanificationFixtures::class, PlanificationPeriodFixtures::class, PlanificationLineFixtures::class, Booking_500Fixtures::class);
+			PlanificationFixtures::class, PlanificationPeriodFixtures::class, PlanificationLineFixtures::class, Booking_550Fixtures::class);
     }
 }

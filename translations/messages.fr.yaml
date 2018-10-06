@@ -136,6 +136,7 @@ label.back.to.list: Retour à la liste des étiquettes
 label.create: Créer une étiquette
 label.created.ok: L'étiquette a bien été créée
 label.deleted.ok: L'étiquette a bien été supprimée
+label.dna.booking: L'étiquette %name% est référencée par des réservations. Suppression impossible
 label.list.update: Modifier la liste des étiquettes
 label.name: Nom de l'étiquette
 label.new: Nouvelle étiquette
@@ -180,6 +181,9 @@ planification.type.select: Sélectionnez le type des ressources à planifier
 planification.updated.ok: La planification a bien été modifiée
 planification.validate.not.allowed: Vous devez sélectionner au moins une ressource
 
+planificationPeriod.dna.booking: Des réservations sont saisies pour cette période. Suppression impossible
+planificationPeriod.una.booking: Des réservations sont saisies pour cette période. Modification impossible
+
 planning: Planning
 planning.calendar: Calendrier
 planning.global: Planning global
@@ -205,6 +209,7 @@ resource.create: Créer une ressource
 resource.created.ok: La ressource a bien été créée
 resource.delete.not.allowed: La ressource est référencée. Suppression impossible
 resource.deleted.ok: La ressource a bien été supprimée
+resource.dna.booking: La ressource %name% est réservée. Suppression impossible
 resource.name: Nom de la ressource
 resource.planified: Ressource planifiée
 resource.planning.background.color: Couleur de fond sur le planning
@@ -311,6 +316,7 @@ timetable.delete.not.allowed.1: La grille horaire journée ne peut pas être sup
 timetable.delete.not.allowed.2: La grille horaire demi-journée ne peut pas être suprimée
 timetable.delete.not.allowed.3: La grille horaire est référencée. Suppression impossible
 timetable.deleted.ok: La grille horaire a bien été supprimée
+timetable.dna.booking: La grille horaire %name% est référencée par des réservations. Suppression impossible
 timetable.half.day: Demi journée
 timetable.name: Nom de la grille horaire
 timetable.new: Nouvelle grille horaire
@@ -362,8 +368,9 @@ userFile.create: Ajouter un utilisateur
 userFile.back: Retour à l'utilisateur
 userFile.back.to.list: Retour à la liste des utilisateurs
 userFile.created.ok: L'utilisateur a bien été ajouté au dossier.
-userFile.delete.not.allowed: Le créateur d'un dossier ne peut pas être supprimé du dossier
 userFile.deleted.ok: L'utilisateur a bien été retiré du dossier
+userFile.dna.booking: L'utilisateur %name% a des réservations. Il n'est pas possible de le supprimer du dossier
+userFile.dna.file.creator: Le créateur d'un dossier ne peut pas être supprimé du dossier
 userFile.plural: Utilisateurs
 userFile.resource.updated.ok: Les informations "ressource utilisateur" ont bien été modifiées
 userFile.update.not.allowed.1: Le créateur d'un dossier ne peut pas être modifié

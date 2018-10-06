@@ -1,5 +1,5 @@
 <?php
-// App/DataFixtures/BookingUser_500Fixtures.php
+// App/DataFixtures/BookingUser_550Fixtures.php
 
 namespace App\DataFixtures;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -12,7 +12,7 @@ use App\Entity\UserFile;
 use App\Entity\Booking;
 use App\Entity\BookingUser;
 
-class BookingUser_500Fixtures extends Fixture implements DependentFixtureInterface
+class BookingUser_550Fixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager)
     {
@@ -1041,6 +1041,6 @@ class BookingUser_500Fixtures extends Fixture implements DependentFixtureInterfa
 	
 	public function getDependencies()
 	{
-		return array(FileFixtures::class, UserFixtures::class, UserFileFixtures::class, Booking_500Fixtures::class);
+		return array(FileFixtures::class, UserFixtures::class, UserFileFixtures::class, Booking_550Fixtures::class);
     }
 }

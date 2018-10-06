@@ -46,7 +46,9 @@
 	<a href="{{ path('user_file_modify', { 'userFileID': userFile.ID }) }}" class="btn btn-primary"><i class="glyphicon glyphicon-pencil"></i> {{ 'modify'|trans }}</a>
 {% endif %}
 {% if selectedUserIsFileCreator %}
-	<button type="button" class="btn btn-info btn-danger" data-toggle="modal" data-target="#deleteModal"><span class="glyphicon glyphicon-trash"></span> <del>{{ 'delete'|trans }}</del></button>
+	<button type="button" class="btn btn-info btn-danger" data-toggle="modal" data-target="#dnaFileCreator"><span class="glyphicon glyphicon-trash"></span> <del>{{ 'delete'|trans }}</del></button>
+{% elseif numberBookings > 0 %}
+	<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#dnaBooking"><span class="glyphicon glyphicon-trash"></span> <del>{{ 'delete'|trans }}</del></button>
 {% else %}
 	<a href="{{ path('user_file_delete', { 'userFileID': userFile.ID }) }}" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> {{ 'delete'|trans }}</a>
 {% endif %}
@@ -100,7 +102,7 @@
 </div>
 </div>
 
-<div id="deleteModal" class="modal fade" role="dialog">
+<div id="dnaFileCreator" class="modal fade" role="dialog">
 <div class="modal-dialog">
 	<div class="modal-content">
 		<div class="modal-header">
@@ -108,7 +110,24 @@
 			<h4 class="modal-title">{{ 'delete.not.allowed'|trans }}</h4>
 		</div>
 		<div class="modal-body">
-			<p>{{ 'userFile.delete.not.allowed'|trans }}</p>
+			<p>{{ 'userFile.dna.file.creator'|trans }}</p>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">{{ 'close'|trans }}</button>
+		</div>
+	</div>
+</div>
+</div>
+
+<div id="dnaBooking" class="modal fade" role="dialog">
+<div class="modal-dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">&times;</button>
+			<h4 class="modal-title">{{ 'delete.not.allowed'|trans }}</h4>
+		</div>
+		<div class="modal-body">
+			<p>{{ 'userFile.dna.booking'|trans({'%name%': userFile.getFirstAndLastName()}) }}</p>
 		</div>
 		<div class="modal-footer">
 			<button type="button" class="btn btn-default" data-dismiss="modal">{{ 'close'|trans }}</button>

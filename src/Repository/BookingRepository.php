@@ -58,19 +58,6 @@ class BookingRepository extends ServiceEntityRepository
 	return $results;
 	}
 	
-	// Affichage des réservations dans le calendrier
-	public function getCalendarBookings(\App\Entity\File $file, \App\Entity\Planification $planification)
-    {
-    $qb = $this->createQueryBuilder('b');
-    $qb->where('b.file = :file')->setParameter('file', $file);
-	$qb->andWhere('b.planification = :planification')->setParameter('planification', $planification);
-	$qb->orderBy('b.resource', 'ASC');
-	$qb->addOrderBy('b.beginningDate', 'ASC');
-    $query = $qb->getQuery();
-    $results = $query->getResult();
-    return $results;
-    }
-    
 	// Toutes les réservations d'un dossier
 	public function getAllBookingsCount(\App\Entity\File $file)
     {
@@ -249,4 +236,17 @@ class BookingRepository extends ServiceEntityRepository
 	{
 	$qb->orderBy('b.beginningDate', 'ASC');
 	}
+
+	// PLUS UTILISE: Affichage des réservations dans le calendrier
+	public function getCalendarBookings(\App\Entity\File $file, \App\Entity\Planification $planification)
+    {
+    $qb = $this->createQueryBuilder('b');
+    $qb->where('b.file = :file')->setParameter('file', $file);
+	$qb->andWhere('b.planification = :planification')->setParameter('planification', $planification);
+	$qb->orderBy('b.resource', 'ASC');
+	$qb->addOrderBy('b.beginningDate', 'ASC');
+    $query = $qb->getQuery();
+    $results = $query->getResult();
+    return $results;
+    }
 }

@@ -136,6 +136,7 @@ label.back.to.list: Back to labels list
 label.create: Create an label
 label.created.ok: The label has been created
 label.deleted.ok: The label has been deleted
+label.dna.booking: L'étiquette %name% est référencée par des réservations. Suppression impossible
 label.list.update: Modify labels list
 label.name: Label name
 label.new: New label
@@ -180,6 +181,9 @@ planification.type.select: Select type of resources to planify
 planification.updated.ok: The planification has been updated
 planification.validate.not.allowed: You must select at least one resource
 
+planificationPeriod.dna.booking: Des réservations sont saisies pour cette période. Suppression impossible
+planificationPeriod.una.booking: Des réservations sont saisies pour cette période. Modification impossible
+
 planning: Planning
 planning.calendar: Calendar
 planning.global: Global planning
@@ -205,6 +209,7 @@ resource.create: Create a resource
 resource.created.ok: The resource has been created
 resource.delete.not.allowed: Resource is referenced. Delete not allowed
 resource.deleted.ok: The resource has been deleted
+resource.dna.booking: La ressource %name% est réservée. Suppression impossible
 resource.name: Resource name
 resource.planified: Planified resource
 resource.planning.background.color: Background color on planning
@@ -311,6 +316,7 @@ timetable.delete.not.allowed.1: The timetable Day cannot be deleted
 timetable.delete.not.allowed.2: The timetable Half day cannot be deleted
 timetable.delete.not.allowed.3: Timetable is referenced. Delete not allowed
 timetable.deleted.ok: The timetable has been deleted
+timetable.dna.booking: La grille horaire %name% est référencée par des réservations. Suppression impossible
 timetable.half.day: Half day
 timetable.name: Timetable name
 timetable.new: New timetable
@@ -361,10 +367,10 @@ userFile.ask.delete: Do you really want to remove user %name% from file ?
 userFile.create: Add a user
 userFile.back: Back to user
 userFile.back.to.list: Back to users list
-userFile.create: Add a user to file
 userFile.created.ok: The user has been added to file
-userFile.delete.not.allowed: The file creator cannot be removed from file
 userFile.deleted.ok: The user has been removed from file
+userFile.dna.booking: L'utilisateur %name% a des réservations. Il n'est pas possible de le supprimer du dossier
+userFile.dna.file.creator: The file creator cannot be removed from file
 userFile.plural: Users
 userFile.resource.updated.ok: Informations "user resource" have been updated
 userFile.update.not.allowed.1: The file creator cannot be modified
