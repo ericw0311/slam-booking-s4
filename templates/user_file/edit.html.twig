@@ -38,15 +38,19 @@
 <div class="btn-group sb-margin-top">
 
 <a href="{{ path('user_file', { 'page': 1 }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'userFile.back.to.list'|trans }}</a>
+
 {% if selectedUserIsFileCreator %}
-	<button type="button" class="btn btn-info btn-primary" data-toggle="modal" data-target="#updateModal1"><span class="glyphicon glyphicon-pencil"></span> <del>{{ 'modify'|trans }}</del></button>
-{% elseif userFile.userCreated and not connectedUserIsFileCreator %}
-	<button type="button" class="btn btn-info btn-primary" data-toggle="modal" data-target="#updateModal2"><span class="glyphicon glyphicon-pencil"></span> <del>{{ 'modify'|trans }}</del></button>
+	<button type="button" class="btn btn btn-primary" data-toggle="modal" data-target="#unaFileCreator1"><span class="glyphicon glyphicon-pencil"></span> <del>{{ 'modify'|trans }}</del></button>
+{% elseif not connectedUserIsFileCreator %}
+	<button type="button" class="btn btn btn-primary" data-toggle="modal" data-target="#unaFileCreator2"><span class="glyphicon glyphicon-pencil"></span> <del>{{ 'modify'|trans }}</del></button>
 {% else %}
 	<a href="{{ path('user_file_modify', { 'userFileID': userFile.ID }) }}" class="btn btn-primary"><i class="glyphicon glyphicon-pencil"></i> {{ 'modify'|trans }}</a>
 {% endif %}
+
 {% if selectedUserIsFileCreator %}
-	<button type="button" class="btn btn-info btn-danger" data-toggle="modal" data-target="#dnaFileCreator"><span class="glyphicon glyphicon-trash"></span> <del>{{ 'delete'|trans }}</del></button>
+	<button type="button" class="btn btn-info btn-danger" data-toggle="modal" data-target="#dnaFileCreator1"><span class="glyphicon glyphicon-trash"></span> <del>{{ 'delete'|trans }}</del></button>
+{% elseif not connectedUserIsFileCreator %}
+	<button type="button" class="btn btn-info btn-danger" data-toggle="modal" data-target="#dnaFileCreator2"><span class="glyphicon glyphicon-trash"></span> <del>{{ 'delete'|trans }}</del></button>
 {% elseif numberBookings > 0 %}
 	<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#dnaBooking"><span class="glyphicon glyphicon-trash"></span> <del>{{ 'delete'|trans }}</del></button>
 {% else %}
@@ -68,7 +72,7 @@
 </div>
 
 <!-- Modal -->
-<div id="updateModal1" class="modal fade" role="dialog">
+<div id="unaFileCreator1" class="modal fade" role="dialog">
 <div class="modal-dialog">
 	<div class="modal-content">
 		<div class="modal-header">
@@ -76,7 +80,7 @@
 			<h4 class="modal-title">{{ 'update.not.allowed'|trans }}</h4>
 		</div>
 		<div class="modal-body">
-			<p>{{ 'userFile.update.not.allowed.1'|trans }}</p>
+			<p>{{ 'userFile.una.file.creator.1'|trans }}</p>
 		</div>
 		<div class="modal-footer">
 			<button type="button" class="btn btn-default" data-dismiss="modal">{{ 'close'|trans }}</button>
@@ -85,7 +89,7 @@
 </div>
 </div>
 
-<div id="updateModal2" class="modal fade" role="dialog">
+<div id="unaFileCreator2" class="modal fade" role="dialog">
 <div class="modal-dialog">
 	<div class="modal-content">
 		<div class="modal-header">
@@ -93,7 +97,7 @@
 			<h4 class="modal-title">{{ 'update.not.allowed'|trans }}</h4>
 		</div>
 		<div class="modal-body">
-			<p>{{ 'userFile.update.not.allowed.2'|trans }}</p>
+			<p>{{ 'userFile.una.file.creator.2'|trans }}</p>
 		</div>
 		<div class="modal-footer">
 			<button type="button" class="btn btn-default" data-dismiss="modal">{{ 'close'|trans }}</button>
@@ -102,7 +106,7 @@
 </div>
 </div>
 
-<div id="dnaFileCreator" class="modal fade" role="dialog">
+<div id="dnaFileCreator1" class="modal fade" role="dialog">
 <div class="modal-dialog">
 	<div class="modal-content">
 		<div class="modal-header">
@@ -110,7 +114,24 @@
 			<h4 class="modal-title">{{ 'delete.not.allowed'|trans }}</h4>
 		</div>
 		<div class="modal-body">
-			<p>{{ 'userFile.dna.file.creator'|trans }}</p>
+			<p>{{ 'userFile.dna.file.creator.1'|trans }}</p>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">{{ 'close'|trans }}</button>
+		</div>
+	</div>
+</div>
+</div>
+
+<div id="dnaFileCreator2" class="modal fade" role="dialog">
+<div class="modal-dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">&times;</button>
+			<h4 class="modal-title">{{ 'delete.not.allowed'|trans }}</h4>
+		</div>
+		<div class="modal-body">
+			<p>{{ 'userFile.dna.file.creator.2'|trans }}</p>
 		</div>
 		<div class="modal-footer">
 			<button type="button" class="btn btn-default" data-dismiss="modal">{{ 'close'|trans }}</button>

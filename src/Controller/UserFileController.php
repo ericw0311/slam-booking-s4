@@ -220,8 +220,8 @@ class UserFileController extends Controller
 		}
     }
 
-    if ($userFileUserCreated) { // L'utilisateur a modifier a un compte utilisateur de cree
-        $request->getSession()->getFlashBag()->add('notice', 'userFile.update.not.allowed.3');
+    if ($userFileUserCreated) { // L'utilisateur a modifié a un compte utilisateur de créé
+        $request->getSession()->getFlashBag()->add('notice', 'userFile.una.self');
     }
     return $this->render('user_file/modify.html.twig', array('userContext' => $userContext, 'userFile' => $userFile, 'form' => $form->createView()));
     }
