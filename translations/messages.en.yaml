@@ -132,6 +132,7 @@ file.updated.ok: The file has been updated
 
 label: Label
 label.ask.delete: Do you really want to delete label %name% ?
+label.back: Back to label
 label.back.to.list: Back to labels list
 label.create: Create an label
 label.created.ok: The label has been created
@@ -164,6 +165,7 @@ period.type.NO: No period
 period.type.SYSDATE: Current date
 
 planification.ask.delete: Do you really want to delete planification %name% ?
+planification.back: Back to planification
 planification.back.to.list: Back to planifications list
 planification.create: Create a planification
 planification.created.ok: The planification has been created

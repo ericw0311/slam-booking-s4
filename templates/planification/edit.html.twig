@@ -7,6 +7,8 @@
  
 {% block body %}
 
+<div class="col-sm-8">
+
 <legend>
 
 <img src="{{ asset('images/planification-32.png') }}">&nbsp;{{ planification.name }}&nbsp;
@@ -29,6 +31,18 @@
 {% endif %}
 
 </legend>
+
+</div>
+
+<div class="col-sm-4">
+
+{% if planificationContext.bookingsCount > 0 %}
+<a href="{{ path('planification_period_booking_list', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'page': 1 }) }}"><img src="{{ asset('images/booking-32.png') }}"> {{ 'booking.plural'|trans }} <span class="badge">{{ planificationContext.bookingsCount }}</span></a>
+{% else %}
+<img src="{{ asset('images/booking-32.png') }}"> {{ 'booking.plural'|trans }} <span class="badge">{{ planificationContext.bookingsCount }}</span>
+{% endif %}
+
+</div>
 
 <div class="col-sm-6">
 

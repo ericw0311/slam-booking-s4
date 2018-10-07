@@ -5,6 +5,7 @@ class PlanificationContext
 {
 	protected $previousPlanificationPeriod;
 	protected $nextPlanificationPeriod;
+    protected $bookingsCount;
     
     public function setPreviousPlanificationPeriod($previousPlanificationPeriod)
     {
@@ -38,11 +39,25 @@ class PlanificationContext
     return ($this->nextPlanificationPeriod !== null);
     }
 
-    function __construct($em, \App\Entity\Planification $planification, \App\Entity\PlanificationPeriod $planificationPeriod)
+    public function setBookingsCount($bookingsCount)
+    {
+    $this->bookingsCount = $bookingsCount;
+    return $this;
+    }
+
+    public function getBookingsCount()
+    {
+    return $this->bookingsCount;
+    }
+
+    function __construct($em, \App\Entity\File $file, \App\Entity\Planification $planification, \App\Entity\PlanificationPeriod $planificationPeriod)
     {
     $ppRepository = $em->getRepository(PlanificationPeriod::Class);
     $this->setPreviousPlanificationPeriod($ppRepository->getPreviousPlanificationPeriod($planification, $planificationPeriod->getID()));
     $this->setNextPlanificationPeriod($ppRepository->getNextPlanificationPeriod($planification, $planificationPeriod->getID()));
+
+	$bRepository = $em->getRepository(Booking::Class);
+    $this->setBookingsCount($bRepository->getPlanificationPeriodBookingsCount($file, $planification, $planificationPeriod));
     return $this;
     }
 }

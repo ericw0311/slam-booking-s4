@@ -1,0 +1,23 @@
+{# templates/label/number.lines.and.columns.html.twig #}
+
+{% extends 'base.connected.html.twig' %}
+ 
+{% block body %}
+
+{{ form_start(form, {'action': path('label_number_lines_and_columns', { 'labelID': label.ID, 'page': page }), 'method': 'POST', 'class': 'form-horizontal'}) }}
+
+<fieldset>
+	<legend><i class="glyphicon glyphicon-wrench"></i>&nbsp;{{ 'number.lines.columns'|trans }}</legend>
+	{{ form_row(form.numberLines) }}
+	{{ form_row(form.numberColumns) }}
+	{{ form_rest(form) }}
+</fieldset>
+
+<div class="btn-group">
+	<a href="{{ path('label_booking_list', { 'labelID': label.ID, 'page': page }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
+	<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> {{ 'validate'|trans }}</button>
+</div>
+
+{{ form_end(form) }}
+
+{% endblock %}

@@ -218,6 +218,60 @@ class BookingRepository extends ServiceEntityRepository
     return $results;
 	}
 
+	// Les réservations d'un dossier et d'une période de planification
+	public function getPlanificationPeriodBookingsCount(\App\Entity\File $file, \App\Entity\Planification $planification, \App\Entity\PlanificationPeriod $planificationPeriod)
+	{
+	$qb = $this->createQueryBuilder('b');
+	$qb->select($qb->expr()->count('b'));
+	$qb->where('b.file = :file')->setParameter('file', $file);
+	$this->getPlanificationPeriodJoin($qb, $planification, $planificationPeriod);
+	$query = $qb->getQuery();
+	$singleScalar = $query->getSingleScalarResult();
+	return $singleScalar;
+	}
+	
+	public function getPlanificationPeriodBookings(\App\Entity\File $file, \App\Entity\Planification $planification, \App\Entity\PlanificationPeriod $planificationPeriod, $firstRecordIndex, $maxRecord)
+	{
+	$qb = $this->createQueryBuilder('b');
+	$this->getListSelect($qb);
+	$qb->where('b.file = :file')->setParameter('file', $file);
+	$this->getPlanificationPeriodJoin($qb, $planification, $planificationPeriod);
+	$this->getListJoin_1($qb);
+	$this->getListSort($qb);
+    $qb->setFirstResult($firstRecordIndex);
+    $qb->setMaxResults($maxRecord);
+    $query = $qb->getQuery();
+    $results = $query->getResult();
+    return $results;
+	}
+
+	// Les réservations d'un dossier et d'une étiquette
+	public function getLabelBookingsCount(\App\Entity\File $file, \App\Entity\Label $label)
+	{
+	$qb = $this->createQueryBuilder('b');
+	$qb->select($qb->expr()->count('b'));
+	$qb->where('b.file = :file')->setParameter('file', $file);
+	$this->getLabelJoin($qb, $label);
+	$query = $qb->getQuery();
+	$singleScalar = $query->getSingleScalarResult();
+	return $singleScalar;
+	}
+	
+	public function getLabelBookings(\App\Entity\File $file, \App\Entity\Label $label, $firstRecordIndex, $maxRecord)
+	{
+	$qb = $this->createQueryBuilder('b');
+	$this->getListSelect($qb);
+	$qb->where('b.file = :file')->setParameter('file', $file);
+	$this->getLabelJoin($qb, $label);
+	$this->getListJoin_1($qb);
+	$this->getListSort($qb);
+    $qb->setFirstResult($firstRecordIndex);
+    $qb->setMaxResults($maxRecord);
+    $query = $qb->getQuery();
+    $results = $query->getResult();
+    return $results;
+	}
+
 	// Listes de réservations: partie Select
 	public function getListSelect($qb)
 	{
@@ -261,8 +315,25 @@ class BookingRepository extends ServiceEntityRepository
 	// Jointure pour sélection d'une grille horaire
 	public function getTimetableJoin($qb, \App\Entity\Timetable $timetable)
 	{
-	$qb->innerJoin('b.bookingLines', 'bl', Expr\Join::WITH, $qb->expr()->eq('bl.timetable', ':t'));
+	$qb->innerJoin('b.bookingLines', 'bli', Expr\Join::WITH, $qb->expr()->eq('bli.timetable', ':t'));
 	$qb->setParameter('t', $timetable);
+	}
+
+	// Jointure pour sélection d'une période de planification
+	public function getPlanificationPeriodJoin($qb, \App\Entity\Planification $planification, \App\Entity\PlanificationPeriod $planificationPeriod)
+	{
+	$qb->innerJoin('b.bookingLines', 'bli', Expr\Join::WITH, 
+		$qb->expr()->andX(
+			$qb->expr()->eq('bli.planification', ':p'), $qb->expr()->eq('bli.planificationPeriod', ':pp')));
+	$qb->setParameter('p', $planification);
+	$qb->setParameter('pp', $planificationPeriod);
+	}
+
+	// Jointure pour sélection d'une étiquete
+	public function getLabelJoin($qb, \App\Entity\Label $label)
+	{
+	$qb->innerJoin('b.bookingLabels', 'bla', Expr\Join::WITH, $qb->expr()->eq('bla.label', ':l'));
+	$qb->setParameter('l', $label);
 	}
 
 	// Listes de réservations: partie Tri

@@ -18,11 +18,16 @@ use App\Entity\PlanificationLine;
 use App\Entity\PlanificationLinesNDB;
 use App\Entity\PlanificationContext;
 use App\Entity\Timetable;
+use App\Entity\UserParameterNLC;
+use App\Entity\Booking;
 
 use App\Form\PlanificationType;
 use App\Form\PlanificationLinesNDBType;
+use App\Form\UserParameterNLCType;
 
+use App\Api\AdministrationApi;
 use App\Api\ResourceApi;
+use App\Api\PlanningApi;
 
 class PlanificationController extends Controller
 {
@@ -232,7 +237,7 @@ class PlanificationController extends Controller
     $em = $this->getDoctrine()->getManager();
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
-    $planificationContext = new PlanificationContext($em, $planification, $planificationPeriod); // contexte planification
+    $planificationContext = new PlanificationContext($em, $userContext->getCurrentFile(), $planification, $planificationPeriod); // contexte planification
     $prRepository = $em->getRepository(PlanificationResource::Class);
     $planificationResources = $prRepository->getResources($planificationPeriod);
 	$resourceIDList = '';
@@ -404,4 +409,68 @@ $resourceIDList = ($resourceIDList == '') ? $planificationResourceDB->getResourc
 
     return $this->render('planification/delete.html.twig', array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'form' => $form->createView()));
     }
+
+    /**
+     * @Route("/planification/bookinglist/{planificationID}/{planificationPeriodID}/{page}", name="planification_period_booking_list", requirements={"page"="\d+"})
+     * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+     * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
+     */
+	public function booking_list(Planification $planification, PlanificationPeriod $planificationPeriod, $page)
+	{
+	$connectedUser = $this->getUser();
+	$em = $this->getDoctrine()->getManager();
+	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+	$bRepository = $em->getRepository(Booking::Class);
+	$numberRecords = $bRepository->getPlanificationPeriodBookingsCount($userContext->getCurrentFile(), $planification, $planificationPeriod);
+
+    $listContext = new ListContext($em, $connectedUser, 'booking', 'booking', $page, $numberRecords);
+    $listBookings = $bRepository->getPlanificationPeriodBookings($userContext->getCurrentFile(), $planification, $planificationPeriod, $listContext->getFirstRecordIndex(), $listContext->getMaxRecords());
+
+	$planning_path = 'planning_one'; // La route du planning est "one" ou "many" selon le nombre de planifications actives à la date du jour
+	$numberPlanifications = PlanningApi::getNumberOfPlanifications($em, $userContext->getCurrentFile());
+	if ($numberPlanifications > 1) {
+		$planning_path = 'planning_many';
+	}
+	return $this->render('planification/booking.list.html.twig',
+		array('userContext' => $userContext, 'listContext' => $listContext, 'planification' => $planification,
+		'planificationPeriod' => $planificationPeriod, 'listBookings' => $listBookings, 'planning_path' => $planning_path));
+    }
+
+	// Met à jour le nombre de lignes et colonnes d'affichage des listes
+	/**
+     * @Route("/planification/numberLinesColumns/{planificationID}/{planificationPeriodID}/{page}", name="planification_period_number_lines_and_columns", requirements={"page"="\d+"})
+     * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+     * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
+     */
+	public function number_lines_and_columns(Request $request, Planification $planification, PlanificationPeriod $planificationPeriod, $page)
+	{
+	$connectedUser = $this->getUser();
+	$em = $this->getDoctrine()->getManager();
+
+	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+	$numberLines = AdministrationApi::getNumberLines($em, $connectedUser, 'booking');
+	$numberColumns = AdministrationApi::getNumberColumns($em, $connectedUser, 'booking');
+
+	$upRepository = $em->getRepository(UserParameter::Class);
+	$userParameterNLC = new UserParameterNLC($numberLines, $numberColumns);
+	$form = $this->createForm(UserParameterNLCType::class, $userParameterNLC);
+
+	if ($request->isMethod('POST')) {
+		$form->submit($request->request->get($form->getName()));
+
+		if ($form->isSubmitted() && $form->isValid()) {
+
+			AdministrationApi::setNumberLines($em, $connectedUser, 'booking', $userParameterNLC->getNumberLines());
+			AdministrationApi::setNumberColumns($em, $connectedUser, 'booking', $userParameterNLC->getNumberColumns());
+			$request->getSession()->getFlashBag()->add('notice', 'number.lines.columns.updated.ok');
+			return $this->redirectToRoute('planification_period_booking_list',
+		array('planificationID' => $planification->getId(), 'planificationPeriodID' => $planificationPeriod->getId(), 'page' => 1));
+		}
+	}
+
+	return $this->render('planification/number.lines.and.columns.html.twig',
+	array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'page' => $page, 'form' => $form->createView()));
+	}
 }

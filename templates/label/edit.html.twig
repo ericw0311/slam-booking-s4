@@ -6,10 +6,39 @@
 
 <legend><img src="{{ asset('images/label-32.png') }}"></img>&nbsp;{{ label.name }}</legend>
 
-<div class="btn-group">
+<div>
+{% if numberBookings > 0 %}
+<a href="{{ path('label_booking_list', { 'labelID': label.ID, 'page': 1 }) }}"><img src="{{ asset('images/booking-32.png') }}"> {{ 'booking.plural'|trans }} <span class="badge">{{ numberBookings }}</span></a>
+{% else %}
+<img src="{{ asset('images/booking-32.png') }}"> {{ 'booking.plural'|trans }} <span class="badge">{{ numberBookings }}</span>
+{% endif %}
+</div>
+
+<div class="btn-group sb-margin-top">
 <a href="{{ path('label', { 'page': 1 }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'label.back.to.list'|trans }}</a>
 <a href="{{ path('label_modify', { 'labelID': label.ID }) }}" class="btn btn-primary"><i class="glyphicon glyphicon-pencil"></i> {{ 'modify'|trans }}</a>
-<a href="{{ path('label_delete', { 'labelID': label.ID }) }}" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> {{ 'delete'|trans }}</a>
+{% if numberBookings > 0 %}
+	<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#dnaBooking"><span class="glyphicon glyphicon-trash"></span> <del>{{ 'delete'|trans }}</del></button>
+{% else %}
+	<a href="{{ path('label_delete', { 'labelID': label.ID }) }}" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> {{ 'delete'|trans }}</a>
+{% endif %}
+</div>
+
+<div id="dnaBooking" class="modal fade" role="dialog">
+<div class="modal-dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">&times;</button>
+			<h4 class="modal-title">{{ 'delete.not.allowed'|trans }}</h4>
+		</div>
+		<div class="modal-body">
+			<p>{{ 'label.dna.booking'|trans({'%name%': label.name}) }}</p>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">{{ 'close'|trans }}</button>
+		</div>
+	</div>
+</div>
 </div>
 
 {% endblock %}
