@@ -168,8 +168,10 @@ planification.ask.delete: Voulez-vous vraiment supprimer la planification %name%
 planification.back: Retour à la planification
 planification.back.to.list: Retour à la liste des planifications
 planification.create: Créer une planification
+planification.create.period: Créer une nouvelle période
 planification.created.ok: La planification a bien été créée
 planification.deleted.ok: La planification a bien été supprimée
+planification.dna.booking: La planification %name% est référencée par des réservations. Suppression impossible
 planification.line.updated.ok: Les planifications par jour ont bien été modifiées
 planification.name: Nom de la planification
 planification.plural: Planifications
@@ -183,8 +185,8 @@ planification.type.select: Sélectionnez le type des ressources à planifier
 planification.updated.ok: La planification a bien été modifiée
 planification.validate.not.allowed: Vous devez sélectionner au moins une ressource
 
-planificationPeriod.dna.booking: Des réservations sont saisies pour cette période. Suppression impossible
 planificationPeriod.una.booking: Des réservations sont saisies pour cette période. Modification impossible
+planificationPeriod.una.closed: Cette période de planification est clotûrée, elle n'est pas modifiable
 
 planning: Planning
 planning.calendar: Calendrier

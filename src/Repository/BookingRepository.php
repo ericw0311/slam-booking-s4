@@ -218,6 +218,18 @@ class BookingRepository extends ServiceEntityRepository
     return $results;
 	}
 
+	// Les réservations d'un dossier et d'une planification
+	public function getPlanificationBookingsCount(\App\Entity\File $file, \App\Entity\Planification $planification)
+	{
+	$qb = $this->createQueryBuilder('b');
+	$qb->select($qb->expr()->count('b'));
+	$qb->where('b.file = :file')->setParameter('file', $file);
+	$this->getPlanificationJoin($qb, $planification);
+	$query = $qb->getQuery();
+	$singleScalar = $query->getSingleScalarResult();
+	return $singleScalar;
+	}
+
 	// Les réservations d'un dossier et d'une période de planification
 	public function getPlanificationPeriodBookingsCount(\App\Entity\File $file, \App\Entity\Planification $planification, \App\Entity\PlanificationPeriod $planificationPeriod)
 	{
@@ -229,7 +241,7 @@ class BookingRepository extends ServiceEntityRepository
 	$singleScalar = $query->getSingleScalarResult();
 	return $singleScalar;
 	}
-	
+
 	public function getPlanificationPeriodBookings(\App\Entity\File $file, \App\Entity\Planification $planification, \App\Entity\PlanificationPeriod $planificationPeriod, $firstRecordIndex, $maxRecord)
 	{
 	$qb = $this->createQueryBuilder('b');
@@ -317,6 +329,13 @@ class BookingRepository extends ServiceEntityRepository
 	{
 	$qb->innerJoin('b.bookingLines', 'bli', Expr\Join::WITH, $qb->expr()->eq('bli.timetable', ':t'));
 	$qb->setParameter('t', $timetable);
+	}
+
+	// Jointure pour sélection d'une planification
+	public function getPlanificationJoin($qb, \App\Entity\Planification $planification)
+	{
+	$qb->innerJoin('b.bookingLines', 'bli', Expr\Join::WITH, $qb->expr()->eq('bli.planification', ':p'));
+	$qb->setParameter('p', $planification);
 	}
 
 	// Jointure pour sélection d'une période de planification

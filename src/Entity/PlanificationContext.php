@@ -6,6 +6,7 @@ class PlanificationContext
 	protected $previousPlanificationPeriod;
 	protected $nextPlanificationPeriod;
     protected $bookingsCount;
+    protected $periodBookingsCount;
     
     public function setPreviousPlanificationPeriod($previousPlanificationPeriod)
     {
@@ -18,9 +19,9 @@ class PlanificationContext
     return $this->previousPlanificationPeriod;
     }
 
-    public function getPreviousPP()
+    public function isFirstPeriod()
     {
-    return ($this->previousPlanificationPeriod !== null);
+    return ($this->previousPlanificationPeriod === null);
     }
 
     public function setNextPlanificationPeriod($nextPlanificationPeriod)
@@ -34,9 +35,9 @@ class PlanificationContext
     return $this->nextPlanificationPeriod;
     }
 
-    public function getNextPP()
+    public function isLastPeriod()
     {
-    return ($this->nextPlanificationPeriod !== null);
+    return ($this->nextPlanificationPeriod === null);
     }
 
     public function setBookingsCount($bookingsCount)
@@ -50,6 +51,17 @@ class PlanificationContext
     return $this->bookingsCount;
     }
 
+    public function setPeriodBookingsCount($periodBookingsCount)
+    {
+    $this->periodBookingsCount = $periodBookingsCount;
+    return $this;
+    }
+
+    public function getPeriodBookingsCount()
+    {
+    return $this->periodBookingsCount;
+    }
+
     function __construct($em, \App\Entity\File $file, \App\Entity\Planification $planification, \App\Entity\PlanificationPeriod $planificationPeriod)
     {
     $ppRepository = $em->getRepository(PlanificationPeriod::Class);
@@ -57,7 +69,14 @@ class PlanificationContext
     $this->setNextPlanificationPeriod($ppRepository->getNextPlanificationPeriod($planification, $planificationPeriod->getID()));
 
 	$bRepository = $em->getRepository(Booking::Class);
-    $this->setBookingsCount($bRepository->getPlanificationPeriodBookingsCount($file, $planification, $planificationPeriod));
+    $this->setBookingsCount($bRepository->getPlanificationBookingsCount($file, $planification));
+    $this->setPeriodBookingsCount($bRepository->getPlanificationPeriodBookingsCount($file, $planification, $planificationPeriod));
     return $this;
+    }
+
+	// Afficher le bouton de création de période
+    public function displayCreatePeriod()
+    {
+    return ($this->isLastPeriod() and $this->getPeriodBookingsCount() > 0);
     }
 }
