@@ -20,10 +20,12 @@ use App\Entity\PlanificationContext;
 use App\Entity\Timetable;
 use App\Entity\UserParameterNLC;
 use App\Entity\Booking;
+use App\Entity\PlanificationPeriodCreateDate;
 
 use App\Form\PlanificationType;
 use App\Form\PlanificationLinesNDBType;
 use App\Form\UserParameterNLCType;
+use App\Form\PlanificationPeriodCreateDateType;
 
 use App\Api\AdministrationApi;
 use App\Api\ResourceApi;
@@ -408,6 +410,38 @@ $resourceIDList = ($resourceIDList == '') ? $planificationResourceDB->getResourc
     }
 
     return $this->render('planification/delete.html.twig', array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'form' => $form->createView()));
+    }
+
+    /**
+     * @Route("/planification/periodcreate/{planificationID}/{planificationPeriodID}", name="planification_period_create")
+     * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+     * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
+     */
+	public function period_create(Request $request, Planification $planification, PlanificationPeriod $planificationPeriod)
+	{
+    $connectedUser = $this->getUser();
+    $em = $this->getDoctrine()->getManager();
+    $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+	$bRepository = $em->getRepository(Booking::Class);
+	$bookingMaxDate = $bRepository->getPlanificationBookingsMaxDate($userContext->getCurrentFile(), $planification);
+	// $bookingMaxDate = $bookingMaxDateDB[0]['ddate'];
+
+    $ppCreateDate = new PlanificationPeriodCreateDate();
+    $form = $this->createForm(PlanificationPeriodCreateDateType::class, $ppCreateDate);
+
+	if ($request->isMethod('POST')) {
+		$form->submit($request->request->get($form->getName()));
+		if ($form->isSubmitted() && $form->isValid()) {
+			$lDate = $ppCreateDate->getDate();
+			$request->getSession()->getFlashBag()->add('notice', 'planificationPeriod.created.ok');
+			return $this->redirectToRoute('planification_edit', array('planificationID' => $planification->getId(), 'planificationPeriodID' => $planificationPeriod->getId()));
+		}
+    }
+
+	return $this->render('planification/period.create.html.twig',
+		array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod,
+			'ppCreateDate' => $ppCreateDate, 'form' => $form->createView()));
     }
 
     /**
