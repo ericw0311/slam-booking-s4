@@ -13,6 +13,10 @@
 	{{ form_rest(form) }}
 </fieldset>
 
+<div class="alert alert-warning">
+{{ 'planificationPeriod.create.minimum.date'|trans({'%date%': ppCreateDate.bookingMaxDate|date('d/m/Y')}) }}
+</div>
+
 <div class="btn-group">
 	<a href="{{ path('planification_edit', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i>{{ 'cancel'|trans }}</a>
 	<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> {{ 'validate'|trans }}</button>

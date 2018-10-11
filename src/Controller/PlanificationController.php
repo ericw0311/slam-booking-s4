@@ -20,6 +20,7 @@ use App\Entity\PlanificationContext;
 use App\Entity\Timetable;
 use App\Entity\UserParameterNLC;
 use App\Entity\Booking;
+use App\Entity\BookingLine;
 use App\Entity\PlanificationPeriodCreateDate;
 
 use App\Form\PlanificationType;
@@ -423,11 +424,11 @@ $resourceIDList = ($resourceIDList == '') ? $planificationResourceDB->getResourc
     $em = $this->getDoctrine()->getManager();
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
-	$bRepository = $em->getRepository(Booking::Class);
-	$bookingMaxDate = $bRepository->getPlanificationBookingsMaxDate($userContext->getCurrentFile(), $planification);
-	// $bookingMaxDate = $bookingMaxDateDB[0]['ddate'];
+	$lbRepository = $em->getRepository(BookingLine::Class);
+	$lastBookingLine = $lbRepository->getLastPlanificationBookingLine($userContext->getCurrentFile(), $planification); 
 
-    $ppCreateDate = new PlanificationPeriodCreateDate();
+//    $ppCreateDate = new PlanificationPeriodCreateDate(new \DateTime());
+	$ppCreateDate = new PlanificationPeriodCreateDate($lastBookingLine->getDate());
     $form = $this->createForm(PlanificationPeriodCreateDateType::class, $ppCreateDate);
 
 	if ($request->isMethod('POST')) {

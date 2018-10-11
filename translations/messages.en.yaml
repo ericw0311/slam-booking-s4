@@ -185,6 +185,7 @@ planification.type.select: Select type of resources to planify
 planification.updated.ok: The planification has been updated
 planification.validate.not.allowed: You must select at least one resource
 
+planificationPeriod.create.minimum.date: La nouvelle période doit débuter au delà de la date de la dernière réservation %date%
 planificationPeriod.created.ok: New planification period has been created
 planificationPeriod.una.booking: Des réservations sont saisies pour cette période. Modification impossible
 planificationPeriod.una.closed: This planification period is closed. It is not updatable

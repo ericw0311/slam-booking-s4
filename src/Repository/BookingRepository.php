@@ -230,18 +230,6 @@ class BookingRepository extends ServiceEntityRepository
 	return $singleScalar;
 	}
 
-	// Date maximum parmi les réservations d'une planification
-	public function getPlanificationBookingsMaxDate(\App\Entity\File $file, \App\Entity\Planification $planification)
-	{
-	$qb = $this->createQueryBuilder('b');
-	$qb->select($qb->expr()->max('bli.ddate'));
-	$qb->where('b.file = :file')->setParameter('file', $file);
-	$this->getPlanificationJoin($qb, $planification);
-	$query = $qb->getQuery();
-	$result = $query->getOneOrNullResult();
-	return $result	;
-	}
-
 	// Les réservations d'un dossier et d'une période de planification
 	public function getPlanificationPeriodBookingsCount(\App\Entity\File $file, \App\Entity\Planification $planification, \App\Entity\PlanificationPeriod $planificationPeriod)
 	{

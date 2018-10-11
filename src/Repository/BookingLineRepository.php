@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\BookingLine;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\Expr;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -42,6 +43,21 @@ class BookingLineRepository extends ServiceEntityRepository
 	$qb->addOrderBy('tl.id', 'ASC');
 	$query = $qb->getQuery();
 	$results = $query->getResult();
+	return $results;
+	}
+
+	// Date maximum parmi les réservations d'une planification
+	public function getLastPlanificationBookingLine(\App\Entity\File $file, \App\Entity\Planification $planification)
+	{
+	$qb = $this->createQueryBuilder('bl');
+	$qb->where('bl.planification = :p')->setParameter('p', $planification);
+	$qb->innerJoin('bl.booking', 'b', Expr\Join::WITH, $qb->expr()->eq('b.file', '?1'));
+    $qb->setParameter(1, $file);
+	$qb->orderBy('bl.ddate', 'DESC');
+	$qb->setMaxResults(1);
+
+	$query = $qb->getQuery();
+	$results = $query->getOneOrNullResult();
 	return $results;
 	}
 }
