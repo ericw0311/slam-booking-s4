@@ -23,7 +23,7 @@ class PlanificationLineRepository extends ServiceEntityRepository
 	public function getLines($planificationPeriod)
     {
     $qb = $this->createQueryBuilder('pl');
-    $qb->where('pl.planificationPeriod = :planificationPeriod')->setParameter('planificationPeriod', $planificationPeriod);
+    $qb->where('pl.planificationPeriod = :p')->setParameter('p', $planificationPeriod);
     $qb->orderBy('pl.oorder', 'ASC');
    
     $query = $qb->getQuery();

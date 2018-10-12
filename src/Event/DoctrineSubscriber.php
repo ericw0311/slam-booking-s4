@@ -59,13 +59,7 @@ class DoctrineSubscriber implements EventSubscriber
 			$this->getLogger()->info('DoctrineSubscriber postPersist 3 File');
             $em = $args->getEntityManager();
 			FileEvent::postPersist($em, $this->getUser(), $entity, $this->getTranslator());
-
-		} else if ($entity instanceof PlanificationPeriod) {
-			$this->getLogger()->info('DoctrineSubscriber postPersist 4 PlanificationPeriod');
-            $em = $args->getEntityManager();
-			PlanificationPeriodEvent::postPersist($em, $this->getUser(), $entity);
 		}
-
     }
 
     public function postUpdate(LifecycleEventArgs $args)

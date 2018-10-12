@@ -6,12 +6,13 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
+use App\Entity\Constants;
 use App\Entity\UserParameter;
 use App\Entity\UserContext;
 use App\Entity\ListContext;
 use App\Entity\Trace;
-use App\Entity\Planification;
 use App\Entity\Resource;
+use App\Entity\Planification;
 use App\Entity\PlanificationPeriod;
 use App\Entity\PlanificationResource;
 use App\Entity\PlanificationLine;
@@ -111,6 +112,12 @@ class PlanificationController extends Controller
 			$planification->setName($resourceDB->getName());
 			$em->persist($planification);
 			$em->persist($planificationPeriod);
+			// Initialise les lignes de planification
+			foreach (Constants::WEEK_DAY_CODE as $dayOrder => $dayCode) {
+				$planificationLine = new PlanificationLine($connectedUser, $planificationPeriod, $dayCode, $dayOrder);
+				$em->persist($planificationLine);
+			}
+
 			if ($resourceDB->getInternal()) { // L'indicateur interne est à 1 si toutes les ressources de la période de planifications sont de classification internes et du même code
 				$internal = 1;
 				$classificationCode = $resourceDB->getCode();
@@ -413,33 +420,69 @@ $resourceIDList = ($resourceIDList == '') ? $planificationResourceDB->getResourc
     return $this->render('planification/delete.html.twig', array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'form' => $form->createView()));
     }
 
-    /**
+  /**
      * @Route("/planification/periodcreate/{planificationID}/{planificationPeriodID}", name="planification_period_create")
      * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
      * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
      */
 	public function period_create(Request $request, Planification $planification, PlanificationPeriod $planificationPeriod)
 	{
-    $connectedUser = $this->getUser();
-    $em = $this->getDoctrine()->getManager();
-    $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+	$connectedUser = $this->getUser();
+	$em = $this->getDoctrine()->getManager();
+	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
-	$lbRepository = $em->getRepository(BookingLine::Class);
-	$lastBookingLine = $lbRepository->getLastPlanificationBookingLine($userContext->getCurrentFile(), $planification); 
+	$blRepository = $em->getRepository(BookingLine::Class);
+	$lastBookingLine = $blRepository->getLastPlanificationBookingLine($userContext->getCurrentFile(), $planification); 
 
-//    $ppCreateDate = new PlanificationPeriodCreateDate(new \DateTime());
 	$ppCreateDate = new PlanificationPeriodCreateDate($lastBookingLine->getDate());
-    $form = $this->createForm(PlanificationPeriodCreateDateType::class, $ppCreateDate);
+	$form = $this->createForm(PlanificationPeriodCreateDateType::class, $ppCreateDate);
 
 	if ($request->isMethod('POST')) {
 		$form->submit($request->request->get($form->getName()));
 		if ($form->isSubmitted() && $form->isValid()) {
+			// Recherche des lignes de planification de la période en cours
+			$plRepository = $em->getRepository(PlanificationLine::Class);
+			$planificationLines = $plRepository->getLines($planificationPeriod);
+
+			// Recherche des ressources planifiées de la période en cours
+			$prRepository = $em->getRepository(PlanificationResource::Class);
+			$planificationResources = $prRepository->getResources($planificationPeriod);
+
 			$lDate = $ppCreateDate->getDate();
+			
+			// Cloture de la période à la veille de la date choisie
+			$previousDate = clone $lDate;
+			$previousDate->sub(new \DateInterval('P1D'));
+			$planificationPeriod->setEndDate($previousDate);
+			
+			// Création d'une nouvelle période
+			$newPeriod = new PlanificationPeriod($connectedUser, $planification);
+			$newPeriod->setBeginningDate($lDate);
+			$em->persist($newPeriod);
+			
+			// Recopie des lignes de planification de la période en cours vers la nouvelle période
+			foreach ($planificationLines as $previousPL) {
+				$newPL = new PlanificationLine($connectedUser, $newPeriod, $previousPL->getWeekDay(), $previousPL->getOrder());
+				$newPL->setActive($previousPL->getActive());
+				if ($newPL->getActive()) {
+					$newPL->setTimetable($previousPL->getTimetable());
+				}
+				$em->persist($newPL);
+				
+			}
+
+			// Recopie des ressources planifiées de la période en cours vers la nouvelle période
+			foreach ($planificationResources as $previousPR) {
+				$newPR = new PlanificationResource($connectedUser, $newPeriod, $previousPR->getResource());
+				$newPR->setOrder($previousPR->getOrder());
+				$em->persist($newPR);
+			}
+  
+			$em->flush();
 			$request->getSession()->getFlashBag()->add('notice', 'planificationPeriod.created.ok');
-			return $this->redirectToRoute('planification_edit', array('planificationID' => $planification->getId(), 'planificationPeriodID' => $planificationPeriod->getId()));
+			return $this->redirectToRoute('planification_edit', array('planificationID' => $planification->getId(), 'planificationPeriodID' => $newPeriod->getId()));
 		}
     }
-
 	return $this->render('planification/period.create.html.twig',
 		array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod,
 			'ppCreateDate' => $ppCreateDate, 'form' => $form->createView()));
