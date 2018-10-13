@@ -79,4 +79,10 @@ class PlanificationContext
     {
     return ($this->isLastPeriod() and $this->getPeriodBookingsCount() > 0);
     }
+
+	// Afficher le bouton de suppression de la période affichée (si c'est la dernière et qu'aucune réservation n'est saisie)
+    public function displayDeletePeriod()
+    {
+    return ($this->isLastPeriod() and $this->getPeriodBookingsCount() <= 0);
+    }
 }

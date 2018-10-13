@@ -14,8 +14,7 @@ class PlanificationPeriodCreateDateType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-	$builder->add('bookingMaxDate', DateType::class, array('widget' => 'single_text', 'html5' => false, 'format' => 'dd/MM/yyyy', 'attr' => ['class' => 'datepicker']))
-		->add('date', DateType::class, array('widget' => 'single_text', 'html5' => false, 'format' => 'dd/MM/yyyy', 'attr' => ['class' => 'datepicker']));
+	$builder->add('date', DateType::class, array('label' => 'planificationPeriod.beginning.date', 'translation_domain' => 'messages', 'widget' => 'single_text', 'html5' => false, 'format' => 'dd/MM/yyyy', 'attr' => ['class' => 'datepicker']));
     }
 
 	public function configureOptions(OptionsResolver $resolver)

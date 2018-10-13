@@ -488,6 +488,30 @@ $resourceIDList = ($resourceIDList == '') ? $planificationResourceDB->getResourc
 			'ppCreateDate' => $ppCreateDate, 'form' => $form->createView()));
     }
 
+    // Suppression d'une période planification (uniquement la dernière si pas de réservations et au moins une période antérieure)
+	/**
+     * @Route("/planificationperiod/delete/{planificationID}/{planificationPeriodID}", name="planification_period_delete")
+	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+	 * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
+     */
+	public function delete_period(Request $request, Planification $planification, PlanificationPeriod $planificationPeriod)
+    {
+	$connectedUser = $this->getUser();
+    $em = $this->getDoctrine()->getManager();
+    $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+    $ppRepository = $em->getRepository(PlanificationPeriod::Class);
+	$previousPP = $ppRepository->getPreviousPlanificationPeriod($planification, $planificationPeriod->getID());
+	
+	$previousPP->setEndDateToNull();
+	$em->persist($previousPP);
+
+	$em->remove($planificationPeriod);
+	$em->flush();
+	$request->getSession()->getFlashBag()->add('notice', 'planificationPeriod.deleted.ok');
+	return $this->redirectToRoute('planification_edit', array('planificationID' => $planification->getID(), 'planificationPeriodID' => $previousPP->getId()));
+    }
+
     /**
      * @Route("/planification/bookinglist/{planificationID}/{planificationPeriodID}/{page}", name="planification_period_booking_list", requirements={"page"="\d+"})
      * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})

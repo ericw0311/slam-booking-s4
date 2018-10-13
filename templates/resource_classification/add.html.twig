@@ -4,10 +4,15 @@
  
 {% block body %}
 
+<legend><img src="{{ asset('images/box-32.png') }}">&nbsp;</img>{{ ('resourceType.create.classification.' ~ resourceType)|trans }}</legend>
+
+<div class="alert alert-warning">
+	{{ 'resourceClassification.create.warning'|trans }}
+</div>
+
 {{ form_start(form, {'action': path('resource_classification_add', { 'resourceType': resourceType }), 'method': 'POST', 'class': 'form-horizontal'}) }}
 
 <fieldset>
-	<legend><img src="{{ asset('images/box-32.png') }}">&nbsp;</img>{{ ('resourceType.create.classification.' ~ resourceType)|trans }}</legend>
 	{{ form_row(form.name) }}
 	{{ form_rest(form) }}
 </fieldset>
@@ -24,16 +29,5 @@
 {% block javascripts %}
 
 <script>document.getElementById('resource_classification_name').focus();</script>
-
-{% endblock %}
-
-{% block message %}
-
-{% for flash_message in app.session.flashBag.get('notice') %}
-<div class="alert alert-warning sb-message">
-	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-	{{ flash_message|trans }}
-</div>
-{% endfor %}
 
 {% endblock %}

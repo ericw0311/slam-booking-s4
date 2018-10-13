@@ -92,7 +92,6 @@ class PlanificationPeriod
     public function setBeginningDate(?\DateTimeInterface $beginningDate): self
     {
         $this->beginningDate = $beginningDate;
-
         return $this;
     }
 
@@ -104,7 +103,12 @@ class PlanificationPeriod
     public function setEndDate(?\DateTimeInterface $endDate): self
     {
         $this->endDate = $endDate;
+        return $this;
+    }
 
+    public function setEndDateToNull(): self
+    {
+        $this->endDate = null;
         return $this;
     }
 

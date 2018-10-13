@@ -165,7 +165,6 @@ class ResourceClassificationController extends Controller
 		}
     }
 
-	$request->getSession()->getFlashBag()->add('notice', 'resourceClassification.create.warning');
 	return $this->render('resource_classification/add.html.twig',
 		array('userContext' => $userContext, 'resourceType' => $resourceType, 'form' => $form->createView()));
     }

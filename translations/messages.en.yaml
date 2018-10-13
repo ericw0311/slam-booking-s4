@@ -170,6 +170,7 @@ planification.back.to.list: Back to planifications list
 planification.create: Create a planification
 planification.create.period: Create a new period
 planification.created.ok: The planification has been created
+planification.delete: Delete planification
 planification.deleted.ok: The planification has been deleted
 planification.dna.booking: La planification %name% est référencée par des réservations. Suppression impossible
 planification.line.updated.ok: Per day planifications have been updated
@@ -185,8 +186,11 @@ planification.type.select: Select type of resources to planify
 planification.updated.ok: The planification has been updated
 planification.validate.not.allowed: You must select at least one resource
 
+planificationPeriod.beginning.date: Period beginning date
 planificationPeriod.create.minimum.date: La nouvelle période doit débuter au delà de la date de la dernière réservation %date%
 planificationPeriod.created.ok: New planification period has been created
+planificationPeriod.delete: Delete planification period
+planificationPeriod.deleted.ok: The period has been deleted
 planificationPeriod.una.booking: Des réservations sont saisies pour cette période. Modification impossible
 planificationPeriod.una.closed: This planification period is closed. It is not updatable
 

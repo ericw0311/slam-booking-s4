@@ -119,10 +119,13 @@
 {% if planificationContext.bookingsCount > 0 %}
 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#dnaBooking"><span class="glyphicon glyphicon-trash"></span> <del>{{ 'delete'|trans }}</del></button>
 {% else %}
-<a href="{{ path('planification_delete', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID }) }}" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> {{ 'delete'|trans }}</a>
+<a href="{{ path('planification_delete', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID }) }}" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> {{ 'planification.delete'|trans }}</a>
 {% endif %}
 {% if planificationContext.displayCreatePeriod() %}
 	<a href="{{ path('planification_period_create', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID }) }}" class="btn btn-success"><i class="glyphicon glyphicon-plus"></i> {{ 'planification.create.period'|trans }}</a>
+{% endif %}
+{% if planificationContext.displayDeletePeriod() %}
+	<a href="{{ path('planification_period_delete', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID }) }}" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> {{ 'planificationPeriod.delete'|trans }}</a>
 {% endif %}
 
 </div>

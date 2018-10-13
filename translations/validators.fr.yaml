@@ -10,7 +10,7 @@ label.already.exists: Cette étiquette existe déjà
 
 planification.already.exists: Cette planification existe déjà
 
-planificationPeriod.date.control: La date entrée doit être supérieure au
+planificationPeriod.date.control: La date de début entrée doit être supérieure à la date de dernière réservation indiquée
 
 resource.already.exists: Cette ressource existe déjà
 
