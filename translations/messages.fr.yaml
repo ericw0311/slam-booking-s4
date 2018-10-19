@@ -197,7 +197,11 @@ planificationPeriod.una.closed: Cette période de planification est clotûrée, 
 planning: Planning
 planning.calendar: Calendrier
 planning.global: Planning global
-planning.stretched.out: Planning étendu
+planning.reduce.left: Réduire le planning vers la gauche
+planning.reduce.top: Réduire le planning vers le haut
+planning.stretch.bottom: Etendre le planning vers le bas
+planning.stretch.right: Etendre le planning vers la droite
+planning.stretched.out: Planning élargi
 planning.timetable: Grille horaire
 planning.display.date: Afficher le planning pour la date sélectionnée
 

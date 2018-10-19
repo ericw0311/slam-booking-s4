@@ -3,7 +3,11 @@
 <table class="table table-bordered table-striped">
 	<thead>
 	<tr>
+{% if planningContext.displayDate() %}
+	<th style="color:blue">{{ dateCourte(planningContext.getDay(day_key).date) }}</th>
+{% else %}
 	<th></th>
+{% endif %}
 {% for planificationResource in planificationResources %}
 	<th>
 {% if planificationResource.resource.internal %}
@@ -16,12 +20,14 @@
 	</tr>
 	</thead>
 	<tbody>
-{% for timetableLine in timetableLines %}
+{% if planningContext.getDay(day_key).type == 'O' %}
+
+{% for timetableLine in planningContext.getDay(day_key).timetableLines %}
 <tr>
 	<td>{{ timetableLine(timetableLine) }}</td>
 {% for planificationResource in planificationResources %}
 
-{% set key = date|date('Ymd') ~ '-' ~ planification.ID ~ '-' ~ planificationPeriod.ID ~ '-' ~ planificationLine.ID ~ '-' ~ planificationResource.resource.ID ~ '-' ~ timetableLine.timetable.ID ~ '-' ~ timetableLine.ID %}
+{% set key = planningContext.getDay(day_key).date|date('Ymd') ~ '-' ~ planification.ID ~ '-' ~ planificationPeriod.ID ~ '-' ~ planningContext.getDay(day_key).planificationLine.ID ~ '-' ~ planificationResource.resource.ID ~ '-' ~ timetableLine.timetable.ID ~ '-' ~ timetableLine.ID %}
 
 {% if bookings[key] is defined %}
 {% if bookings[key].type == 'H' %}
@@ -46,21 +52,28 @@
 {% if bookings[key].getNoteExists() %}
 <img src="{{ asset('images/note-16.png') }}" title="{{ bookings[key].note }}">&nbsp;
 {% endif %}
-<a href="{{ path(booking_update, { 'bookingID': bookings[key].id, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': planificationResource.resource.ID, 'date': date|date('Ymd') }) }}" class="glyphicon glyphicon-pencil" title="{{ 'modify'|trans }}"></a>&nbsp;
-<a href="{{ path(booking_delete, { 'bookingID': bookings[key].id, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': planificationResource.resource.ID, 'date': date|date('Ymd') }) }}" class="glyphicon glyphicon-trash" title="{{ 'delete'|trans }}"></a>
+<a href="{{ path(booking_update, { 'bookingID': bookings[key].id, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': planificationResource.resource.ID, 'date': planningContext.getDay(day_key).date|date('Ymd') }) }}" class="glyphicon glyphicon-pencil" title="{{ 'modify'|trans }}"></a>&nbsp;
+<a href="{{ path(booking_delete, { 'bookingID': bookings[key].id, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': planificationResource.resource.ID, 'date': planningContext.getDay(day_key).date|date('Ymd') }) }}" class="glyphicon glyphicon-trash" title="{{ 'delete'|trans }}"></a>
 </td></tr></table>
 
 		</td>
 {% endif %}
 {% else %}
 		<td>
-<a href="{{ path(booking_create, { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': planificationResource.resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': (date|date('Ymd') ~ '+' ~ timetableLine.timetable.ID ~ '+' ~ timetableLine.ID), 'userFileIDList': userContext.getCurrentUserFile().getID(), 'labelIDList': 0, 'noteID': 0 }) }}" class="glyphicon glyphicon-plus" title="{{ 'booking.create'|trans }}"></a>
+<a href="{{ path(booking_create, { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': planificationResource.resource.ID, 'date': planningContext.getDay(day_key).date|date('Ymd'), 'timetableLinesList': (planningContext.getDay(day_key).date|date('Ymd') ~ '+' ~ timetableLine.timetable.ID ~ '+' ~ timetableLine.ID), 'userFileIDList': userContext.getCurrentUserFile().getID(), 'labelIDList': 0, 'noteID': 0 }) }}" class="glyphicon glyphicon-plus" title="{{ 'booking.create'|trans }}"></a>
 		</td>
 {% endif %}
 {% endfor %}
 </tr>
 
 {% endfor %}
+
+{% else %}
+<tr>
+	<td></td><td colspan={{ planificationResources|length }}>C'est fermé</td>
+</tr>
+{% endif %}
+
 	</tbody>
 </table>
 

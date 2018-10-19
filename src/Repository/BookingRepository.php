@@ -24,7 +24,7 @@ class BookingRepository extends ServiceEntityRepository
     }
 
 	// Affichage des réservations dans le planning
-	public function getPlanningBookings(\App\Entity\File $file, \Datetime $date, \App\Entity\Planification $planification, \App\Entity\PlanificationPeriod $planificationPeriod)
+	public function getPlanningBookings(\App\Entity\File $file, \Datetime $beginningDate, \Datetime $endDate, \App\Entity\Planification $planification, \App\Entity\PlanificationPeriod $planificationPeriod)
 	{
 	$qb = $this->createQueryBuilder('b');
     $qb->select('b.id bookingID');
@@ -36,7 +36,10 @@ class BookingRepository extends ServiceEntityRepository
 	$qb->addSelect('t.id timetableID');
 	$qb->addSelect('tl.id timetableLineID');
 	$qb->where('b.file = :file')->setParameter('file', $file);
-	$qb->andWhere("DATE_FORMAT(bl.ddate,'%Y%m%d') = :date")->setParameter('date', $date->format('Ymd'));
+	// $qb->andWhere("DATE_FORMAT(bl.ddate,'%Y%m%d') = :date")->setParameter('date', $date->format('Ymd'));
+	$qb->andWhere($qb->expr()->between("DATE_FORMAT(bl.ddate,'%Y%m%d')", ':beginningDate', ':endDate'))
+		->setParameter('beginningDate', $beginningDate->format('Ymd'))
+		->setParameter('endDate', $endDate->format('Ymd'));
 	$qb->andWhere('bl.planification = :planification')->setParameter('planification', $planification);
 	$qb->andWhere('bl.planificationPeriod = :planificationPeriod')->setParameter('planificationPeriod', $planificationPeriod);
 	$qb->innerJoin('b.bookingLines', 'bl');

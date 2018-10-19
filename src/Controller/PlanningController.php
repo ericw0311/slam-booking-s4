@@ -11,6 +11,7 @@ use Psr\Log\NullLogger;
 
 use App\Entity\UserContext;
 use App\Entity\ListContext;
+use App\Entity\PlanningContext;
 use App\Entity\Planification;
 use App\Entity\PlanificationPeriod;
 use App\Entity\PlanificationResource;
@@ -176,7 +177,7 @@ class PlanningController extends Controller
 	return PlanningController::planning($request, $planification, $date, 0);
     }
 
-	// Affichage de la grille horaire journaliere d'une planification (la période de planification n'est pas passée, elle est déterminée)
+// Affichage de la grille horaire journaliere d'une planification (la période de planification n'est pas passée, elle est déterminée)
     public function planning(Request $request, Planification $planification, \Datetime $date, $many)
     {
     $connectedUser = $this->getUser();
@@ -186,14 +187,12 @@ class PlanningController extends Controller
 	$lDate = $date;
     $ddate = new Ddate();
     $form = $this->createForm(DdateType::class, $ddate);
-
 	if ($request->isMethod('POST')) {
 		$form->submit($request->request->get($form->getName()));
 		if ($form->isSubmitted() && $form->isValid()) {
 			$lDate = $ddate->getDate();
 		}
     }
-
     $pRepository = $em->getRepository(Planification::Class);
 	// $logger->info('DBG 3 _'.$lDate->format('Y-m-d H:i:s').'_');
     $planifications = $pRepository->getPlanningPlanifications($userContext->getCurrentFile(), $lDate);
@@ -215,32 +214,23 @@ class PlanningController extends Controller
 		$lPlanification = $pRepository->find($planifications[0]['ID']);
 		$planificationPeriod = $ppRepository->find($planifications[0]['planificationPeriodID']);
 	}
-
 	$previousDate = clone $lDate;
 	$previousDate->sub(new \DateInterval('P1D'));
 	$nextDate = clone $lDate;
 	$nextDate->add(new \DateInterval('P1D'));
 
+    $planningContext = new PlanningContext($em, $connectedUser, $planificationPeriod, $date);
+
     $prRepository = $em->getRepository(PlanificationResource::Class);
     $planificationResources = $prRepository->getResources($planificationPeriod);
-    $plRepository = $em->getRepository(PlanificationLine::Class);
-	$planificationLine = $plRepository->findOneBy(array('planificationPeriod' => $planificationPeriod, 'weekDay' => strtoupper($lDate->format('D'))));
 
-	if ($planificationLine === null || $planificationLine->getActive() < 1) {
-		return $this->render('planning/'.($many ? 'many' : 'one').'.closed.html.twig',
-			array('userContext' => $userContext, 'planification' => $lPlanification, 'planificationPeriod' => $planificationPeriod, 'planificationLine' => $planificationLine,
-				'planifications' => $planifications, 'planificationResources' => $planificationResources,
-				'date' => $lDate, 'nextDate' => $nextDate, 'previousDate' => $previousDate, 'form' => $form->createView()));
-	}
-
-    $tlRepository = $em->getRepository(TimetableLine::Class);
-    $timetableLines = $tlRepository->getTimetableLines($planificationLine->getTimetable());
-	$bookings = BookingApi::getPlanningBookings($em, $userContext->getCurrentFile(), $lDate, $lPlanification, $planificationPeriod, $userContext->getCurrentUserFile());
-
-		return $this->render('planning/'.($many ? 'many' : 'one').'.opened.html.twig',
-			array('userContext' => $userContext, 'planification' => $lPlanification, 'planificationPeriod' => $planificationPeriod, 'planificationLine' => $planificationLine,
-				'planifications' => $planifications, 'planificationResources' => $planificationResources, 'timetableLines' => $timetableLines,
-				'date' => $lDate, 'nextDate' => $nextDate, 'previousDate' => $previousDate, 'bookings' => $bookings, 'form' => $form->createView()));
+	$bookings = BookingApi::getPlanningBookings($em, $userContext->getCurrentFile(), $lDate, $planningContext->getLastDate(), $lPlanification, $planificationPeriod, $userContext->getCurrentUserFile());
+	
+	return $this->render('planning/'.($many ? 'many' : 'one').'.html.twig',
+		array('userContext' => $userContext, 'planningContext' => $planningContext,
+			'planification' => $lPlanification, 'planificationPeriod' => $planificationPeriod,
+			'planifications' => $planifications, 'planificationResources' => $planificationResources,
+		'date' => $lDate, 'nextDate' => $nextDate, 'previousDate' => $previousDate, 'bookings' => $bookings, 'form' => $form->createView()));
     }
 
     // Affichage du planning pour plusieurs planifications (periode de planification connue)
@@ -295,24 +285,87 @@ class PlanningController extends Controller
 	$nextDate = clone $date;
 	$nextDate->add(new \DateInterval('P1D'));
 
+    $planningContext = new PlanningContext($em, $connectedUser, $planificationPeriod, $date);
+
     $prRepository = $em->getRepository(PlanificationResource::Class);
     $planificationResources = $prRepository->getResources($planificationPeriod);
-    $plRepository = $em->getRepository(PlanificationLine::Class);
-	$planificationLine = $plRepository->findOneBy(array('planificationPeriod' => $planificationPeriod, 'weekDay' => strtoupper($date->format('D'))));
 
-	if ($planificationLine === null || $planificationLine->getActive() < 1) {
-		return $this->render('planning/'.($many ? 'many' : 'one').'.closed.html.twig',
-			array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'planificationLine' => $planificationLine,
-				'planifications' => $planifications, 'planificationResources' => $planificationResources,
-				'date' => $date, 'nextDate' => $nextDate, 'previousDate' => $previousDate, 'form' => $form->createView()));
-	}
+	$bookings = BookingApi::getPlanningBookings($em, $userContext->getCurrentFile(), $date, $planningContext->getLastDate(), $planification, $planificationPeriod, $userContext->getCurrentUserFile());
 
-    $tlRepository = $em->getRepository(TimetableLine::Class);
-    $timetableLines = $tlRepository->getTimetableLines($planificationLine->getTimetable());
-	$bookings = BookingApi::getPlanningBookings($em, $userContext->getCurrentFile(), $date, $planification, $planificationPeriod, $userContext->getCurrentUserFile());
-	return $this->render('planning/'.($many ? 'many' : 'one').'.opened.html.twig',
-		array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'planificationLine' => $planificationLine,
-			'planifications' => $planifications, 'planificationResources' => $planificationResources, 'timetableLines' => $timetableLines,
+	return $this->render('planning/'.($many ? 'many' : 'one').'.html.twig',
+		array('userContext' => $userContext, 'planningContext' => $planningContext,
+			'planification' => $planification, 'planificationPeriod' => $planificationPeriod,
+			'planifications' => $planifications, 'planificationResources' => $planificationResources,
 			'date' => $date, 'nextDate' => $nextDate, 'previousDate' => $previousDate, 'bookings' => $bookings, 'form' => $form->createView()));
+    }
+
+	// Mise à jour du nombre de lignes pour plusieurs planifications
+    /**
+     * @Route("/planning/manysetnumberlines/{planificationID}/{planificationPeriodID}/{date}/{numberLines}", name="planning_many_set_number_lines", requirements={"numberLines"="\d+"})
+	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+	 * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
+	 * @ParamConverter("date", options={"format": "Ymd"})
+     */
+    public function many_set_number_lines(Request $request, Planification $planification, PlanificationPeriod $planificationPeriod, \Datetime $date, $numberLines)
+    {
+	return PlanningController::set_number_lines($request, $planification, $planificationPeriod, $date, $numberLines, 1);
+    }
+
+	// Mise à jour du nombre de lignes pour une planification
+    /**
+     * @Route("/planning/onesetnumberlines/{planificationID}/{planificationPeriodID}/{date}/{numberLines}", name="planning_one_set_number_lines", requirements={"numberLines"="\d+"})
+	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+	 * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
+	 * @ParamConverter("date", options={"format": "Ymd"})
+     */
+    public function one_set_number_lines(Request $request, Planification $planification, PlanificationPeriod $planificationPeriod, \Datetime $date, $numberLines)
+    {
+	return PlanningController::set_number_lines($request, $planification, $planificationPeriod, $date, $numberLines, 0);
+    }
+
+	// Mise à jour du nombre de lignes
+	public function set_number_lines(Request $request, Planification $planification, PlanificationPeriod $planificationPeriod, \Datetime $date, $numberLines, $many)
+	{
+	$connectedUser = $this->getUser();
+	$em = $this->getDoctrine()->getManager();
+	PlanningApi::setNumberLines($em, $connectedUser, $numberLines);
+
+	return $this->redirectToRoute('planning_'.($many ? 'many' : 'one').'_pp',
+		array('planificationID' => $planification->getID(), 'planificationPeriodID' => $planificationPeriod->getID(), 'date' => $date->format("Ymd")));
+    }
+
+	// Mise à jour du nombre de colonnes pour plusieurs planifications
+    /**
+     * @Route("/planning/manysetnumbercolumns/{planificationID}/{planificationPeriodID}/{date}/{numberColumns}", name="planning_many_set_number_columns", requirements={"numberColumns"="\d+"})
+	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+	 * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
+	 * @ParamConverter("date", options={"format": "Ymd"})
+     */
+    public function many_set_number_columns(Request $request, Planification $planification, PlanificationPeriod $planificationPeriod, \Datetime $date, $numberColumns)
+    {
+	return PlanningController::set_number_columns($request, $planification, $planificationPeriod, $date, $numberColumns, 1);
+    }
+
+	// Mise à jour du nombre de colonnes pour une planification
+    /**
+     * @Route("/planning/onesetnumbercolumns/{planificationID}/{planificationPeriodID}/{date}/{numberColumns}", name="planning_one_set_number_columns", requirements={"numberColumns"="\d+"})
+	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+	 * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
+	 * @ParamConverter("date", options={"format": "Ymd"})
+     */
+    public function one_set_number_columns(Request $request, Planification $planification, PlanificationPeriod $planificationPeriod, \Datetime $date, $numberColumns)
+    {
+	return PlanningController::set_number_columns($request, $planification, $planificationPeriod, $date, $numberColumns, 0);
+    }
+
+	// Mise à jour du nombre de colonnes
+	public function set_number_columns(Request $request, Planification $planification, PlanificationPeriod $planificationPeriod, \Datetime $date, $numberColumns, $many)
+	{
+	$connectedUser = $this->getUser();
+	$em = $this->getDoctrine()->getManager();
+	PlanningApi::setNumberColumns($em, $connectedUser, $numberColumns);
+
+	return $this->redirectToRoute('planning_'.($many ? 'many' : 'one').'_pp',
+		array('planificationID' => $planification->getID(), 'planificationPeriodID' => $planificationPeriod->getID(), 'date' => $date->format("Ymd")));
     }
 }

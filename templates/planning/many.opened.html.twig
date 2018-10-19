@@ -1,9 +1,0 @@
-{# templates/planning/many.opened.html.twig #}
-
-{% extends 'planning/many.html.twig' %}
-
-{% block planning %}
-
-{{ include('planning/opened.html.twig', { 'booking_create': 'booking_many_create', 'booking_update': 'booking_many_init_update', 'booking_delete': 'booking_many_delete' }) }}
-
-{% endblock %}
