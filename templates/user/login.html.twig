@@ -2,36 +2,51 @@
 
 {% block body %}
 
-    {% if error %}
-        <div class="alert alert-danger">
-            {{ error.messageKey }}
-        </div>
-    {% endif %}
+{% if error %}
+	<div class="alert alert-danger">
+	{{ error.messageKey }}
+	</div>
+{% endif %}
  
-		<div class="col-sm-3"></div>
-        <div class="col-sm-6">
-                <form action="{{ path('user_login') }}" method="post">
-                    <fieldset>
-                        <legend><i class="fa fa-lock" aria-hidden="true"></i>{{ 'user.connection'|trans }}</legend>
-                        <div class="form-group">
-                            <label for="username">{{ 'user.name'|trans }}</label>
-                            <input type="text" id="username" name="_username" value="{{ last_username }}" class="form-control"/>
-                        </div>
-                        <div class="form-group">
-                            <label for="password">{{ 'user.password'|trans }}</label>
-                            <input type="password" id="password" name="_password" class="form-control" />
-                        </div>
-                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"/>
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fa fa-sign-in" aria-hidden="true"></i>{{ 'user.login'|trans }}
-                        </button>
-                    </fieldset>
-                </form>
-        </div>
-		<div class="col-sm-3"></div>
+<div class="col-sm-3"></div>
+<div class="col-sm-6">
+	<form action="{{ path('user_login') }}" method="post">
+		<fieldset>
+		<legend><span class="glyphicon glyphicon-log-in">&nbsp;<i class="fa fa-lock" aria-hidden="true"></i>{{ 'user.connection'|trans }}</legend>
+			<div class="form-group">
+				<label for="username">{{ 'user.name'|trans }}</label>
+				<input type="text" id="username" name="_username" value="{{ last_username }}" class="form-control"/>
+			</div>
+		<div class="form-group">
+			<label for="password">{{ 'user.password'|trans }}</label>
+			<input type="password" id="password" name="_password" class="form-control" />
+		</div>
+		<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"/>
+		<div class="btn-group sb-margin-top">
+		<button type="submit" class="btn btn-primary">
+			<i class="fa fa-sign-in" aria-hidden="true"></i>{{ 'user.login'|trans }}
+		</button>
+<a href="{{ path('user_forgot_login_or_password') }}" class="btn btn-success"><i class="glyphicon glyphicon-log-in"></i> {{ 'user.forgot.login.or.password'|trans }}</a>
+		</div>
+		</fieldset>
+	</form>
+</div>
+<div class="col-sm-3"></div>
 
 {% endblock %}
 
+{% block message %}
+
+<div class="col-sm-12">
+{% for flash_message in app.session.flashBag.get('notice') %}
+<div class="alert alert-success sb-message">
+	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+	{{ flash_message|trans }}
+</div>
+{% endfor %}
+</div>
+
+{% endblock %}
 
 {% block javascripts %}
 

@@ -354,9 +354,11 @@ user.account.type.ORGANISATION: Organisation
 user.connection: Connection
 user.email: Email
 user.firstName: First name
+user.forgot.login.or.password: Forgot login or password
 user.lastName: Last name
 user.list.update: Modify users list
 user.login: Login
+user.login.and.password.sent: User name and password have been sent to the email address entered
 user.logout: Logout
 user.modify.password: Modify password
 user.name: User name

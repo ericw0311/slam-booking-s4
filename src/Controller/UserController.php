@@ -15,8 +15,10 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use App\Form\UserType;
 use App\Form\UserPasswordType;
 use App\Form\UserModifyType;
+use App\Form\SD_EmailType;
 use App\Entity\User;
 use App\Entity\UserContext;
+use App\Entity\Email;
 use App\Events;
 
 class UserController extends Controller
@@ -63,6 +65,37 @@ class UserController extends Controller
 			// La derniere erreur de connexion (si il y en a une)
 			'error' => $helper->getLastAuthenticationError(),
 		]);
+	}
+
+    /**
+	 * @Route("/forgotloginorpassword", name="user_forgot_login_or_password")
+     */
+    public function forgot_login_or_password(Request $request, \Swift_Mailer $mailer)
+    {
+	$email = new Email();
+	$form = $this->createForm(SD_EmailType::class, $email);
+
+	if ($request->isMethod('POST')) {
+		$form->submit($request->request->get($form->getName()));
+
+		if ($form->isSubmitted() && $form->isValid()) {
+
+			$message = (new \Swift_Message('Hello Email'))
+				->setFrom('slam.booking.web@gmail.com')
+				->setTo('eric.pierre.willard@gmail.com')
+				->setBody(
+					$this->renderView('emails/login.and.password.sent.html.twig',
+						array('name' => $email->getEmail())),
+				'text/html');
+
+			$mailer->send($message);
+
+			$request->getSession()->getFlashBag()->add('notice', 'user.login.and.password.sent');
+			return $this->redirectToRoute('user_login');
+		}
+	}
+
+	return $this->render('user/forgot.login.or.password.html.twig', array('form' => $form->createView()));
 	}
 
 	/**

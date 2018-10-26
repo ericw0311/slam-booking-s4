@@ -5,6 +5,7 @@
 {{ form_start(form, {'action': path('user_registration'), 'method': 'POST', 'class': 'form-horizontal'}) }}
 
 <fieldset>
+	<legend><span class="glyphicon glyphicon-log-in">&nbsp;<i class="fa fa-lock" aria-hidden="true"></i>{{ 'user.registration'|trans }}</legend>
 	<legend>{{ 'user.registration'|trans }}</legend>
 	{{ form_row(form.accountType) }}
 	{{ form_row(form.firstName) }}

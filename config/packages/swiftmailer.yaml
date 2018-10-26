@@ -1,6 +1,13 @@
 # config/packages/test/swiftmailer.yaml
 swiftmailer:
-    disable_delivery: true
+    disable_delivery: false
+    transport: smtp
+    encryption: tls
+    auth_mode: login
+    host: smtp.gmail.com
+    username: slam.booking.web
+    password: sb201810
+    port: 587
 
 parameters:
-    env(MAILER_URL): 'gmail://eric.pierre.willard:Jveuadp0410@localhost'
+    env(MAILER_URL): 'gmail://slam.booking.web:sb201810@localhost'
