@@ -3,42 +3,42 @@
 {% extends 'booking/create.or.update.html.twig' %}
 
 {% block period_end_link %}
-	<a href="{{ path('booking_many_end_period_create', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'firstDateNumber': 1, 'userFileIDList': userFileIDList, 'labelIDList': labelIDList, 'noteID': noteID }) }}" class="list-group-item" title="{{ 'booking.period.end.update'|trans }}"><img src="{{ asset('images/time-32.png') }}">&nbsp;{{ dateLongue(endDate) }}&nbsp;&rarr;&nbsp;{{ timetableLine(endTimetableLine) }}</a>
+	<a href="{{ path('booking_many_end_period_create', { 'planningDate': planningDate|date('Ymd'), 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'firstDateNumber': 1, 'userFileIDList': userFileIDList, 'labelIDList': labelIDList, 'noteID': noteID }) }}" class="list-group-item" title="{{ 'booking.period.end.update'|trans }}"><img src="{{ asset('images/time-32.png') }}">&nbsp;{{ dateLongue(endDate) }}&nbsp;&rarr;&nbsp;{{ timetableLine(endTimetableLine) }}</a>
 {% endblock %}
 
 {% block userFiles_list_link %}
-	<a href="{{ path('booking_many_users_create', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'labelIDList': labelIDList, 'noteID': noteID, 'userFileIDInitialList': userFileIDList, 'userFileIDList': userFileIDList }) }}" class="list-group-item" title="{{ 'user.list.update'|trans }}"><img src="{{ asset('images/' ~ image) }}">&nbsp;{{ userFiles[0].getFirstAndLastName() }}</a>
+	<a href="{{ path('booking_many_users_create', { 'planningDate': planningDate|date('Ymd'), 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'labelIDList': labelIDList, 'noteID': noteID, 'userFileIDInitialList': userFileIDList, 'userFileIDList': userFileIDList }) }}" class="list-group-item" title="{{ 'user.list.update'|trans }}"><img src="{{ asset('images/' ~ image) }}">&nbsp;{{ userFiles[0].getFirstAndLastName() }}</a>
 {% endblock %}
 
 {% block userFiles_table_link %}
-	<a href="{{ path('booking_many_users_create', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'labelIDList': labelIDList, 'noteID': noteID, 'userFileIDInitialList': userFileIDList, 'userFileIDList': userFileIDList }) }}" class="glyphicon glyphicon-pencil" title="{{ 'user.list.update'|trans }}"></a>
+	<a href="{{ path('booking_many_users_create', { 'planningDate': planningDate|date('Ymd'), 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'labelIDList': labelIDList, 'noteID': noteID, 'userFileIDInitialList': userFileIDList, 'userFileIDList': userFileIDList }) }}" class="glyphicon glyphicon-pencil" title="{{ 'user.list.update'|trans }}"></a>
 {% endblock %}
 
 {% block labels_empty_list_link %}
-	<a href="{{ path('booking_many_labels_create', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDList, 'noteID': noteID, 'labelIDInitialList': labelIDList, 'labelIDList': labelIDList }) }}" class="list-group-item" title="{{ 'label.list.update'|trans }}"><img src="{{ asset('images/label-32.png') }}">&nbsp;{{ 'label.no'|trans }}</a>
+	<a href="{{ path('booking_many_labels_create', { 'planningDate': planningDate|date('Ymd'), 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDList, 'noteID': noteID, 'labelIDInitialList': labelIDList, 'labelIDList': labelIDList }) }}" class="list-group-item" title="{{ 'label.list.update'|trans }}"><img src="{{ asset('images/label-32.png') }}">&nbsp;{{ 'label.no'|trans }}</a>
 {% endblock %}
 
 {% block labels_list_link %}
-	<a href="{{ path('booking_many_labels_create', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDList, 'noteID': noteID, 'labelIDInitialList': labelIDList, 'labelIDList': labelIDList }) }}" class="list-group-item" title="{{ 'label.list.update'|trans }}"><img src="{{ asset('images/label-32.png') }}">&nbsp;{{ labels[0].getName() }}</a>
+	<a href="{{ path('booking_many_labels_create', { 'planningDate': planningDate|date('Ymd'), 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDList, 'noteID': noteID, 'labelIDInitialList': labelIDList, 'labelIDList': labelIDList }) }}" class="list-group-item" title="{{ 'label.list.update'|trans }}"><img src="{{ asset('images/label-32.png') }}">&nbsp;{{ labels[0].getName() }}</a>
 {% endblock %}
 
 {% block labels_table_link %}
-	<a href="{{ path('booking_many_labels_create', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDList, 'noteID': noteID, 'labelIDInitialList': labelIDList, 'labelIDList': labelIDList }) }}" class="glyphicon glyphicon-pencil" title="{{ 'booking.label.list.update'|trans }}"></a>
+	<a href="{{ path('booking_many_labels_create', { 'planningDate': planningDate|date('Ymd'), 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDList, 'noteID': noteID, 'labelIDInitialList': labelIDList, 'labelIDList': labelIDList }) }}" class="glyphicon glyphicon-pencil" title="{{ 'booking.label.list.update'|trans }}"></a>
 {% endblock %}
 
 {% block note_empty_link %}
-	<a href="{{ path('booking_many_note_create', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDList, 'labelIDList': labelIDList, 'noteID': noteID }) }}" class="list-group-item" title="{{ 'note.enter'|trans }}"><img src="{{ asset('images/note-32.png') }}">&nbsp;{{ 'note.no'|trans }}</a>
+	<a href="{{ path('booking_many_note_create', { 'planningDate': planningDate|date('Ymd'), 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDList, 'labelIDList': labelIDList, 'noteID': noteID }) }}" class="list-group-item" title="{{ 'note.enter'|trans }}"><img src="{{ asset('images/note-32.png') }}">&nbsp;{{ 'note.no'|trans }}</a>
 {% endblock %}
 
 {% block note_update_link %}
-	<a href="{{ path('booking_many_note_create', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDList, 'labelIDList': labelIDList, 'noteID': noteID }) }}" class="glyphicon glyphicon-pencil" title="{{ 'modify'|trans }}"></a>
+	<a href="{{ path('booking_many_note_create', { 'planningDate': planningDate|date('Ymd'), 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDList, 'labelIDList': labelIDList, 'noteID': noteID }) }}" class="glyphicon glyphicon-pencil" title="{{ 'modify'|trans }}"></a>
 {% endblock %}
 
 {% block note_delete_link %}
-	<a href="{{ path('booking_many_note_delete_create', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDList, 'labelIDList': labelIDList, 'noteID': note.ID }) }}" class="glyphicon glyphicon-trash" title="{{ 'delete'|trans }}"></a>
+	<a href="{{ path('booking_many_note_delete_create', { 'planningDate': planningDate|date('Ymd'), 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDList, 'labelIDList': labelIDList, 'noteID': note.ID }) }}" class="glyphicon glyphicon-trash" title="{{ 'delete'|trans }}"></a>
 {% endblock %}
 
 {% block booking_buttons %}
-	<a href="{{ path('planning_many', { 'planificationID': planification.ID, 'date': date|date('Ymd') }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
-	<a href="{{ path('booking_many_validate_create', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDList, 'labelIDList': labelIDList, 'noteID': noteID }) }}" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i>&nbsp;{{ 'validate'|trans }}</a>
+	<a href="{{ path('planning_many', { 'planificationID': planification.ID, 'date': planningDate|date('Ymd') }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
+	<a href="{{ path('booking_many_validate_create', { 'planningDate': planningDate|date('Ymd'), 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDList, 'labelIDList': labelIDList, 'noteID': noteID }) }}" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i>&nbsp;{{ 'validate'|trans }}</a>
 {% endblock %}
