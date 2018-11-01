@@ -70,7 +70,7 @@ class UserController extends Controller
     /**
 	 * @Route("/forgotloginorpassword", name="user_forgot_login_or_password")
      */
-    public function forgot_login_or_password(Request $request, \Swift_Mailer $mailer)
+    public function forgot_login_or_password(Request $request, UserPasswordEncoderInterface $passwordEncoder, \Swift_Mailer $mailer)
     {
 	$email = new Email();
 	$form = $this->createForm(SD_EmailType::class, $email);
@@ -80,13 +80,28 @@ class UserController extends Controller
 
 		if ($form->isSubmitted() && $form->isValid()) {
 
-			$message = (new \Swift_Message('Hello Email'))
+			$em = $this->getDoctrine()->getManager();
+			$uRepository = $em->getRepository(User::class);
+			$user = $uRepository->findOneBy(array('email' => $email->getEmail()));
+			if ($user === null) {
+				$request->getSession()->getFlashBag()->add('notice', 'user.email.not.found');
+				return $this->redirectToRoute('user_forgot_login_or_password');
+			}
+
+
+			// On réinitialise le mot de passe
+			$decodePassword = 'slam'.$user->getID();
+			$encodePassword = $passwordEncoder->encodePassword($user, $decodePassword);
+			$user->setPassword($encodePassword);
+			$em->flush();
+
+			$message = (new \Swift_Message('Envoi du nom d\'utilisateur et du mot de passe'))
 				->setFrom('slam.booking.web@gmail.com')
-				->setTo('eric.pierre.willard@gmail.com')
+				->setTo($email->getEmail())
 				->setBody(
 					$this->renderView('emails/login.and.password.sent.html.twig',
-						array('name' => $email->getEmail())),
-				'text/html');
+						array('user' => $user, 'password' => $decodePassword)),
+						'text/html');
 
 			$mailer->send($message);
 

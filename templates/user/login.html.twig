@@ -2,25 +2,22 @@
 
 {% block body %}
 
-{% if error %}
-	<div class="alert alert-danger">
-	{{ error.messageKey }}
-	</div>
-{% endif %}
- 
 <div class="col-sm-3"></div>
 <div class="col-sm-6">
+		<legend><span class="glyphicon glyphicon-log-in">&nbsp;<i class="fa fa-lock" aria-hidden="true"></i>{{ 'user.connection'|trans }}</legend>
+{% if error %}
+		<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+{% endif %}
 	<form action="{{ path('user_login') }}" method="post">
 		<fieldset>
-		<legend><span class="glyphicon glyphicon-log-in">&nbsp;<i class="fa fa-lock" aria-hidden="true"></i>{{ 'user.connection'|trans }}</legend>
 			<div class="form-group">
 				<label for="username">{{ 'user.name'|trans }}</label>
 				<input type="text" id="username" name="_username" value="{{ last_username }}" class="form-control"/>
 			</div>
-		<div class="form-group">
-			<label for="password">{{ 'user.password'|trans }}</label>
-			<input type="password" id="password" name="_password" class="form-control" />
-		</div>
+			<div class="form-group">
+				<label for="password">{{ 'user.password'|trans }}</label>
+				<input type="password" id="password" name="_password" class="form-control" />
+			</div>
 		<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"/>
 		<div class="btn-group sb-margin-top">
 		<button type="submit" class="btn btn-primary">

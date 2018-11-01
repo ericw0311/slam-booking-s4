@@ -353,6 +353,7 @@ user.account.type.INDIVIDUAL: Individual
 user.account.type.ORGANISATION: Organisation
 user.connection: Connection
 user.email: Email
+user.email.not.found: Email entered does not match any registered user
 user.firstName: First name
 user.forgot.login.or.password: Forgot login or password
 user.lastName: Last name
