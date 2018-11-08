@@ -23,7 +23,7 @@
 		<button type="submit" class="btn btn-primary">
 			<i class="fa fa-sign-in" aria-hidden="true"></i>{{ 'user.login'|trans }}
 		</button>
-<a href="{{ path('user_forgot_login_or_password') }}" class="btn btn-success"><i class="glyphicon glyphicon-log-in"></i> {{ 'user.forgot.login.or.password'|trans }}</a>
+<a href="{{ path('user_forgot_login_or_password') }}" class="btn btn-link">{{ 'user.forgot.login.or.password'|trans }}</a>
 		</div>
 		</fieldset>
 	</form>
@@ -42,11 +42,5 @@
 </div>
 {% endfor %}
 </div>
-
-{% endblock %}
-
-{% block javascripts %}
-
-<script>document.getElementById('username').focus();</script>
 
 {% endblock %}

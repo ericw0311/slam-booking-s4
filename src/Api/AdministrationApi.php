@@ -2,6 +2,7 @@
 // src/Api/AdministrationApi.php
 namespace App\Api;
 use App\Entity\File;
+use App\Entity\FileParameter;
 use App\Entity\UserParameter;
 use App\Entity\Constants;
 
@@ -151,5 +152,59 @@ class AdministrationApi
 		$em->persist($userParameter);
 	}
 	$em->flush();
+	}
+
+	// Met à jour l'indicateur: envoi de mails aux administrateurs du dossier à la saisie/MAJ/suppression des réservations.
+	static function setFileBookingEmailAdministrator($em, \App\Entity\User $user, \App\Entity\File $file, $fileAdministrator)
+	{
+	$fpRepository = $em->getRepository(FileParameter::class);
+
+	$fileParameter = $fpRepository->findOneBy(array('file' => $file, 'parameterGroup' => 'booking.mail', 'parameter' => 'administrator'));
+	if ($fileParameter != null) {
+		$fileParameter->setSBBooleanValue($fileAdministrator);
+	} else { 
+		$fileParameter = new FileParameter($user, $file, 'booking.mail', 'administrator');
+		$fileParameter->setSBBooleanValue($fileAdministrator);
+		$em->persist($fileParameter);
+	}
+	$em->flush();
+	}
+
+	// Retourne l'indicateur: envoi de mails aux administrateurs du dossier à la saisie/MAJ/suppression des réservations.
+	static function getFileBookingEmailAdministrator($em, \App\Entity\File $file)
+	{
+	$fpRepository = $em->getRepository(FileParameter::class);
+
+	$fileParameter = $fpRepository->findOneBy(array('file' => $file, 'parameterGroup' => 'booking.mail', 'parameter' => 'administrator'));
+	if ($fileParameter != null) { $fileAdministrator = $fileParameter->getBooleanValue(); } else { $fileAdministrator =  constant(Constants::class.'::BOOKING_MAIL_ADMINISTRATOR'); }
+
+	return $fileAdministrator;
+	}
+
+	// Met à jour l'indicateur: envoi de mails aux utilisateurs à la saisie/MAJ/suppression des réservations.
+	static function setFileBookingEmailUser($em, \App\Entity\User $user, \App\Entity\File $file, $bookingUser)
+	{
+	$fpRepository = $em->getRepository(FileParameter::class);
+
+	$fileParameter = $fpRepository->findOneBy(array('file' => $file, 'parameterGroup' => 'booking.mail', 'parameter' => 'user'));
+	if ($fileParameter != null) {
+		$fileParameter->setSBBooleanValue($bookingUser);
+	} else { 
+		$fileParameter = new FileParameter($user, $file, 'booking.mail', 'user');
+		$fileParameter->setSBBooleanValue($bookingUser);
+		$em->persist($fileParameter);
+	}
+	$em->flush();
+	}
+
+	// Retourne l'indicateur: envoi de mails aux utilisateurs à la saisie/MAJ/suppression des réservations.
+	static function getFileBookingEmailUser($em, \App\Entity\File $file)
+	{
+	$fpRepository = $em->getRepository(FileParameter::class);
+
+	$fileParameter = $fpRepository->findOneBy(array('file' => $file, 'parameterGroup' => 'booking.mail', 'parameter' => 'user'));
+	if ($fileParameter != null) { $bookingUser = $fileParameter->getBooleanValue(); } else { $bookingUser =  constant(Constants::class.'::BOOKING_MAIL_USER'); }
+
+	return $bookingUser;
 	}
 }

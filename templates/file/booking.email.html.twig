@@ -1,0 +1,23 @@
+{# templates/file/booking.email.html.twig #}
+
+{% extends 'base.connected.html.twig' %}
+ 
+{% block body %}
+
+{{ form_start(form, {'action': path('file_booking_email', { 'fileID': file.ID }), 'method': 'POST', 'class': 'form-horizontal'}) }}
+
+<fieldset>
+	<legend><i class="glyphicon glyphicon-envelope"></i>&nbsp;{{ 'file.booking.email'|trans }}</legend>
+	{{ form_row(form.fileAdministrator) }}
+	{{ form_row(form.bookingUser) }}
+	{{ form_rest(form) }}
+</fieldset>
+
+<div class="btn-group">
+	<a href="{{ path('file_edit', { 'fileID': file.ID }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
+	<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> {{ 'validate'|trans }}</button>
+</div>
+
+{{ form_end(form) }}
+
+{% endblock %}

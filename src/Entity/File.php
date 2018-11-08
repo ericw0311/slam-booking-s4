@@ -84,6 +84,11 @@ class File
      */
     private $queryBookings;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\FileParameter", mappedBy="file", orphanRemoval=true)
+     */
+    private $fileParameters;
+
     public function __construct(\App\Entity\User $user)
     {
 		$this->setUser($user);
@@ -95,6 +100,7 @@ class File
         $this->labels = new ArrayCollection();
         $this->bookings = new ArrayCollection();
         $this->queryBookings = new ArrayCollection();
+        $this->fileParameters = new ArrayCollection();
     }
 
     public function getId()
@@ -368,6 +374,37 @@ class File
             // set the owning side to null (unless already changed)
             if ($queryBooking->getFile() === $this) {
                 $queryBooking->setFile(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|FileParameter[]
+     */
+    public function getFileParameters(): Collection
+    {
+        return $this->fileParameters;
+    }
+
+    public function addFileParameter(FileParameter $fileParameter): self
+    {
+        if (!$this->fileParameters->contains($fileParameter)) {
+            $this->fileParameters[] = $fileParameter;
+            $fileParameter->setFile($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFileParameter(FileParameter $fileParameter): self
+    {
+        if ($this->fileParameters->contains($fileParameter)) {
+            $this->fileParameters->removeElement($fileParameter);
+            // set the owning side to null (unless already changed)
+            if ($fileParameter->getFile() === $this) {
+                $fileParameter->setFile(null);
             }
         }
 

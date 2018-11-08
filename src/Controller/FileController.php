@@ -18,8 +18,10 @@ use App\Entity\Booking;
 use App\Entity\Label;
 use App\Entity\UserParameterNLC;
 use App\Entity\UserParameter;
+use App\Entity\FileBookingEmail;
 
 use App\Form\FileType;
+use App\Form\FileBookingEmailType;
 use App\Form\UserParameterNLCType;
 
 use App\Api\AdministrationApi;
@@ -230,7 +232,6 @@ class FileController extends Controller
 	$numberLines = AdministrationApi::getNumberLines($em, $connectedUser, 'booking');
 	$numberColumns = AdministrationApi::getNumberColumns($em, $connectedUser, 'booking');
 
-	$upRepository = $em->getRepository(UserParameter::Class);
 	$userParameterNLC = new UserParameterNLC($numberLines, $numberColumns);
 	$form = $this->createForm(UserParameterNLCType::class, $userParameterNLC);
 
@@ -248,5 +249,39 @@ class FileController extends Controller
 
 	return $this->render('file/number.lines.and.columns.html.twig',
 	array('userContext' => $userContext, 'file' => $file, 'page' => $page, 'form' => $form->createView()));
+	}
+
+	// Met à jour le nombre de lignes et colonnes d'affichage des listes
+	/**
+     * @Route("/file/bookingemail/{fileID}", name="file_booking_email")
+     * @ParamConverter("file", options={"mapping": {"fileID": "id"}})
+     */
+	public function booking_email(Request $request, File $file)
+	{
+	$connectedUser = $this->getUser();
+	$em = $this->getDoctrine()->getManager();
+
+	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+	$fileAdministrator = AdministrationApi::getFileBookingEmailAdministrator($em, $file);
+	$bookingUser = AdministrationApi::getFileBookingEmailUser($em, $file);
+
+	$fileBookingEmail = new FileBookingEmail($fileAdministrator, $bookingUser);
+	$form = $this->createForm(FileBookingEmailType::class, $fileBookingEmail);
+
+	if ($request->isMethod('POST')) {
+		$form->submit($request->request->get($form->getName()));
+
+		if ($form->isSubmitted() && $form->isValid()) {
+
+			AdministrationApi::setFileBookingEmailAdministrator($em, $connectedUser, $file, $fileBookingEmail->getFileAdministrator());
+			AdministrationApi::setFileBookingEmailUser($em, $connectedUser, $file, $fileBookingEmail->getBookingUser());
+			$request->getSession()->getFlashBag()->add('notice', 'file.booking.email.updated.ok');
+			return $this->redirectToRoute('file_edit', array('fileID' => $file->getId()));
+		}
+	}
+
+	return $this->render('file/booking.email.html.twig',
+	array('userContext' => $userContext, 'file' => $file, 'form' => $form->createView()));
 	}
 }

@@ -20,7 +20,7 @@ class QueryBookingType extends AbstractType
 			'label' => 'period.type',
 			'translation_domain' => 'messages',
 			'choices' => array('NO' => 'NO', 'BETWEEN' => 'BETWEEN', 'AFTER' => 'AFTER', 'BEFORE' => 'BEFORE', 'SYSDATE' => 'SYSDATE', 'AFTER.SYSDATE' => 'AFTER.SYSDATE', 'BEFORE.SYSDATE' => 'BEFORE.SYSDATE'),
-			'choice_label' => function ($value, $key, $index) { return 'period.type.'.$key; }
+			'choice_label' => function ($value, $key, $index) { return 'queryBooking.period.type.'.$key; }
         ))
 		->add('beginningDate', DateType::class, array('label' => 'from', 'translation_domain' => 'messages',
 			'widget' => 'single_text', 'html5' => false, 'format' => 'dd/MM/yyyy', 'attr' => ['class' => 'datepicker']))

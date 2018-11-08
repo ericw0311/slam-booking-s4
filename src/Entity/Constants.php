@@ -85,4 +85,8 @@ class Constants
 
 	// Couleurs d'affichage des réservations dans le calendrier
 	const CALENDAR_COLOR = array('success' => '#dff0d8', 'warning' => '#fcf8e3', 'info' => '#d9edf7', 'danger' => '#f2dede');
+
+	// Valeurs par défaut d'envoi de mail lors de la saisie/mise à jour/suppression des réservations (aux administrateurs du dossier et aux utilisateurs de la réservation)
+	const BOOKING_MAIL_ADMINISTRATOR = true;
+	const BOOKING_MAIL_USER = false;
 }

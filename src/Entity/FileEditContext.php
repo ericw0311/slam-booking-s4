@@ -2,6 +2,8 @@
 // Utilisé pour la page d'édition du dossier
 namespace App\Entity;
 
+use App\Api\AdministrationApi;
+
 class FileEditContext
 {
 	protected $userFilesCount;
@@ -9,6 +11,8 @@ class FileEditContext
     protected $labelsCount;
     protected $resourcesCount;
     protected $bookingsCount;
+	protected $fileAdministrator;
+	protected $bookingUser;
 
     public function setUserFilesCount($userFilesCount)
     {
@@ -65,6 +69,28 @@ class FileEditContext
     return $this->bookingsCount;
     }
 
+	public function getFileAdministrator()
+	{
+	return $this->fileAdministrator;
+	}
+
+	public function setFileAdministrator($fileAdministrator)
+	{
+	$this->fileAdministrator = $fileAdministrator;
+	return $this;
+	}
+
+	public function getBookingUser()
+	{
+	return $this->bookingUser;
+	}
+
+	public function setBookingUser($bookingUser): self
+	{
+	$this->bookingUser = $bookingUser;
+	return $this;
+	}
+
     function __construct($em, \App\Entity\File $file)
     {
     $ufRepository = $em->getRepository(UserFile::class);
@@ -81,5 +107,9 @@ class FileEditContext
 
     $bRepository = $em->getRepository(Booking::class);
     $this->setBookingsCount($bRepository->getAllBookingsCount($file));
+
+
+    $this->setFileAdministrator(AdministrationApi::getFileBookingEmailAdministrator($em, $file));
+	$this->setBookingUser(AdministrationApi::getFileBookingEmailUser($em, $file));
     }
 }

@@ -92,6 +92,7 @@ class User implements UserInterface, \Serializable
         $this->bookingLines = new ArrayCollection();
         $this->bookingLabels = new ArrayCollection();
         $this->queryBookings = new ArrayCollection();
+        $this->fileParameters = new ArrayCollection();
     }
 
     public function getId()
@@ -335,6 +336,11 @@ class User implements UserInterface, \Serializable
   * @ORM\OneToMany(targetEntity="App\Entity\QueryBooking", mappedBy="user", orphanRemoval=true)
   */
  private $queryBookings;
+
+ /**
+  * @ORM\OneToMany(targetEntity="App\Entity\FileParameter", mappedBy="user", orphanRemoval=true)
+  */
+ private $fileParameters;
 
 
 
@@ -839,6 +845,37 @@ class User implements UserInterface, \Serializable
                 $queryBooking->setUser(null);
             }
         }
+        return $this;
+    }
+
+    /**
+     * @return Collection|FileParameter[]
+     */
+    public function getFileParameters(): Collection
+    {
+        return $this->fileParameters;
+    }
+
+    public function addFileParameter(FileParameter $fileParameter): self
+    {
+        if (!$this->fileParameters->contains($fileParameter)) {
+            $this->fileParameters[] = $fileParameter;
+            $fileParameter->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFileParameter(FileParameter $fileParameter): self
+    {
+        if ($this->fileParameters->contains($fileParameter)) {
+            $this->fileParameters->removeElement($fileParameter);
+            // set the owning side to null (unless already changed)
+            if ($fileParameter->getUser() === $this) {
+                $fileParameter->setUser(null);
+            }
+        }
+
         return $this;
     }
 }

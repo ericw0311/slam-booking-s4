@@ -114,6 +114,10 @@ dashboard.singular: Dashboard
 file.ask.delete: Do you really want to delete file %name% ?
 file.back: Back to file
 file.back.to.list: Back to file list
+file.booking.email: Bookings emails
+file.booking.email.administrator: Send an email to file administrators
+file.booking.email.updated.ok: The email indicators have been updated
+file.booking.email.user: Send an email to booking users
 file.create: Create a file
 file.created.by: File created by
 file.created.ok: The file has been created
@@ -154,15 +158,6 @@ note: Note
 note.enter: Saisir une note
 note.no: Pas de note
 note.update: Modifier la note
-
-period.type: Period
-period.type.AFTER: After a day
-period.type.AFTER.SYSDATE: After current day
-period.type.BEFORE: Before a day
-period.type.BEFORE.SYSDATE: Before current day
-period.type.BETWEEN: Between two days
-period.type.NO: No period
-period.type.SYSDATE: Current date
 
 planification.ask.delete: Do you really want to delete planification %name% ?
 planification.back: Back to planification
@@ -212,6 +207,14 @@ queryBooking.created.ok: The query has been created
 queryBooking.deleted.ok: The query has been deleted
 queryBooking.name: Query name
 queryBooking.new: New query
+queryBooking.period.type: Period
+queryBooking.period.type.AFTER: After a day
+queryBooking.period.type.AFTER.SYSDATE: After current day
+queryBooking.period.type.BEFORE: Before a day
+queryBooking.period.type.BEFORE.SYSDATE: Before current day
+queryBooking.period.type.BETWEEN: Between two days
+queryBooking.period.type.NO: No period
+queryBooking.period.type.SYSDATE: Current date
 queryBooking.plural: Queries
 queryBooking.singular: Query
 queryBooking.updated.ok: The query has been updated

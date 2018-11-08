@@ -114,6 +114,10 @@ dashboard.singular: Tableau de bord
 file.ask.delete: Voulez-vous vraiment supprimer le dossier %name% ?
 file.back: Retour au dossier
 file.back.to.list: Retour à la liste des dossiers
+file.booking.email: Emails à la saisie des réservations
+file.booking.email.administrator: Envoyer un mail aux administrateurs du dossier
+file.booking.email.updated.ok: Les indicateurs d'envoi des mails ont bien été modifiés
+file.booking.email.user: Envoyer un mail aux utilisateurs de la réservation
 file.create: Créer un dossier
 file.created.by: Dossier créé par
 file.created.ok: Le dossier a bien été créé
@@ -154,15 +158,6 @@ note: Note
 note.enter: Saisir une note
 note.no: Pas de note
 note.update: Modifier la note
-
-period.type: Période
-period.type.AFTER: Au dela d'une date
-period.type.AFTER.SYSDATE: Au dela de la date du jour
-period.type.BEFORE: Avant une date
-period.type.BEFORE.SYSDATE: Avant la date du jour
-period.type.BETWEEN: Entre deux dates
-period.type.NO: Pas de période
-period.type.SYSDATE: Date du jour
 
 planification.ask.delete: Voulez-vous vraiment supprimer la planification %name% ?
 planification.back: Retour à la planification
@@ -212,6 +207,14 @@ queryBooking.created.ok: La requête a bien été créée
 queryBooking.deleted.ok: La requête a bien été supprimée
 queryBooking.name: Nom de requête
 queryBooking.new: Nouvelle requête
+queryBooking.period.type: Période
+queryBooking.period.type.AFTER: Au dela d'une date
+queryBooking.period.type.AFTER.SYSDATE: Au dela de la date du jour
+queryBooking.period.type.BEFORE: Avant une date
+queryBooking.period.type.BEFORE.SYSDATE: Avant la date du jour
+queryBooking.period.type.BETWEEN: Entre deux dates
+queryBooking.period.type.NO: Pas de période
+queryBooking.period.type.SYSDATE: Date du jour
 queryBooking.plural: Requêtes
 queryBooking.singular: Requête
 queryBooking.updated.ok: La requête a bien été modifiée

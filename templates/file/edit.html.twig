@@ -2,7 +2,13 @@
  
 {% block body %}
 
-<legend><img src="{{ asset('images/file-32.png') }}"></img>&nbsp;{{ file.name }}</legend>
+<legend><img src="{{ asset('images/file-32.png') }}"></img>&nbsp;{{ file.name }}&nbsp;
+{% if file.user.id != userContext.user.id %}
+	<button type="button" class="glyphicon glyphicon-pencil btn-link" style="color:red" data-toggle="modal" data-target="#unaCreator"></button>
+{% else %}
+	<a href="{{ path('file_modify', { 'fileID': file.ID }) }}" class="glyphicon glyphicon-pencil" title="{{ 'modify'|trans }}"></a>
+{% endif %}
+</legend>
 
 <p><img src="{{ asset('images/administrator-32.png') }}"></img>&nbsp;{{ 'file.created.by'|trans }}&nbsp;{{ file.user.getFirstAndLastName() }}</p>
 
@@ -14,15 +20,22 @@
 {% endif %}
 </div>
 
+<p>&nbsp;</p>
+<legend><span class="glyphicon glyphicon-envelope"></span>&nbsp;{{ 'file.booking.email'|trans }}
+{% if file.user.id == userContext.user.id %}
+	<a href="{{ path('file_booking_email', { 'fileID': file.ID }) }}" class="glyphicon glyphicon-pencil" title="{{ 'modify'|trans }}"></a>
+{% endif %}
+</legend>
+
+{% if fileEditContext.fileAdministrator %} {% set image = 'green-check-32.png' %} {% else %} {% set image = 'red-cross-32.png' %} {% endif %}
+<p><img src="{{ asset('images/' ~ image) }}">&nbsp;{{ 'file.booking.email.administrator'|trans }}</p>
+
+{% if fileEditContext.bookingUser %} {% set image = 'green-check-32.png' %} {% else %} {% set image = 'red-cross-32.png' %} {% endif %}
+<p><img src="{{ asset('images/' ~ image) }}">&nbsp;{{ 'file.booking.email.user'|trans }}</p>
+
 <div class="btn-group sb-margin-top">
 
 <a href="{{ path('file', { 'page': 1 }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'file.back.to.list'|trans }}</a>
-
-{% if file.user.id != userContext.user.id %}
-	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#unaCreator"><span class="glyphicon glyphicon-pencil"></span> <del>{{ 'modify'|trans }}</del></button>
-{% else %}
-	<a href="{{ path('file_modify', { 'fileID': file.ID }) }}" class="btn btn-primary"><i class="glyphicon glyphicon-pencil"></i> {{ 'modify'|trans }}</a>
-{% endif %}
 
 {% if file.user.id != userContext.user.id %}
 	<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#dnaCreator"><span class="glyphicon glyphicon-trash"></span> <del>{{ 'delete'|trans }}</del></button>
