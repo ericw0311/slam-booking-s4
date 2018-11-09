@@ -33,6 +33,13 @@
 {% if fileEditContext.bookingUser %} {% set image = 'green-check-32.png' %} {% else %} {% set image = 'red-cross-32.png' %} {% endif %}
 <p><img src="{{ asset('images/' ~ image) }}">&nbsp;{{ 'file.booking.email.user'|trans }}</p>
 
+<p>&nbsp;</p>
+<legend><span class="glyphicon glyphicon-calendar"></span>&nbsp;{{ 'file.booking.period'|trans }}
+{% if file.user.id == userContext.user.id %}
+	<a href="{{ path('file_booking_period', { 'fileID': file.ID }) }}" class="glyphicon glyphicon-pencil" title="{{ 'modify'|trans }}"></a>
+{% endif %}
+</legend>
+
 <div class="btn-group sb-margin-top">
 
 <a href="{{ path('file', { 'page': 1 }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'file.back.to.list'|trans }}</a>

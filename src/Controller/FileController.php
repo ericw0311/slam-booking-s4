@@ -19,9 +19,11 @@ use App\Entity\Label;
 use App\Entity\UserParameterNLC;
 use App\Entity\UserParameter;
 use App\Entity\FileBookingEmail;
+use App\Entity\FileBookingPeriod;
 
 use App\Form\FileType;
 use App\Form\FileBookingEmailType;
+use App\Form\FileBookingPeriodType;
 use App\Form\UserParameterNLCType;
 
 use App\Api\AdministrationApi;
@@ -251,7 +253,7 @@ class FileController extends Controller
 	array('userContext' => $userContext, 'file' => $file, 'page' => $page, 'form' => $form->createView()));
 	}
 
-	// Met à jour le nombre de lignes et colonnes d'affichage des listes
+	// Met à jour les indicateurs d'envoi des mails à la saisie des réservations
 	/**
      * @Route("/file/bookingemail/{fileID}", name="file_booking_email")
      * @ParamConverter("file", options={"mapping": {"fileID": "id"}})
@@ -282,6 +284,49 @@ class FileController extends Controller
 	}
 
 	return $this->render('file/booking.email.html.twig',
+	array('userContext' => $userContext, 'file' => $file, 'form' => $form->createView()));
+	}
+
+	// Met à jour les informations de période de réservation
+	/**
+     * @Route("/file/bookingperiod/{fileID}", name="file_booking_period")
+     * @ParamConverter("file", options={"mapping": {"fileID": "id"}})
+     */
+	public function booking_period(Request $request, File $file)
+	{
+	$connectedUser = $this->getUser();
+	$em = $this->getDoctrine()->getManager();
+
+	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+	$before = AdministrationApi::getFileBookingPeriodBefore($em, $file);
+	$beforeType = AdministrationApi::getFileBookingPeriodBeforeType($em, $file);
+	$beforeNumber = AdministrationApi::getFileBookingPeriodBeforeNumber($em, $file);
+	$after = AdministrationApi::getFileBookingPeriodAfter($em, $file);
+	$afterType = AdministrationApi::getFileBookingPeriodAfterType($em, $file);
+	$afterNumber = AdministrationApi::getFileBookingPeriodAfterNumber($em, $file);
+
+	$fileBookingPeriod = new FileBookingPeriod($before, $beforeType, $beforeNumber, $after, $afterType, $afterNumber);
+	$form = $this->createForm(FileBookingPeriodType::class, $fileBookingPeriod);
+
+	if ($request->isMethod('POST')) {
+		$form->submit($request->request->get($form->getName()));
+
+		if ($form->isSubmitted() && $form->isValid()) {
+
+			AdministrationApi::setFileBookingPeriodBefore($em, $connectedUser, $file, $fileBookingPeriod->getBefore());
+			AdministrationApi::setFileBookingPeriodBeforeType($em, $connectedUser, $file, $fileBookingPeriod->getBeforeType());
+			AdministrationApi::setFileBookingPeriodBeforeNumber($em, $connectedUser, $file, $fileBookingPeriod->getBeforeNumber());
+			AdministrationApi::setFileBookingPeriodAfter($em, $connectedUser, $file, $fileBookingPeriod->getAfter());
+			AdministrationApi::setFileBookingPeriodAfterType($em, $connectedUser, $file, $fileBookingPeriod->getAfterType());
+			AdministrationApi::setFileBookingPeriodAfterNumber($em, $connectedUser, $file, $fileBookingPeriod->getAfterNumber());
+
+			$request->getSession()->getFlashBag()->add('notice', 'file.booking.period.updated.ok');
+			return $this->redirectToRoute('file_edit', array('fileID' => $file->getId()));
+		}
+	}
+
+	return $this->render('file/booking.period.html.twig',
 	array('userContext' => $userContext, 'file' => $file, 'form' => $form->createView()));
 	}
 }

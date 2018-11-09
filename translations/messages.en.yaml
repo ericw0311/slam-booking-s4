@@ -118,6 +118,16 @@ file.booking.email: Bookings emails
 file.booking.email.administrator: Send an email to file administrators
 file.booking.email.updated.ok: The email indicators have been updated
 file.booking.email.user: Send an email to booking users
+file.booking.period: Booking period
+file.booking.period.after: Restrict booking period after current date
+file.booking.period.before: Restrict booking period before current date
+file.booking.period.number: Duration
+file.booking.period.type: Period
+file.booking.period.type.DAY: Days
+file.booking.period.type.MONTH: Months
+file.booking.period.type.WEEK: Weeks
+file.booking.period.type.YEAR: Years
+file.booking.period.updated.ok: The booking period have been updated
 file.create: Create a file
 file.created.by: File created by
 file.created.ok: The file has been created
@@ -131,7 +141,7 @@ file.new: New file
 file.plural: Files
 file.set.as.current: Set as current file
 file.singular: File
-file.update.not.allowed: Only the creator of the file ia allowed to update it
+file.una.creator: Only the creator of the file ia allowed to update it
 file.updated.ok: The file has been updated
 
 label: Label

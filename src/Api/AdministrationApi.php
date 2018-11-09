@@ -207,4 +207,166 @@ class AdministrationApi
 
 	return $bookingUser;
 	}
+
+	// Met à jour l'indicateur: Restriction de période de réservation avant la date du jour.
+	static function setFileBookingPeriodBefore($em, \App\Entity\User $user, \App\Entity\File $file, $before)
+	{
+	$fpRepository = $em->getRepository(FileParameter::class);
+
+	$fileParameter = $fpRepository->findOneBy(array('file' => $file, 'parameterGroup' => 'booking.period', 'parameter' => 'before'));
+	if ($fileParameter != null) {
+		$fileParameter->setSBBooleanValue($before);
+	} else { 
+		$fileParameter = new FileParameter($user, $file, 'booking.period', 'before');
+		$fileParameter->setSBBooleanValue($before);
+		$em->persist($fileParameter);
+	}
+	$em->flush();
+	}
+
+	// Retourne l'indicateur: Restriction de période de réservation avant la date du jour.
+	static function getFileBookingPeriodBefore($em, \App\Entity\File $file)
+	{
+	$fpRepository = $em->getRepository(FileParameter::class);
+
+	$fileParameter = $fpRepository->findOneBy(array('file' => $file, 'parameterGroup' => 'booking.period', 'parameter' => 'before'));
+	if ($fileParameter != null) { $before = $fileParameter->getBooleanValue(); } else { $before =  constant(Constants::class.'::BOOKING_PERIOD_BEFORE'); }
+
+	return $before;
+	}
+
+	// Met à jour le type de restriction de période de réservation avant la date du jour.
+	static function setFileBookingPeriodBeforeType($em, \App\Entity\User $user, \App\Entity\File $file, $beforeType)
+	{
+	$fpRepository = $em->getRepository(FileParameter::class);
+
+	$fileParameter = $fpRepository->findOneBy(array('file' => $file, 'parameterGroup' => 'booking.period', 'parameter' => 'before.type'));
+	if ($fileParameter != null) {
+		$fileParameter->setSBStringValue($beforeType);
+	} else { 
+		$fileParameter = new FileParameter($user, $file, 'booking.period', 'before.type');
+		$fileParameter->setSBStringValue($beforeType);
+		$em->persist($fileParameter);
+	}
+	$em->flush();
+	}
+
+	// Retourne le type de restriction de période de réservation avant la date du jour.
+	static function getFileBookingPeriodBeforeType($em, \App\Entity\File $file)
+	{
+	$fpRepository = $em->getRepository(FileParameter::class);
+
+	$fileParameter = $fpRepository->findOneBy(array('file' => $file, 'parameterGroup' => 'booking.period', 'parameter' => 'before.type'));
+	if ($fileParameter != null) { $beforeType = $fileParameter->getStringValue(); } else { $beforeType =  constant(Constants::class.'::BOOKING_PERIOD_BEFORE_TYPE'); }
+
+	return $beforeType;
+	}
+
+	// Met à jour le nombre associé à la restriction de période de réservation avant la date du jour.
+	static function setFileBookingPeriodBeforeNumber($em, \App\Entity\User $user, \App\Entity\File $file, $beforeNumber)
+	{
+	$fpRepository = $em->getRepository(FileParameter::class);
+
+	$fileParameter = $fpRepository->findOneBy(array('file' => $file, 'parameterGroup' => 'booking.period', 'parameter' => 'before.number'));
+	if ($fileParameter != null) {
+		$fileParameter->setSBIntegerValue($beforeNumber);
+	} else { 
+		$fileParameter = new FileParameter($user, $file, 'booking.period', 'before.number');
+		$fileParameter->setSBIntegerValue($beforeNumber);
+		$em->persist($fileParameter);
+	}
+	$em->flush();
+	}
+
+	// Retourne le nombre associé à la restriction de période de réservation avant la date du jour.
+	static function getFileBookingPeriodBeforeNumber($em, \App\Entity\File $file)
+	{
+	$fpRepository = $em->getRepository(FileParameter::class);
+
+	$fileParameter = $fpRepository->findOneBy(array('file' => $file, 'parameterGroup' => 'booking.period', 'parameter' => 'before.number'));
+	if ($fileParameter != null) { $beforeNumber = $fileParameter->getIntegerValue(); } else { $beforeNumber =  constant(Constants::class.'::BOOKING_PERIOD_BEFORE_NUMBER'); }
+
+	return $beforeNumber;
+	}
+
+	// Met à jour l'indicateur: Restriction de période de réservation après la date du jour.
+	static function setFileBookingPeriodAfter($em, \App\Entity\User $user, \App\Entity\File $file, $after)
+	{
+	$fpRepository = $em->getRepository(FileParameter::class);
+
+	$fileParameter = $fpRepository->findOneBy(array('file' => $file, 'parameterGroup' => 'booking.period', 'parameter' => 'after'));
+	if ($fileParameter != null) {
+		$fileParameter->setSBBooleanValue($after);
+	} else { 
+		$fileParameter = new FileParameter($user, $file, 'booking.period', 'after');
+		$fileParameter->setSBBooleanValue($after);
+		$em->persist($fileParameter);
+	}
+	$em->flush();
+	}
+
+	// Retourne l'indicateur: Restriction de période de réservation après la date du jour.
+	static function getFileBookingPeriodAfter($em, \App\Entity\File $file)
+	{
+	$fpRepository = $em->getRepository(FileParameter::class);
+
+	$fileParameter = $fpRepository->findOneBy(array('file' => $file, 'parameterGroup' => 'booking.period', 'parameter' => 'after'));
+	if ($fileParameter != null) { $after = $fileParameter->getBooleanValue(); } else { $after =  constant(Constants::class.'::BOOKING_PERIOD_AFTER'); }
+
+	return $after;
+	}
+
+	// Met à jour le type de restriction de période de réservation après la date du jour.
+	static function setFileBookingPeriodAfterType($em, \App\Entity\User $user, \App\Entity\File $file, $afterType)
+	{
+	$fpRepository = $em->getRepository(FileParameter::class);
+
+	$fileParameter = $fpRepository->findOneBy(array('file' => $file, 'parameterGroup' => 'booking.period', 'parameter' => 'after.type'));
+	if ($fileParameter != null) {
+		$fileParameter->setSBStringValue($afterType);
+	} else { 
+		$fileParameter = new FileParameter($user, $file, 'booking.period', 'after.type');
+		$fileParameter->setSBStringValue($afterType);
+		$em->persist($fileParameter);
+	}
+	$em->flush();
+	}
+
+	// Retourne le type de restriction de période de réservation après la date du jour.
+	static function getFileBookingPeriodAfterType($em, \App\Entity\File $file)
+	{
+	$fpRepository = $em->getRepository(FileParameter::class);
+
+	$fileParameter = $fpRepository->findOneBy(array('file' => $file, 'parameterGroup' => 'booking.period', 'parameter' => 'after.type'));
+	if ($fileParameter != null) { $afterType = $fileParameter->getStringValue(); } else { $afterType =  constant(Constants::class.'::BOOKING_PERIOD_AFTER_TYPE'); }
+
+	return $afterType;
+	}
+
+	// Met à jour le nombre associé à la restriction de période de réservation après la date du jour.
+	static function setFileBookingPeriodAfterNumber($em, \App\Entity\User $user, \App\Entity\File $file, $afterNumber)
+	{
+	$fpRepository = $em->getRepository(FileParameter::class);
+
+	$fileParameter = $fpRepository->findOneBy(array('file' => $file, 'parameterGroup' => 'booking.period', 'parameter' => 'after.number'));
+	if ($fileParameter != null) {
+		$fileParameter->setSBIntegerValue($afterNumber);
+	} else { 
+		$fileParameter = new FileParameter($user, $file, 'booking.period', 'after.number');
+		$fileParameter->setSBIntegerValue($afterNumber);
+		$em->persist($fileParameter);
+	}
+	$em->flush();
+	}
+
+	// Retourne le nombre associé à la restriction de période de réservation après la date du jour.
+	static function getFileBookingPeriodAfterNumber($em, \App\Entity\File $file)
+	{
+	$fpRepository = $em->getRepository(FileParameter::class);
+
+	$fileParameter = $fpRepository->findOneBy(array('file' => $file, 'parameterGroup' => 'booking.period', 'parameter' => 'after.number'));
+	if ($fileParameter != null) { $afterNumber = $fileParameter->getIntegerValue(); } else { $afterNumber =  constant(Constants::class.'::BOOKING_PERIOD_AFTER_NUMBER'); }
+
+	return $afterNumber;
+	}
 }

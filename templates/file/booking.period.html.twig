@@ -1,0 +1,27 @@
+{# templates/file/booking.period.html.twig #}
+
+{% extends 'base.connected.html.twig' %}
+ 
+{% block body %}
+
+{{ form_start(form, {'action': path('file_booking_period', { 'fileID': file.ID }), 'method': 'POST', 'class': 'form-horizontal'}) }}
+
+<fieldset>
+	<legend><i class="glyphicon glyphicon-calendar"></i>&nbsp;{{ 'file.booking.period'|trans }}</legend>
+	{{ form_row(form.before) }}
+	{{ form_row(form.beforeNumber) }}
+	{{ form_row(form.beforeType) }}
+	{{ form_row(form.after) }}
+	{{ form_row(form.afterNumber) }}
+	{{ form_row(form.afterType) }}
+	{{ form_rest(form) }}
+</fieldset>
+
+<div class="btn-group">
+	<a href="{{ path('file_edit', { 'fileID': file.ID }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
+	<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> {{ 'validate'|trans }}</button>
+</div>
+
+{{ form_end(form) }}
+
+{% endblock %}

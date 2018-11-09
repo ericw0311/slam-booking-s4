@@ -89,4 +89,14 @@ class Constants
 	// Valeurs par défaut d'envoi de mail lors de la saisie/mise à jour/suppression des réservations (aux administrateurs du dossier et aux utilisateurs de la réservation)
 	const BOOKING_MAIL_ADMINISTRATOR = true;
 	const BOOKING_MAIL_USER = false;
+
+	// Valeurs par défaut de réstriction de période de réservation avant la date du jour.
+	const BOOKING_PERIOD_BEFORE = true;
+	const BOOKING_PERIOD_BEFORE_TYPE = 'DAY';
+	const BOOKING_PERIOD_BEFORE_NUMBER = 1;
+
+	// Valeurs par défaut de réstriction de période de réservation après la date du jour.
+	const BOOKING_PERIOD_AFTER = false;
+	const BOOKING_PERIOD_AFTER_TYPE = 'WEEK';
+	const BOOKING_PERIOD_AFTER_NUMBER = 2;
 }
