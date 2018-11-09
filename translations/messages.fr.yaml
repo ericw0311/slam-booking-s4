@@ -119,8 +119,12 @@ file.booking.email.administrator: Envoyer un mail aux administrateurs du dossier
 file.booking.email.updated.ok: Les indicateurs d'envoi des mails ont bien été modifiés
 file.booking.email.user: Envoyer un mail aux utilisateurs de la réservation
 file.booking.period: Période de réservation
-file.booking.period.after: Restreindre la période de réservation après la date du jour
-file.booking.period.before: Restreindre la période de réservation avant la date du jour
+file.booking.period.after.1: Restreindre la période de réservation après la date du jour
+file.booking.period.after.2: Restriction après la date du jour
+file.booking.period.after.3: Pas de restriction après la date du jour
+file.booking.period.before.1: Restreindre la période de réservation avant la date du jour
+file.booking.period.before.2: Restriction avant la date du jour
+file.booking.period.before.3: Pas de restriction avant la date du jour
 file.booking.period.number: Durée
 file.booking.period.type: Période
 file.booking.period.type.DAY: Jours

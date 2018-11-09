@@ -40,6 +40,22 @@
 {% endif %}
 </legend>
 
+<p><img src="{{ asset('images/before-40.png') }}"></span>&nbsp;
+{% if fileEditContext.before %}
+{{ 'file.booking.period.before.2'|trans }}:&nbsp;{{ fileEditContext.beforeNumber }}&nbsp;{{ ('file.booking.period.type.' ~ fileEditContext.beforeType)|trans }}
+{% else %}
+{{ 'file.booking.period.before.3'|trans }}
+{% endif %}
+</p>
+
+<p><img src="{{ asset('images/after-40.png') }}"></span>&nbsp;
+{% if fileEditContext.after %}
+{{ 'file.booking.period.after.2'|trans }}:&nbsp;{{ fileEditContext.afterNumber }}&nbsp;{{ ('file.booking.period.type.' ~ fileEditContext.afterType)|trans }}
+{% else %}
+{{ 'file.booking.period.after.3'|trans }}
+{% endif %}
+</p>
+
 <div class="btn-group sb-margin-top">
 
 <a href="{{ path('file', { 'page': 1 }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'file.back.to.list'|trans }}</a>

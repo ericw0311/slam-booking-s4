@@ -119,8 +119,12 @@ file.booking.email.administrator: Send an email to file administrators
 file.booking.email.updated.ok: The email indicators have been updated
 file.booking.email.user: Send an email to booking users
 file.booking.period: Booking period
-file.booking.period.after: Restrict booking period after current date
-file.booking.period.before: Restrict booking period before current date
+file.booking.period.after.1: Restrict booking period after current date
+file.booking.period.after.2: Restriction after current date
+file.booking.period.after.3: No restriction after current date
+file.booking.period.before.1: Restrict booking period before current date
+file.booking.period.before.2: Restriction before current date
+file.booking.period.before.3: No restriction before current date
 file.booking.period.number: Duration
 file.booking.period.type: Period
 file.booking.period.type.DAY: Days
