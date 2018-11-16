@@ -82,9 +82,11 @@
 
 <a href="{{ path('planning_one_pp', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': date|date('Ymd') }) }}" title="{{ 'planning.stretched.out'|trans }}"><span class="glyphicon glyphicon-resize-full"></span></a>
 
-</legend>
+{% if planningContext.before or planningContext.after %}
+<button type="button" class="glyphicon glyphicon-alert btn-link" style="color:red" data-toggle="modal" data-target="#bpAlert"></button>
+{% endif %}
 
-<p style="color:red">du {{ dateLongue(planningContext.firstBookingDate) }} au {{ dateLongue(planningContext.lastBookingDate) }}</span>
+</legend>
 
 <div class="row">
 
@@ -103,5 +105,20 @@
 {{ form_end(form) }}
 
 {{ include('planning/modal.html.twig') }}
+
+{% endblock %}
+
+{% block message %}
+
+<div class="col-sm-12">
+
+{% for flash_message in app.session.flashBag.get('notice') %}
+<div class="alert alert-success sb-message">
+	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+	{{ flash_message|trans }}
+</div>
+{% endfor %}
+
+</div>
 
 {% endblock %}

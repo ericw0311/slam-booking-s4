@@ -59,6 +59,10 @@
 
 <a href="{{ path('planning_many_pp', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': date|date('Ymd') }) }}" title="{{ 'planning.global'|trans }}"><span class="glyphicon glyphicon-resize-small"></span></a>
 
+{% if planningContext.before or planningContext.after %}
+<button type="button" class="glyphicon glyphicon-alert btn-link" style="color:red" data-toggle="modal" data-target="#bpAlert"></button>
+{% endif %}
+
 </legend>
 
 <div class="row">
@@ -66,7 +70,7 @@
 {% for j in 1..planningContext.numberColumns %}
     <div class="col-sm-{{ (12/planningContext.numberColumns) }}">
 {% for i in 1..planningContext.numberLines %}
-{{ include('planning/opened.html.twig', { 'booking_create': 'booking_one_create', 'booking_update': 'booking_one_init_update', 'booking_delete': 'booking_one_delete', 'day_key': (i ~ '-' ~ j) }) }}
+{{ include('planning/day.html.twig', { 'booking_create': 'booking_one_create', 'booking_update': 'booking_one_init_update', 'booking_delete': 'booking_one_delete', 'day_key': (i ~ '-' ~ j) }) }}
 {% endfor %}
     </div>
 {% endfor %}
@@ -76,5 +80,20 @@
 {{ form_end(form) }}
 
 {{ include('planning/modal.html.twig') }}
+
+{% endblock %}
+
+{% block message %}
+
+<div class="col-sm-12">
+
+{% for flash_message in app.session.flashBag.get('notice') %}
+<div class="alert alert-success sb-message">
+	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+	{{ flash_message|trans }}
+</div>
+{% endfor %}
+
+</div>
 
 {% endblock %}

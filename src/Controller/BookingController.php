@@ -338,9 +338,9 @@ class BookingController extends Controller
 	 * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
 	 * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
      */
-    public function many_validate_create(Request $request, LoggerInterface $logger, \Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID)
+    public function many_validate_create(Request $request, LoggerInterface $logger, \Swift_Mailer $mailer, \Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID)
     {
-	return BookingController::validate_create($request, $logger, $planningDate, $planification, $planificationPeriod, $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, 1);
+	return BookingController::validate_create($request, $logger, $mailer, $planningDate, $planification, $planificationPeriod, $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, 1);
     }
 
     // Validation de la création d'une réservation
@@ -351,13 +351,13 @@ class BookingController extends Controller
 	 * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
 	 * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
      */
-    public function one_validate_create(Request $request, LoggerInterface $logger, \Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID)
+    public function one_validate_create(Request $request, LoggerInterface $logger, \Swift_Mailer $mailer, \Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID)
     {
-	return BookingController::validate_create($request, $logger, $planningDate, $planification, $planificationPeriod, $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, 0);
+	return BookingController::validate_create($request, $logger, $mailer, $planningDate, $planification, $planificationPeriod, $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, 0);
     }
 
 	// Validation de la création d'une réservation
-    public function validate_create(Request $request, LoggerInterface $logger, \Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, $many)
+    public function validate_create(Request $request, LoggerInterface $logger, \Swift_Mailer $mailer, \Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, $many)
     {
 	$logger->info('DBG 1');
 	$connectedUser = $this->getUser();
@@ -430,6 +430,16 @@ class BookingController extends Controller
 		$em->persist($bookingLabel);
 	}
 	$em->flush();
+
+	$message = (new \Swift_Message('Nouvelle réservation'))
+				->setFrom('slam.booking.web@gmail.com')
+				->setTo('eric.pierre.willard@gmail.com')
+				->setBody(
+					$this->renderView('emails/booking.html.twig',
+						array('booking' => $booking)),
+						'text/html');
+	$mailer->send($message);
+
 	$request->getSession()->getFlashBag()->add('notice', 'booking.created.ok');
 
 	return $this->redirectToRoute('planning_'.($many ? 'many' : 'one').'_pp',

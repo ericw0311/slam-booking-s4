@@ -103,8 +103,12 @@ booking.create: Book
 booking.created.ok: The booking has been created
 booking.deleted.ok: The booking has been deleted
 booking.in.progress: Bookings in progress
+booking.period: Booking period
 booking.period.beginning.update: Modify beginning period
 booking.period.end.update: Modify end period
+booking.period.from: Bookings allowed from %firstBookingDate%
+booking.period.from.until: Bookings allowed from %firstBookingDate% until %lastBookingDate%
+booking.period.until: Bookings allowed until %lastBookingDate%
 booking.plural: Bookings
 booking.singular: Booking
 booking.updated.ok: The booking has been updated

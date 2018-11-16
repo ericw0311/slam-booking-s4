@@ -6,7 +6,7 @@
 			<h4 class="modal-title">{{ 'booking.not.allowed'|trans }}</h4>
 		</div>
 		<div class="modal-body">
-			<p>{{ 'booking.bna.before'|trans({'%firstBookingDate%': dateCourte(planningContext.firstBookingDate)}) }}</p>
+			<p>{{ 'booking.bna.before'|trans({'%firstBookingDate%': dateLongue(planningContext.firstBookingDate)}) }}</p>
 		</div>
 		<div class="modal-footer">
 			<button type="button" class="btn btn-default" data-dismiss="modal">{{ 'close'|trans }}</button>
@@ -23,7 +23,33 @@
 			<h4 class="modal-title">{{ 'booking.not.allowed'|trans }}</h4>
 		</div>
 		<div class="modal-body">
-			<p>{{ 'booking.bna.after'|trans({'%lastBookingDate%': dateCourte(planningContext.lastBookingDate)}) }}</p>
+			<p>{{ 'booking.bna.after'|trans({'%lastBookingDate%': dateLongue(planningContext.lastBookingDate)}) }}</p>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">{{ 'close'|trans }}</button>
+		</div>
+	</div>
+</div>
+</div>
+
+<!-- Booking period alert -->
+<div id="bpAlert" class="modal fade" role="dialog">
+<div class="modal-dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">&times;</button>
+			<h4 class="modal-title">{{ 'booking.period'|trans }}</h4>
+		</div>
+		<div class="modal-body">
+{% if planningContext.before and planningContext.after %}
+			<p>{{ 'booking.period.from.until'|trans({'%firstBookingDate%': dateLongue(planningContext.firstBookingDate), '%lastBookingDate%': dateLongue(planningContext.lastBookingDate)}) }}</p>
+{% elseif planningContext.before %}
+			<p>{{ 'booking.period.from'|trans({'%firstBookingDate%': dateLongue(planningContext.firstBookingDate)}) }}</p>
+{% elseif planningContext.after %}
+			<p>{{ 'booking.period.until'|trans({'%lastBookingDate%': dateLongue(planningContext.lastBookingDate)}) }}</p>
+{% else %}
+			<p>{{ 'booking.period'|trans }}</p>
+{% endif %}
 		</div>
 		<div class="modal-footer">
 			<button type="button" class="btn btn-default" data-dismiss="modal">{{ 'close'|trans }}</button>

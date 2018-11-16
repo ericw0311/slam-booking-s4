@@ -42,7 +42,7 @@
 
 <p><img src="{{ asset('images/before-40.png') }}"></span>&nbsp;
 {% if fileEditContext.before %}
-{{ 'file.booking.period.before.2'|trans }}:&nbsp;{{ fileEditContext.beforeNumber }}&nbsp;{{ ('file.booking.period.type.' ~ fileEditContext.beforeType)|trans }}
+{{ 'file.booking.period.before.2'|trans }}:&nbsp;{{ fileEditContext.beforeNumber }}&nbsp;{{ ('file.booking.period.type.' ~ fileEditContext.beforeType)|trans }}&nbsp;&rarr;&nbsp;{{ dateLongue(fileEditContext.firstBookingDate) }}
 {% else %}
 {{ 'file.booking.period.before.3'|trans }}
 {% endif %}
@@ -50,13 +50,11 @@
 
 <p><img src="{{ asset('images/after-40.png') }}"></span>&nbsp;
 {% if fileEditContext.after %}
-{{ 'file.booking.period.after.2'|trans }}:&nbsp;{{ fileEditContext.afterNumber }}&nbsp;{{ ('file.booking.period.type.' ~ fileEditContext.afterType)|trans }}
+{{ 'file.booking.period.after.2'|trans }}:&nbsp;{{ fileEditContext.afterNumber }}&nbsp;{{ ('file.booking.period.type.' ~ fileEditContext.afterType)|trans }}&nbsp;&rarr;&nbsp;{{ dateLongue(fileEditContext.lastBookingDate) }}
 {% else %}
 {{ 'file.booking.period.after.3'|trans }}
 {% endif %}
 </p>
-
-<p style="color:red">du {{ dateLongue(fileEditContext.firstBookingDate) }} au {{ dateLongue(fileEditContext.lastBookingDate) }}</span>
 
 <div class="btn-group sb-margin-top">
 

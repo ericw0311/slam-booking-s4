@@ -9,8 +9,11 @@ class PlanningContext
 	private $numberLines; // Nombre de lignes pouvant etre affichees sur une page
 	private $numberColumns; // Nombre de colonnes pouvant etre affichees sur une page
 	private $days;
-	private $firstBookingDate;
-	private $lastBookingDate;
+
+	private $before; // Appliquer une restriction avant la date du jour
+	private $after; // Appliquer une restriction après la date du jour
+	private $firstBookingDate; // Première date de réservation autorisée si indicateur before est vrai
+	private $lastBookingDate; // Dernière date de réservation autorisée si indicateur after est vrai
 
 	function __construct($em, \App\Entity\User $user, \App\Entity\File $file, PlanificationPeriod $planificationPeriod, \Datetime $date)
 	{
@@ -20,20 +23,20 @@ class PlanningContext
 	$userParameter = $upRepository->findOneBy(array('user' => $user, 'parameterGroup' => 'planning.number.lines.columns', 'parameter' => 'number.columns'));
 	if ($userParameter != null) { $this->numberColumns = $userParameter->getIntegerValue(); } else { $this->numberColumns = constant(Constants::class.'::PLANNING_DEFAULT_NUMBER_COLUMNS'); }
 
-	$before = AdministrationApi::getFileBookingPeriodBefore($em, $file);
+	$this->before = AdministrationApi::getFileBookingPeriodBefore($em, $file);
 	$beforeType = AdministrationApi::getFileBookingPeriodBeforeType($em, $file);
 	$beforeNumber = AdministrationApi::getFileBookingPeriodBeforeNumber($em, $file);
 
-	$after = AdministrationApi::getFileBookingPeriodAfter($em, $file);
+	$this->after = AdministrationApi::getFileBookingPeriodAfter($em, $file);
 	$afterType = AdministrationApi::getFileBookingPeriodAfterType($em, $file);
 	$afterNumber = AdministrationApi::getFileBookingPeriodAfterNumber($em, $file);
 
-	if ($before) {
+	if ($this->before) {
 		$this->firstBookingDate = PlanningApi::getFirstBookingDate($beforeType, $beforeNumber);
 	} else {
 		$this->firstBookingDate = new \DateTime();
 	}
-	if ($after) {
+	if ($this->after) {
 		$this->lastBookingDate = PlanningApi::getLastBookingDate($afterType, $afterNumber);
 	} else {
 		$this->lastBookingDate = new \DateTime();
@@ -41,21 +44,21 @@ class PlanningContext
 
 	$this->days = array();
 
-	for($i = 1; $i <= $this->getNumberLines(); $i++) {
-		for($j = 1; $j <= $this->getNumberColumns(); $j++) {
+	for($j = 1; $j <= $this->getNumberColumns(); $j++) {
+		for($i = 1; $i <= $this->getNumberLines(); $i++) {
 			$dayKey = $i.'-'.$j;
-			$dayNum = ($i-1)*$this->getNumberColumns() + ($j-1);
+			$dayNum = ($j-1)*$this->getNumberLines() + ($i-1);
 			$dayDate = clone $date;
 			if ($dayNum > 0) {
 				$dayDate->add(new \DateInterval('P'.$dayNum.'D'));
 			}
 			$beforeSign = '+';
-			if ($before) {
+			if ($this->before) {
 				$interval = $this->firstBookingDate->diff($dayDate);
 				$beforeSign = $interval->format('%R');
 			}
 			$afterSign = '+';
-			if ($after) {
+			if ($this->after) {
 				$interval = $dayDate->diff($this->lastBookingDate);
 				$afterSign = $interval->format('%R');
 			}
@@ -102,6 +105,16 @@ class PlanningContext
 	public function getLastDate()
 	{
 	return ($this->getDay($this->getNumberLines().'-'.$this->getNumberColumns())->getDate());
+	}
+
+	public function getBefore()
+	{
+	return $this->before;
+	}
+
+	public function getAfter()
+	{
+	return $this->after;
 	}
 
     public function getFirstBookingDate()

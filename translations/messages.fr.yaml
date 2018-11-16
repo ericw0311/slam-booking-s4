@@ -103,8 +103,12 @@ booking.create: Réserver
 booking.created.ok: La réservation a bien été créée
 booking.deleted.ok: La réservation a bien été supprimée
 booking.in.progress: Les réservations en cours
+booking.period: Période de réservation
 booking.period.beginning.update: Modifier la période de début
 booking.period.end.update: Modifier la période de fin
+booking.period.from: Réservations autorisées à partir du %firstBookingDate%
+booking.period.from.until: Réservations autorisées à partir du %firstBookingDate% jusqu'au %lastBookingDate%
+booking.period.until: Réservations autorisées jusqu'au %lastBookingDate%
 booking.plural: Réservations
 booking.singular: Réservation
 booking.updated.ok: La réservation a bien été modifiée

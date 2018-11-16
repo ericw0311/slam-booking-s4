@@ -1,6 +1,7 @@
-# config/packages/test/swiftmailer.yaml
+# config/packages/swiftmailer.yaml
+
 swiftmailer:
-    disable_delivery: true
+    disable_delivery: false
     transport: smtp
     encryption: tls
     auth_mode: login
