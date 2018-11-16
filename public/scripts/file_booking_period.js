@@ -7,39 +7,39 @@ var afterNumber = document.getElementById('file_booking_period_afterNumber');
 var afterType = document.getElementById('file_booking_period_afterType');
 
 if (before.checked) {
-	beforeNumber.style.visibility = "visible";
-	beforeType.style.visibility = "visible";
+	beforeNumber.disabled = false;
+	beforeType.disabled = false;
 } else {
-	beforeNumber.style.visibility = "hidden";
-	beforeType.style.visibility = "hidden";
+	beforeNumber.disabled = true;
+	beforeType.disabled = true;
 }
 
 if (after.checked) {
-	afterNumber.style.visibility = "visible";
-	afterType.style.visibility = "visible";
+	afterNumber.disabled = false;
+	afterType.disabled = false;
 } else {
-	afterNumber.style.visibility = "hidden";
-	afterType.style.visibility = "hidden";
+	afterNumber.disabled = true;
+	afterType.disabled = true;
 }
 
 before.addEventListener('change', function() {
 	// alert(before.checked);
 	if (before.checked) {
-		beforeNumber.style.visibility = "visible";
-		beforeType.style.visibility = "visible";
+		beforeNumber.disabled = false;
+		beforeType.disabled = false;
 	} else {
-		beforeNumber.style.visibility = "hidden";
-		beforeType.style.visibility = "hidden";
+		beforeNumber.disabled = true;
+		beforeType.disabled = true;
 	}
 });
 
 after.addEventListener('change', function() {
 	// alert(after.checked);
 	if (after.checked) {
-		afterNumber.style.visibility = "visible";
-		afterType.style.visibility = "visible";
+		afterNumber.disabled = false;
+		afterType.disabled = false;
 	} else {
-		afterNumber.style.visibility = "hidden";
-		afterType.style.visibility = "hidden";
+		afterNumber.disabled = true;
+		afterType.disabled = true;
 	}
 });

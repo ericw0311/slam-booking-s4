@@ -1,19 +1,43 @@
 <?php
 namespace App\Entity;
 
+use App\Api\AdministrationApi;
+use App\Api\PlanningApi;
+
 class PlanningContext
 {
 	private $numberLines; // Nombre de lignes pouvant etre affichees sur une page
 	private $numberColumns; // Nombre de colonnes pouvant etre affichees sur une page
 	private $days;
+	private $firstBookingDate;
+	private $lastBookingDate;
 
-	function __construct($em, \App\Entity\User $user, PlanificationPeriod $planificationPeriod, \Datetime $date)
+	function __construct($em, \App\Entity\User $user, \App\Entity\File $file, PlanificationPeriod $planificationPeriod, \Datetime $date)
 	{
 	$upRepository = $em->getRepository(UserParameter::class);
 	$userParameter = $upRepository->findOneBy(array('user' => $user, 'parameterGroup' => 'planning.number.lines.columns', 'parameter' => 'number.lines'));
 	if ($userParameter != null) { $this->numberLines = $userParameter->getIntegerValue(); } else { $this->numberLines =  constant(Constants::class.'::PLANNING_DEFAULT_NUMBER_LINES'); }
 	$userParameter = $upRepository->findOneBy(array('user' => $user, 'parameterGroup' => 'planning.number.lines.columns', 'parameter' => 'number.columns'));
 	if ($userParameter != null) { $this->numberColumns = $userParameter->getIntegerValue(); } else { $this->numberColumns = constant(Constants::class.'::PLANNING_DEFAULT_NUMBER_COLUMNS'); }
+
+	$before = AdministrationApi::getFileBookingPeriodBefore($em, $file);
+	$beforeType = AdministrationApi::getFileBookingPeriodBeforeType($em, $file);
+	$beforeNumber = AdministrationApi::getFileBookingPeriodBeforeNumber($em, $file);
+
+	$after = AdministrationApi::getFileBookingPeriodAfter($em, $file);
+	$afterType = AdministrationApi::getFileBookingPeriodAfterType($em, $file);
+	$afterNumber = AdministrationApi::getFileBookingPeriodAfterNumber($em, $file);
+
+	if ($before) {
+		$this->firstBookingDate = PlanningApi::getFirstBookingDate($beforeType, $beforeNumber);
+	} else {
+		$this->firstBookingDate = new \DateTime();
+	}
+	if ($after) {
+		$this->lastBookingDate = PlanningApi::getLastBookingDate($afterType, $afterNumber);
+	} else {
+		$this->lastBookingDate = new \DateTime();
+	}
 
 	$this->days = array();
 
@@ -25,9 +49,24 @@ class PlanningContext
 			if ($dayNum > 0) {
 				$dayDate->add(new \DateInterval('P'.$dayNum.'D'));
 			}
-			$this->days[$dayKey] = new Day($em, $planificationPeriod, $dayDate);
+			$beforeSign = '+';
+			if ($before) {
+				$interval = $this->firstBookingDate->diff($dayDate);
+				$beforeSign = $interval->format('%R');
+			}
+			$afterSign = '+';
+			if ($after) {
+				$interval = $dayDate->diff($this->lastBookingDate);
+				$afterSign = $interval->format('%R');
+			}
+			$periodType = 'O'; // OK pour réservation
+			if ($beforeSign == '-') { $periodType = 'B'; } // Avant période de réservation
+			if ($afterSign == '-') { $periodType = 'A'; } // Après période de réservation
+
+			$this->days[$dayKey] = new Day($em, $planificationPeriod, $dayDate, $periodType);
 		}
 	}
+
 	return $this;
 	}
 	
@@ -53,7 +92,7 @@ class PlanningContext
 	return $this->getNumberLines() * $this->getNumberColumns();
 	}
 
-	// Nombre de jours affichés
+	// Indique si on affiche la date pour chaque jour
 	public function displayDate()
 	{
 	return ($this->getNumberDays() > 1);
@@ -64,4 +103,14 @@ class PlanningContext
 	{
 	return ($this->getDay($this->getNumberLines().'-'.$this->getNumberColumns())->getDate());
 	}
+
+    public function getFirstBookingDate()
+    {
+    return $this->firstBookingDate;
+    }
+
+    public function getLastBookingDate()
+    {
+    return $this->lastBookingDate;
+    }
 }

@@ -96,6 +96,9 @@ activity.updated.ok: L'activité a bien été modifiée
 booking.all: Toutes les réservations
 booking.ask.delete: Voulez-vous vraiment supprimer cette réservation ?
 booking.back.to.list: Retour à la liste des réservations
+booking.bna.after: Réservation interdite au delà de la date du %lastBookingDate%
+booking.bna.before: Réservation interdite avant la date du %firstBookingDate%
+booking.not.allowed: Réservation interdite
 booking.create: Réserver
 booking.created.ok: La réservation a bien été créée
 booking.deleted.ok: La réservation a bien été supprimée

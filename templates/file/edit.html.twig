@@ -56,6 +56,8 @@
 {% endif %}
 </p>
 
+<p style="color:red">du {{ dateLongue(fileEditContext.firstBookingDate) }} au {{ dateLongue(fileEditContext.lastBookingDate) }}</span>
+
 <div class="btn-group sb-margin-top">
 
 <a href="{{ path('file', { 'page': 1 }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'file.back.to.list'|trans }}</a>

@@ -5,6 +5,7 @@ class Day
 {
 	private $date;
 	private $type; // O = ouvert, C = fermé (closed), X = clôturé
+	private $periodType; // O = OK pour réservation, B = before (avant période de réservation), A = after (après période de réservation)
 	private $planificationLine;
 	private $timetableLines;
 
@@ -30,6 +31,17 @@ class Day
 	return $this;
 	}
 
+	public function getPeriodType()
+	{
+	return $this->periodType;
+	}
+
+	public function setPeriodType(string $periodType): self
+	{
+	$this->periodType = $periodType;
+	return $this;
+	}
+
 	public function getPlanificationLine(): ?PlanificationLine
 	{
 	return $this->planificationLine;
@@ -52,9 +64,10 @@ class Day
 	return $this;
 	}
 
-	public function __construct($em, PlanificationPeriod $planificationPeriod, \Datetime $date)
+	public function __construct($em, PlanificationPeriod $planificationPeriod, \Datetime $date, $periodType)
 	{
 	$this->setDate($date);
+	$this->setPeriodType($periodType);
 
 	$plRepository = $em->getRepository(PlanificationLine::Class);
 $planificationLine = $plRepository->findOneBy(array('planificationPeriod' => $planificationPeriod, 'weekDay' => strtoupper($this->getDate()->format('D'))));

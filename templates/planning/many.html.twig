@@ -84,12 +84,14 @@
 
 </legend>
 
+<p style="color:red">du {{ dateLongue(planningContext.firstBookingDate) }} au {{ dateLongue(planningContext.lastBookingDate) }}</span>
+
 <div class="row">
 
 {% for j in 1..planningContext.numberColumns %}
     <div class="col-sm-{{ (12/planningContext.numberColumns) }}">
 {% for i in 1..planningContext.numberLines %}
-{{ include('planning/opened.html.twig', { 'booking_create': 'booking_many_create', 'booking_update': 'booking_many_init_update', 'booking_delete': 'booking_many_delete', 'day_key': (i ~ '-' ~ j) }) }}
+{{ include('planning/day.html.twig', { 'booking_create': 'booking_many_create', 'booking_update': 'booking_many_init_update', 'booking_delete': 'booking_many_delete', 'day_key': (i ~ '-' ~ j) }) }}
 {% endfor %}
     </div>
 {% endfor %}
@@ -99,5 +101,7 @@
 </div>
 
 {{ form_end(form) }}
+
+{{ include('planning/modal.html.twig') }}
 
 {% endblock %}

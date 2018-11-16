@@ -150,4 +150,123 @@ class PlanningApi
 	}
 	$em->flush();
 	}
+
+	// Retourne la première date de réservation
+	static function getFirstBookingDate($beforeType, $beforeNumber): \DateTime
+	{
+	if ($beforeType == 'WEEK') {
+		return PlanningApi::getFirstBookingDate_WEEK($beforeNumber);
+	} else if ($beforeType == 'MONTH') {
+		return PlanningApi::getFirstBookingDate_MONTH($beforeNumber);
+	} else if ($beforeType == 'YEAR') {
+		return PlanningApi::getFirstBookingDate_YEAR($beforeNumber);
+	} else {
+		return PlanningApi::getFirstBookingDate_DAY($beforeNumber);
+	}
+	}
+
+	// Retourne la première date de réservation (si mesurée en jours).
+	static function getFirstBookingDate_DAY($numberOfDays): \DateTime
+	{
+	$lDate = New \DateTime();
+	if ($numberOfDays > 1) {
+		$lDate->sub(new \DateInterval('P'.($numberOfDays-1).'D'));
+	}
+	return $lDate;
+	}
+
+	// Retourne la première date de réservation (si mesurée en semaines).
+	static function getFirstBookingDate_WEEK($numberOfWeeks): \DateTime
+	{
+	$weekDay = date("w");
+	if ($weekDay <= 0) { // Le jour en cours est un dimanche.
+		$numberOfDays = 6 + (($numberOfWeeks-1)*7);
+	} else { // Le jour en cours n'est pas un dimanche.
+		$numberOfDays = ($weekDay-1) + (($numberOfWeeks-1)*7);
+	}
+	$lDate = New \DateTime();
+	if ($numberOfDays > 0) {
+		$lDate->sub(new \DateInterval('P'.$numberOfDays.'D'));
+	}
+	return $lDate;
+	}
+
+	// Retourne la première date de réservation (si mesurée en mois).
+	static function getFirstBookingDate_MONTH($numberOfMonths): \DateTime
+	{
+	$lDate = New \DateTime(date('Y').'-'.date('M').'-01');
+	if ($numberOfMonths > 1) {
+		$lDate->sub(new \DateInterval('P'.($numberOfMonths-1).'M'));
+	}
+	return $lDate;
+	}
+
+	// Retourne la première date de réservation (si mesurée en années).
+	static function getFirstBookingDate_YEAR($numberOfYears): \DateTime
+	{
+	$lDate = New \DateTime(date('Y').'-01-01');
+	if ($numberOfYears > 1) {
+		$lDate->sub(new \DateInterval('P'.($numberOfYears-1).'Y'));
+	}
+	return $lDate;
+	}
+
+	// Retourne la dernière date de réservation
+	static function getLastBookingDate($afterType, $afterNumber): \DateTime
+	{
+	if ($afterType == 'WEEK') {
+		return PlanningApi::getLastBookingDate_WEEK($afterNumber);
+	} else if ($afterType == 'MONTH') {
+		return PlanningApi::getLastBookingDate_MONTH($afterNumber);
+	} else if ($afterType == 'YEAR') {
+		return PlanningApi::getLastBookingDate_YEAR($afterNumber);
+	} else {
+		return PlanningApi::getLastBookingDate_DAY($afterNumber);
+	}
+	}
+
+	// Retourne la dernière date de réservation (si mesurée en jours).
+	static function getLastBookingDate_DAY($numberOfDays): \DateTime
+	{
+	$lDate = New \DateTime();
+	if ($numberOfDays > 1) {
+		$lDate->add(new \DateInterval('P'.($numberOfDays-1).'D'));
+	}
+	return $lDate;
+	}
+
+	// Retourne la dernière date de réservation (si mesurée en semaines).
+	static function getLastBookingDate_WEEK($numberOfWeeks): \DateTime
+	{
+	$weekDay = date("w");
+	if ($weekDay <= 0) { // Le jour en cours est un dimanche.
+		$numberOfDays = ($numberOfWeeks-1)*7;
+	} else { // Le jour en cours n'est pas un dimanche.
+		$numberOfDays = (7-$weekDay) + (($numberOfWeeks-1)*7);
+	}
+	$lDate = New \DateTime();
+	if ($numberOfDays > 0) {
+		$lDate->add(new \DateInterval('P'.$numberOfDays.'D'));
+	}
+	return $lDate;
+	}
+
+	// Retourne la dernière date de réservation (si mesurée en mois).
+	static function getLastBookingDate_MONTH($numberOfMonths): \DateTime
+	{
+	$lDate = New \DateTime(date('Y').'-'.date('M').'-01'); // On se place au premier jour du mois en cours
+	$lDate->add(new \DateInterval('P'.$numberOfMonths.'M')); // On avance jusqu'au premier jour du mois suivant le dernier mois 
+	$lDate->sub(new \DateInterval('P1D')); // On recule d'un jour = Dernier jour du mois
+	return $lDate;
+	}
+
+	// Retourne la dernière date de réservation (si mesurée en années).
+	static function getLastBookingDate_YEAR($numberOfYears): \DateTime
+	{
+	$lDate = New \DateTime(date('Y').'-12-31'); // Dernier jour de l'année en cours
+	if ($numberOfYears > 1) {
+		$lDate->add(new \DateInterval('P'.($numberOfYears-1).'Y'));
+	}
+	return $lDate;
+	}
 }

@@ -96,6 +96,9 @@ activity.updated.ok: The activity has been updated
 booking.all: All bookings
 booking.ask.delete: Do you really want to delete this booking ?
 booking.back.to.list: Back to bookings list
+booking.bna.after: Booking not allowed after %lastBookingDate%
+booking.bna.before: Booking not allowed before %firstBookingDate%
+booking.not.allowed: Booking not allowed
 booking.create: Book
 booking.created.ok: The booking has been created
 booking.deleted.ok: The booking has been deleted

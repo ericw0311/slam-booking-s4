@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Api\AdministrationApi;
+use App\Api\PlanningApi;
 
 class FileEditContext
 {
@@ -13,6 +14,7 @@ class FileEditContext
     protected $bookingsCount;
 	protected $fileAdministrator;
 	protected $bookingUser;
+
 	protected $before; // Appliquer une restriction avant la date du jour
 	protected $beforeType; // Type de restriction avant la date du jour: JOUR, SEMAINE, MOIS, ANNEE
 	protected $beforeNumber; // Nombre associé à la restriction avant la date du jour
@@ -20,6 +22,9 @@ class FileEditContext
 	protected $after; // Appliquer une restriction après la date du jour
 	protected $afterType; // Type de restriction après la date du jour: JOUR, SEMAINE, MOIS, ANNEE
 	protected $afterNumber; // Nombre associé à la restriction après la date du jour
+
+	private $firstBookingDate;
+	private $lastBookingDate;
 
     public function setUserFilesCount($userFilesCount)
     {
@@ -164,6 +169,16 @@ class FileEditContext
 	return $this;
 	}
 
+    public function getFirstBookingDate()
+    {
+    return $this->firstBookingDate;
+    }
+
+    public function getLastBookingDate()
+    {
+    return $this->lastBookingDate;
+    }
+
     function __construct($em, \App\Entity\File $file)
     {
     $ufRepository = $em->getRepository(UserFile::class);
@@ -191,5 +206,16 @@ class FileEditContext
     $this->setAfter(AdministrationApi::getFileBookingPeriodAfter($em, $file));
     $this->setAfterType(AdministrationApi::getFileBookingPeriodAfterType($em, $file));
     $this->setAfterNumber(AdministrationApi::getFileBookingPeriodAfterNumber($em, $file));
+
+	if ($this->before) {
+		$this->firstBookingDate = PlanningApi::getFirstBookingDate($this->beforeType, $this->beforeNumber);
+	} else {
+		$this->firstBookingDate = new \DateTime();
+	}
+	if ($this->after) {
+		$this->lastBookingDate = PlanningApi::getLastBookingDate($this->afterType, $this->afterNumber);
+	} else {
+		$this->lastBookingDate = new \DateTime();
+	}
     }
 }
