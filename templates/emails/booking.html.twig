@@ -1,5 +1,20 @@
 {# templates/emails/booking.html.twig #}
 
+{% set rtIcons = constant('App\\Entity\\Constants::RESOURCE_TYPE_ICON') %}
+{% set rcIcons = constant('App\\Entity\\Constants::RESOURCE_CLASSIFICATION_ICON') %}
+
+{% if booking.resource.internal %}
+{% set resource_image = rcIcons[booking.resource.code] %}
+{% else %}
+{% set resource_image = rtIcons[booking.resource.type] %}
+{% endif %}
+
 <h3>Nouvelle réservation</h3>
 
-<p>Ressource {{ booking.resource.name }}</p>
+<img src="{{ absolute_url(asset('images/time-16.png')) }}">
+
+<p><img src="{{ absolute_url(asset('images/' ~ resource_image ~ '-32.png')) }}">&nbsp;{{ booking.resource.name }}</p>
+
+<p><img src="{{ absolute_url(asset('images/time-16.png')) }}">&nbsp;{{ periode(booking.beginningDate, booking.endDate) }}</p>
+
+<p>{{ absolute_url(asset('images/' ~ resource_image ~ '-32.png')) }}</p>
