@@ -151,7 +151,16 @@ class ResourceApi
 	}
 	return $availableResources;
     }
-	
+
+	// Retourne le nombre de ressources à planifier (tous types): NON UTILISE
+	static function getResourcesToPlanifyCount($em, \App\Entity\File $file)
+	{
+	$rRepository = $em->getRepository(Resource::Class);
+	$prRepository = $em->getRepository(PlanificationResource::Class);
+    $numberResources = $rRepository->getResourcesToPlanifyCount($file, $prRepository->getResourcePlanifiedQB());
+	return $numberResources;
+	}
+
 	// Retourne un tableau des ressources pouvant être ajoutées à une planification (initialisation de planification)
 	static function initAvailableResources($em, \App\Entity\File $file, $type, $selectedResourceIDList)
 	{

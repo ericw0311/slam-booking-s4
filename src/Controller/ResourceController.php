@@ -18,7 +18,9 @@ use App\Entity\ResourceContext;
 use App\Entity\UserParameterNLC;
 use App\Entity\UserParameter;
 use App\Entity\Planification;
+use App\Entity\PlanificationResource;
 use App\Entity\Booking;
+use App\Entity\Resource_List;
 
 use App\Form\ResourceType;
 use App\Form\ResourceAddType;
@@ -43,9 +45,19 @@ class ResourceController extends Controller
 
     $listContext = new ListContext($em, $connectedUser, 'resource', 'resource', $page, $numberRecords);
 
-    $listResources = $rRepository->getDisplayedResources($userContext->getCurrentFile(), $listContext->getFirstRecordIndex(), $listContext->getMaxRecords());
-    
-	return $this->render('resource/index.html.twig', array('userContext' => $userContext, 'listContext' => $listContext, 'listResources' => $listResources));
+    $resources = $rRepository->getDisplayedResources($userContext->getCurrentFile(), $listContext->getFirstRecordIndex(), $listContext->getMaxRecords());
+
+	$resources_list = array();
+	$prRepository = $em->getRepository(PlanificationResource::Class);
+
+    foreach ($resources as $resource) {
+		$resource_list = new Resource_List($resource->getID(), $resource->getInternal(), $resource->getType(), $resource->getCode(), $resource->getName());
+		$numberPlanificationPeriods = $prRepository->getPlanificationPeriodsCount($resource);
+		$resource_list->setPlanified(($numberPlanificationPeriods > 0));
+		array_push($resources_list, $resource_list);
+	}
+
+	return $this->render('resource/index.html.twig', array('userContext' => $userContext, 'listContext' => $listContext, 'listResources' => $resources_list));
     }
 
 

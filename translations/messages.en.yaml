@@ -191,6 +191,7 @@ planification.deleted.ok: The planification has been deleted
 planification.dna.booking: La planification %name% est référencée par des réservations. Suppression impossible
 planification.line.updated.ok: Per day planifications have been updated
 planification.name: Planification name
+planification.no.resources.to.planify: There is no resource to planify
 planification.plural: Planifications
 planification.resource.select: Select resource
 planification.resource.selected: Selected resources

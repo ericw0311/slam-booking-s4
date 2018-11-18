@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Repository;
-
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -67,6 +65,21 @@ class ResourceRepository extends ServiceEntityRepository
     return $results;
     }
 
+	// Compte le nombre de ressources à planifier (tous types): NON UTILISE
+	public function getResourcesToPlanifyCount(\App\Entity\File $file, $resourcePlanifiedQB)
+    {
+    $qb = $this->createQueryBuilder('r');
+    $qb->select($qb->expr()->count('r'));
+    $qb->where('r.file = :file')->setParameter('file', $file);
+    
+	$qb->andWhere($qb->expr()->not($qb->expr()->exists($resourcePlanifiedQB->getDQL())));
+     
+	$query = $qb->getQuery();
+	$singleScalar = $query->getSingleScalarResult();
+	return $singleScalar;
+    }
+
+	// Retourne les ressources à planifier (pour un type)
 	public function getResourcesToPlanify(\App\Entity\File $file, $type, $resourcePlanifiedQB)
     {
     $qb = $this->createQueryBuilder('r');
@@ -81,6 +94,7 @@ class ResourceRepository extends ServiceEntityRepository
     return $results;
     }
 
+	// Retourne les types de ressources à planifier
 	public function getResourceTypesToPlanify(\App\Entity\File $file, $resourcePlanifiedQB)
     {
     $qb = $this->createQueryBuilder('r');

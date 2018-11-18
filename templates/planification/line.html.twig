@@ -64,3 +64,14 @@
 <script src="{{ asset('scripts/planification_line.js') }}"></script>
 
 {% endblock %}
+
+{% block message %}
+
+{% for flash_message in app.session.flashBag.get('notice') %}
+<div class="alert alert-success sb-message">
+	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+	{{ flash_message|trans }}
+</div>
+{% endfor %}
+
+{% endblock %}

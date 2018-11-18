@@ -25,6 +25,7 @@
 <div class="btn-group">
 <a href="{{ path('resource', { 'page': 1 }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
 <button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> {{ 'validate'|trans }}</button>
+{{ form_widget(form.validateAndCreate, { 'attr': {'class': 'btn btn-success'} }) }}
 </div>
 
 {{ form_end(form) }}

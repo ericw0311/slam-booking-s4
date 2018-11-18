@@ -50,7 +50,8 @@ class PlanificationController extends Controller
 	$listContext = new ListContext($em, $connectedUser, 'planification', 'planification', $page, $numberRecords);
 	$listPlanifications = $pRepository->getDisplayedPlanifications($userContext->getCurrentFile(), $listContext->getFirstRecordIndex(), $listContext->getMaxRecords());
 
-	return $this->render('planification/index.html.twig', array('userContext' => $userContext, 'listContext' => $listContext, 'listPlanifications' => $listPlanifications));
+	return $this->render('planification/index.html.twig', 
+	array('userContext' => $userContext, 'listContext' => $listContext, 'listPlanifications' => $listPlanifications));
     }
 
 	// Ajout d'une planification: Sélection du type de ressources à planifier
@@ -139,7 +140,7 @@ class PlanificationController extends Controller
 	$em->persist($planification);
 	$em->flush();
 	$request->getSession()->getFlashBag()->add('notice', 'planification.created.ok');
-	return $this->redirectToRoute('planification', array('page' => 1));
+	return $this->redirectToRoute('planification_line', array('planificationID' => $planification->getID(), 'planificationPeriodID' => $planificationPeriod->getID()));
     }
 
 	// Mise a jour des ressources à planifier

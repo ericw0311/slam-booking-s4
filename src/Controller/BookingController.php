@@ -432,7 +432,7 @@ class BookingController extends Controller
 	$em->flush();
 
 	$message = (new \Swift_Message('Nouvelle réservation'))
-				->setFrom('slam.booking.web@gmail.com')
+				->setFrom(['slam.booking.web@gmail.com' => 'Slam Booking'])
 				->setTo('eric.pierre.willard@gmail.com')
 				->setBody(
 					$this->renderView('emails/booking.html.twig',
