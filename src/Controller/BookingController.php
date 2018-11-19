@@ -26,6 +26,7 @@ use App\Entity\BookingUser;
 use App\Entity\BookingLabel;
 
 use App\Form\NoteType;
+use App\Api\AdministrationApi;
 use App\Api\BookingApi;
 
 class BookingController extends Controller
@@ -431,24 +432,26 @@ class BookingController extends Controller
 		$em->persist($bookingLabel);
 	}
 	$em->flush();
-
-
+	
 	// Envoi du mail
-	$buRepository = $em->getRepository(BookingUser::Class);
-	$bookingUsers = $buRepository->findBy(array('booking' => $booking), array('oorder' => 'asc'));
+	$sendEmailAdministrator = AdministrationApi::getFileBookingEmailAdministrator($em, $userContext->getCurrentFile());
+	$sendEmailBookingUser = AdministrationApi::getFileBookingEmailUser($em, $userContext->getCurrentFile());
 
-	$blaRepository = $em->getRepository(BookingLabel::Class);
-	$bookingLabels = $blaRepository->findBy(array('booking' => $booking), array('id' => 'asc'));
+	if ($sendEmailAdministrator or $sendEmailBookingUser) {
+		$buRepository = $em->getRepository(BookingUser::Class);
+		$bookingUsers = $buRepository->findBy(array('booking' => $booking), array('oorder' => 'asc'));
 
-	$message = (new \Swift_Message($translator->trans('booking.new')))
-				->setFrom(['slam.booking.web@gmail.com' => 'Slam Booking'])
-				->setTo('eric.pierre.willard@gmail.com')
-				->setTo(['eric.pierre.willard@gmail.com', 'maxence.willard@gmail.com' => 'Maxounet'])
-				->setBody(
-					$this->renderView('emails/booking.html.twig',
-						array('booking' => $booking, 'bookingUsers' => $bookingUsers, 'bookingLabels' => $bookingLabels)),
-						'text/html');
-	$mailer->send($message);
+		$blaRepository = $em->getRepository(BookingLabel::Class);
+		$bookingLabels = $blaRepository->findBy(array('booking' => $booking), array('id' => 'asc'));
+
+		$message = (new \Swift_Message($translator->trans('booking.create')))
+			->setFrom(['slam.booking.web@gmail.com' => 'Slam Booking'])
+			->setTo(BookingApi::getBookingUserEmailArray($em, $booking, $sendEmailAdministrator, $sendEmailBookingUser))
+			->setBody($this->renderView('emails/booking.html.twig',
+				array('type' => 'C', 'booking' => $booking, 'bookingUsers' => $bookingUsers, 'bookingLabels' => $bookingLabels)),
+				'text/html');
+		$mailer->send($message);
+	}
 
 	$request->getSession()->getFlashBag()->add('notice', 'booking.created.ok');
 
@@ -833,9 +836,9 @@ class BookingController extends Controller
      * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
      * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
      */
-	public function many_validate_update(Request $request, \Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID)
+	public function many_validate_update(Request $request, \Swift_Mailer $mailer, TranslatorInterface $translator, \Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID)
 	{
-	return BookingController::validate_update($request, $planningDate, $booking, $planification, $planificationPeriod, $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, 1);
+	return BookingController::validate_update($request, $mailer, $translator, $planningDate, $booking, $planification, $planificationPeriod, $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, 1);
 	}
 
 	// Validation de la mise à jour d'une réservation
@@ -847,13 +850,13 @@ class BookingController extends Controller
      * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
      * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
      */
-	public function one_validate_update(Request $request, \Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID)
+	public function one_validate_update(Request $request, \Swift_Mailer $mailer, TranslatorInterface $translator, \Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID)
 	{
-	return BookingController::validate_update($request, $planningDate, $booking, $planification, $planificationPeriod, $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, 0);
+	return BookingController::validate_update($request, $mailer, $translator, $planningDate, $booking, $planification, $planificationPeriod, $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, 0);
 	}
 
 	// Validation de la mise à jour d'une réservation
-    public function validate_update(Request $request, \Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, $many)
+    public function validate_update(Request $request, \Swift_Mailer $mailer, TranslatorInterface $translator, \Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, $many)
     {
 	$connectedUser = $this->getUser();
 	$em = $this->getDoctrine()->getManager();
@@ -967,6 +970,27 @@ class BookingController extends Controller
 		$em->persist($bookingLabel);
 	}
 	$em->flush();
+
+	// Envoi du mail
+	$sendEmailAdministrator = AdministrationApi::getFileBookingEmailAdministrator($em, $userContext->getCurrentFile());
+	$sendEmailBookingUser = AdministrationApi::getFileBookingEmailUser($em, $userContext->getCurrentFile());
+
+	if ($sendEmailAdministrator or $sendEmailBookingUser) {
+		$buRepository = $em->getRepository(BookingUser::Class);
+		$bookingUsers = $buRepository->findBy(array('booking' => $booking), array('oorder' => 'asc'));
+
+		$blaRepository = $em->getRepository(BookingLabel::Class);
+		$bookingLabels = $blaRepository->findBy(array('booking' => $booking), array('id' => 'asc'));
+
+		$message = (new \Swift_Message($translator->trans('booking.update')))
+			->setFrom(['slam.booking.web@gmail.com' => 'Slam Booking'])
+			->setTo(BookingApi::getBookingUserEmailArray($em, $booking, $sendEmailAdministrator, $sendEmailBookingUser))
+			->setBody($this->renderView('emails/booking.html.twig',
+				array('type' => 'U', 'booking' => $booking, 'bookingUsers' => $bookingUsers, 'bookingLabels' => $bookingLabels)),
+				'text/html');
+		$mailer->send($message);
+	}
+
 	$request->getSession()->getFlashBag()->add('notice', 'booking.updated.ok');
 	return $this->redirectToRoute('planning_'.($many ? 'many' : 'one').'_pp',
 		array('planificationID' => $planification->getID(), 'planificationPeriodID' => $planificationPeriod->getID(), 'date' => $planningDate->format('Ymd')));
@@ -982,9 +1006,9 @@ class BookingController extends Controller
      * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
 	 * @ParamConverter("date", options={"format": "Ymd"})
      */
-    public function many_delete(Request $request, \Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date)
+    public function many_delete(Request $request, \Swift_Mailer $mailer, TranslatorInterface $translator, \Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date)
     {
-	return BookingController::delete($request, $planningDate, $booking, $planification, $planificationPeriod, $resource, $date, 1);
+	return BookingController::delete($request, $mailer, $translator, $planningDate, $booking, $planification, $planificationPeriod, $resource, $date, 1);
     }
 
     // Suppression d'une réservation
@@ -997,13 +1021,13 @@ class BookingController extends Controller
      * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
 	 * @ParamConverter("date", options={"format": "Ymd"})
      */
-    public function one_delete(Request $request, \Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date)
+    public function one_delete(Request $request, \Swift_Mailer $mailer, TranslatorInterface $translator, \Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date)
     {
-	return BookingController::delete($request, $planningDate, $booking, $planification, $planificationPeriod, $resource, $date, 0);
+	return BookingController::delete($request, $mailer, $translator, $planningDate, $booking, $planification, $planificationPeriod, $resource, $date, 0);
     }
 
     // Suppression d'une réservation
-    public function delete(Request $request, \Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $many)
+    public function delete(Request $request, \Swift_Mailer $mailer, TranslatorInterface $translator, \Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $many)
     {
     $connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
@@ -1047,6 +1071,27 @@ class BookingController extends Controller
 	if ($request->isMethod('POST')) {
 		$form->submit($request->request->get($form->getName()));
 		if ($form->isSubmitted() && $form->isValid()) {
+
+			// Envoi du mail
+			$sendEmailAdministrator = AdministrationApi::getFileBookingEmailAdministrator($em, $userContext->getCurrentFile());
+			$sendEmailBookingUser = AdministrationApi::getFileBookingEmailUser($em, $userContext->getCurrentFile());
+
+			if ($sendEmailAdministrator or $sendEmailBookingUser) {
+				$buRepository = $em->getRepository(BookingUser::Class);
+				$bookingUsers = $buRepository->findBy(array('booking' => $booking), array('oorder' => 'asc'));
+
+				$blaRepository = $em->getRepository(BookingLabel::Class);
+				$bookingLabels = $blaRepository->findBy(array('booking' => $booking), array('id' => 'asc'));
+
+				$message = (new \Swift_Message($translator->trans('booking.delete')))
+					->setFrom(['slam.booking.web@gmail.com' => 'Slam Booking'])
+					->setTo(BookingApi::getBookingUserEmailArray($em, $booking, $sendEmailAdministrator, $sendEmailBookingUser))
+					->setBody($this->renderView('emails/booking.html.twig',
+						array('type' => 'D', 'booking' => $booking, 'bookingUsers' => $bookingUsers, 'bookingLabels' => $bookingLabels)),
+						'text/html');
+				$mailer->send($message);
+			}
+
 			// Inutile de persister ici, Doctrine connait déjà la reservation
 			$em->remove($booking);
 			$em->flush();

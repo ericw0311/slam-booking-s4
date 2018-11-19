@@ -99,12 +99,13 @@ booking.ask.delete: Do you really want to delete this booking ?
 booking.back.to.list: Back to bookings list
 booking.bna.after: Booking not allowed after %lastBookingDate%
 booking.bna.before: Booking not allowed before %firstBookingDate%
-booking.not.allowed: Booking not allowed
-booking.create: Book
+booking.book: Book
+booking.create: Booking create
 booking.created.ok: The booking has been created
+booking.delete: Booking delete
 booking.deleted.ok: The booking has been deleted
 booking.in.progress: Bookings in progress
-booking.new: New booking
+booking.not.allowed: Booking not allowed
 booking.period: Booking period
 booking.period.beginning.update: Modify beginning period
 booking.period.end.update: Modify end period
@@ -113,6 +114,7 @@ booking.period.from.until: Bookings allowed from %firstBookingDate% until %lastB
 booking.period.until: Bookings allowed until %lastBookingDate%
 booking.plural: Bookings
 booking.singular: Booking
+booking.update: Booking update
 booking.updated.ok: The booking has been updated
 booking.your: Your bookings
 booking.your.in.progress: Your bookings in progress

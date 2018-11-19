@@ -99,12 +99,13 @@ booking.ask.delete: Voulez-vous vraiment supprimer cette réservation ?
 booking.back.to.list: Retour à la liste des réservations
 booking.bna.after: Réservation interdite au delà de la date du %lastBookingDate%
 booking.bna.before: Réservation interdite avant la date du %firstBookingDate%
-booking.not.allowed: Réservation interdite
-booking.create: Réserver
+booking.book: Réserver
+booking.create: Création d'une réservation
 booking.created.ok: La réservation a bien été créée
+booking.delete: Suppression d'une réservation
 booking.deleted.ok: La réservation a bien été supprimée
 booking.in.progress: Les réservations en cours
-booking.new: Nouvelle réservation
+booking.not.allowed: Réservation interdite
 booking.period: Période de réservation
 booking.period.beginning.update: Modifier la période de début
 booking.period.end.update: Modifier la période de fin
@@ -113,6 +114,7 @@ booking.period.from.until: Réservations autorisées à partir du %firstBookingD
 booking.period.until: Réservations autorisées jusqu'au %lastBookingDate%
 booking.plural: Réservations
 booking.singular: Réservation
+booking.update: Modification d'une réservation
 booking.updated.ok: La réservation a bien été modifiée
 booking.your: Vos réservations
 booking.your.in.progress: Vos réservations en cours

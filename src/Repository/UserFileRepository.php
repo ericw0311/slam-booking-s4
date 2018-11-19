@@ -44,6 +44,20 @@ class UserFileRepository extends ServiceEntityRepository
 	return $results;
 	}
 
+	// Retourne les administrateurs d'un dossier
+	public function getUserFileAdministrators(\App\Entity\File $file)
+	{
+	$qb = $this->createQueryBuilder('uf');
+	$qb->where('uf.file = :file')->setParameter('file', $file);
+	$qb->andWhere('uf.administrator = :administrator')->setParameter('administrator', true);
+	$qb->orderBy('uf.firstName', 'ASC');
+	$qb->addOrderBy('uf.lastName', 'ASC');
+
+	$query = $qb->getQuery();
+	$results = $query->getResult();
+	return $results;
+	}
+
 	// Sélection des utilisateurs à l'exception du créateur du dossier
 	public function getUserFilesExceptFileCreatorCount(\App\Entity\File $file)
 	{

@@ -3,15 +3,21 @@
 {% set rtIcons = constant('App\\Entity\\Constants::RESOURCE_TYPE_ICON') %}
 {% set rcIcons = constant('App\\Entity\\Constants::RESOURCE_CLASSIFICATION_ICON') %}
 
+{% if type == 'U' %}
+<h3>{{ 'booking.update'|trans }}</h3>
+{% elseif  type == 'D' %}
+<h3>{{ 'booking.delete'|trans }}</h3>
+{% else %}
+<h3>{{ 'booking.create'|trans }}</h3>
+{% endif %}
+
 {% if booking.resource.internal %}
 {% set resource_image = rcIcons[booking.resource.code] %}
 {% else %}
 {% set resource_image = rtIcons[booking.resource.type] %}
 {% endif %}
 
-<legend>
-<img src="{{ absolute_url(asset('images/' ~ resource_image ~ '-32.png')) }}">&nbsp;{{ booking.resource.name }}
-</legend>
+<p><img src="{{ absolute_url(asset('images/' ~ resource_image ~ '-32.png')) }}">&nbsp;{{ booking.resource.name }}</p>
 
 <h3>{{ 'period'|trans }}</h3>
 <p><img src="{{ absolute_url(asset('images/time-16.png')) }}">&nbsp;{{ periode(booking.beginningDate, booking.endDate) }}</p>
@@ -45,4 +51,8 @@
 <p><img src="{{ absolute_url(asset('images/label-16.png')) }}">&nbsp;{{ bookingLabel.label.name }}</p>
 {% endfor %}
 
+{% endif %}
+
+{% if booking.note != "" %}
+<p><img src="{{ absolute_url(asset('images/note-16.png')) }}">&nbsp;{{ booking.note }}</p>
 {% endif %}

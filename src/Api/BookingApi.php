@@ -429,6 +429,7 @@ class BookingApi
 	if (count($bookingLinesDB) <= 0) {
 		return '';
 	}
+
 	// On construit une chaine comprenant toutes périodes de la réservation.
 	// Les périodes sont regroupées par date séparées par un -
 	// Pour chaque date, on a le codage date + timetableID + timetableLineIDList
@@ -447,5 +448,36 @@ class BookingApi
 		$memo_date = $bookingLine['date']->format('Ymd');
 	}
 	return $url;
+	}
+
+	// Retourne la liste d'emails des destinataires du mail informant de la création/mise à jour/suppression des réservations
+	static function getBookingUserEmailArray($em, \App\Entity\Booking $booking, $fileAdministrator, $bookingUser)
+	{
+	$ufRepository = $em->getRepository(UserFile::Class);
+	$buRepository = $em->getRepository(BookingUser::Class);
+
+	$emailArray = array();
+
+	if ($fileAdministrator) { // Administrateurs du dossier
+		$fileAdministrators = $ufRepository->getUserFileAdministrators($booking->getFile());
+
+		foreach ($fileAdministrators as $userFile) {
+			array_push($emailArray, $userFile->getEmail());
+		}
+	}
+
+	if ($bookingUser) { // Utilisateurs de la réservation
+		$bookingUsers = $buRepository->findBy(array('booking' => $booking), array('oorder' => 'asc'));
+
+		foreach ($bookingUsers as $bookingUser) {
+			// Je ne parviens pas à mettre le nom des utilisateurs en clair... array_push($emailArray, [$bookingUser->getUserFile()->getEmail() => $bookingUser->getUserFile()->getFirstAndLastName()]);
+			// alors que ça, ça marche bien... ->setTo(['eric.pierre.willard@gmail.com', 'maxence.willard@gmail.com' => 'Maxence Willard'])
+
+			if (!$fileAdministrator or !$bookingUser->getUserFile()->getAdministrator()) { // On traite le cas ou l'utilisateur est déjà dans la liste en tant que administrateur du dossier.
+				array_push($emailArray, $bookingUser->getUserFile()->getEmail());
+			}
+		}
+	}
+	return $emailArray;
 	}
 }
