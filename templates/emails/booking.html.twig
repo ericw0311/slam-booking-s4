@@ -9,12 +9,40 @@
 {% set resource_image = rtIcons[booking.resource.type] %}
 {% endif %}
 
-<h3>Nouvelle réservation</h3>
+<legend>
+<img src="{{ absolute_url(asset('images/' ~ resource_image ~ '-32.png')) }}">&nbsp;{{ booking.resource.name }}
+</legend>
 
-<img src="{{ absolute_url(asset('images/time-16.png')) }}">
-
-<p><img src="{{ absolute_url(asset('images/' ~ resource_image ~ '-32.png')) }}">&nbsp;{{ booking.resource.name }}</p>
-
+<h3>{{ 'period'|trans }}</h3>
 <p><img src="{{ absolute_url(asset('images/time-16.png')) }}">&nbsp;{{ periode(booking.beginningDate, booking.endDate) }}</p>
 
-<p>{{ absolute_url(asset('images/' ~ resource_image ~ '-32.png')) }}</p>
+{% if bookingUsers|length > 1 %}
+<h3>{{ 'users'|trans }}</h3>
+{% else %}
+<h3>{{ 'user'|trans }}</h3>
+{% endif %}
+
+{% for bookingUser in bookingUsers %}
+
+{% if bookingUser.userFile.administrator %}
+{% set user_image = 'administrator' %}
+{% else %}
+{% set user_image = 'user' %}
+{% endif %}
+
+<p><img src="{{ absolute_url(asset('images/' ~ user_image ~ '-16.png')) }}">&nbsp;{{ bookingUser.userFile.getFirstAndLastName() }}</p>
+{% endfor %}
+
+{% if bookingLabels|length > 0 %}
+
+{% if bookingLabels|length > 1 %}
+<h3>{{ 'label.plural'|trans }}</h3>
+{% else %}
+<h3>{{ 'label'|trans }}</h3>
+{% endif %}
+
+{% for bookingLabel in bookingLabels %}
+<p><img src="{{ absolute_url(asset('images/label-16.png')) }}">&nbsp;{{ bookingLabel.label.name }}</p>
+{% endfor %}
+
+{% endif %}

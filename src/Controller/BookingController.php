@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
@@ -338,9 +339,9 @@ class BookingController extends Controller
 	 * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
 	 * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
      */
-    public function many_validate_create(Request $request, LoggerInterface $logger, \Swift_Mailer $mailer, \Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID)
+    public function many_validate_create(Request $request, LoggerInterface $logger, \Swift_Mailer $mailer, TranslatorInterface $translator, \Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID)
     {
-	return BookingController::validate_create($request, $logger, $mailer, $planningDate, $planification, $planificationPeriod, $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, 1);
+	return BookingController::validate_create($request, $logger, $mailer, $translator, $planningDate, $planification, $planificationPeriod, $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, 1);
     }
 
     // Validation de la création d'une réservation
@@ -351,13 +352,13 @@ class BookingController extends Controller
 	 * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
 	 * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
      */
-    public function one_validate_create(Request $request, LoggerInterface $logger, \Swift_Mailer $mailer, \Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID)
+    public function one_validate_create(Request $request, LoggerInterface $logger, \Swift_Mailer $mailer, TranslatorInterface $translator, \Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID)
     {
-	return BookingController::validate_create($request, $logger, $mailer, $planningDate, $planification, $planificationPeriod, $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, 0);
+	return BookingController::validate_create($request, $logger, $mailer, $translator, $planningDate, $planification, $planificationPeriod, $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, 0);
     }
 
 	// Validation de la création d'une réservation
-    public function validate_create(Request $request, LoggerInterface $logger, \Swift_Mailer $mailer, \Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, $many)
+    public function validate_create(Request $request, LoggerInterface $logger, \Swift_Mailer $mailer, TranslatorInterface $translator, \Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, $many)
     {
 	$logger->info('DBG 1');
 	$connectedUser = $this->getUser();
@@ -431,12 +432,21 @@ class BookingController extends Controller
 	}
 	$em->flush();
 
-	$message = (new \Swift_Message('Nouvelle réservation'))
+
+	// Envoi du mail
+	$buRepository = $em->getRepository(BookingUser::Class);
+	$bookingUsers = $buRepository->findBy(array('booking' => $booking), array('oorder' => 'asc'));
+
+	$blaRepository = $em->getRepository(BookingLabel::Class);
+	$bookingLabels = $blaRepository->findBy(array('booking' => $booking), array('id' => 'asc'));
+
+	$message = (new \Swift_Message($translator->trans('booking.new')))
 				->setFrom(['slam.booking.web@gmail.com' => 'Slam Booking'])
 				->setTo('eric.pierre.willard@gmail.com')
+				->setTo(['eric.pierre.willard@gmail.com', 'maxence.willard@gmail.com' => 'Maxounet'])
 				->setBody(
 					$this->renderView('emails/booking.html.twig',
-						array('booking' => $booking)),
+						array('booking' => $booking, 'bookingUsers' => $bookingUsers, 'bookingLabels' => $bookingLabels)),
 						'text/html');
 	$mailer->send($message);
 
