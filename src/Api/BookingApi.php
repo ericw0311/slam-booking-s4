@@ -375,11 +375,14 @@ class BookingApi
 	$bRepository = $em->getRepository(Booking::Class);
 	$buRepository = $em->getRepository(BookingUser::Class);
 	$blRepository = $em->getRepository(BookingLabel::Class);
+
 	$bookingsDB = $bRepository->getPlanningBookings($file, $beginningDate, $endDate, $planification, $planificationPeriod);
+
 	$bookings = array();
 	if (count($bookingsDB) <= 0) {
 		return $bookings;
 	}
+
 	$evenResourcesID = ResourceApi::getEvenPlanifiedResourcesID($em, $planificationPeriod);
 	$memo_date = "00000000";
 	$memo_bookingID = 0;
@@ -387,37 +390,48 @@ class BookingApi
 	$currentBookingHeaderKey = "";
 	$bookingTimetableLinesCount = 0; // Compteur des lignes de la reservation courante.
 	$resourceBookingCount = 0; // Compteur des reservations de la ressource courante.
+
 	foreach ($bookingsDB as $booking) {
 		$key = $booking['date']->format('Ymd').'-'.$booking['planificationID'].'-'.$booking['planificationPeriodID'].'-'.$booking['planificationLineID'].'-'.$booking['resourceID'].'-'.$booking['timetableID'].'-'.$booking['timetableLineID'];
+
 		if ($memo_bookingID > 0 && ($booking['bookingID'] <> $memo_bookingID || $booking['date']->format('Ymd') <> $memo_date)) { // On a parcouru une reservation ou rupture de date.
 			$bookings[$currentBookingHeaderKey]->setNumberTimetableLines($bookingTimetableLinesCount);
 			$bookings[$currentBookingHeaderKey]->setUserNamesString(BookingApi::getBookingUserNamesString($em, $bRepository->find($memo_bookingID), $currentUserFile));
 			$bookings[$currentBookingHeaderKey]->setLabelNamesString(BookingApi::getBookingLabelNamesString($em, $bRepository->find($memo_bookingID)));
 			$bookings[$currentBookingHeaderKey]->setNote($bRepository->find($memo_bookingID)->getNote());
+			$bookings[$currentBookingHeaderKey]->setUserId($bRepository->find($memo_bookingID)->getUser()->getID());
 			$bookingTimetableLinesCount = 0;
 			$resourceBookingCount++;
 		}
+
 		if ($booking['date']->format('Ymd') <> $memo_date || $booking['resourceID'] <> $memo_resourceID) { // On change de date ou de ressource.
 			$resourceBookingCount = 0;
 		}
+
 		$bookingTimetableLinesCount++;
+
 		if ($booking['bookingID'] <> $memo_bookingID || $booking['date']->format('Ymd') <> $memo_date) {
 			$type = 'H';
 			$currentBookingHeaderKey = $key;
 		} else {
 			$type = 'L';
 		}
+
 		$cellClass = (in_array($booking['resourceID'], $evenResourcesID) ? ((($resourceBookingCount % 2) < 1) ? 'success' : 'warning') : ((($resourceBookingCount % 2) < 1) ? 'info' : 'danger'));
 		$bookingNDB = new BookingNDB($booking['bookingID'], $type, $cellClass);
 		$bookings[$key] = $bookingNDB;
+
 		$memo_bookingID = $booking['bookingID'];
 		$memo_resourceID = $booking['resourceID'];
 		$memo_date = $booking['date']->format('Ymd');
 	}
+
 	$bookings[$currentBookingHeaderKey]->setNumberTimetableLines($bookingTimetableLinesCount); // Derniere reservation
 	$bookings[$currentBookingHeaderKey]->setUserNamesString(BookingApi::getBookingUserNamesString($em, $bRepository->find($memo_bookingID), $currentUserFile));
 	$bookings[$currentBookingHeaderKey]->setLabelNamesString(BookingApi::getBookingLabelNamesString($em, $bRepository->find($memo_bookingID)));
 	$bookings[$currentBookingHeaderKey]->setNote($bRepository->find($memo_bookingID)->getNote());
+	$bookings[$currentBookingHeaderKey]->setUserId($bRepository->find($memo_bookingID)->getUser()->getID());
+
 	return $bookings;
 	}
 

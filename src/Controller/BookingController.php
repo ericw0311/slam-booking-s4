@@ -67,10 +67,14 @@ class BookingController extends Controller
 	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
 	$nRepository = $em->getRepository(Note::Class);
+	$lRepository = $em->getRepository(Label::Class);
+
 	BookingApi::getBookingLinesUrlBeginningAndEndPeriod($em, $timetableLinesList, $beginningDate, $beginningTimetableLine, $endDate, $endTimetableLine);
+
 	// Utilisateurs
 	$userFiles = BookingApi::getUserFiles($em, $userFileIDList);
 	// Etiquettes
+	$numberLabels = $lRepository->getLabelsCount($userContext->getCurrentFile());
 	$labels = BookingApi::getLabels($em, $labelIDList);
 	// Note
 	$note = new Note($connectedUser);
@@ -81,7 +85,7 @@ class BookingController extends Controller
 		array('userContext' => $userContext, 'planningDate' => $planningDate, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource,
 			'date' => $date, 'timetableLinesList' => $timetableLinesList, 'beginningDate' => $beginningDate, 'beginningTimetableLine' => $beginningTimetableLine,
 			'endDate' => $endDate, 'endTimetableLine' => $endTimetableLine, 'userFiles' => $userFiles, 'userFileIDList' => $userFileIDList,
-			'labels' => $labels, 'labelIDList' => $labelIDList, 'noteID' => $noteID, 'note' => $note));
+			'numberLabels' => $numberLabels, 'labels' => $labels, 'labelIDList' => $labelIDList, 'noteID' => $noteID, 'note' => $note));
     }
 
 	// Mise a jour de la periode de fin (en création de réservation)
@@ -549,10 +553,13 @@ class BookingController extends Controller
     $em = $this->getDoctrine()->getManager();
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 	$nRepository = $em->getRepository(Note::Class);
+	$lRepository = $em->getRepository(Label::Class);
+
 	BookingApi::getBookingLinesUrlBeginningAndEndPeriod($em, $timetableLinesList, $beginningDate, $beginningTimetableLine, $endDate, $endTimetableLine);
 	// Utilisateurs
 	$userFiles = BookingApi::getUserFiles($em, $userFileIDList);
 	// Etiquettes
+	$numberLabels = $lRepository->getLabelsCount($userContext->getCurrentFile());
 	$labels = BookingApi::getLabels($em, $labelIDList);
 	// Note
 	$note = new Note($connectedUser);
@@ -564,7 +571,7 @@ class BookingController extends Controller
 		array('userContext' => $userContext, 'planningDate' => $planningDate, 'booking' => $booking, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource,
 			'date' => $date, 'timetableLinesList' => $timetableLinesList, 'beginningDate' => $beginningDate, 'beginningTimetableLine' => $beginningTimetableLine,
 			'endDate' => $endDate, 'endTimetableLine' => $endTimetableLine, 'userFiles' => $userFiles, 'userFileIDList' => $userFileIDList,
-			'labels' => $labels, 'labelIDList' => $labelIDList, 'noteID' => $noteID, 'note' => $note));
+			'numberLabels' => $numberLabels, 'labels' => $labels, 'labelIDList' => $labelIDList, 'noteID' => $noteID, 'note' => $note));
     }
 
     // Mise a jour de la periode de fin (en mise à jour de réservation)
@@ -1047,6 +1054,8 @@ class BookingController extends Controller
 		}
 	}
 	// Libellés
+	$lRepository = $em->getRepository(Label::Class);
+	$numberLabels = $lRepository->getLabelsCount($userContext->getCurrentFile());
 	$labelIDList = BookingApi::getBookingLabelsUrl($em, $booking);
 	$labelIDArray = explode("-", $labelIDList);
 	$labels = array();
@@ -1105,6 +1114,6 @@ class BookingController extends Controller
 		array('userContext' => $userContext, 'planningDate' => $planningDate, 'booking' => $booking, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource,
 			'date' => $date, 'timetableLinesList' => $timetableLinesList, 'beginningDate' => $beginningDate, 'beginningTimetableLine' => $beginningTimetableLine,
 			'endDate' => $endDate, 'endTimetableLine' => $endTimetableLine, 'userFiles' => $userFiles, 'userFileIDList' => $userFileIDList,
-			'labels' => $labels, 'labelIDList' => $labelIDList, 'noteID' => $noteID, 'note' => $note, 'form' => $form->createView()));
+			'numberLabels' => $numberLabels, 'labels' => $labels, 'labelIDList' => $labelIDList, 'noteID' => $noteID, 'note' => $note, 'form' => $form->createView()));
     }
 }

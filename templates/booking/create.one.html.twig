@@ -15,7 +15,9 @@
 {% endblock %}
 
 {% block labels_empty_list_link %}
+{% if numberLabels > 0 %}
 	<a href="{{ path('booking_one_labels_create', { 'planningDate': planningDate|date('Ymd'), 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'date': date|date('Ymd'), 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDList, 'noteID': noteID, 'labelIDInitialList': labelIDList, 'labelIDList': labelIDList }) }}" class="list-group-item" title="{{ 'label.list.update'|trans }}"><img src="{{ asset('images/label-32.png') }}">&nbsp;{{ 'label.no'|trans }}</a>
+{% endif %}
 {% endblock %}
 
 {% block labels_list_link %}

@@ -4,6 +4,12 @@
 
 {% block booking_details %}
 
+<div class="col-sm-12">
+
+{% block entered_by %}{% endblock %}
+
+</div>
+
 <div class="col-sm-6">
 
 <a href="#" class="list-group-item" title="{{ 'booking.period.beginning.update'|trans }}"><img src="{{ asset('images/time-32.png') }}">&nbsp;{{ dateLongue(beginningDate) }}&nbsp;&rarr;&nbsp;{{ timetableLine(beginningTimetableLine) }}</a>

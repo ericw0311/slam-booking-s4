@@ -104,6 +104,7 @@ booking.create: Booking create
 booking.created.ok: The booking has been created
 booking.delete: Booking delete
 booking.deleted.ok: The booking has been deleted
+booking.entered.on.by: Booking entered on %bookingDate% at %bookingTime% by %userName%
 booking.in.progress: Bookings in progress
 booking.not.allowed: Booking not allowed
 booking.period: Booking period

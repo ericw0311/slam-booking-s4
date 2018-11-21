@@ -11,6 +11,7 @@ class BookingNDB
 	private $userNamesString;
 	private $labelNamesString;
 	private $note;
+	private $userId;
 
 	public function setId($id)
 	{
@@ -94,6 +95,17 @@ class BookingNDB
 	return $this->note;
 	}
 	
+	public function setUserId($userId)
+	{
+	$this->userId = $userId;
+	return $this;
+	}
+
+	public function getUserId()
+	{
+	return $this->userId;
+	}
+
 	public function __construct($id, $type, $cellClass)
 	{
 	$this->setId($id);
@@ -103,6 +115,7 @@ class BookingNDB
 	$this->setUserNamesString(null);
 	$this->setLabelNamesString(null);
 	$this->setNote(null);
+	$this->setUserId(0);
 	}
 
 	public function getNoteExists()
