@@ -184,23 +184,17 @@ class BookingApi
 	}
 
 	// Retourne la liste des noms des utilisateurs d'une réservation
-	static function getBookingUserNamesString($em, \App\Entity\Booking $booking, \App\Entity\UserFile $currentUserFile)
+	static function getBookingUserPlanningInfo($em, \App\Entity\Booking $booking, \App\Entity\UserFile $currentUserFile, &$numberUsers)
 	{
 	$buRepository = $em->getRepository(BookingUser::Class);
 	$bookingUsers = $buRepository->findBy(array('booking' => $booking), array('oorder' => 'asc'));
-	$userNamesString = '';
 	if (count($bookingUsers) <= 0) { // Ce cas ne doit pas arriver. Toute réservation a au moins un utilisateur. Mais si cela arrive, on initialise la liste des utilisateurs avec l'utilisateur courant
-		$userNamesString = $currentUserFile->getFirstAndLastName();
-		return $userNamesString;
+		$numberUsers = 1;
+		return $currentUserFile->getFirstAndLastName();
 	}
-	$i = 0;
-	foreach ($bookingUsers as $bookingUser) {
-		$userNamesString .= $bookingUser->getUserFile()->getFirstAndLastName();
-		if (++$i < count($bookingUsers)) {
-			$userNamesString .= chr(32).'|'.chr(32);
-		}
-	}
-	return $userNamesString;
+	
+	$numberUsers = count($bookingUsers);
+	return $bookingUsers[0]->getUserFile()->getFirstAndLastName();
 	}
 
 	// Gestion des étiquettes des réservations
@@ -323,19 +317,18 @@ class BookingApi
 	return $labelsID;
 	}
 	// Retourne un tableau des étiquettes d'une réservation
-	static function getBookingLabelNamesString($em, \App\Entity\Booking $booking)
+	static function getBookingLabelPlanningInfo($em, \App\Entity\Booking $booking, &$numberLabels)
 	{
 	$blRepository = $em->getRepository(BookingLabel::Class);
 	$bookingLabels = $blRepository->findBy(array('booking' => $booking), array('oorder' => 'asc'));
-	$labelNamesString = '';
-	$i = 0;
-	foreach ($bookingLabels as $bookingLabel) {
-		$labelNamesString .= $bookingLabel->getLabel()->getName();
-		if (++$i < count($bookingLabels)) {
-			$labelNamesString .= chr(32).'|'.chr(32);
-		}
+
+	if (count($bookingLabels) <= 0) {
+		$bookingLabels = 0;
+		return '';
 	}
-	return $labelNamesString;
+	
+	$numberLabels = count($bookingLabels);
+	return $bookingLabels[0]->getLabel()->getName();
 	}
 
 	// Retourne les informations de début et de fin de réservation à partir d'une liste de périodes contenue dans une Url
@@ -390,14 +383,23 @@ class BookingApi
 	$currentBookingHeaderKey = "";
 	$bookingTimetableLinesCount = 0; // Compteur des lignes de la reservation courante.
 	$resourceBookingCount = 0; // Compteur des reservations de la ressource courante.
+	$numberUsers = 1;
+	$numberLabels = 0;
 
 	foreach ($bookingsDB as $booking) {
 		$key = $booking['date']->format('Ymd').'-'.$booking['planificationID'].'-'.$booking['planificationPeriodID'].'-'.$booking['planificationLineID'].'-'.$booking['resourceID'].'-'.$booking['timetableID'].'-'.$booking['timetableLineID'];
 
 		if ($memo_bookingID > 0 && ($booking['bookingID'] <> $memo_bookingID || $booking['date']->format('Ymd') <> $memo_date)) { // On a parcouru une reservation ou rupture de date.
 			$bookings[$currentBookingHeaderKey]->setNumberTimetableLines($bookingTimetableLinesCount);
-			$bookings[$currentBookingHeaderKey]->setUserNamesString(BookingApi::getBookingUserNamesString($em, $bRepository->find($memo_bookingID), $currentUserFile));
-			$bookings[$currentBookingHeaderKey]->setLabelNamesString(BookingApi::getBookingLabelNamesString($em, $bRepository->find($memo_bookingID)));
+
+			$userString = BookingApi::getBookingUserPlanningInfo($em, $bRepository->find($memo_bookingID), $currentUserFile, $numberUsers);
+			$bookings[$currentBookingHeaderKey]->setFirstUserName($userString);
+			$bookings[$currentBookingHeaderKey]->setNumberUsers($numberUsers);
+
+			$labelString = BookingApi::getBookingLabelPlanningInfo($em, $bRepository->find($memo_bookingID), $numberLabels);
+			$bookings[$currentBookingHeaderKey]->setFirstLabelName($labelString);
+			$bookings[$currentBookingHeaderKey]->setNumberLabels($numberLabels);
+
 			$bookings[$currentBookingHeaderKey]->setNote($bRepository->find($memo_bookingID)->getNote());
 			$bookings[$currentBookingHeaderKey]->setUserId($bRepository->find($memo_bookingID)->getUser()->getID());
 			$bookingTimetableLinesCount = 0;
@@ -427,10 +429,14 @@ class BookingApi
 	}
 
 	$bookings[$currentBookingHeaderKey]->setNumberTimetableLines($bookingTimetableLinesCount); // Derniere reservation
-	$bookings[$currentBookingHeaderKey]->setUserNamesString(BookingApi::getBookingUserNamesString($em, $bRepository->find($memo_bookingID), $currentUserFile));
-	$bookings[$currentBookingHeaderKey]->setLabelNamesString(BookingApi::getBookingLabelNamesString($em, $bRepository->find($memo_bookingID)));
-	$bookings[$currentBookingHeaderKey]->setNote($bRepository->find($memo_bookingID)->getNote());
-	$bookings[$currentBookingHeaderKey]->setUserId($bRepository->find($memo_bookingID)->getUser()->getID());
+
+	$userString = BookingApi::getBookingUserPlanningInfo($em, $bRepository->find($memo_bookingID), $currentUserFile, $numberUsers);
+	$bookings[$currentBookingHeaderKey]->setFirstUserName($userString);
+	$bookings[$currentBookingHeaderKey]->setNumberUsers($numberUsers);
+
+	$labelString = BookingApi::getBookingLabelPlanningInfo($em, $bRepository->find($memo_bookingID), $numberLabels);
+	$bookings[$currentBookingHeaderKey]->setFirstLabelName($labelString);
+	$bookings[$currentBookingHeaderKey]->setNumberLabels($numberLabels);
 
 	return $bookings;
 	}

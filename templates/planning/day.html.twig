@@ -39,26 +39,31 @@
 
 <table><tr><td>
 <img src="{{ asset('images/user-16.png') }}">&nbsp;
-{{ bookings[key].userNamesString }}
-{% if bookings[key].getMultiLigne() %}
-</td></tr><tr><td>
-{% else %}
-&nbsp;
+{{ bookings[key].firstUserName }}
+
+{% if (bookings[key].numberUsers > 1) %}
+&nbsp;<span class="w3-badge w3-green">&plus;{{ (bookings[key].numberUsers-1) }}</span>
 {% endif %}
-{% if bookings[key].getLabel() %}
-<img src="{{ asset('images/label-16.png') }}">&nbsp;
-{{ bookings[key].labelNamesString }}&nbsp;
+
+{% if (bookings[key].numberLabels > 0) %}
+<img src="{{ asset('images/label-16.png') }}">&nbsp;{{ bookings[key].firstLabelName }}
 {% endif %}
+
+{% if (bookings[key].numberLabels > 1) %}
+<span class="w3-badge w3-orange">&plus;{{ (bookings[key].numberLabels-1) }}</span>
+{% endif %}
+
 {% if bookings[key].getNoteExists() %}
 <img src="{{ asset('images/note-16.png') }}" title="{{ bookings[key].note }}">&nbsp;
 {% endif %}
 
-{% if bookings[key].userId == userContext.user.id %}
+&nbsp;<a href="{{ path(booking_view, { 'planningDate': date|date('Ymd'), 'bookingID': bookings[key].id, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': planificationResource.resource.ID, 'date': planningContext.getDay(day_key).date|date('Ymd') }) }}" class="glyphicon glyphicon-eye-open" title="{{ 'view'|trans }}"></a>
+
+{% if userContext.getCurrentUserFileAdministrator() or bookings[key].userId == userContext.user.id %}
 <a href="{{ path(booking_update, { 'planningDate': date|date('Ymd'), 'bookingID': bookings[key].id, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': planificationResource.resource.ID, 'date': planningContext.getDay(day_key).date|date('Ymd') }) }}" class="glyphicon glyphicon-pencil" title="{{ 'modify'|trans }}"></a>&nbsp;
 <a href="{{ path(booking_delete, { 'planningDate': date|date('Ymd'), 'bookingID': bookings[key].id, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': planificationResource.resource.ID, 'date': planningContext.getDay(day_key).date|date('Ymd') }) }}" class="glyphicon glyphicon-trash" title="{{ 'delete'|trans }}"></a>
-{% else %}
-<a href="{{ path(booking_update, { 'planningDate': date|date('Ymd'), 'bookingID': bookings[key].id, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': planificationResource.resource.ID, 'date': planningContext.getDay(day_key).date|date('Ymd') }) }}" class="glyphicon glyphicon-eye-open" title="{{ 'modify'|trans }}"></a>
 {% endif %}
+
 </td></tr></table>
 
 		</td>

@@ -8,10 +8,12 @@ class BookingNDB
 	private $type;
 	private $numberTimetableLines;
 	private $cellClass;
-	private $userNamesString;
-	private $labelNamesString;
 	private $note;
 	private $userId;
+	private $numberUsers;
+	private $firstUserName;
+	private $numberLabels;
+	private $firstLabelName;
 
 	public function setId($id)
 	{
@@ -57,31 +59,48 @@ class BookingNDB
 	return $this->cellClass;
 	}
 
-	public function setUserNamesString($userNamesString)
+	public function setFirstUserName($firstUserName)
 	{
-	$this->userNamesString = $userNamesString;
+	$this->firstUserName = $firstUserName;
 	return $this;
 	}
 
-	public function getUserNamesString()
+	public function getFirstUserName()
 	{
-	return $this->userNamesString;
+	return $this->firstUserName;
 	}
 	
-	public function setLabelNamesString($labelNamesString)
+	public function setNumberUsers($numberUsers)
 	{
-	$this->labelNamesString = $labelNamesString;
+	$this->numberUsers = $numberUsers;
 	return $this;
 	}
 
-	public function getLabelNamesString()
+	public function getNumberUsers()
 	{
-	return $this->labelNamesString;
+	return $this->numberUsers;
+	}
+
+	public function setFirstLabelName($firstLabelName)
+	{
+	$this->firstLabelName = $firstLabelName;
+	return $this;
+	}
+
+	public function getFirstLabelName()
+	{
+	return $this->firstLabelName;
 	}
 	
-	public function getLabel() // Indique si au moins une étiquette a été attachée à la réservation
+	public function setNumberLabels($numberLabels)
 	{
-	return (!empty($this->labelNamesString));
+	$this->numberLabels = $numberLabels;
+	return $this;
+	}
+
+	public function getNumberLabels()
+	{
+	return $this->numberLabels;
 	}
 
 	public function setNote($note)
@@ -112,8 +131,10 @@ class BookingNDB
 	$this->setType($type);
 	$this->setNumberTimetableLines(0);
 	$this->setCellClass($cellClass);
-	$this->setUserNamesString(null);
-	$this->setLabelNamesString(null);
+	$this->setFirstUserName(null);
+	$this->setNumberUsers(0);
+	$this->setFirstLabelName(null);
+	$this->setNumberLabels(0);
 	$this->setNote(null);
 	$this->setUserId(0);
 	}
@@ -121,10 +142,5 @@ class BookingNDB
 	public function getNoteExists()
 	{
 	return (!empty($this->note));
-	}
-	
-	public function getMultiLigne() // Une réservation est affichée en multiligne si elle est multi créneaux horaires et qu'elle a une ou plusieurs étiquettes
-	{
-	return ($this->getNumberTimetableLines() > 1 && $this->getLabel());
 	}
 }

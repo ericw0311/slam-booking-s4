@@ -217,6 +217,7 @@ planificationPeriod.una.booking: Des réservations sont saisies pour cette péri
 planificationPeriod.una.closed: Cette période de planification est clotûrée, elle n'est pas modifiable
 
 planning: Planning
+planning.back: Retour au planning
 planning.calendar: Calendrier
 planning.global: Planning global
 planning.reduce.left: Réduire le planning vers la gauche
@@ -389,7 +390,9 @@ user.forgot.login.or.password: Nom d'utilisateur ou mot de passe oublié
 user.lastName: Nom de famille
 user.list.update: Modifier la liste des utilisateurs
 user.login: Se connecter
+user.login.and.password: Votre nom d'utilisateur est %name% et votre mot de passe est %password%. Pour vous connecter, cliquez sur le lien:
 user.login.and.password.sent: Le nom d'utilisateur et le passe ont été envoyés à l'adresse mail saisie
+user.login.and.password.sent.email.title: Envoi du nom d'utilisateur et du mot de passe
 user.logout: Se déconnecter
 user.modify.password: Modifier le mot de passe
 user.name: Nom d'utilisateur
@@ -399,6 +402,7 @@ user.password: Mot de passe
 user.password.updated.ok: Le mot de passe a bien été modifié
 user.register: S'inscrire
 user.registration: Inscription
+user.registration.successfull: Bonjour %name%. Votre inscription sur le site Slam Booking est bien prise en compte. Pour vous connecter, cliquez sur le lien:
 user.repeat.password: Répéter le mot de passe
 user.select: Sélectionner l'utilisateur
 user.unselect: Désélectionner l'utilisateur

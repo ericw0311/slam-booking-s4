@@ -5,6 +5,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -25,7 +26,7 @@ class UserController extends Controller
 	/**
 	 * @Route("/register", name="user_registration")
      */
-	public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, EventDispatcherInterface $eventDispatcher)
+	public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, EventDispatcherInterface $eventDispatcher, \Swift_Mailer $mailer, TranslatorInterface $translator)
 	{
 	$user = new User();
 	$form = $this->createForm(UserType::class, $user);
@@ -43,9 +44,18 @@ class UserController extends Controller
 		$em->persist($user);
 		$em->flush();
 
-		//On déclenche l'event
-		$event = new GenericEvent($user);
-		$eventDispatcher->dispatch(Events::USER_REGISTERED, $event);
+		// On déclenche l'event
+		// $event = new GenericEvent($user);
+		// $eventDispatcher->dispatch(Events::USER_REGISTERED, $event);
+
+		$message = (new \Swift_Message($translator->trans('user.registration')))
+			->setFrom(['slam.booking.web@gmail.com' => 'Slam Booking'])
+			->setTo($user->getEmail())
+			->setBody(
+				$this->renderView('emails/registration.html.twig', array('user' => $user)),
+					'text/html');
+
+		$mailer->send($message);
 
 		return $this->redirectToRoute('user_login');
 	}
@@ -69,7 +79,7 @@ class UserController extends Controller
     /**
 	 * @Route("/forgotloginorpassword", name="user_forgot_login_or_password")
      */
-    public function forgot_login_or_password(Request $request, UserPasswordEncoderInterface $passwordEncoder, \Swift_Mailer $mailer)
+    public function forgot_login_or_password(Request $request, UserPasswordEncoderInterface $passwordEncoder, \Swift_Mailer $mailer, TranslatorInterface $translator)
     {
 	$email = new Email();
 	$form = $this->createForm(SD_EmailType::class, $email);
@@ -87,15 +97,14 @@ class UserController extends Controller
 				return $this->redirectToRoute('user_forgot_login_or_password');
 			}
 
-
 			// On réinitialise le mot de passe
 			$decodePassword = 'slam'.$user->getID();
 			$encodePassword = $passwordEncoder->encodePassword($user, $decodePassword);
 			$user->setPassword($encodePassword);
 			$em->flush();
 
-			$message = (new \Swift_Message('Envoi du nom d\'utilisateur et du mot de passe'))
-				->setFrom('slam.booking.web@gmail.com')
+			$message = (new \Swift_Message($translator->trans('user.login.and.password.sent.email.title')))
+				->setFrom(['slam.booking.web@gmail.com' => 'Slam Booking'])
 				->setTo($email->getEmail())
 				->setBody(
 					$this->renderView('emails/login.and.password.sent.html.twig',

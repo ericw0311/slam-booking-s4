@@ -34,33 +34,31 @@ class BookingController extends Controller
 	// CREATION DES RESERVATIONS
     // Création de réservation
     /**
-     * @Route("/bookingmany/create/{planningDate}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{labelIDList}/{noteID}", name="booking_many_create")
+     * @Route("/bookingmany/create/{planningDate}/{planificationID}/{planificationPeriodID}/{resourceID}/{timetableLinesList}/{userFileIDList}/{labelIDList}/{noteID}", name="booking_many_create")
 	 * @ParamConverter("planningDate", options={"format": "Ymd"})
 	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
 	 * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
 	 * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
-	 * @ParamConverter("date", options={"format": "Ymd"})
      */
-	public function many_create(\Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $labelIDList, $noteID)
+	public function many_create(\Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID)
 	{
-	return BookingController::create($planningDate, $planification, $planificationPeriod, $resource, $date, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, 1);
+	return BookingController::create($planningDate, $planification, $planificationPeriod, $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, 1);
 	}
     
     /**
-     * @Route("/bookingone/create/{planningDate}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{labelIDList}/{noteID}", name="booking_one_create")
+     * @Route("/bookingone/create/{planningDate}/{planificationID}/{planificationPeriodID}/{resourceID}/{timetableLinesList}/{userFileIDList}/{labelIDList}/{noteID}", name="booking_one_create")
 	 * @ParamConverter("planningDate", options={"format": "Ymd"})
 	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
 	 * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
 	 * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
-	 * @ParamConverter("date", options={"format": "Ymd"})
      */
-	public function one_create(\Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $labelIDList, $noteID)
+	public function one_create(\Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID)
     {
-	return BookingController::create($planningDate, $planification, $planificationPeriod, $resource, $date, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, 0);
+	return BookingController::create($planningDate, $planification, $planificationPeriod, $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, 0);
     }
     
 	// Création de réservation
-	public function create(\Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, $many)
+	public function create(\Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, $many)
 	{
 	$connectedUser = $this->getUser();
 	$em = $this->getDoctrine()->getManager();
@@ -83,41 +81,39 @@ class BookingController extends Controller
 	}
 	return $this->render('booking/create.'.($many ? 'many' : 'one').'.html.twig',
 		array('userContext' => $userContext, 'planningDate' => $planningDate, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource,
-			'date' => $date, 'timetableLinesList' => $timetableLinesList, 'beginningDate' => $beginningDate, 'beginningTimetableLine' => $beginningTimetableLine,
+			'timetableLinesList' => $timetableLinesList, 'beginningDate' => $beginningDate, 'beginningTimetableLine' => $beginningTimetableLine,
 			'endDate' => $endDate, 'endTimetableLine' => $endTimetableLine, 'userFiles' => $userFiles, 'userFileIDList' => $userFileIDList,
 			'numberLabels' => $numberLabels, 'labels' => $labels, 'labelIDList' => $labelIDList, 'noteID' => $noteID, 'note' => $note));
     }
 
 	// Mise a jour de la periode de fin (en création de réservation)
     /**
-     * @Route("/bookingmany/endperiodcreate/{planningDate}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{firstDateNumber}/{userFileIDList}/{labelIDList}/{noteID}", name="booking_many_end_period_create")
+     * @Route("/bookingmany/endperiodcreate/{planningDate}/{planificationID}/{planificationPeriodID}/{resourceID}/{timetableLinesList}/{firstDateNumber}/{userFileIDList}/{labelIDList}/{noteID}", name="booking_many_end_period_create")
 	 * @ParamConverter("planningDate", options={"format": "Ymd"})
 	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
 	 * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
 	 * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
-	 * @ParamConverter("date", options={"format": "Ymd"})
      */
-    public function many_end_period_create(\Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $firstDateNumber, $userFileIDList, $labelIDList, $noteID)
+    public function many_end_period_create(\Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $firstDateNumber, $userFileIDList, $labelIDList, $noteID)
     {
-	return BookingController::end_period_create($planningDate, $planification, $planificationPeriod, $resource, $date, $timetableLinesList, $firstDateNumber, $userFileIDList, $labelIDList, $noteID, 1);
+	return BookingController::end_period_create($planningDate, $planification, $planificationPeriod, $resource, $timetableLinesList, $firstDateNumber, $userFileIDList, $labelIDList, $noteID, 1);
     }
 
     // Mise a jour de la periode de fin (en création de réservation)
     /**
-     * @Route("/bookingone/endperiodcreate/{planningDate}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{firstDateNumber}/{userFileIDList}/{labelIDList}/{noteID}", name="booking_one_end_period_create")
+     * @Route("/bookingone/endperiodcreate/{planningDate}/{planificationID}/{planificationPeriodID}/{resourceID}/{timetableLinesList}/{firstDateNumber}/{userFileIDList}/{labelIDList}/{noteID}", name="booking_one_end_period_create")
 	 * @ParamConverter("planningDate", options={"format": "Ymd"})
 	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
 	 * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
 	 * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
-	 * @ParamConverter("date", options={"format": "Ymd"})
      */
-    public function one_end_period_create(\Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $firstDateNumber, $userFileIDList, $labelIDList, $noteID)
+    public function one_end_period_create(\Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $firstDateNumber, $userFileIDList, $labelIDList, $noteID)
     {
-	return BookingController::end_period_create($planningDate, $planification, $planificationPeriod, $resource, $date, $timetableLinesList, $firstDateNumber, $userFileIDList, $labelIDList, $noteID, 0);
+	return BookingController::end_period_create($planningDate, $planification, $planificationPeriod, $resource, $timetableLinesList, $firstDateNumber, $userFileIDList, $labelIDList, $noteID, 0);
     }
 
     // Mise a jour de la periode de fin (en création de réservation)
-    public function end_period_create(\Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $firstDateNumber, $userFileIDList, $labelIDList, $noteID, $many)
+    public function end_period_create(\Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $firstDateNumber, $userFileIDList, $labelIDList, $noteID, $many)
     {
     $connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
@@ -133,45 +129,43 @@ class BookingController extends Controller
 	$previousFirstDateNumber = ($firstDateNumber < Constants::MAXIMUM_NUMBER_BOOKING_DATES_DISPLAYED) ? 0 : ($firstDateNumber - Constants::MAXIMUM_NUMBER_BOOKING_DATES_DISPLAYED);
 
 	return $this->render('booking/period.end.create.'.($many ? 'many' : 'one').'.html.twig',
-		array('userContext' => $userContext, 'planningDate' => $planningDate, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource, 'date' => $date, 'timetableLinesList' => $timetableLinesList,
+		array('userContext' => $userContext, 'planningDate' => $planningDate, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource, 'timetableLinesList' => $timetableLinesList,
 			'beginningDate' => $beginningDate, 'beginningTimetableLine' => $beginningTimetableLine, 'endPeriods' => $endPeriods, 'firstDateNumber' => $firstDateNumber, 
 			'previousFirstDateNumber' => $previousFirstDateNumber, 'nextFirstDateNumber' => $nextFirstDateNumber, 'userFileIDList' => $userFileIDList, 'labelIDList' => $labelIDList, 'noteID' => $noteID));
     }
 
     // Mise a jour de la liste des utilisateurs (en création de réservation)
     /**
-     * @Route("/bookingmany/userscreate/{planningDate}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{labelIDList}/{noteID}/{userFileIDInitialList}/{userFileIDList}",
+     * @Route("/bookingmany/userscreate/{planningDate}/{planificationID}/{planificationPeriodID}/{resourceID}/{timetableLinesList}/{labelIDList}/{noteID}/{userFileIDInitialList}/{userFileIDList}",
      * defaults={"userFileIDList" = null},
      * name="booking_many_users_create")
 	 * @ParamConverter("planningDate", options={"format": "Ymd"})
 	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
 	 * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
 	 * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
-	 * @ParamConverter("date", options={"format": "Ymd"})
      */
-	public function many_users_create(\Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $labelIDList, $noteID, $userFileIDInitialList, $userFileIDList)
+	public function many_users_create(\Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $labelIDList, $noteID, $userFileIDInitialList, $userFileIDList)
 	{
-	return BookingController::users_create($planningDate, $planification, $planificationPeriod, $resource, $date, $timetableLinesList, $labelIDList, $noteID, $userFileIDInitialList, $userFileIDList, 1);
+	return BookingController::users_create($planningDate, $planification, $planificationPeriod, $resource, $timetableLinesList, $labelIDList, $noteID, $userFileIDInitialList, $userFileIDList, 1);
 	}
 
     // Mise a jour de la liste des utilisateurs (en création de réservation)
     /**
-     * @Route("/bookingone/userscreate/{planningDate}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{labelIDList}/{noteID}/{userFileIDInitialList}/{userFileIDList}",
+     * @Route("/bookingone/userscreate/{planningDate}/{planificationID}/{planificationPeriodID}/{resourceID}/{timetableLinesList}/{labelIDList}/{noteID}/{userFileIDInitialList}/{userFileIDList}",
      * defaults={"userFileIDList" = null},
      * name="booking_one_users_create")
 	 * @ParamConverter("planningDate", options={"format": "Ymd"})
 	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
 	 * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
 	 * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
-	 * @ParamConverter("date", options={"format": "Ymd"})
      */
-	public function one_users_create(\Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $labelIDList, $noteID, $userFileIDInitialList, $userFileIDList)
+	public function one_users_create(\Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $labelIDList, $noteID, $userFileIDInitialList, $userFileIDList)
     {
-	return BookingController::users_create($planningDate, $planification, $planificationPeriod, $resource, $date, $timetableLinesList, $labelIDList, $noteID, $userFileIDInitialList, $userFileIDList, 0);
+	return BookingController::users_create($planningDate, $planification, $planificationPeriod, $resource, $timetableLinesList, $labelIDList, $noteID, $userFileIDInitialList, $userFileIDList, 0);
     }
 
     // Mise a jour de la liste des utilisateurs (en création de réservation)
-    public function users_create(\Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $labelIDList, $noteID, $userFileIDInitialList, $userFileIDList, $many)
+    public function users_create(\Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $labelIDList, $noteID, $userFileIDInitialList, $userFileIDList, $many)
 	{
 	$connectedUser = $this->getUser();
 	$em = $this->getDoctrine()->getManager();
@@ -182,41 +176,39 @@ class BookingController extends Controller
 	$availableUserFiles = BookingApi::initAvailableUserFiles($em, $userContext->getCurrentFile(), $userFileIDList);
 
 	return $this->render('booking/users.create.'.($many ? 'many' : 'one').'.html.twig',
-		array('userContext' => $userContext, 'planningDate' => $planningDate, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource, 'date' => $date,
+		array('userContext' => $userContext, 'planningDate' => $planningDate, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource,
 		'timetableLinesList' => $timetableLinesList, 'labelIDList' => $labelIDList, 'noteID' => $noteID, 'selectedUserFiles' => $selectedUserFiles, 'availableUserFiles' => $availableUserFiles,
 		'userFileIDList' => $userFileIDList, 'userFileIDInitialList' => $userFileIDInitialList));
     }
 
     // Mise a jour de la liste des utilisateurs (en création de réservation)
     /**
-     * @Route("/bookingmany/labelscreate/{planningDate}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{noteID}/{labelIDInitialList}/{labelIDList}", name="booking_many_labels_create")
+     * @Route("/bookingmany/labelscreate/{planningDate}/{planificationID}/{planificationPeriodID}/{resourceID}/{timetableLinesList}/{userFileIDList}/{noteID}/{labelIDInitialList}/{labelIDList}", name="booking_many_labels_create")
 	 * @ParamConverter("planningDate", options={"format": "Ymd"})
 	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
 	 * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
 	 * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
-	 * @ParamConverter("date", options={"format": "Ymd"})
      */
-	public function many_labels_create(\Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $noteID, $labelIDInitialList, $labelIDList)
+	public function many_labels_create(\Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, $noteID, $labelIDInitialList, $labelIDList)
 	{
-	return BookingController::labels_create($planningDate, $planification, $planificationPeriod, $resource, $date, $timetableLinesList, $userFileIDList, $noteID, $labelIDInitialList, $labelIDList, 1);
+	return BookingController::labels_create($planningDate, $planification, $planificationPeriod, $resource, $timetableLinesList, $userFileIDList, $noteID, $labelIDInitialList, $labelIDList, 1);
 	}
 
     // Mise a jour de la liste des utilisateurs (en création de réservation)
     /**
-     * @Route("/bookingone/labelscreate/{planningDate}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{noteID}/{labelIDInitialList}/{labelIDList}", name="booking_one_labels_create")
+     * @Route("/bookingone/labelscreate/{planningDate}/{planificationID}/{planificationPeriodID}/{resourceID}/{timetableLinesList}/{userFileIDList}/{noteID}/{labelIDInitialList}/{labelIDList}", name="booking_one_labels_create")
 	 * @ParamConverter("planningDate", options={"format": "Ymd"})
 	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
 	 * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
 	 * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
-	 * @ParamConverter("date", options={"format": "Ymd"})
      */
-	public function one_labels_create(\Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $noteID, $labelIDInitialList, $labelIDList)
+	public function one_labels_create(\Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, $noteID, $labelIDInitialList, $labelIDList)
     {
-	return BookingController::labels_create($planningDate, $planification, $planificationPeriod, $resource, $date, $timetableLinesList, $userFileIDList, $noteID, $labelIDInitialList, $labelIDList, 0);
+	return BookingController::labels_create($planningDate, $planification, $planificationPeriod, $resource, $timetableLinesList, $userFileIDList, $noteID, $labelIDInitialList, $labelIDList, 0);
     }
 
     // Mise a jour de la liste des étiquettes (en création de réservation)
-    public function labels_create(\Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $noteID, $labelIDInitialList, $labelIDList, $many)
+    public function labels_create(\Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, $noteID, $labelIDInitialList, $labelIDList, $many)
 	{
 	$connectedUser = $this->getUser();
 	$em = $this->getDoctrine()->getManager();
@@ -226,41 +218,39 @@ class BookingController extends Controller
 	$availableLabels = BookingApi::initAvailableLabels($em, $userContext->getCurrentFile(), $labelIDList);
 
 	return $this->render('booking/labels.create.'.($many ? 'many' : 'one').'.html.twig',
-		array('userContext' => $userContext, 'planningDate' => $planningDate, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource, 'date' => $date,
+		array('userContext' => $userContext, 'planningDate' => $planningDate, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource,
 			'timetableLinesList' => $timetableLinesList, 'userFileIDList' => $userFileIDList, 'noteID' => $noteID, 'selectedLabels' => $selectedLabels, 
 			'availableLabels' => $availableLabels, 'labelIDList' => $labelIDList, 'labelIDInitialList' => $labelIDInitialList));
     }
 
 	// Mise a jour de la note (en création de réservation)
     /**
-     * @Route("/bookingmany/notecreate/{planningDate}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{labelIDList}/{noteID}", name="booking_many_note_create")
+     * @Route("/bookingmany/notecreate/{planningDate}/{planificationID}/{planificationPeriodID}/{resourceID}/{timetableLinesList}/{userFileIDList}/{labelIDList}/{noteID}", name="booking_many_note_create")
 	 * @ParamConverter("planningDate", options={"format": "Ymd"})
 	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
 	 * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
 	 * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
-	 * @ParamConverter("date", options={"format": "Ymd"})
      */
-	public function many_note_create(Request $request, \Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $labelIDList, $noteID)
+	public function many_note_create(Request $request, \Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID)
     {
-	return BookingController::note_create($request, $planningDate, $planification, $planificationPeriod, $resource, $date, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, 1);
+	return BookingController::note_create($request, $planningDate, $planification, $planificationPeriod, $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, 1);
     }
 
 	// Mise a jour de la note (en création de réservation)
     /**
-     * @Route("/bookingone/notecreate/{planningDate}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{labelIDList}/{noteID}", name="booking_one_note_create")
+     * @Route("/bookingone/notecreate/{planningDate}/{planificationID}/{planificationPeriodID}/{resourceID}/{timetableLinesList}/{userFileIDList}/{labelIDList}/{noteID}", name="booking_one_note_create")
 	 * @ParamConverter("planningDate", options={"format": "Ymd"})
 	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
 	 * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
 	 * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
-	 * @ParamConverter("date", options={"format": "Ymd"})
      */
-	public function one_note_create(Request $request, \Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $labelIDList, $noteID)
+	public function one_note_create(Request $request, \Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID)
     {
-	return BookingController::note_create($request, $planningDate, $planification, $planificationPeriod, $resource, $date, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, 0);
+	return BookingController::note_create($request, $planningDate, $planification, $planificationPeriod, $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, 0);
     }
 
 	// Mise a jour de la note (en création de réservation)
-    public function note_create(Request $request, \Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, $many)
+    public function note_create(Request $request, \Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, $many)
 	{
 	$connectedUser = $this->getUser();
 	$em = $this->getDoctrine()->getManager();
@@ -280,49 +270,46 @@ class BookingController extends Controller
 			$em->flush();
 			return $this->redirectToRoute('booking_'.($many ? 'many' : 'one').'_create',
 				array('planningDate' => $planningDate->format('Ymd'), 'planificationID' => $planification->getID(), 'planificationPeriodID' => $planificationPeriod->getID(), 'resourceID' => $resource->getID(),
-					'date' => $date->format('Ymd'), 'timetableLinesList' => $timetableLinesList, 'userFileIDList' => $userFileIDList, 'labelIDList' => $labelIDList,
-					'noteID' => $note->getID()));
+					'timetableLinesList' => $timetableLinesList, 'userFileIDList' => $userFileIDList, 'labelIDList' => $labelIDList, 'noteID' => $note->getID()));
 		}
     }
 
 	return $this->render('booking/note.create.'.($many ? 'many' : 'one').'.html.twig',
 		array('userContext' => $userContext, 'planningDate' => $planningDate, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod,
-			'resource' => $resource, 'date' => $date, 'timetableLinesList' => $timetableLinesList,
+			'resource' => $resource, 'timetableLinesList' => $timetableLinesList,
 			'userFileIDList' => $userFileIDList, 'labelIDList' => $labelIDList, 'noteID' => $noteID, 'form' => $form->createView()));
 	}
 
 	// Suppression de la note (en création de réservation)
     /**
-     * @Route("/bookingmany/notedeletecreate/{planningDate}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{labelIDList}/{noteID}", name="booking_many_note_delete_create")
+     * @Route("/bookingmany/notedeletecreate/{planningDate}/{planificationID}/{planificationPeriodID}/{resourceID}/{timetableLinesList}/{userFileIDList}/{labelIDList}/{noteID}", name="booking_many_note_delete_create")
 	 * @ParamConverter("planningDate", options={"format": "Ymd"})
 	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
 	 * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
 	 * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
-	 * @ParamConverter("date", options={"format": "Ymd"})
 	 * @ParamConverter("note", options={"mapping": {"noteID": "id"}})
      */
-	public function many_note_delete_create(\Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $labelIDList, Note $note)
+	public function many_note_delete_create(\Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, $labelIDList, Note $note)
     {
-	return BookingController::note_delete_create($planningDate, $planification, $planificationPeriod, $resource, $date, $timetableLinesList, $userFileIDList, $labelIDList, $note, 1);
+	return BookingController::note_delete_create($planningDate, $planification, $planificationPeriod, $resource, $timetableLinesList, $userFileIDList, $labelIDList, $note, 1);
     }
 
 	// Suppression de la note (en création de réservation)
     /**
-     * @Route("/bookingone/notedeletecreate/{planningDate}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{labelIDList}/{noteID}", name="booking_one_note_delete_create")
+     * @Route("/bookingone/notedeletecreate/{planningDate}/{planificationID}/{planificationPeriodID}/{resourceID}/{timetableLinesList}/{userFileIDList}/{labelIDList}/{noteID}", name="booking_one_note_delete_create")
 	 * @ParamConverter("planningDate", options={"format": "Ymd"})
 	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
 	 * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
 	 * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
-	 * @ParamConverter("date", options={"format": "Ymd"})
 	 * @ParamConverter("note", options={"mapping": {"noteID": "id"}})
      */
-	public function one_note_delete_create(\Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $labelIDList, Note $note)
+	public function one_note_delete_create(\Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, $labelIDList, Note $note)
     {
-	return BookingController::note_delete_create($planningDate, $planification, $planificationPeriod, $resource, $date, $timetableLinesList, $userFileIDList, $labelIDList, $note, 0);
+	return BookingController::note_delete_create($planningDate, $planification, $planificationPeriod, $resource, $timetableLinesList, $userFileIDList, $labelIDList, $note, 0);
     }
 
 	// Suppression de la note (en création de réservation)
-    public function note_delete_create(\Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $labelIDList, Note $note, $many)
+    public function note_delete_create(\Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, $labelIDList, Note $note, $many)
 	{
 	$connectedUser = $this->getUser();
 	$em = $this->getDoctrine()->getManager();
@@ -333,7 +320,7 @@ class BookingController extends Controller
 
 	return $this->redirectToRoute('booking_'.($many ? 'many' : 'one').'_create',
 		array('planningDate' => $planningDate->format('Ymd'), 'planificationID' => $planification->getID(), 'planificationPeriodID' => $planificationPeriod->getID(), 'resourceID' => $resource->getID(),
-		'date' => $date->format('Ymd'), 'timetableLinesList' => $timetableLinesList, 'userFileIDList' => $userFileIDList, 'labelIDList' => $labelIDList, 'noteID' => 0));
+		'timetableLinesList' => $timetableLinesList, 'userFileIDList' => $userFileIDList, 'labelIDList' => $labelIDList, 'noteID' => 0));
 	}
 
     // Validation de la création d'une réservation
@@ -466,36 +453,34 @@ class BookingController extends Controller
 	// MISE A JOUR DES RESERVATIONS
     // Initialisation de la mise à jour de réservation
     /**
-     * @Route("/bookingmany/initupdate/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}", name="booking_many_init_update")
+     * @Route("/bookingmany/initupdate/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}", name="booking_many_init_update")
 	 * @ParamConverter("planningDate", options={"format": "Ymd"})
 	 * @ParamConverter("booking", options={"mapping": {"bookingID": "id"}})
 	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
      * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
      * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
-	 * @ParamConverter("date", options={"format": "Ymd"})
      */
-    public function many_init_update(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date)
+    public function many_init_update(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource)
     {
-	return BookingController::init_update($planningDate, $booking, $planification, $planificationPeriod, $resource, $date, 1);
+	return BookingController::init_update($planningDate, $booking, $planification, $planificationPeriod, $resource, 1);
     }
 
     // Initialisation de la mise à jour de réservation
     /**
-     * @Route("/bookingone/initupdate/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}", name="booking_one_init_update")
+     * @Route("/bookingone/initupdate/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}", name="booking_one_init_update")
 	 * @ParamConverter("planningDate", options={"format": "Ymd"})
 	 * @ParamConverter("booking", options={"mapping": {"bookingID": "id"}})
 	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
      * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
      * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
-	 * @ParamConverter("date", options={"format": "Ymd"})
      */
-    public function one_init_update(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date)
+    public function one_init_update(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource)
     {
-	return BookingController::init_update($planningDate, $booking, $planification, $planificationPeriod, $resource, $date, 0);
+	return BookingController::init_update($planningDate, $booking, $planification, $planificationPeriod, $resource, 0);
     }
 
     // Initialisation de la mise à jour de réservation
-    public function init_update(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $many)
+    public function init_update(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $many)
     {
     $em = $this->getDoctrine()->getManager();
 	$timetableLinesList = BookingApi::getBookingLinesUrl($em, $booking);
@@ -509,45 +494,42 @@ class BookingController extends Controller
 
 	return $this->redirectToRoute('booking_'.($many ? 'many' : 'one').'_update',
 		array('planningDate' => $planningDate->format('Ymd'), 'bookingID' => $booking->getID(), 'planificationID' => $planification->getID(), 'planificationPeriodID' => $planificationPeriod->getID(),
-			'resourceID' => $resource->getID(), 'date' => $date->format('Ymd'), 'timetableLinesList' => $timetableLinesList, 'userFileIDList' => $userFileIDList,
-			'labelIDList' => $labelIDList, 'noteID' => $noteID));
+			'resourceID' => $resource->getID(), 'timetableLinesList' => $timetableLinesList, 'userFileIDList' => $userFileIDList, 'labelIDList' => $labelIDList, 'noteID' => $noteID));
     }
 
     // Mise à jour de réservation
     /**
-     * @Route("/bookingmany/update/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{labelIDList}/{noteID}", name="booking_many_update")
+     * @Route("/bookingmany/update/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{timetableLinesList}/{userFileIDList}/{labelIDList}/{noteID}", name="booking_many_update")
 	 * @ParamConverter("planningDate", options={"format": "Ymd"})
 	 * @ParamConverter("booking", options={"mapping": {"bookingID": "id"}})
 	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
      * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
      * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
-	 * @ParamConverter("date", options={"format": "Ymd"})
      */
-    public function many_update(LoggerInterface $logger, \Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $labelIDList, $noteID)
+    public function many_update(LoggerInterface $logger, \Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID)
     {
 	$logger->info('BookingController.many_update DBG 1');
 	$logger->info('BookingController.many_update DBG 2 _'.$booking->getID().'_');
 
-	return BookingController::update($logger, $planningDate, $booking, $planification, $planificationPeriod, $resource, $date, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, 1);
+	return BookingController::update($logger, $planningDate, $booking, $planification, $planificationPeriod, $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, 1);
     }
 
     // Mise à jour de réservation
     /**
-     * @Route("/bookingone/update/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{labelIDList}/{noteID}", name="booking_one_update")
+     * @Route("/bookingone/update/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{timetableLinesList}/{userFileIDList}/{labelIDList}/{noteID}", name="booking_one_update")
 	 * @ParamConverter("planningDate", options={"format": "Ymd"})
 	 * @ParamConverter("booking", options={"mapping": {"bookingID": "id"}})
 	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
      * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
      * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
-	 * @ParamConverter("date", options={"format": "Ymd"})
      */
-    public function one_update(LoggerInterface $logger, \Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $labelIDList, $noteID)
+    public function one_update(LoggerInterface $logger, \Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID)
     {
-	return BookingController::update($logger, $planningDate, $booking, $planification, $planificationPeriod, $resource, $date, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, 0);
+	return BookingController::update($logger, $planningDate, $booking, $planification, $planificationPeriod, $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, 0);
     }
 
     // Mise à jour de réservation
-    public function update(LoggerInterface $logger, \Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, $many)
+    public function update(LoggerInterface $logger, \Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, $many)
     {
     $connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
@@ -569,43 +551,41 @@ class BookingController extends Controller
 
 	return $this->render('booking/update.'.($many ? 'many' : 'one').'.html.twig',
 		array('userContext' => $userContext, 'planningDate' => $planningDate, 'booking' => $booking, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource,
-			'date' => $date, 'timetableLinesList' => $timetableLinesList, 'beginningDate' => $beginningDate, 'beginningTimetableLine' => $beginningTimetableLine,
+			'timetableLinesList' => $timetableLinesList, 'beginningDate' => $beginningDate, 'beginningTimetableLine' => $beginningTimetableLine,
 			'endDate' => $endDate, 'endTimetableLine' => $endTimetableLine, 'userFiles' => $userFiles, 'userFileIDList' => $userFileIDList,
 			'numberLabels' => $numberLabels, 'labels' => $labels, 'labelIDList' => $labelIDList, 'noteID' => $noteID, 'note' => $note));
     }
 
     // Mise a jour de la periode de fin (en mise à jour de réservation)
     /**
-     * @Route("/bookingmany/endperiodupdate/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{firstDateNumber}/{userFileIDList}/{labelIDList}/{noteID}", name="booking_many_end_period_update")
+     * @Route("/bookingmany/endperiodupdate/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{timetableLinesList}/{firstDateNumber}/{userFileIDList}/{labelIDList}/{noteID}", name="booking_many_end_period_update")
 	 * @ParamConverter("planningDate", options={"format": "Ymd"})
 	 * @ParamConverter("booking", options={"mapping": {"bookingID": "id"}})
 	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
      * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
      * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
-	 * @ParamConverter("date", options={"format": "Ymd"})
      */
-    public function many_end_period_update(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $firstDateNumber, $userFileIDList, $labelIDList, $noteID)
+    public function many_end_period_update(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $firstDateNumber, $userFileIDList, $labelIDList, $noteID)
     {
-	return BookingController::end_period_update($planningDate, $booking, $planification, $planificationPeriod, $resource, $date, $timetableLinesList, $firstDateNumber, $userFileIDList, $labelIDList, $noteID, 1);
+	return BookingController::end_period_update($planningDate, $booking, $planification, $planificationPeriod, $resource, $timetableLinesList, $firstDateNumber, $userFileIDList, $labelIDList, $noteID, 1);
     }
 
     // Mise a jour de la periode de fin (en mise à jour de réservation)
     /**
-     * @Route("/bookingone/endperiodupdate/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{firstDateNumber}/{userFileIDList}/{labelIDList}/{noteID}", name="booking_one_end_period_update")
+     * @Route("/bookingone/endperiodupdate/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{timetableLinesList}/{firstDateNumber}/{userFileIDList}/{labelIDList}/{noteID}", name="booking_one_end_period_update")
 	 * @ParamConverter("planningDate", options={"format": "Ymd"})
 	 * @ParamConverter("booking", options={"mapping": {"bookingID": "id"}})
 	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
      * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
      * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
-	 * @ParamConverter("date", options={"format": "Ymd"})
      */
-    public function one_end_period_update(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $firstDateNumber, $userFileIDList, $labelIDList, $noteID)
+    public function one_end_period_update(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $firstDateNumber, $userFileIDList, $labelIDList, $noteID)
     {
-	return BookingController::end_period_update($planningDate, $booking, $planification, $planificationPeriod, $resource, $date, $timetableLinesList, $firstDateNumber, $userFileIDList, $labelIDList, $noteID, 0);
+	return BookingController::end_period_update($planningDate, $booking, $planification, $planificationPeriod, $resource, $timetableLinesList, $firstDateNumber, $userFileIDList, $labelIDList, $noteID, 0);
     }
 
     // Mise a jour de la periode de fin (en mise à jour de réservation)
-    public function end_period_update(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $firstDateNumber, $userFileIDList, $labelIDList, $noteID, $many)
+    public function end_period_update(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $firstDateNumber, $userFileIDList, $labelIDList, $noteID, $many)
     {
     $connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
@@ -622,7 +602,7 @@ class BookingController extends Controller
 
 	return $this->render('booking/period.end.update.'.($many ? 'many' : 'one').'.html.twig',
 		array('userContext' => $userContext, 'planningDate' => $planningDate, 'booking' => $booking, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod,
-			'resource' => $resource, 'date' => $date, 'timetableLinesList' => $timetableLinesList, 'beginningDate' => $beginningDate,
+			'resource' => $resource, 'timetableLinesList' => $timetableLinesList, 'beginningDate' => $beginningDate,
 			'beginningTimetableLine' => $beginningTimetableLine, 'endPeriods' => $endPeriods, 'firstDateNumber' => $firstDateNumber,
 			'previousFirstDateNumber' => $previousFirstDateNumber, 'nextFirstDateNumber' => $nextFirstDateNumber, 'userFileIDList' => $userFileIDList,
 			'labelIDList' => $labelIDList, 'noteID' => $noteID));
@@ -630,7 +610,7 @@ class BookingController extends Controller
 
     // Mise a jour de la liste des utilisateurs (en mise a jour de réservation)
     /**
-     * @Route("/bookingmany/usersupdate/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{labelIDList}/{noteID}/{userFileIDInitialList}/{userFileIDList}",
+     * @Route("/bookingmany/usersupdate/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{timetableLinesList}/{labelIDList}/{noteID}/{userFileIDInitialList}/{userFileIDList}",
      * defaults={"userFileIDList" = null},
      * name="booking_many_users_update")
 	 * @ParamConverter("planningDate", options={"format": "Ymd"})
@@ -638,16 +618,15 @@ class BookingController extends Controller
 	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
      * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
      * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
-	 * @ParamConverter("date", options={"format": "Ymd"})
      */
-    public function many_users_update(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $labelIDList, $noteID, $userFileIDInitialList, $userFileIDList)
+    public function many_users_update(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $labelIDList, $noteID, $userFileIDInitialList, $userFileIDList)
     {
-	return BookingController::users_update($planningDate, $booking, $planification, $planificationPeriod, $resource, $date, $timetableLinesList, $labelIDList, $noteID, $userFileIDInitialList, $userFileIDList, 1);
+	return BookingController::users_update($planningDate, $booking, $planification, $planificationPeriod, $resource, $timetableLinesList, $labelIDList, $noteID, $userFileIDInitialList, $userFileIDList, 1);
     }
 
     // Mise a jour de la liste des utilisateurs (en mise a jour de réservation)
     /**
-     * @Route("/bookingone/usersupdate/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{labelIDList}/{noteID}/{userFileIDInitialList}/{userFileIDList}",
+     * @Route("/bookingone/usersupdate/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{timetableLinesList}/{labelIDList}/{noteID}/{userFileIDInitialList}/{userFileIDList}",
      * defaults={"userFileIDList" = null},
      * name="booking_one_users_update")
 	 * @ParamConverter("planningDate", options={"format": "Ymd"})
@@ -655,15 +634,14 @@ class BookingController extends Controller
 	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
      * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
      * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
-	 * @ParamConverter("date", options={"format": "Ymd"})
      */
-    public function one_users_update(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $labelIDList, $noteID, $userFileIDInitialList, $userFileIDList)
+    public function one_users_update(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $labelIDList, $noteID, $userFileIDInitialList, $userFileIDList)
     {
-	return BookingController::users_update($planningDate, $booking, $planification, $planificationPeriod, $resource, $date, $timetableLinesList, $labelIDList, $noteID, $userFileIDInitialList, $userFileIDList, 0);
+	return BookingController::users_update($planningDate, $booking, $planification, $planificationPeriod, $resource, $timetableLinesList, $labelIDList, $noteID, $userFileIDInitialList, $userFileIDList, 0);
     }
 
     // Mise a jour de la liste des utilisateurs (en mise à jour de réservation)
-    public function users_update(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $labelIDList, $noteID, $userFileIDInitialList, $userFileIDList, $many)
+    public function users_update(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $labelIDList, $noteID, $userFileIDInitialList, $userFileIDList, $many)
 	{
 	$connectedUser = $this->getUser();
 	$em = $this->getDoctrine()->getManager();
@@ -674,42 +652,40 @@ class BookingController extends Controller
 
 	return $this->render('booking/users.update.'.($many ? 'many' : 'one').'.html.twig',
 		array('userContext' => $userContext, 'planningDate' => $planningDate, 'booking' => $booking, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource,
-			'date' => $date, 'timetableLinesList' => $timetableLinesList, 'labelIDList' => $labelIDList, 'noteID' => $noteID,
+			'timetableLinesList' => $timetableLinesList, 'labelIDList' => $labelIDList, 'noteID' => $noteID,
 			'selectedUserFiles' => $selectedUserFiles, 'availableUserFiles' => $availableUserFiles, 'userFileIDList' => $userFileIDList, 'userFileIDInitialList' => $userFileIDInitialList));
     }
 
 	// Mise a jour de la liste des étiquettes (en mise a jour de réservation)
     /**
-     * @Route("/bookingmany/labelsupdate/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{noteID}/{labelIDInitialList}/{labelIDList}", name="booking_many_labels_update")
+     * @Route("/bookingmany/labelsupdate/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{timetableLinesList}/{userFileIDList}/{noteID}/{labelIDInitialList}/{labelIDList}", name="booking_many_labels_update")
 	 * @ParamConverter("planningDate", options={"format": "Ymd"})
 	 * @ParamConverter("booking", options={"mapping": {"bookingID": "id"}})
 	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
      * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
      * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
-	 * @ParamConverter("date", options={"format": "Ymd"})
      */
-    public function many_labels_update(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $noteID, $labelIDInitialList, $labelIDList)
+    public function many_labels_update(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, $noteID, $labelIDInitialList, $labelIDList)
     {
-	return BookingController::labels_update($planningDate, $booking, $planification, $planificationPeriod, $resource, $date, $timetableLinesList, $userFileIDList, $noteID, $labelIDInitialList, $labelIDList, 1);
+	return BookingController::labels_update($planningDate, $booking, $planification, $planificationPeriod, $resource, $timetableLinesList, $userFileIDList, $noteID, $labelIDInitialList, $labelIDList, 1);
     }
 
 	// Mise a jour de la liste des étiquettes (en mise a jour de réservation)
     /**
-     * @Route("/bookingone/labelsupdate/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{noteID}/{labelIDInitialList}/{labelIDList}", name="booking_one_labels_update")
+     * @Route("/bookingone/labelsupdate/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{timetableLinesList}/{userFileIDList}/{noteID}/{labelIDInitialList}/{labelIDList}", name="booking_one_labels_update")
 	 * @ParamConverter("planningDate", options={"format": "Ymd"})
 	 * @ParamConverter("booking", options={"mapping": {"bookingID": "id"}})
 	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
      * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
      * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
-	 * @ParamConverter("date", options={"format": "Ymd"})
      */
-    public function one_labels_update(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $noteID, $labelIDInitialList, $labelIDList)
+    public function one_labels_update(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, $noteID, $labelIDInitialList, $labelIDList)
     {
-	return BookingController::labels_update($planningDate, $booking, $planification, $planificationPeriod, $resource, $date, $timetableLinesList, $userFileIDList, $noteID, $labelIDInitialList, $labelIDList, 0);
+	return BookingController::labels_update($planningDate, $booking, $planification, $planificationPeriod, $resource, $timetableLinesList, $userFileIDList, $noteID, $labelIDInitialList, $labelIDList, 0);
     }
 
     // Mise a jour de la liste des étiquettes (en mise à jour de réservation)
-    public function labels_update(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $noteID, $labelIDInitialList, $labelIDList, $many)
+    public function labels_update(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, $noteID, $labelIDInitialList, $labelIDList, $many)
 	{
 	$connectedUser = $this->getUser();
 	$em = $this->getDoctrine()->getManager();
@@ -720,42 +696,40 @@ class BookingController extends Controller
 	
 	return $this->render('booking/labels.update.'.($many ? 'many' : 'one').'.html.twig',
 		array('userContext' => $userContext, 'planningDate' => $planningDate, 'booking' => $booking, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource,
-			'date' => $date, 'timetableLinesList' => $timetableLinesList, 'userFileIDList' => $userFileIDList, 'noteID' => $noteID,
+			'timetableLinesList' => $timetableLinesList, 'userFileIDList' => $userFileIDList, 'noteID' => $noteID,
 			'selectedLabels' => $selectedLabels, 'availableLabels' => $availableLabels, 'labelIDList' => $labelIDList, 'labelIDInitialList' => $labelIDInitialList));
     }
 
 	// Mise a jour de la note (en mise à jour de réservation)
     /**
-     * @Route("/bookingmany/noteupdate/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{labelIDList}/{noteID}", name="booking_many_note_update")
+     * @Route("/bookingmany/noteupdate/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{timetableLinesList}/{userFileIDList}/{labelIDList}/{noteID}", name="booking_many_note_update")
 	 * @ParamConverter("planningDate", options={"format": "Ymd"})
 	 * @ParamConverter("booking", options={"mapping": {"bookingID": "id"}})
 	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
      * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
      * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
-	 * @ParamConverter("date", options={"format": "Ymd"})
      */
-    public function many_note_update(Request $request, \Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $labelIDList, $noteID)
+    public function many_note_update(Request $request, \Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID)
     {
-	return BookingController::note_update($request, $planningDate, $booking, $planification, $planificationPeriod, $resource, $date, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, 1);
+	return BookingController::note_update($request, $planningDate, $booking, $planification, $planificationPeriod, $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, 1);
     }
 
 	// Mise a jour de la note (en mise à jour de réservation)
     /**
-     * @Route("/bookingone/noteupdate/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{labelIDList}/{noteID}", name="booking_one_note_update")
+     * @Route("/bookingone/noteupdate/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{timetableLinesList}/{userFileIDList}/{labelIDList}/{noteID}", name="booking_one_note_update")
 	 * @ParamConverter("planningDate", options={"format": "Ymd"})
 	 * @ParamConverter("booking", options={"mapping": {"bookingID": "id"}})
 	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
      * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
      * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
-	 * @ParamConverter("date", options={"format": "Ymd"})
      */
-    public function one_note_update(Request $request, \Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $labelIDList, $noteID)
+    public function one_note_update(Request $request, \Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID)
     {
-	return BookingController::note_update($request, $planningDate, $booking, $planification, $planificationPeriod, $resource, $date, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, 0);
+	return BookingController::note_update($request, $planningDate, $booking, $planification, $planificationPeriod, $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, 0);
     }
 
 	// Mise a jour de la note (en mise à jour de réservation)
-    public function note_update(Request $request, \Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, $many)
+    public function note_update(Request $request, \Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, $many)
     {
 	$connectedUser = $this->getUser();
 	$em = $this->getDoctrine()->getManager();
@@ -776,49 +750,47 @@ class BookingController extends Controller
 			$em->flush();
 			return $this->redirectToRoute('booking_'.($many ? 'many' : 'one').'_update',
 				array('planningDate' => $planningDate->format('Ymd'), 'bookingID' => $booking->getID(), 'planificationID' => $planification->getID(), 'planificationPeriodID' => $planificationPeriod->getID(), 'resourceID' => $resource->getID(),
-					'date' => $date->format('Ymd'), 'timetableLinesList' => $timetableLinesList, 'userFileIDList' => $userFileIDList, 'labelIDList' => $labelIDList, 'noteID' => $note->getID()));
+					'timetableLinesList' => $timetableLinesList, 'userFileIDList' => $userFileIDList, 'labelIDList' => $labelIDList, 'noteID' => $note->getID()));
 		}
     }
 
 	return $this->render('booking/note.update.'.($many ? 'many' : 'one').'.html.twig',
-		array('userContext' => $userContext, 'planningDate' => $planningDate, 'booking' => $booking, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource, 'date' => $date,
+		array('userContext' => $userContext, 'planningDate' => $planningDate, 'booking' => $booking, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource,
 			'timetableLinesList' => $timetableLinesList, 'userFileIDList' => $userFileIDList, 'labelIDList' => $labelIDList, 'noteID' => $noteID, 'form' => $form->createView()));
     }
 
 	// Suppression de la note (en mise à jour de réservation)
     /**
-     * @Route("/bookingmany/notedeleteupdate/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{labelIDList}/{noteID}", name="booking_many_note_delete_update")
+     * @Route("/bookingmany/notedeleteupdate/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{timetableLinesList}/{userFileIDList}/{labelIDList}/{noteID}", name="booking_many_note_delete_update")
 	 * @ParamConverter("planningDate", options={"format": "Ymd"})
 	 * @ParamConverter("booking", options={"mapping": {"bookingID": "id"}})
 	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
      * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
      * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
-	 * @ParamConverter("date", options={"format": "Ymd"})
 	 * @ParamConverter("note", options={"mapping": {"noteID": "id"}})
      */
-    public function many_note_delete_update(LoggerInterface $logger, \Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $labelIDList, Note $note)
+    public function many_note_delete_update(LoggerInterface $logger, \Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, $labelIDList, Note $note)
     {
-	return BookingController::note_delete_update($logger, $planningDate, $booking, $planification, $planificationPeriod, $resource, $date, $timetableLinesList, $userFileIDList, $labelIDList, $note, 1);
+	return BookingController::note_delete_update($logger, $planningDate, $booking, $planification, $planificationPeriod, $resource, $timetableLinesList, $userFileIDList, $labelIDList, $note, 1);
     }
 
 	// Suppression de la note (en mise à jour de réservation)
     /**
-     * @Route("/bookingone/notedeleteupdate/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}/{timetableLinesList}/{userFileIDList}/{labelIDList}/{noteID}", name="booking_one_note_delete_update")
+     * @Route("/bookingone/notedeleteupdate/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{timetableLinesList}/{userFileIDList}/{labelIDList}/{noteID}", name="booking_one_note_delete_update")
 	 * @ParamConverter("planningDate", options={"format": "Ymd"})
 	 * @ParamConverter("booking", options={"mapping": {"bookingID": "id"}})
 	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
      * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
      * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
-	 * @ParamConverter("date", options={"format": "Ymd"})
 	 * @ParamConverter("note", options={"mapping": {"noteID": "id"}})
      */
-    public function one_note_delete_update(LoggerInterface $logger, \Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $labelIDList, Note $note)
+    public function one_note_delete_update(LoggerInterface $logger, \Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, $labelIDList, Note $note)
     {
-	return BookingController::note_delete_update($logger, $planningDate, $booking, $planification, $planificationPeriod, $resource, $date, $timetableLinesList, $userFileIDList, $labelIDList, $note, 0);
+	return BookingController::note_delete_update($logger, $planningDate, $booking, $planification, $planificationPeriod, $resource, $timetableLinesList, $userFileIDList, $labelIDList, $note, 0);
     }
 
 	// Suppression de la note (en mise à jour de réservation)
-    public function note_delete_update(LoggerInterface $logger, \Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $timetableLinesList, $userFileIDList, $labelIDList, Note $note, $many)
+    public function note_delete_update(LoggerInterface $logger, \Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, $labelIDList, Note $note, $many)
     {
 	$logger->info('BookingController.note_delete_update DBG 1');
 	$logger->info('BookingController.note_delete_update DBG 2 _'.$booking->getID().'_');
@@ -831,7 +803,7 @@ class BookingController extends Controller
 	$em->flush();
 	return $this->redirectToRoute('booking_'.($many ? 'many' : 'one').'_update',
 		array('planningDate' => $planningDate->format('Ymd'), 'bookingID' => $booking->getID(), 'planificationID' => $planification->getID(), 'planificationPeriodID' => $planificationPeriod->getID(), 'resourceID' => $resource->getID(),
-			'date' => $date->format('Ymd'), 'timetableLinesList' => $timetableLinesList, 'userFileIDList' => $userFileIDList, 'labelIDList' => $labelIDList, 'noteID' => 0));
+			'timetableLinesList' => $timetableLinesList, 'userFileIDList' => $userFileIDList, 'labelIDList' => $labelIDList, 'noteID' => 0));
     }
 
 	// Validation de la mise à jour d'une réservation
@@ -892,6 +864,7 @@ class BookingController extends Controller
 	$endTimetableLineID = $endTimetableLines[count($endTimetableLines)-1];
 	$endTimetableLine = $tlRepository->find($endTimetableLineID);
 	$booking->setEndDate(date_create_from_format('YmdHi', $endDateString.$endTimetableLine->getEndTime()->format('Hi')));
+
 	// Mise à jour de la note
 	$note = new Note($connectedUser);
 	if ($noteID > 0) {
@@ -1005,36 +978,34 @@ class BookingController extends Controller
 
     // Suppression d'une réservation
     /**
-     * @Route("/bookingmany/delete/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}", name="booking_many_delete")
+     * @Route("/bookingmany/delete/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}", name="booking_many_delete")
 	 * @ParamConverter("planningDate", options={"format": "Ymd"})
 	 * @ParamConverter("booking", options={"mapping": {"bookingID": "id"}})
 	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
      * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
      * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
-	 * @ParamConverter("date", options={"format": "Ymd"})
      */
-    public function many_delete(Request $request, \Swift_Mailer $mailer, TranslatorInterface $translator, \Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date)
+    public function many_delete(Request $request, \Swift_Mailer $mailer, TranslatorInterface $translator, \Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource)
     {
-	return BookingController::delete($request, $mailer, $translator, $planningDate, $booking, $planification, $planificationPeriod, $resource, $date, 1);
+	return BookingController::delete($request, $mailer, $translator, $planningDate, $booking, $planification, $planificationPeriod, $resource, 1);
     }
 
     // Suppression d'une réservation
     /**
-     * @Route("/bookingone/delete/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{date}", name="booking_one_delete")
+     * @Route("/bookingone/delete/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}", name="booking_one_delete")
 	 * @ParamConverter("planningDate", options={"format": "Ymd"})
 	 * @ParamConverter("booking", options={"mapping": {"bookingID": "id"}})
 	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
      * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
      * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
-	 * @ParamConverter("date", options={"format": "Ymd"})
      */
-    public function one_delete(Request $request, \Swift_Mailer $mailer, TranslatorInterface $translator, \Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date)
+    public function one_delete(Request $request, \Swift_Mailer $mailer, TranslatorInterface $translator, \Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource)
     {
-	return BookingController::delete($request, $mailer, $translator, $planningDate, $booking, $planification, $planificationPeriod, $resource, $date, 0);
+	return BookingController::delete($request, $mailer, $translator, $planningDate, $booking, $planification, $planificationPeriod, $resource, 0);
     }
 
     // Suppression d'une réservation
-    public function delete(Request $request, \Swift_Mailer $mailer, TranslatorInterface $translator, \Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $date, $many)
+    public function delete(Request $request, \Swift_Mailer $mailer, TranslatorInterface $translator, \Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $many)
     {
     $connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
@@ -1112,8 +1083,85 @@ class BookingController extends Controller
 
 	return $this->render('booking/delete.'.($many ? 'many' : 'one').'.html.twig',
 		array('userContext' => $userContext, 'planningDate' => $planningDate, 'booking' => $booking, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource,
-			'date' => $date, 'timetableLinesList' => $timetableLinesList, 'beginningDate' => $beginningDate, 'beginningTimetableLine' => $beginningTimetableLine,
+			'timetableLinesList' => $timetableLinesList, 'beginningDate' => $beginningDate, 'beginningTimetableLine' => $beginningTimetableLine,
 			'endDate' => $endDate, 'endTimetableLine' => $endTimetableLine, 'userFiles' => $userFiles, 'userFileIDList' => $userFileIDList,
 			'numberLabels' => $numberLabels, 'labels' => $labels, 'labelIDList' => $labelIDList, 'noteID' => $noteID, 'note' => $note, 'form' => $form->createView()));
+    }
+
+    // Consultation d'une réservation
+    /**
+     * @Route("/bookingmany/view/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}", name="booking_many_view")
+	 * @ParamConverter("planningDate", options={"format": "Ymd"})
+	 * @ParamConverter("booking", options={"mapping": {"bookingID": "id"}})
+	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+     * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
+     * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
+     */
+	public function many_view(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource)
+	{
+	return BookingController::view($planningDate, $booking, $planification, $planificationPeriod, $resource, 1);
+	}
+
+    // Consultation d'une réservation
+    /**
+     * @Route("/bookingone/view/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}", name="booking_one_view")
+	 * @ParamConverter("planningDate", options={"format": "Ymd"})
+	 * @ParamConverter("booking", options={"mapping": {"bookingID": "id"}})
+	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+     * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
+     * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
+     */
+	public function one_view(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource)
+	{
+	return BookingController::view($planningDate, $booking, $planification, $planificationPeriod, $resource, 0);
+	}
+
+    // Consultation d'une réservation
+    public function view(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $many)
+    {
+    $connectedUser = $this->getUser();
+    $em = $this->getDoctrine()->getManager();
+    $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+	$timetableLinesList = BookingApi::getBookingLinesUrl($em, $booking);
+	BookingApi::getBookingLinesUrlBeginningAndEndPeriod($em, $timetableLinesList, $beginningDate, $beginningTimetableLine, $endDate, $endTimetableLine);
+	// Utilisateurs
+	$userFileIDList = BookingApi::getBookingUsersUrl($em, $booking);
+	$userFileIDArray = explode("-", $userFileIDList);
+	$userFiles = array();
+	$ufRepository = $em->getRepository(UserFile::Class);
+	foreach ($userFileIDArray as $userFileID) {
+		$userFile = $ufRepository->find($userFileID);
+		if ($userFile !== null) {
+			$userFiles[] = $userFile;
+		}
+	}
+	// Libellés
+	$lRepository = $em->getRepository(Label::Class);
+	$numberLabels = $lRepository->getLabelsCount($userContext->getCurrentFile());
+	$labelIDList = BookingApi::getBookingLabelsUrl($em, $booking);
+	$labelIDArray = explode("-", $labelIDList);
+	$labels = array();
+	$lRepository = $em->getRepository(Label::Class);
+	foreach ($labelIDArray as $labelID) {
+		$label = $lRepository->find($labelID);
+		if ($label !== null) {
+			$labels[] = $label;
+		}
+	}
+	// Note
+	$noteID = 0;
+	$note = new Note($connectedUser);
+	$nRepository = $em->getRepository(Note::Class);
+	if ($booking->getFormNote() !== null) {
+		$noteID = $booking->getFormNote()->getID();
+		$note = $nRepository->find($noteID);
+	}
+
+	return $this->render('booking/view.'.($many ? 'many' : 'one').'.html.twig',
+		array('userContext' => $userContext, 'planningDate' => $planningDate, 'booking' => $booking, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource,
+			'timetableLinesList' => $timetableLinesList, 'beginningDate' => $beginningDate, 'beginningTimetableLine' => $beginningTimetableLine,
+			'endDate' => $endDate, 'endTimetableLine' => $endTimetableLine, 'userFiles' => $userFiles, 'userFileIDList' => $userFileIDList,
+			'numberLabels' => $numberLabels, 'labels' => $labels, 'labelIDList' => $labelIDList, 'noteID' => $noteID, 'note' => $note));
     }
 }

@@ -21,12 +21,6 @@
 <li class="list-group-item"><img src="{{ asset('images/time-32.png') }}">&nbsp;{{ dateLongue(endDate) }}&nbsp;&rarr;&nbsp;{{ timetableLine(endTimetableLine) }}</li>
 {% endblock %}
 
-{% block labels_empty_list_link %}
-{% if numberLabels > 0 %}
-	<li class="list-group-item"><img src="{{ asset('images/label-32.png') }}">&nbsp;{{ 'label.no'|trans }}</li>
-{% endif %}
-{% endblock %}
-
 {% block labels_list_link %}
 	<li class="list-group-item"><img src="{{ asset('images/label-32.png') }}">&nbsp;{{ labels[0].getName() }}</li>
 {% endblock %}

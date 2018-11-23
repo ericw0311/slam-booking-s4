@@ -217,6 +217,7 @@ planificationPeriod.una.booking: Des réservations sont saisies pour cette péri
 planificationPeriod.una.closed: This planification period is closed. It is not updatable
 
 planning: Planning
+planning.back: Back to planning
 planning.calendar: Calendar
 planning.global: Global planning
 planning.reduce.left: Réduire le planning vers la gauche
@@ -389,7 +390,9 @@ user.forgot.login.or.password: Forgot login or password
 user.lastName: Last name
 user.list.update: Modify users list
 user.login: Login
+user.login.and.password: Your user name is %name% and your password is %password%. To connect, use this link:
 user.login.and.password.sent: User name and password have been sent to the email address entered
+user.login.and.password.sent.email.title: User name and password
 user.logout: Logout
 user.modify.password: Modify password
 user.name: User name
@@ -399,6 +402,7 @@ user.password: Password
 user.password.updated.ok: The password has been updated
 user.register: Register
 user.registration: Registration
+user.registration.successfull: Hi %name%. You have successfully registered to Slam Booking. To connect, use the following link:
 user.repeat.password: Repeat password
 user.select: Select user
 user.unselect: Unselect user
