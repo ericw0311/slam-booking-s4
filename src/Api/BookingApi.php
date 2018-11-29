@@ -316,6 +316,7 @@ class BookingApi
 	}
 	return $labelsID;
 	}
+
 	// Retourne un tableau des étiquettes d'une réservation
 	static function getBookingLabelPlanningInfo($em, \App\Entity\Booking $booking, &$numberLabels)
 	{
@@ -323,7 +324,7 @@ class BookingApi
 	$bookingLabels = $blRepository->findBy(array('booking' => $booking), array('oorder' => 'asc'));
 
 	if (count($bookingLabels) <= 0) {
-		$bookingLabels = 0;
+		$numberLabels = 0;
 		return '';
 	}
 	
@@ -366,17 +367,37 @@ class BookingApi
 	static function getPlanningBookings($em, \App\Entity\File $file, \Datetime $beginningDate, \Datetime $endDate, \App\Entity\Planification $planification, \App\Entity\PlanificationPeriod $planificationPeriod, \App\Entity\UserFile $currentUserFile)
 	{
 	$bRepository = $em->getRepository(Booking::Class);
-	$buRepository = $em->getRepository(BookingUser::Class);
-	$blRepository = $em->getRepository(BookingLabel::Class);
 
+	$evenResourcesID = ResourceApi::getEvenPlanifiedResourcesID($em, $planificationPeriod);
 	$bookingsDB = $bRepository->getPlanningBookings($file, $beginningDate, $endDate, $planification, $planificationPeriod);
+
+	return BookingApi::getPlanningBookingArray($em, $currentUserFile, $bookingsDB, 'P', $evenResourcesID, 0);
+	}
+
+	static function getDuplicateBookings($em, \App\Entity\File $file, \Datetime $beginningDate, \Datetime $endDate, \App\Entity\Planification $planification, \App\Entity\PlanificationPeriod $planificationPeriod, \App\Entity\Booking $booking, \App\Entity\UserFile $currentUserFile)
+	{
+	$bRepository = $em->getRepository(Booking::Class);
+
+	$evenResourcesID = array();
+	$bookingsDB = $bRepository->getDuplicateBookings($file, $beginningDate, $endDate, $planification, $planificationPeriod, $booking->getResource());
+
+	return BookingApi::getPlanningBookingArray($em, $currentUserFile, $bookingsDB, 'C', $evenResourcesID, $booking->getID());
+	}
+
+	// Retourne le tableau des réservations pour affichage dans un planning
+	// bookingsDB: Ressources interrogées en base de données
+	// planningType: P = Planning, C = réservations Cycliques
+	// evenResourcesID: Tableau des ressources ayant un numéro d'ordre pair: Pour planningType P = Planning
+	// bookingID: Réservation: Pour planningType C = réservations Cycliques
+	static function getPlanningBookingArray($em, \App\Entity\UserFile $currentUserFile, $bookingsDB, $planningType, $evenResourcesID, $bookingID)
+	{
+	$bRepository = $em->getRepository(Booking::Class);
 
 	$bookings = array();
 	if (count($bookingsDB) <= 0) {
 		return $bookings;
 	}
 
-	$evenResourcesID = ResourceApi::getEvenPlanifiedResourcesID($em, $planificationPeriod);
 	$memo_date = "00000000";
 	$memo_bookingID = 0;
 	$memo_resourceID = 0;
@@ -413,14 +434,20 @@ class BookingApi
 		$bookingTimetableLinesCount++;
 
 		if ($booking['bookingID'] <> $memo_bookingID || $booking['date']->format('Ymd') <> $memo_date) {
-			$type = 'H';
+			$cellType = 'H';
 			$currentBookingHeaderKey = $key;
 		} else {
-			$type = 'L';
+			$cellType = 'L';
 		}
 
-		$cellClass = (in_array($booking['resourceID'], $evenResourcesID) ? ((($resourceBookingCount % 2) < 1) ? 'success' : 'warning') : ((($resourceBookingCount % 2) < 1) ? 'info' : 'danger'));
-		$bookingNDB = new BookingNDB($booking['bookingID'], $type, $cellClass);
+		if ($planningType == 'C') {
+			// Réservations cycliques: La réservation traitée a une couleur verte (success), les autres ont une couleur rouge (danger)
+			$cellClass = (($booking['resourceID'] == $bookingID) ? 'success' : 'danger');
+		} else {
+			// Planning: La couleur des réservations est alternée à la fois entre ressources (utilisation du tableau des ressources d'ordre pair) et entre réservations d'une même journée (Compteur resourceBookingCount)
+			$cellClass = (in_array($booking['resourceID'], $evenResourcesID) ? ((($resourceBookingCount % 2) < 1) ? 'success' : 'warning') : ((($resourceBookingCount % 2) < 1) ? 'info' : 'danger'));
+		}
+		$bookingNDB = new BookingNDB($booking['bookingID'], $cellType, $cellClass);
 		$bookings[$key] = $bookingNDB;
 
 		$memo_bookingID = $booking['bookingID'];

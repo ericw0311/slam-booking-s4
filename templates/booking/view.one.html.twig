@@ -23,4 +23,11 @@
 
 {% block booking_buttons %}
 <a href="{{ path('planning_one', { 'planificationID': planification.ID, 'date': planningDate|date('Ymd') }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'planning.back'|trans }}</a>
+{% if userContext.getCurrentUserFileAdministrator() or booking.user.id == userContext.user.id %}
+<a href="{{ path('booking_one_init_update', { 'planningDate': planningDate|date('Ymd'), 'bookingID': booking.id, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID }) }}" class="btn btn-primary"><i class="glyphicon glyphicon-pencil"></i> {{ 'modify'|trans }}</a>
+<a href="{{ path('booking_one_delete', { 'planningDate': planningDate|date('Ymd'), 'bookingID': booking.id, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID }) }}" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> {{ 'delete'|trans }}</a>
+{% endif %}
+{% if userContext.getCurrentUserFileAdministrator() %}
+<a href="{{ path('booking_one_duplicate', { 'planningDate': planningDate|date('Ymd'), 'bookingID': booking.id, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID }) }}" class="btn btn-success"><i class="glyphicon glyphicon-repeat"></i> {{ 'duplicate'|trans }}</a>
+{% endif %}
 {% endblock %}

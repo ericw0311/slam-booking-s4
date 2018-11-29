@@ -26,6 +26,7 @@ days.next: Next days
 days.previous: Previous days
 delete: Delete
 delete.not.allowed: Delete not allowed
+duplicate: Duplicate
 end.time: End time
 from: From
 modify: Modify
@@ -78,6 +79,8 @@ update.not.allowed: Update not allowed
 user.account: User account
 validate: Validate
 validate.not.allowed: Validate not allowed
+view: View
+view.and.modify: View and modify
 week.next: Next week
 week.previous: Previous week
 yes: Yes

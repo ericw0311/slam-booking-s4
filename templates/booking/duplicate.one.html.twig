@@ -1,0 +1,7 @@
+{# templates/booking/duplicate.one.html.twig #}
+
+{% extends 'booking/duplicate.html.twig' %}
+
+{% block booking_buttons %}
+<a href="{{ path('planning_one', { 'planificationID': planification.ID, 'date': planningDate|date('Ymd') }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'planning.back'|trans }}</a>
+{% endblock %}

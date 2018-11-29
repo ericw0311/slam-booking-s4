@@ -93,7 +93,7 @@
 {% for j in 1..planningContext.numberColumns %}
     <div class="col-sm-{{ (12/planningContext.numberColumns) }}">
 {% for i in 1..planningContext.numberLines %}
-{{ include('planning/day.html.twig', { 'booking_create': 'booking_many_create', 'booking_update': 'booking_many_init_update', 'booking_delete': 'booking_many_delete', 'booking_view': 'booking_many_view', 'day_key': (i ~ '-' ~ j) }) }}
+{{ include('planning/day.html.twig', { 'booking_create': 'booking_many_create', 'booking_view': 'booking_many_view', 'day_key': (i ~ '-' ~ j) }) }}
 {% endfor %}
     </div>
 {% endfor %}

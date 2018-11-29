@@ -26,6 +26,7 @@ days.next: Jours suivants
 days.previous: Jours précédents
 delete: Supprimer
 delete.not.allowed: Suppression interdite
+duplicate: Dupliquer
 end.time: Heure de fin
 from: De
 modify: Modifier
@@ -78,6 +79,8 @@ update.not.allowed: Modification interdite
 user.account: Compte utilisateur
 validate: Valider
 validate.not.allowed: Validation interdite
+view: Consulter
+view.and.modify: Consulter et modifier
 week.next: Semaine suivante
 week.previous: Semaine précédente
 yes: Oui

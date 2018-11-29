@@ -25,8 +25,44 @@ class BookingRepository extends ServiceEntityRepository
 
 	// Affichage des réservations dans le planning
 	public function getPlanningBookings(\App\Entity\File $file, \Datetime $beginningDate, \Datetime $endDate, \App\Entity\Planification $planification, \App\Entity\PlanificationPeriod $planificationPeriod)
-	{
+    {
 	$qb = $this->createQueryBuilder('b');
+	$this->getPlanningSelect($qb);
+	$qb->where('b.file = :file')->setParameter('file', $file);
+	$qb->andWhere($qb->expr()->between("DATE_FORMAT(bl.ddate,'%Y%m%d')", ':beginningDate', ':endDate'))
+		->setParameter('beginningDate', $beginningDate->format('Ymd'))
+		->setParameter('endDate', $endDate->format('Ymd'));
+	$qb->andWhere('bl.planification = :planification')->setParameter('planification', $planification);
+	$qb->andWhere('bl.planificationPeriod = :planificationPeriod')->setParameter('planificationPeriod', $planificationPeriod);
+	$this->getPlanningJoin($qb);
+	$this->getPlanningOrder($qb);
+	$query = $qb->getQuery();
+	$results = $query->getResult();
+	return $results;
+    }
+
+	// Affichage des réservations pour la duplication des réservations (on ne traite qu'une ressource)
+	public function getDuplicateBookings(\App\Entity\File $file, \Datetime $beginningDate, \Datetime $endDate, \App\Entity\Planification $planification, \App\Entity\PlanificationPeriod $planificationPeriod, \App\Entity\Resource $resource)
+    {
+	$qb = $this->createQueryBuilder('b');
+	$this->getPlanningSelect($qb);
+	$qb->where('b.file = :file')->setParameter('file', $file);
+	$qb->andWhere($qb->expr()->between("DATE_FORMAT(bl.ddate,'%Y%m%d')", ':beginningDate', ':endDate'))
+		->setParameter('beginningDate', $beginningDate->format('Ymd'))
+		->setParameter('endDate', $endDate->format('Ymd'));
+	$qb->andWhere('bl.planification = :planification')->setParameter('planification', $planification);
+	$qb->andWhere('bl.planificationPeriod = :planificationPeriod')->setParameter('planificationPeriod', $planificationPeriod);
+	$qb->andWhere('bl.resource = :resource')->setParameter('resource', $resource);
+	$this->getPlanningJoin($qb);
+	$this->getPlanningOrder($qb);
+	$query = $qb->getQuery();
+	$results = $query->getResult();
+	return $results;
+    }
+
+	// Planning des réservations: partie Select
+	public function getPlanningSelect($qb)
+	{
     $qb->select('b.id bookingID');
 	$qb->addSelect('bl.ddate date');
     $qb->addSelect('p.id planificationID');
@@ -35,13 +71,12 @@ class BookingRepository extends ServiceEntityRepository
 	$qb->addSelect('r.id resourceID');
 	$qb->addSelect('t.id timetableID');
 	$qb->addSelect('tl.id timetableLineID');
-	$qb->where('b.file = :file')->setParameter('file', $file);
-	// $qb->andWhere("DATE_FORMAT(bl.ddate,'%Y%m%d') = :date")->setParameter('date', $date->format('Ymd'));
-	$qb->andWhere($qb->expr()->between("DATE_FORMAT(bl.ddate,'%Y%m%d')", ':beginningDate', ':endDate'))
-		->setParameter('beginningDate', $beginningDate->format('Ymd'))
-		->setParameter('endDate', $endDate->format('Ymd'));
-	$qb->andWhere('bl.planification = :planification')->setParameter('planification', $planification);
-	$qb->andWhere('bl.planificationPeriod = :planificationPeriod')->setParameter('planificationPeriod', $planificationPeriod);
+	}
+
+
+	// Planning des réservations: partie Join
+	public function getPlanningJoin($qb)
+	{
 	$qb->innerJoin('b.bookingLines', 'bl');
 	$qb->innerJoin('bl.planification', 'p');
 	$qb->innerJoin('bl.planificationPeriod', 'pp');
@@ -49,6 +84,11 @@ class BookingRepository extends ServiceEntityRepository
 	$qb->innerJoin('bl.resource', 'r');
 	$qb->innerJoin('bl.timetable', 't');
 	$qb->innerJoin('bl.timetableLine', 'tl');
+	}
+
+	// Planning des réservations: partie Order
+	public function getPlanningOrder($qb)
+	{
 	$qb->orderBy('bl.ddate', 'ASC');
 	$qb->addOrderBy('p.id', 'ASC');
 	$qb->addOrderBy('pp.id', 'ASC');
@@ -56,11 +96,8 @@ class BookingRepository extends ServiceEntityRepository
 	$qb->addOrderBy('r.id', 'ASC');
 	$qb->addOrderBy('t.id', 'ASC');
 	$qb->addOrderBy('tl.id', 'ASC');
-	$query = $qb->getQuery();
-	$results = $query->getResult();
-	return $results;
 	}
-	
+
 	// Toutes les réservations d'un dossier
 	public function getAllBookingsCount(\App\Entity\File $file)
     {

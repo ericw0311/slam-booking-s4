@@ -18,6 +18,7 @@ use App\Entity\Note;
 use App\Entity\Planification;
 use App\Entity\PlanificationPeriod;
 use App\Entity\PlanificationLine;
+use App\Entity\PlanningContext;
 use App\Entity\Timetable;
 use App\Entity\TimetableLine;
 use App\Entity\Booking;
@@ -1163,5 +1164,55 @@ class BookingController extends Controller
 			'timetableLinesList' => $timetableLinesList, 'beginningDate' => $beginningDate, 'beginningTimetableLine' => $beginningTimetableLine,
 			'endDate' => $endDate, 'endTimetableLine' => $endTimetableLine, 'userFiles' => $userFiles, 'userFileIDList' => $userFileIDList,
 			'numberLabels' => $numberLabels, 'labels' => $labels, 'labelIDList' => $labelIDList, 'noteID' => $noteID, 'note' => $note));
+    }
+
+	// Duplication d'une réservation
+    /**
+     * @Route("/bookingmany/duplicate/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}", name="booking_many_duplicate")
+	 * @ParamConverter("planningDate", options={"format": "Ymd"})
+	 * @ParamConverter("booking", options={"mapping": {"bookingID": "id"}})
+	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+     * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
+     * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
+     */
+	public function many_duplicate(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource)
+	{
+	return BookingController::duplicate($planningDate, $booking, $planification, $planificationPeriod, $resource, 1);
+	}
+
+	// Duplication d'une réservation
+    /**
+     * @Route("/bookingone/duplicate/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}", name="booking_one_duplicate")
+	 * @ParamConverter("planningDate", options={"format": "Ymd"})
+	 * @ParamConverter("booking", options={"mapping": {"bookingID": "id"}})
+	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+     * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
+     * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
+     */
+	public function one_duplicate(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource)
+	{
+	return BookingController::duplicate($planningDate, $booking, $planification, $planificationPeriod, $resource, 0);
+	}
+
+	// Duplication d'une réservation
+	public function duplicate(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $many)
+    {
+    $connectedUser = $this->getUser();
+    $em = $this->getDoctrine()->getManager();
+    $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+	$blRepository = $em->getRepository(BookingLine::Class);
+
+	$firstBookingLine = $blRepository->getFirstBookingLine($booking); 
+	$lastBookingLine = $blRepository->getLastBookingLine($booking); 
+
+    $planningContext = new PlanningContext($em, $connectedUser, $userContext->getCurrentFile(), $planificationPeriod, $firstBookingLine->getDate());
+
+	$bookings = BookingApi::getDuplicateBookings($em, $userContext->getCurrentFile(), $firstBookingLine->getDate(), $lastBookingLine->getDate(), $planification, $planificationPeriod, $booking, $userContext->getCurrentUserFile());
+
+	return $this->render('booking/duplicate.'.($many ? 'many' : 'one').'.html.twig',
+		array('userContext' => $userContext, 'planningContext' => $planningContext, 'planningDate' => $planningDate,
+			'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource,
+			'bookings' => $bookings));
     }
 }

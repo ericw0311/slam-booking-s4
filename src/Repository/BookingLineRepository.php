@@ -60,4 +60,30 @@ class BookingLineRepository extends ServiceEntityRepository
 	$results = $query->getOneOrNullResult();
 	return $results;
 	}
+
+	// Première ligne d'une réservation
+	public function getFirstBookingLine(\App\Entity\Booking $booking)
+	{
+	$qb = $this->createQueryBuilder('bl');
+	$qb->where('bl.booking = :b')->setParameter('b', $booking);
+	$qb->orderBy('bl.id', 'ASC');
+	$qb->setMaxResults(1);
+
+	$query = $qb->getQuery();
+	$results = $query->getOneOrNullResult();
+	return $results;
+	}
+
+	// Dernière ligne d'une réservation
+	public function getLastBookingLine(\App\Entity\Booking $booking)
+	{
+	$qb = $this->createQueryBuilder('bl');
+	$qb->where('bl.booking = :b')->setParameter('b', $booking);
+	$qb->orderBy('bl.id', 'DESC');
+	$qb->setMaxResults(1);
+
+	$query = $qb->getQuery();
+	$results = $query->getOneOrNullResult();
+	return $results;
+	}
 }
