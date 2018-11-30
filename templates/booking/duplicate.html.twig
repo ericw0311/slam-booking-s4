@@ -4,4 +4,20 @@
 
 {% block booking_details %}
 
+<div class="col-sm-6">
+
+{% for j in 1..planningContext.numberColumns %}
+{% for i in 1..planningContext.numberLines %}
+{{ include('planning/day.html.twig', { 'booking_create': 'booking_many_create', 'booking_view': 'booking_many_view', 'day_key': (i ~ '-' ~ j) }) }}
+{% endfor %}
+{% endfor %}
+
+</div>
+
+<div class="col-sm-6">
+
+et là
+
+</div>
+
 {% endblock %}

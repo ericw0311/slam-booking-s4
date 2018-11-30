@@ -18,6 +18,7 @@ use App\Entity\Note;
 use App\Entity\Planification;
 use App\Entity\PlanificationPeriod;
 use App\Entity\PlanificationLine;
+use App\Entity\PlanificationResource;
 use App\Entity\PlanningContext;
 use App\Entity\Timetable;
 use App\Entity\TimetableLine;
@@ -1206,13 +1207,19 @@ class BookingController extends Controller
 	$firstBookingLine = $blRepository->getFirstBookingLine($booking); 
 	$lastBookingLine = $blRepository->getLastBookingLine($booking); 
 
-    $planningContext = new PlanningContext($em, $connectedUser, $userContext->getCurrentFile(), $planificationPeriod, $firstBookingLine->getDate());
+	$interval = $lastBookingLine->getDate()->diff($firstBookingLine->getDate());
+	$numberDays = $interval->format('%a');
+
+    $planningContext = new PlanningContext($em, $connectedUser, $userContext->getCurrentFile(), $planificationPeriod, 'D', $firstBookingLine->getDate(), $lastBookingLine->getDate());
+
+    $prRepository = $em->getRepository(PlanificationResource::Class);
+    $planificationResources = $prRepository->getResource($planificationPeriod, $resource);
 
 	$bookings = BookingApi::getDuplicateBookings($em, $userContext->getCurrentFile(), $firstBookingLine->getDate(), $lastBookingLine->getDate(), $planification, $planificationPeriod, $booking, $userContext->getCurrentUserFile());
 
 	return $this->render('booking/duplicate.'.($many ? 'many' : 'one').'.html.twig',
 		array('userContext' => $userContext, 'planningContext' => $planningContext, 'planningDate' => $planningDate,
-			'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource,
-			'bookings' => $bookings));
+			'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'planificationResources' => $planificationResources,
+			'resource' => $resource, 'bookings' => $bookings));
     }
 }

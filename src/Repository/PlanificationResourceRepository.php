@@ -20,10 +20,23 @@ class PlanificationResourceRepository extends ServiceEntityRepository
     }
 
 	// Recherche les ressources d'une periode de planification
-	public function getResources($planificationPeriod)
+	public function getResources(\App\Entity\PlanificationPeriod $planificationPeriod)
     {
     $qb = $this->createQueryBuilder('pr');
     $qb->where('pr.planificationPeriod = :planificationPeriod')->setParameter('planificationPeriod', $planificationPeriod);
+    $qb->orderBy('pr.oorder', 'ASC');
+   
+    $query = $qb->getQuery();
+    $results = $query->getResult();
+    return $results;
+    }
+
+	// Recherche une ressource parmi les ressources d'une periode de planification (utilisé en dupplication de réservation)
+	public function getResource(\App\Entity\PlanificationPeriod $planificationPeriod, \App\Entity\Resource $resource)
+    {
+    $qb = $this->createQueryBuilder('pr');
+    $qb->where('pr.planificationPeriod = :planificationPeriod')->setParameter('planificationPeriod', $planificationPeriod);
+    $qb->andWhere('pr.resource = :resource')->setParameter('resource', $resource);
     $qb->orderBy('pr.oorder', 'ASC');
    
     $query = $qb->getQuery();
