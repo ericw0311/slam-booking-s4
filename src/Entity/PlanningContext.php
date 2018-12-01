@@ -124,10 +124,10 @@ class PlanningContext
 	return $this->getNumberLines() * $this->getNumberColumns();
 	}
 
-	// Indique si on affiche la date pour chaque jour
+	// Indique si on affiche la date pour chaque jour: systématiquement en duplication et si plusieurs jours affichés sur le planning
 	public function displayDate()
 	{
-	return ($this->getNumberDays() > 1);
+	return (($this->getPlanningType() == 'D') or ($this->getNumberDays() > 1));
 	}
 
 	// Dernière date de la période
@@ -156,7 +156,7 @@ class PlanningContext
     return $this->lastBookingDate;
     }
 
-	// Affichage des boutons dans le planning (pas pour la suplication)
+	// Affichage des boutons dans le planning (pas pour la duplication)
 	public function getDisplayButtons()
 	{
 	return ($this->getPlanningType() == 'P');

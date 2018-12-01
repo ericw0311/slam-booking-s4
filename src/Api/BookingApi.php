@@ -381,14 +381,14 @@ class BookingApi
 	$evenResourcesID = array();
 	$bookingsDB = $bRepository->getDuplicateBookings($file, $beginningDate, $endDate, $planification, $planificationPeriod, $booking->getResource());
 
-	return BookingApi::getPlanningBookingArray($em, $currentUserFile, $bookingsDB, 'C', $evenResourcesID, $booking->getID());
+	return BookingApi::getPlanningBookingArray($em, $currentUserFile, $bookingsDB, 'D', $evenResourcesID, $booking->getID());
 	}
 
 	// Retourne le tableau des réservations pour affichage dans un planning
 	// bookingsDB: Ressources interrogées en base de données
 	// planningType: P = Planning, C = réservations Cycliques
 	// evenResourcesID: Tableau des ressources ayant un numéro d'ordre pair: Pour planningType P = Planning
-	// bookingID: Réservation: Pour planningType C = réservations Cycliques
+	// bookingID: Réservation: Pour planningType D = Duplication de réservation
 	static function getPlanningBookingArray($em, \App\Entity\UserFile $currentUserFile, $bookingsDB, $planningType, $evenResourcesID, $bookingID)
 	{
 	$bRepository = $em->getRepository(Booking::Class);
@@ -440,9 +440,9 @@ class BookingApi
 			$cellType = 'L';
 		}
 
-		if ($planningType == 'C') {
-			// Réservations cycliques: La réservation traitée a une couleur verte (success), les autres ont une couleur rouge (danger)
-			$cellClass = (($booking['resourceID'] == $bookingID) ? 'success' : 'danger');
+		if ($planningType == 'D') {
+			// Duplication de réservation: La réservation traitée a une couleur verte (success), les autres ont une couleur rouge (danger)
+			$cellClass = (($booking['bookingID'] == $bookingID) ? 'success' : 'danger');
 		} else {
 			// Planning: La couleur des réservations est alternée à la fois entre ressources (utilisation du tableau des ressources d'ordre pair) et entre réservations d'une même journée (Compteur resourceBookingCount)
 			$cellClass = (in_array($booking['resourceID'], $evenResourcesID) ? ((($resourceBookingCount % 2) < 1) ? 'success' : 'warning') : ((($resourceBookingCount % 2) < 1) ? 'info' : 'danger'));
@@ -465,6 +465,8 @@ class BookingApi
 	$bookings[$currentBookingHeaderKey]->setFirstLabelName($labelString);
 	$bookings[$currentBookingHeaderKey]->setNumberLabels($numberLabels);
 
+	$bookings[$currentBookingHeaderKey]->setNote($bRepository->find($memo_bookingID)->getNote());
+	$bookings[$currentBookingHeaderKey]->setUserId($bRepository->find($memo_bookingID)->getUser()->getID());
 	return $bookings;
 	}
 

@@ -1207,9 +1207,6 @@ class BookingController extends Controller
 	$firstBookingLine = $blRepository->getFirstBookingLine($booking); 
 	$lastBookingLine = $blRepository->getLastBookingLine($booking); 
 
-	$interval = $lastBookingLine->getDate()->diff($firstBookingLine->getDate());
-	$numberDays = $interval->format('%a');
-
     $planningContext = new PlanningContext($em, $connectedUser, $userContext->getCurrentFile(), $planificationPeriod, 'D', $firstBookingLine->getDate(), $lastBookingLine->getDate());
 
     $prRepository = $em->getRepository(PlanificationResource::Class);
@@ -1220,6 +1217,6 @@ class BookingController extends Controller
 	return $this->render('booking/duplicate.'.($many ? 'many' : 'one').'.html.twig',
 		array('userContext' => $userContext, 'planningContext' => $planningContext, 'planningDate' => $planningDate,
 			'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'planificationResources' => $planificationResources,
-			'resource' => $resource, 'bookings' => $bookings));
+			'resource' => $resource, 'booking' => $booking, 'bookings' => $bookings));
     }
 }

@@ -31,7 +31,7 @@ class PlanificationResourceRepository extends ServiceEntityRepository
     return $results;
     }
 
-	// Recherche une ressource parmi les ressources d'une periode de planification (utilisé en dupplication de réservation)
+	// Recherche une ressource parmi les ressources d'une periode de planification (utilisé en duplication de réservation)
 	public function getResource(\App\Entity\PlanificationPeriod $planificationPeriod, \App\Entity\Resource $resource)
     {
     $qb = $this->createQueryBuilder('pr');

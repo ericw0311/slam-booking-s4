@@ -8,7 +8,7 @@
 
 {% for j in 1..planningContext.numberColumns %}
 {% for i in 1..planningContext.numberLines %}
-{{ include('planning/day.html.twig', { 'booking_create': 'booking_many_create', 'booking_view': 'booking_many_view', 'day_key': (i ~ '-' ~ j) }) }}
+{{ include('planning/day.html.twig', { 'day_key': (i ~ '-' ~ j) }) }}
 {% endfor %}
 {% endfor %}
 
@@ -16,7 +16,7 @@
 
 <div class="col-sm-6">
 
-et là
+ici _{{ booking.id }}_et là
 
 </div>
 
