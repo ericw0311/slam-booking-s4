@@ -1167,36 +1167,84 @@ class BookingController extends Controller
 			'numberLabels' => $numberLabels, 'labels' => $labels, 'labelIDList' => $labelIDList, 'noteID' => $noteID, 'note' => $note));
     }
 
-	// Duplication d'une réservation
+	// Initialisation de la duplication d'une réservation
     /**
-     * @Route("/bookingmany/duplicate/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}", name="booking_many_duplicate")
+     * @Route("/bookingmany/initduplicate/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}", name="booking_many_init_duplicate")
 	 * @ParamConverter("planningDate", options={"format": "Ymd"})
 	 * @ParamConverter("booking", options={"mapping": {"bookingID": "id"}})
 	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
      * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
      * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
      */
-	public function many_duplicate(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource)
+	public function many_init_duplicate(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource)
 	{
-	return BookingController::duplicate($planningDate, $booking, $planification, $planificationPeriod, $resource, 1);
+	return BookingController::init_duplicate($planningDate, $booking, $planification, $planificationPeriod, $resource, 1);
 	}
 
-	// Duplication d'une réservation
+	// Initialisation de la duplication d'une réservation
     /**
-     * @Route("/bookingone/duplicate/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}", name="booking_one_duplicate")
+     * @Route("/bookingone/initduplicate/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}", name="booking_one_init_duplicate")
 	 * @ParamConverter("planningDate", options={"format": "Ymd"})
 	 * @ParamConverter("booking", options={"mapping": {"bookingID": "id"}})
 	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
      * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
      * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
      */
-	public function one_duplicate(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource)
+	public function one_init_duplicate(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource)
 	{
-	return BookingController::duplicate($planningDate, $booking, $planification, $planificationPeriod, $resource, 0);
+	return BookingController::init_duplicate($planningDate, $booking, $planification, $planificationPeriod, $resource, 0);
+	}
+
+	// Initialisation de la duplication d'une réservation
+	public function init_duplicate(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $many)
+    {
+    $connectedUser = $this->getUser();
+    $em = $this->getDoctrine()->getManager();
+
+	$blRepository = $em->getRepository(BookingLine::Class);
+
+	$firstBookingLine = $blRepository->getFirstBookingLine($booking); 
+
+	$newBookingDate = clone $firstBookingLine->getDate();
+	$newBookingDate->add(new \DateInterval('P7D'));
+
+	return $this->redirectToRoute('booking_'.($many ? 'many' : 'one').'_duplicate',
+		array('planningDate' => $planningDate->format('Ymd'), 'bookingID' => $booking->getID(), 'planificationID' => $planification->getID(), 'planificationPeriodID' => $planificationPeriod->getID(),
+			'resourceID' => $resource->getID(), 'newBookingDate' => $newBookingDate->format('Ymd')));
+    }
+
+	// Duplication d'une réservation
+    /**
+     * @Route("/bookingmany/duplicate/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{newBookingDate}", name="booking_many_duplicate")
+	 * @ParamConverter("planningDate", options={"format": "Ymd"})
+	 * @ParamConverter("booking", options={"mapping": {"bookingID": "id"}})
+	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+     * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
+     * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
+	 * @ParamConverter("newBookingDate", options={"format": "Ymd"})
+     */
+	public function many_duplicate(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $newBookingDate)
+	{
+	return BookingController::duplicate($planningDate, $booking, $planification, $planificationPeriod, $resource, $newBookingDate, 1);
 	}
 
 	// Duplication d'une réservation
-	public function duplicate(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $many)
+    /**
+     * @Route("/bookingone/duplicate/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{newBookingDate}", name="booking_one_duplicate")
+	 * @ParamConverter("planningDate", options={"format": "Ymd"})
+	 * @ParamConverter("booking", options={"mapping": {"bookingID": "id"}})
+	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+     * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
+     * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
+	 * @ParamConverter("newBookingDate", options={"format": "Ymd"})
+     */
+	public function one_duplicate(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $newBookingDate)
+	{
+	return BookingController::duplicate($planningDate, $booking, $planification, $planificationPeriod, $resource, $newBookingDate, 0);
+	}
+
+	// Duplication d'une réservation
+	public function duplicate(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $newBookingDate, $many)
     {
     $connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();

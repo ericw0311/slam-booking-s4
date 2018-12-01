@@ -224,7 +224,7 @@ class PlanningController extends Controller
     $prRepository = $em->getRepository(PlanificationResource::Class);
     $planificationResources = $prRepository->getResources($planificationPeriod);
 
-	$bookings = BookingApi::getPlanningBookings($em, $userContext->getCurrentFile(), $lDate, $planningContext->getLastDate(), $lPlanification, $planificationPeriod, $userContext->getCurrentUserFile());
+	$bookings = BookingApi::getPlanningBookings($em, $userContext->getCurrentFile(), $lDate, $planningContext->getLastDate(1), $lPlanification, $planificationPeriod, $userContext->getCurrentUserFile());
 	
 	return $this->render('planning/'.($many ? 'many' : 'one').'.html.twig',
 		array('userContext' => $userContext, 'planningContext' => $planningContext,
@@ -290,7 +290,7 @@ class PlanningController extends Controller
     $prRepository = $em->getRepository(PlanificationResource::Class);
     $planificationResources = $prRepository->getResources($planificationPeriod);
 
-	$bookings = BookingApi::getPlanningBookings($em, $userContext->getCurrentFile(), $date, $planningContext->getLastDate(), $planification, $planificationPeriod, $userContext->getCurrentUserFile());
+	$bookings = BookingApi::getPlanningBookings($em, $userContext->getCurrentFile(), $date, $planningContext->getLastDate(1), $planification, $planificationPeriod, $userContext->getCurrentUserFile());
 
 	return $this->render('planning/'.($many ? 'many' : 'one').'.html.twig',
 		array('userContext' => $userContext, 'planningContext' => $planningContext,

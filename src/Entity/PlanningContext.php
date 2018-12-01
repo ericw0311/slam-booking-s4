@@ -24,32 +24,9 @@ class PlanningContext
 	} else {
 		$this->initDuplicate($beginningDate, $endDate);
 	}
-	
+
 	$this->days = array();
-	for($j = 1; $j <= $this->getNumberColumns(); $j++) {
-		for($i = 1; $i <= $this->getNumberLines(); $i++) {
-			$dayKey = $i.'-'.$j;
-			$dayNum = ($j-1)*$this->getNumberLines() + ($i-1);
-			$dayDate = clone $beginningDate;
-			if ($dayNum > 0) {
-				$dayDate->add(new \DateInterval('P'.$dayNum.'D'));
-			}
-			$beforeSign = '+';
-			if ($this->before) {
-				$interval = $this->firstBookingDate->diff($dayDate);
-				$beforeSign = $interval->format('%R');
-			}
-			$afterSign = '+';
-			if ($this->after) {
-				$interval = $dayDate->diff($this->lastBookingDate);
-				$afterSign = $interval->format('%R');
-			}
-			$periodType = 'O'; // OK pour réservation
-			if ($beforeSign == '-') { $periodType = 'B'; } // Avant période de réservation
-			if ($afterSign == '-') { $periodType = 'A'; } // Après période de réservation
-			$this->days[$dayKey] = new Day($em, $planificationPeriod, $dayDate, $periodType);
-		}
-	}
+	$this->initDays($em, $planificationPeriod, 1, $beginningDate);
 	return $this;
 	}
 	
@@ -97,6 +74,36 @@ class PlanningContext
 	$this->lastBookingDate = new \DateTime();
 	}
 
+	// Planning: keyPrefix = 1
+	// Duplication: keyPrefix = 1 pour la réservation origine et keyPrefix = 2 pour la réservation à créer
+	public function initDays($em, PlanificationPeriod $planificationPeriod, $keyPrefix, \Datetime $beginningDate)
+	{
+	for($j = 1; $j <= $this->getNumberColumns(); $j++) {
+		for($i = 1; $i <= $this->getNumberLines(); $i++) {
+			$dayKey = $keyPrefix.'-'.$i.'-'.$j;
+			$dayNum = ($j-1)*$this->getNumberLines() + ($i-1);
+			$dayDate = clone $beginningDate;
+			if ($dayNum > 0) {
+				$dayDate->add(new \DateInterval('P'.$dayNum.'D'));
+			}
+			$beforeSign = '+';
+			if ($this->before) {
+				$interval = $this->firstBookingDate->diff($dayDate);
+				$beforeSign = $interval->format('%R');
+			}
+			$afterSign = '+';
+			if ($this->after) {
+				$interval = $dayDate->diff($this->lastBookingDate);
+				$afterSign = $interval->format('%R');
+			}
+			$periodType = 'O'; // OK pour réservation
+			if ($beforeSign == '-') { $periodType = 'B'; } // Avant période de réservation
+			if ($afterSign == '-') { $periodType = 'A'; } // Après période de réservation
+			$this->days[$dayKey] = new Day($em, $planificationPeriod, $dayDate, $periodType);
+		}
+	}
+	}
+
 	public function getPlanningType()
 	{
 	return $this->planningType;
@@ -131,9 +138,9 @@ class PlanningContext
 	}
 
 	// Dernière date de la période
-	public function getLastDate()
+	public function getLastDate($keyPrefix)
 	{
-	return ($this->getDay($this->getNumberLines().'-'.$this->getNumberColumns())->getDate());
+	return ($this->getDay($keyPrefix.'-'.$this->getNumberLines().'-'.$this->getNumberColumns())->getDate());
 	}
 
 	public function getBefore()

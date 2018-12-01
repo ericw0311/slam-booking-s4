@@ -28,6 +28,6 @@
 <a href="{{ path('booking_one_delete', { 'planningDate': planningDate|date('Ymd'), 'bookingID': booking.id, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID }) }}" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> {{ 'delete'|trans }}</a>
 {% endif %}
 {% if userContext.getCurrentUserFileAdministrator() %}
-<a href="{{ path('booking_one_duplicate', { 'planningDate': planningDate|date('Ymd'), 'bookingID': booking.id, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID }) }}" class="btn btn-success"><i class="glyphicon glyphicon-repeat"></i> {{ 'duplicate'|trans }}</a>
+<a href="{{ path('booking_one_init_duplicate', { 'planningDate': planningDate|date('Ymd'), 'bookingID': booking.id, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID }) }}" class="btn btn-success"><i class="glyphicon glyphicon-repeat"></i> {{ 'duplicate'|trans }}</a>
 {% endif %}
 {% endblock %}
