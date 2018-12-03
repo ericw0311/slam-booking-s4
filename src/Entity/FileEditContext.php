@@ -208,12 +208,12 @@ class FileEditContext
     $this->setAfterNumber(AdministrationApi::getFileBookingPeriodAfterNumber($em, $file));
 
 	if ($this->before) {
-		$this->firstBookingDate = PlanningApi::getFirstBookingDate($this->beforeType, $this->beforeNumber);
+		$this->firstBookingDate = PlanningApi::getFirstDate($this->beforeType, $this->beforeNumber);
 	} else {
 		$this->firstBookingDate = new \DateTime();
 	}
 	if ($this->after) {
-		$this->lastBookingDate = PlanningApi::getLastBookingDate($this->afterType, $this->afterNumber);
+		$this->lastBookingDate = PlanningApi::getLastDate($this->afterType, $this->afterNumber);
 	} else {
 		$this->lastBookingDate = new \DateTime();
 	}

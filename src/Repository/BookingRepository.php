@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -41,15 +40,18 @@ class BookingRepository extends ServiceEntityRepository
 	return $results;
     }
 
-	// Affichage des réservations pour la duplication des réservations (on ne traite qu'une ressource)
-	public function getDuplicateBookings(\App\Entity\File $file, \Datetime $beginningDate, \Datetime $endDate, \App\Entity\Planification $planification, \App\Entity\PlanificationPeriod $planificationPeriod, \App\Entity\Resource $resource)
+	// Affichage des réservations pour la duplication des réservations (on traite deux périodes et une seule ressource)
+	public function getDuplicateBookings(\App\Entity\File $file, \Datetime $beginningDate, \Datetime $endDate, \Datetime $newBookingBeginningDate, \Datetime $newBookingEndDate,
+		\App\Entity\Planification $planification, \App\Entity\PlanificationPeriod $planificationPeriod, \App\Entity\Resource $resource)
     {
 	$qb = $this->createQueryBuilder('b');
 	$this->getPlanningSelect($qb);
 	$qb->where('b.file = :file')->setParameter('file', $file);
-	$qb->andWhere($qb->expr()->between("DATE_FORMAT(bl.ddate,'%Y%m%d')", ':beginningDate', ':endDate'))
+$qb->andWhere($qb->expr()->orX($qb->expr()->between("DATE_FORMAT(bl.ddate,'%Y%m%d')", ':beginningDate', ':endDate'), $qb->expr()->between("DATE_FORMAT(bl.ddate,'%Y%m%d')", ':newBookingBeginningDate', ':newBookingEndDate')))
 		->setParameter('beginningDate', $beginningDate->format('Ymd'))
-		->setParameter('endDate', $endDate->format('Ymd'));
+		->setParameter('endDate', $endDate->format('Ymd'))
+		->setParameter('newBookingBeginningDate', $newBookingBeginningDate->format('Ymd'))
+		->setParameter('newBookingEndDate', $newBookingEndDate->format('Ymd'));
 	$qb->andWhere('bl.planification = :planification')->setParameter('planification', $planification);
 	$qb->andWhere('bl.planificationPeriod = :planificationPeriod')->setParameter('planificationPeriod', $planificationPeriod);
 	$qb->andWhere('bl.resource = :resource')->setParameter('resource', $resource);

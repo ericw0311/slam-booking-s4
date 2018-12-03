@@ -151,22 +151,22 @@ class PlanningApi
 	$em->flush();
 	}
 
-	// Retourne la première date de réservation
-	static function getFirstBookingDate($beforeType, $beforeNumber): \DateTime
+	// Retourne la première date
+	static function getFirstDate($beforeType, $beforeNumber): \DateTime
 	{
 	if ($beforeType == 'WEEK') {
-		return PlanningApi::getFirstBookingDate_WEEK($beforeNumber);
+		return PlanningApi::getFirstDate_WEEK($beforeNumber);
 	} else if ($beforeType == 'MONTH') {
-		return PlanningApi::getFirstBookingDate_MONTH($beforeNumber);
+		return PlanningApi::getFirstDate_MONTH($beforeNumber);
 	} else if ($beforeType == 'YEAR') {
-		return PlanningApi::getFirstBookingDate_YEAR($beforeNumber);
+		return PlanningApi::getFirstDate_YEAR($beforeNumber);
 	} else {
-		return PlanningApi::getFirstBookingDate_DAY($beforeNumber);
+		return PlanningApi::getFirstDate_DAY($beforeNumber);
 	}
 	}
 
-	// Retourne la première date de réservation (si mesurée en jours).
-	static function getFirstBookingDate_DAY($numberOfDays): \DateTime
+	// Retourne la première date (si mesurée en jours).
+	static function getFirstDate_DAY($numberOfDays): \DateTime
 	{
 	$lDate = New \DateTime();
 	if ($numberOfDays > 1) {
@@ -175,8 +175,8 @@ class PlanningApi
 	return $lDate;
 	}
 
-	// Retourne la première date de réservation (si mesurée en semaines).
-	static function getFirstBookingDate_WEEK($numberOfWeeks): \DateTime
+	// Retourne la première date (si mesurée en semaines).
+	static function getFirstDate_WEEK($numberOfWeeks): \DateTime
 	{
 	$weekDay = date("w");
 	if ($weekDay <= 0) { // Le jour en cours est un dimanche.
@@ -191,8 +191,8 @@ class PlanningApi
 	return $lDate;
 	}
 
-	// Retourne la première date de réservation (si mesurée en mois).
-	static function getFirstBookingDate_MONTH($numberOfMonths): \DateTime
+	// Retourne la première date (si mesurée en mois).
+	static function getFirstDate_MONTH($numberOfMonths): \DateTime
 	{
 	$lDate = New \DateTime(date('Y').'-'.date('M').'-01');
 	if ($numberOfMonths > 1) {
@@ -201,8 +201,8 @@ class PlanningApi
 	return $lDate;
 	}
 
-	// Retourne la première date de réservation (si mesurée en années).
-	static function getFirstBookingDate_YEAR($numberOfYears): \DateTime
+	// Retourne la première date (si mesurée en années).
+	static function getFirstDate_YEAR($numberOfYears): \DateTime
 	{
 	$lDate = New \DateTime(date('Y').'-01-01');
 	if ($numberOfYears > 1) {
@@ -211,22 +211,22 @@ class PlanningApi
 	return $lDate;
 	}
 
-	// Retourne la dernière date de réservation
-	static function getLastBookingDate($afterType, $afterNumber): \DateTime
+	// Retourne la dernière date
+	static function getLastDate($afterType, $afterNumber): \DateTime
 	{
 	if ($afterType == 'WEEK') {
-		return PlanningApi::getLastBookingDate_WEEK($afterNumber);
+		return PlanningApi::getLastDate_WEEK($afterNumber);
 	} else if ($afterType == 'MONTH') {
-		return PlanningApi::getLastBookingDate_MONTH($afterNumber);
+		return PlanningApi::getLastDate_MONTH($afterNumber);
 	} else if ($afterType == 'YEAR') {
-		return PlanningApi::getLastBookingDate_YEAR($afterNumber);
+		return PlanningApi::getLastDate_YEAR($afterNumber);
 	} else {
-		return PlanningApi::getLastBookingDate_DAY($afterNumber);
+		return PlanningApi::getLastDate_DAY($afterNumber);
 	}
 	}
 
-	// Retourne la dernière date de réservation (si mesurée en jours).
-	static function getLastBookingDate_DAY($numberOfDays): \DateTime
+	// Retourne la dernière date (si mesurée en jours).
+	static function getLastDate_DAY($numberOfDays): \DateTime
 	{
 	$lDate = New \DateTime();
 	if ($numberOfDays > 1) {
@@ -235,8 +235,8 @@ class PlanningApi
 	return $lDate;
 	}
 
-	// Retourne la dernière date de réservation (si mesurée en semaines).
-	static function getLastBookingDate_WEEK($numberOfWeeks): \DateTime
+	// Retourne la dernière date (si mesurée en semaines).
+	static function getLastDate_WEEK($numberOfWeeks): \DateTime
 	{
 	$weekDay = date("w");
 	if ($weekDay <= 0) { // Le jour en cours est un dimanche.
@@ -251,8 +251,8 @@ class PlanningApi
 	return $lDate;
 	}
 
-	// Retourne la dernière date de réservation (si mesurée en mois).
-	static function getLastBookingDate_MONTH($numberOfMonths): \DateTime
+	// Retourne la dernière date (si mesurée en mois).
+	static function getLastDate_MONTH($numberOfMonths): \DateTime
 	{
 	$lDate = New \DateTime(date('Y').'-'.date('M').'-01'); // On se place au premier jour du mois en cours
 	$lDate->add(new \DateInterval('P'.$numberOfMonths.'M')); // On avance jusqu'au premier jour du mois suivant le dernier mois 
@@ -260,8 +260,8 @@ class PlanningApi
 	return $lDate;
 	}
 
-	// Retourne la dernière date de réservation (si mesurée en années).
-	static function getLastBookingDate_YEAR($numberOfYears): \DateTime
+	// Retourne la dernière date (si mesurée en années).
+	static function getLastDate_YEAR($numberOfYears): \DateTime
 	{
 	$lDate = New \DateTime(date('Y').'-12-31'); // Dernier jour de l'année en cours
 	if ($numberOfYears > 1) {

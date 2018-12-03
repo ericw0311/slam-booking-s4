@@ -16,7 +16,11 @@
 
 <div class="col-sm-6">
 
-ici _{{ booking.id }}_et là
+{% for j in 1..planningContext.numberColumns %}
+{% for i in 1..planningContext.numberLines %}
+{{ include('planning/day.html.twig', { 'day_key': ('2-' ~ i ~ '-' ~ j) }) }}
+{% endfor %}
+{% endfor %}
 
 </div>
 

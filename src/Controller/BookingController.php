@@ -1255,12 +1255,24 @@ class BookingController extends Controller
 	$firstBookingLine = $blRepository->getFirstBookingLine($booking); 
 	$lastBookingLine = $blRepository->getLastBookingLine($booking); 
 
-    $planningContext = new PlanningContext($em, $connectedUser, $userContext->getCurrentFile(), $planificationPeriod, 'D', $firstBookingLine->getDate(), $lastBookingLine->getDate());
+	// Nombre de jours dans la réservation
+	$interval = $lastBookingLine->getDate()->diff($firstBookingLine->getDate());
+	$numberDays = $interval->format('%a');
+
+	$newBookingBeginningDate = $newBookingDate;
+
+	$newBookingEndDate = clone $newBookingBeginningDate;
+	if ($numberDays > 0) {
+		$newBookingEndDate->add(new \DateInterval('P'.$numberDays.'D'));
+	}
+
+	$planningContext = new PlanningContext($em, $connectedUser, $userContext->getCurrentFile(), $planificationPeriod, 'D', $firstBookingLine->getDate(), $newBookingBeginningDate, $numberDays);
 
     $prRepository = $em->getRepository(PlanificationResource::Class);
     $planificationResources = $prRepository->getResource($planificationPeriod, $resource);
 
-	$bookings = BookingApi::getDuplicateBookings($em, $userContext->getCurrentFile(), $firstBookingLine->getDate(), $lastBookingLine->getDate(), $planification, $planificationPeriod, $booking, $userContext->getCurrentUserFile());
+	$bookings = BookingApi::getDuplicateBookings($em, $userContext->getCurrentFile(), $firstBookingLine->getDate(), $lastBookingLine->getDate(), $newBookingBeginningDate, $newBookingEndDate,
+		$planification, $planificationPeriod, $booking, $userContext->getCurrentUserFile());
 
 	return $this->render('booking/duplicate.'.($many ? 'many' : 'one').'.html.twig',
 		array('userContext' => $userContext, 'planningContext' => $planningContext, 'planningDate' => $planningDate,

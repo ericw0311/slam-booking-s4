@@ -1,8 +1,8 @@
 <?php
 namespace App\Entity;
+
 use App\Api\AdministrationApi;
 use App\Api\PlanningApi;
-
 class PlanningContext
 {
 	private $planningType; // Type de planning: P = Planning, D = Dupplication de réservation
@@ -11,67 +11,66 @@ class PlanningContext
 	private $days;
 	private $before; // Appliquer une restriction avant la date du jour
 	private $after; // Appliquer une restriction après la date du jour
-	private $firstBookingDate; // Première date de réservation autorisée si indicateur before est vrai
-	private $lastBookingDate; // Dernière date de réservation autorisée si indicateur after est vrai
+	private $firstAllowedBookingDate; // Première date de réservation autorisée si indicateur before est vrai
+	private $lastAllowedBookingDate; // Dernière date de réservation autorisée si indicateur after est vrai
 
-	// endDate n'est utilisé que pour le type Duplication
-	function __construct($em, \App\Entity\User $user, \App\Entity\File $file, PlanificationPeriod $planificationPeriod, $planningType, \Datetime $beginningDate, \Datetime $endDate)
+	// newBookingBeginningDate et numberDays ne sont utilisés que pour le type Duplication
+	function __construct($em, \App\Entity\User $user, \App\Entity\File $file, PlanificationPeriod $planificationPeriod, $planningType, \Datetime $beginningDate,
+		\Datetime $newBookingBeginningDate, $numberDays)
 	{
 	$this->planningType = $planningType;
 
 	if ($this->getPlanningType() == 'P') {
 		$this->initPlanning($em, $user, $file);
 	} else {
-		$this->initDuplicate($beginningDate, $endDate);
+		$this->initDuplicate($beginningDate, $numberDays);
 	}
-
 	$this->days = array();
 	$this->initDays($em, $planificationPeriod, 1, $beginningDate);
+
+	if ($this->getPlanningType() == 'D') { // En duplication, on traite les jours de la réservation à créer.
+		$this->initDays($em, $planificationPeriod, 2, $newBookingBeginningDate);
+	}
 	return $this;
 	}
-	
+
 	public function initPlanning($em, \App\Entity\User $user, \App\Entity\File $file)
 	{
 	$upRepository = $em->getRepository(UserParameter::class);
 
 	$userParameter = $upRepository->findOneBy(array('user' => $user, 'parameterGroup' => 'planning.number.lines.columns', 'parameter' => 'number.lines'));
 	if ($userParameter != null) { $this->numberLines = $userParameter->getIntegerValue(); } else { $this->numberLines =  constant(Constants::class.'::PLANNING_DEFAULT_NUMBER_LINES'); }
-
+	
 	$userParameter = $upRepository->findOneBy(array('user' => $user, 'parameterGroup' => 'planning.number.lines.columns', 'parameter' => 'number.columns'));
 	if ($userParameter != null) { $this->numberColumns = $userParameter->getIntegerValue(); } else { $this->numberColumns = constant(Constants::class.'::PLANNING_DEFAULT_NUMBER_COLUMNS'); }
-
+	
 	$this->before = AdministrationApi::getFileBookingPeriodBefore($em, $file);
 	$beforeType = AdministrationApi::getFileBookingPeriodBeforeType($em, $file);
 	$beforeNumber = AdministrationApi::getFileBookingPeriodBeforeNumber($em, $file);
-
 	$this->after = AdministrationApi::getFileBookingPeriodAfter($em, $file);
 	$afterType = AdministrationApi::getFileBookingPeriodAfterType($em, $file);
 	$afterNumber = AdministrationApi::getFileBookingPeriodAfterNumber($em, $file);
 	if ($this->before) {
-		$this->firstBookingDate = PlanningApi::getFirstBookingDate($beforeType, $beforeNumber);
+		$this->firstAllowedBookingDate = PlanningApi::getFirstDate($beforeType, $beforeNumber);
 	} else {
-		$this->firstBookingDate = new \DateTime();
+		$this->firstAllowedBookingDate = new \DateTime();
 	}
 	if ($this->after) {
-		$this->lastBookingDate = PlanningApi::getLastBookingDate($afterType, $afterNumber);
+		$this->lastAllowedBookingDate = PlanningApi::getLastDate($afterType, $afterNumber);
 	} else {
-		$this->lastBookingDate = new \DateTime();
+		$this->lastAllowedBookingDate = new \DateTime();
 	}
 	}
 
-	public function initDuplicate($firstBookingDate, $lastBookingDate)
+	public function initDuplicate($firstBookingDate, $numberDays)
 	{
 	$this->numberColumns =  1;
-
 	// Nombre de jours dans la réservation
-	$interval = $lastBookingDate->diff($firstBookingDate);
-	$numberDays = $interval->format('%a');
 	$this->numberLines =  $numberDays+1;
-
 	$this->before = false;
 	$this->after = false;
-	$this->firstBookingDate = new \DateTime();
-	$this->lastBookingDate = new \DateTime();
+	$this->firstAllowedBookingDate = new \DateTime();
+	$this->lastAllowedBookingDate = new \DateTime();
 	}
 
 	// Planning: keyPrefix = 1
@@ -88,12 +87,12 @@ class PlanningContext
 			}
 			$beforeSign = '+';
 			if ($this->before) {
-				$interval = $this->firstBookingDate->diff($dayDate);
+				$interval = $this->firstAllowedBookingDate->diff($dayDate);
 				$beforeSign = $interval->format('%R');
 			}
 			$afterSign = '+';
 			if ($this->after) {
-				$interval = $dayDate->diff($this->lastBookingDate);
+				$interval = $dayDate->diff($this->lastAllowedBookingDate);
 				$afterSign = $interval->format('%R');
 			}
 			$periodType = 'O'; // OK pour réservation
@@ -153,14 +152,14 @@ class PlanningContext
 	return $this->after;
 	}
 
-    public function getFirstBookingDate()
+    public function getFirstAllowedBookingDate()
     {
-    return $this->firstBookingDate;
+    return $this->firstAllowedBookingDate;
     }
- 
-	public function getLastBookingDate()
+
+	public function getLastAllowedBookingDate()
     {
-    return $this->lastBookingDate;
+    return $this->lastAllowedBookingDate;
     }
 
 	// Affichage des boutons dans le planning (pas pour la duplication)

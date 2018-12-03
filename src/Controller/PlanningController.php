@@ -219,7 +219,7 @@ class PlanningController extends Controller
 	$nextDate = clone $lDate;
 	$nextDate->add(new \DateInterval('P1D'));
 
-    $planningContext = new PlanningContext($em, $connectedUser, $userContext->getCurrentFile(), $planificationPeriod, 'P', $date, $date);
+    $planningContext = new PlanningContext($em, $connectedUser, $userContext->getCurrentFile(), $planificationPeriod, 'P', $date, $date, 1);
 
     $prRepository = $em->getRepository(PlanificationResource::Class);
     $planificationResources = $prRepository->getResources($planificationPeriod);
@@ -285,7 +285,7 @@ class PlanningController extends Controller
 	$nextDate = clone $date;
 	$nextDate->add(new \DateInterval('P1D'));
 
-    $planningContext = new PlanningContext($em, $connectedUser, $userContext->getCurrentFile(), $planificationPeriod, 'P', $date, $date);
+    $planningContext = new PlanningContext($em, $connectedUser, $userContext->getCurrentFile(), $planificationPeriod, 'P', $date, $date, 1);
 
     $prRepository = $em->getRepository(PlanificationResource::Class);
     $planificationResources = $prRepository->getResources($planificationPeriod);
