@@ -1210,41 +1210,39 @@ class BookingController extends Controller
 
 	return $this->redirectToRoute('booking_'.($many ? 'many' : 'one').'_duplicate',
 		array('planningDate' => $planningDate->format('Ymd'), 'bookingID' => $booking->getID(), 'planificationID' => $planification->getID(), 'planificationPeriodID' => $planificationPeriod->getID(),
-			'resourceID' => $resource->getID(), 'newBookingDate' => $newBookingDate->format('Ymd')));
+			'resourceID' => $resource->getID(), 'gap' => 7));
     }
 
 	// Duplication d'une réservation
     /**
-     * @Route("/bookingmany/duplicate/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{newBookingDate}", name="booking_many_duplicate")
+     * @Route("/bookingmany/duplicate/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{gap}", name="booking_many_duplicate", requirements={"gap"="\d+"})
 	 * @ParamConverter("planningDate", options={"format": "Ymd"})
 	 * @ParamConverter("booking", options={"mapping": {"bookingID": "id"}})
 	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
      * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
      * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
-	 * @ParamConverter("newBookingDate", options={"format": "Ymd"})
      */
-	public function many_duplicate(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $newBookingDate)
+	public function many_duplicate(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $gap)
 	{
-	return BookingController::duplicate($planningDate, $booking, $planification, $planificationPeriod, $resource, $newBookingDate, 1);
+	return BookingController::duplicate($planningDate, $booking, $planification, $planificationPeriod, $resource, $gap, 1);
 	}
 
 	// Duplication d'une réservation
     /**
-     * @Route("/bookingone/duplicate/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{newBookingDate}", name="booking_one_duplicate")
+     * @Route("/bookingone/duplicate/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{gap}", name="booking_one_duplicate", requirements={"gap"="\d+"})
 	 * @ParamConverter("planningDate", options={"format": "Ymd"})
 	 * @ParamConverter("booking", options={"mapping": {"bookingID": "id"}})
 	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
      * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
      * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
-	 * @ParamConverter("newBookingDate", options={"format": "Ymd"})
      */
-	public function one_duplicate(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $newBookingDate)
+	public function one_duplicate(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $gap)
 	{
-	return BookingController::duplicate($planningDate, $booking, $planification, $planificationPeriod, $resource, $newBookingDate, 0);
+	return BookingController::duplicate($planningDate, $booking, $planification, $planificationPeriod, $resource, $gap, 0);
 	}
 
 	// Duplication d'une réservation
-	public function duplicate(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $newBookingDate, $many)
+	public function duplicate(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $gap, $many)
     {
     $connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
@@ -1259,7 +1257,8 @@ class BookingController extends Controller
 	$interval = $lastBookingLine->getDate()->diff($firstBookingLine->getDate());
 	$numberDays = $interval->format('%a');
 
-	$newBookingBeginningDate = $newBookingDate;
+	$newBookingBeginningDate = clone $firstBookingLine->getDate();
+	$newBookingBeginningDate->add(new \DateInterval('P'.$gap.'D'));
 
 	$newBookingEndDate = clone $newBookingBeginningDate;
 	if ($numberDays > 0) {
@@ -1274,9 +1273,13 @@ class BookingController extends Controller
 	$bookings = BookingApi::getDuplicateBookings($em, $userContext->getCurrentFile(), $firstBookingLine->getDate(), $lastBookingLine->getDate(), $newBookingBeginningDate, $newBookingEndDate,
 		$planification, $planificationPeriod, $booking, $userContext->getCurrentUserFile());
 
+	$previousGap = $gap-7;
+	$nextGap = $gap+7;
+
 	return $this->render('booking/duplicate.'.($many ? 'many' : 'one').'.html.twig',
 		array('userContext' => $userContext, 'planningContext' => $planningContext, 'planningDate' => $planningDate,
 			'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'planificationResources' => $planificationResources,
-			'resource' => $resource, 'booking' => $booking, 'bookings' => $bookings));
+			'resource' => $resource, 'booking' => $booking, 'bookings' => $bookings,
+			'previousGap' => $previousGap, 'nextGap' => $nextGap));
     }
 }

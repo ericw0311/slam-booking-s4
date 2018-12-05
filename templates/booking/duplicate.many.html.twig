@@ -4,4 +4,8 @@
 
 {% block booking_buttons %}
 <a href="{{ path('planning_many', { 'planificationID': planification.ID, 'date': planningDate|date('Ymd') }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'planning.back'|trans }}</a>
+{% if previousGap > 0 %}
+	<a href="{{ path('booking_many_duplicate', { 'planningDate': planningDate|date('Ymd'), 'bookingID': booking.id, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'gap': previousGap }) }}" class="btn btn-primary"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'week.previous'|trans }}</a>
+{% endif %}
+<a href="{{ path('booking_many_duplicate', { 'planningDate': planningDate|date('Ymd'), 'bookingID': booking.id, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'gap': nextGap }) }}" class="btn btn-primary"><i class="glyphicon glyphicon-chevron-right"></i> {{ 'week.next'|trans }}</a>
 {% endblock %}
