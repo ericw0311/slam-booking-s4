@@ -1273,6 +1273,8 @@ class BookingController extends Controller
 	$bookings = BookingApi::getDuplicateBookings($em, $userContext->getCurrentFile(), $firstBookingLine->getDate(), $lastBookingLine->getDate(), $newBookingBeginningDate, $newBookingEndDate,
 		$planification, $planificationPeriod, $booking, $userContext->getCurrentUserFile());
 
+	$ctrlBookingLineID = BookingApi::ctrlDuplicateBooking($em, $booking, $gap); // On contrôle si la réservation peut être duppliquée.
+
 	$previousGap = $gap-7;
 	$nextGap = $gap+7;
 
@@ -1280,6 +1282,48 @@ class BookingController extends Controller
 		array('userContext' => $userContext, 'planningContext' => $planningContext, 'planningDate' => $planningDate,
 			'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'planificationResources' => $planificationResources,
 			'resource' => $resource, 'booking' => $booking, 'bookings' => $bookings,
-			'previousGap' => $previousGap, 'nextGap' => $nextGap));
+			'ctrlBookingLineID' => $ctrlBookingLineID, 'gap' => $gap, 'previousGap' => $previousGap, 'nextGap' => $nextGap));
     }
+
+	// Validation de la duplication d'une réservation
+    /**
+     * @Route("/bookingmany/validateduplicate/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{gap}", name="booking_many_validate_duplicate", requirements={"gap"="\d+"})
+	 * @ParamConverter("planningDate", options={"format": "Ymd"})
+	 * @ParamConverter("booking", options={"mapping": {"bookingID": "id"}})
+	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+     * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
+     * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
+     */
+	public function many_validate_duplicate(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $gap)
+	{
+	return BookingController::validate_duplicate($planningDate, $booking, $planification, $planificationPeriod, $resource, $gap, 1);
+	}
+
+	// Validation de la duplication d'une réservation
+    /**
+     * @Route("/bookingone/validateduplicate/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{gap}", name="booking_one_validate_duplicate", requirements={"gap"="\d+"})
+	 * @ParamConverter("planningDate", options={"format": "Ymd"})
+	 * @ParamConverter("booking", options={"mapping": {"bookingID": "id"}})
+	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+     * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
+     * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
+     */
+	public function one_validate_duplicate(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $gap)
+	{
+	return BookingController::validate_duplicate($planningDate, $booking, $planification, $planificationPeriod, $resource, $gap, 0);
+	}
+
+	// Validation de la duplication d'une réservation
+	public function validate_duplicate(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $gap, $many)
+    {
+    $connectedUser = $this->getUser();
+    $em = $this->getDoctrine()->getManager();
+    $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+	$newBookingID = BookingApi::duplicateBooking($em, $booking, $gap, $connectedUser, $userContext->getCurrentFile());
+
+	return $this->redirectToRoute('booking_'.($many ? 'many' : 'one').'_duplicate',
+		array('planningDate' => $planningDate->format('Ymd'), 'bookingID' => $booking->getID(), 'planificationID' => $planification->getID(), 'planificationPeriodID' => $planificationPeriod->getID(),
+			'resourceID' => $resource->getID(), 'gap' => $gap));
+	}
 }

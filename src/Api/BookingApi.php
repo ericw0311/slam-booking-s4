@@ -533,4 +533,89 @@ class BookingApi
 	}
 	return $emailArray;
 	}
+
+
+	// Contrôle si une réservation peut être duppliquée. On parcourt les lignes de réservation et on recherche sur les conditions de la clé unique
+	// Retourne 0 si aucune ligne de réservation trouvée, et l'ID de la première ligne sinon
+	static function ctrlDuplicateBooking($em, \App\Entity\Booking $booking, $gap)
+	{
+	$blRepository = $em->getRepository(BookingLine::Class);
+	$bookingLinesDB = $blRepository->getBookingLines($booking);
+
+	$bookingLines = $blRepository->findBy(array('booking' => $booking), array('id' => 'asc'));
+	foreach ($bookingLines as $bookingLine) {
+
+		$newBookingLineDate = clone $bookingLine->getDate();
+		$newBookingLineDate->add(new \DateInterval('P'.$gap.'D'));
+
+		$newBookingLineDate = $blRepository->findOneBy(array('resource' => $bookingLine->getResource(), 'ddate' => $newBookingLineDate, 'timetable' => $bookingLine->getTimetable(), 'timetableLine' => $bookingLine->getTimetableLine()));
+		if ($newBookingLineDate !== null) {
+			return $newBookingLineDate->getId();
+		}
+	}
+	return 0;
+	}
+
+	// Dupplication d'une réservation.
+	static function duplicateBooking($em, \App\Entity\Booking $booking, $gap, $connectedUser, $currentFile)
+	{
+	$bliRepository = $em->getRepository(BookingLine::Class);
+	$buRepository = $em->getRepository(BookingUser::Class);
+	$blaRepository = $em->getRepository(BookingLabel::Class);
+	$plRepository = $em->getRepository(PlanificationLine::Class);
+
+	$firstBookingLine = $bliRepository->getFirstBookingLine($booking);
+	$lastBookingLine = $bliRepository->getLastBookingLine($booking);
+
+	$newBookingBeginningDate = clone $firstBookingLine->getDate();
+	$newBookingBeginningDate->add(new \DateInterval('P'.$gap.'D'));
+
+	$newBookingEndDate = clone $lastBookingLine->getDate();
+	$newBookingEndDate->add(new \DateInterval('P'.$gap.'D'));
+
+	$newBooking = new Booking($connectedUser, $currentFile, $booking->getPlanification(), $booking->getResource());
+
+	$newBooking->setBeginningDate(date_create_from_format('YmdHi', $newBookingBeginningDate->format('Ymd').$firstBookingLine->getTimetableLine()->getBeginningTime()->format('Hi')));
+	$newBooking->setEndDate(date_create_from_format('YmdHi', $newBookingEndDate->format('Ymd').$lastBookingLine->getTimetableLine()->getEndTime()->format('Hi')));
+
+	$newBooking->setNote($booking->getNote());
+	$newBooking->setFormNote($booking->getFormNote());
+	$em->persist($newBooking);
+
+	$bookingLines = $bliRepository->findBy(array('booking' => $booking), array('id' => 'asc'));
+	foreach ($bookingLines as $bookingLine) {
+
+		$newBookingLineDate = clone $bookingLine->getDate();
+		$newBookingLineDate->add(new \DateInterval('P'.$gap.'D'));
+
+		$newBookingLine = new BookingLine($connectedUser, $newBooking, $bookingLine->getResource());
+		$newBookingLine->setDate($newBookingLineDate);
+		$newBookingLine->setPlanification($bookingLine->getPlanification());
+		$newBookingLine->setPlanificationPeriod($bookingLine->getPlanificationPeriod());
+		// La référence à la ligne de planification est recherchée car si la nouvelle réservation et l'ancienne ne sont pas sur un même jour de la semaine (ce qui est théoriquement possible) cette référence n'est pas la même entre les deux réservations
+		$newBookingLine->setPlanificationLine($plRepository->findOneBy(array('planificationPeriod' => $bookingLine->getPlanificationPeriod(), 'weekDay' => strtoupper($newBookingLineDate->format('D')))));
+		$newBookingLine->setTimetable($bookingLine->getTimetable());
+		$newBookingLine->setTimetableLine($bookingLine->getTimetableLine());
+		$em->persist($newBookingLine);
+	}
+
+	$bookingUsers = $buRepository->findBy(array('booking' => $booking), array('id' => 'asc'));
+	foreach ($bookingUsers as $bookingUser) {
+
+		$newBookingUser = new BookingUser($connectedUser, $newBooking, $bookingUser->getUserFile());
+		$newBookingUser->setOrder($bookingUser->getOrder());
+		$em->persist($newBookingUser);
+	}
+
+	$bookingLabels = $blaRepository->findBy(array('booking' => $booking), array('id' => 'asc'));
+	foreach ($bookingLabels as $bookingLabel) {
+
+		$newBookingLabel = new BookingLabel($connectedUser, $newBooking, $bookingLabel->getLabel());
+		$newBookingLabel->setOrder($bookingLabel->getOrder());
+		$em->persist($newBookingLabel);
+	}
+	$em->flush();
+	return $newBooking->getID();
+	}
+
 }

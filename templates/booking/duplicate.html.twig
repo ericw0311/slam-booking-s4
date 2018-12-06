@@ -4,6 +4,17 @@
 
 {% block booking_details %}
 
+<div class="col-sm-12">
+{% if ctrlBookingLineID > 0 %}
+<div class="alert alert-danger">
+<span class="glyphicon glyphicon-star"></span>&nbsp;{{ 'booking.duplicate.ko'|trans({'%newBookingDate%': dateLongue(planningContext.getFirstDuplicateDate())}) }}
+{% else %}
+<div class="alert alert-info">
+<span class="glyphicon glyphicon-star"></span>&nbsp;{{ 'booking.duplicate.ok'|trans({'%newBookingDate%': dateLongue(planningContext.getFirstDuplicateDate())}) }}
+{% endif %}
+</div>
+</div>
+
 <div class="col-sm-6">
 
 {% for j in 1..planningContext.numberColumns %}

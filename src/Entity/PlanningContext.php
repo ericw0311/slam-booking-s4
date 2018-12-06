@@ -136,6 +136,18 @@ class PlanningContext
 	return (($this->getPlanningType() == 'D') or ($this->getNumberDays() > 1));
 	}
 
+	// Première date de la période
+	public function getFirstDate($keyPrefix)
+	{
+	return ($this->getDay($keyPrefix.'-1-1')->getDate());
+	}
+
+	// Première date de dupplication
+	public function getFirstDuplicateDate()
+	{
+	return ($this->getFirstDate(2));
+	}
+
 	// Dernière date de la période
 	public function getLastDate($keyPrefix)
 	{

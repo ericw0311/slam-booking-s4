@@ -107,6 +107,8 @@ booking.create: Création d'une réservation
 booking.created.ok: La réservation a bien été créée
 booking.delete: Suppression d'une réservation
 booking.deleted.ok: La réservation a bien été supprimée
+booking.duplicate.ko: La réservation ne peut pas être duppliquée au %newBookingDate%
+booking.duplicate.ok: La réservation peut être duppliquée au %newBookingDate%
 booking.entered.on.by: Réservation saisie le %bookingDate% à %bookingTime% par %userName%
 booking.in.progress: Les réservations en cours
 booking.not.allowed: Réservation interdite
