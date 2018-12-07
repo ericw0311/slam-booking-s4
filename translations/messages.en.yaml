@@ -107,6 +107,7 @@ booking.create: Booking create
 booking.created.ok: The booking has been created
 booking.delete: Booking delete
 booking.deleted.ok: The booking has been deleted
+booking.duplicate.exists: The booking is duplicated on %newBookingDate%
 booking.duplicate.ko: The booking cannot be duplicated on %newBookingDate%
 booking.duplicate.ok: The booking can be duplicated on %newBookingDate%
 booking.entered.on.by: Booking entered on %bookingDate% at %bookingTime% by %userName%

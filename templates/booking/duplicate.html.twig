@@ -5,7 +5,10 @@
 {% block booking_details %}
 
 <div class="col-sm-12">
-{% if ctrlBookingLineID > 0 %}
+{% if newBookingID > 0 %}
+<div class="alert alert-success">
+<span class="glyphicon glyphicon-star"></span>&nbsp;{{ 'booking.duplicate.exists'|trans({'%newBookingDate%': dateLongue(planningContext.getFirstDuplicateDate())}) }}
+{% elseif ctrlBookingLineID > 0 %}
 <div class="alert alert-danger">
 <span class="glyphicon glyphicon-star"></span>&nbsp;{{ 'booking.duplicate.ko'|trans({'%newBookingDate%': dateLongue(planningContext.getFirstDuplicateDate())}) }}
 {% else %}

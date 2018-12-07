@@ -373,20 +373,20 @@ class BookingApi
 	$evenResourcesID = ResourceApi::getEvenPlanifiedResourcesID($em, $planificationPeriod);
 	$bookingsDB = $bRepository->getPlanningBookings($file, $beginningDate, $endDate, $planification, $planificationPeriod);
 
-	return BookingApi::getPlanningBookingArray($em, $currentUserFile, $bookingsDB, 'P', $evenResourcesID, 0);
+	return BookingApi::getPlanningBookingArray($em, $currentUserFile, $bookingsDB, 'P', $evenResourcesID, 0, 0);
 	}
 
 
 	static function getDuplicateBookings($em, \App\Entity\File $file, \Datetime $beginningDate, \Datetime $endDate, \Datetime $newBookingBeginningDate, \Datetime $newBookingEndDate,
-		\App\Entity\Planification $planification, \App\Entity\PlanificationPeriod $planificationPeriod, \App\Entity\Booking $booking, \App\Entity\UserFile $currentUserFile)
+		\App\Entity\Planification $planification, \App\Entity\PlanificationPeriod $planificationPeriod, \App\Entity\Booking $originBooking, $newBookingID, \App\Entity\UserFile $currentUserFile)
 	{
 	$bRepository = $em->getRepository(Booking::Class);
 
 	$evenResourcesID = array();
 	$bookingsDB = $bRepository->getDuplicateBookings($file, $beginningDate, $endDate, $newBookingBeginningDate, $newBookingEndDate,
-		$planification, $planificationPeriod, $booking->getResource());
+		$planification, $planificationPeriod, $originBooking->getResource());
 
-	return BookingApi::getPlanningBookingArray($em, $currentUserFile, $bookingsDB, 'D', $evenResourcesID, $booking->getID());
+	return BookingApi::getPlanningBookingArray($em, $currentUserFile, $bookingsDB, 'D', $evenResourcesID, $originBooking->getID(), $newBookingID);
 	}
 
 	// Retourne le tableau des réservations pour affichage dans un planning
@@ -394,7 +394,7 @@ class BookingApi
 	// planningType: P = Planning, C = réservations Cycliques
 	// evenResourcesID: Tableau des ressources ayant un numéro d'ordre pair: Pour planningType P = Planning
 	// bookingID: Réservation: Pour planningType D = Duplication de réservation
-	static function getPlanningBookingArray($em, \App\Entity\UserFile $currentUserFile, $bookingsDB, $planningType, $evenResourcesID, $bookingID)
+	static function getPlanningBookingArray($em, \App\Entity\UserFile $currentUserFile, $bookingsDB, $planningType, $evenResourcesID, $originBookingID, $newBookingID)
 	{
 	$bRepository = $em->getRepository(Booking::Class);
 
@@ -447,7 +447,7 @@ class BookingApi
 
 		if ($planningType == 'D') {
 			// Duplication de réservation: La réservation traitée a une couleur verte (success), les autres ont une couleur rouge (danger)
-			$cellClass = (($booking['bookingID'] == $bookingID) ? 'success' : 'danger');
+			$cellClass = ((($booking['bookingID'] == $originBookingID) or ($booking['bookingID'] == $newBookingID)) ? 'success' : 'danger');
 		} else {
 			// Planning: La couleur des réservations est alternée à la fois entre ressources (utilisation du tableau des ressources d'ordre pair) et entre réservations d'une même journée (Compteur resourceBookingCount)
 			$cellClass = (in_array($booking['resourceID'], $evenResourcesID) ? ((($resourceBookingCount % 2) < 1) ? 'success' : 'warning') : ((($resourceBookingCount % 2) < 1) ? 'info' : 'danger'));

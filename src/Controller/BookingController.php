@@ -26,6 +26,7 @@ use App\Entity\Booking;
 use App\Entity\BookingLine;
 use App\Entity\BookingUser;
 use App\Entity\BookingLabel;
+use App\Entity\BookingDuplication;
 
 use App\Form\NoteType;
 use App\Api\AdministrationApi;
@@ -1249,6 +1250,7 @@ class BookingController extends Controller
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
 	$blRepository = $em->getRepository(BookingLine::Class);
+	$bdRepository = $em->getRepository(BookingDuplication::Class);
 
 	$firstBookingLine = $blRepository->getFirstBookingLine($booking); 
 	$lastBookingLine = $blRepository->getLastBookingLine($booking); 
@@ -1270,9 +1272,17 @@ class BookingController extends Controller
     $prRepository = $em->getRepository(PlanificationResource::Class);
     $planificationResources = $prRepository->getResource($planificationPeriod, $resource);
 
-	$bookings = BookingApi::getDuplicateBookings($em, $userContext->getCurrentFile(), $firstBookingLine->getDate(), $lastBookingLine->getDate(), $newBookingBeginningDate, $newBookingEndDate,
-		$planification, $planificationPeriod, $booking, $userContext->getCurrentUserFile());
+	// Recherche de la réservation dupliquée
+	$newBookingID = 0;
+	$bookingDuplication = $bdRepository->findOneBy(array('originBooking' => $booking, 'ddate' => $newBookingBeginningDate));
+	if ($bookingDuplication !== null) {
+		$newBookingID = $bookingDuplication->getNewBooking()->getId();
+	}
 
+	$bookings = BookingApi::getDuplicateBookings($em, $userContext->getCurrentFile(), $firstBookingLine->getDate(), $lastBookingLine->getDate(), $newBookingBeginningDate, $newBookingEndDate,
+		$planification, $planificationPeriod, $booking, $newBookingID, $userContext->getCurrentUserFile());
+
+	// Logiquement, si la réservation est déjà dupliquée (newBookingID > 0) cette recherche est inutile, on sait qu'il y a des lignes de réservation en date de dupplication, et on peut se passer de la recherche suivante.
 	$ctrlBookingLineID = BookingApi::ctrlDuplicateBooking($em, $booking, $gap); // On contrôle si la réservation peut être duppliquée.
 
 	$previousGap = $gap-7;
@@ -1281,7 +1291,7 @@ class BookingController extends Controller
 	return $this->render('booking/duplicate.'.($many ? 'many' : 'one').'.html.twig',
 		array('userContext' => $userContext, 'planningContext' => $planningContext, 'planningDate' => $planningDate,
 			'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'planificationResources' => $planificationResources,
-			'resource' => $resource, 'booking' => $booking, 'bookings' => $bookings,
+			'resource' => $resource, 'booking' => $booking, 'bookings' => $bookings, 'newBookingID' => $newBookingID,
 			'ctrlBookingLineID' => $ctrlBookingLineID, 'gap' => $gap, 'previousGap' => $previousGap, 'nextGap' => $nextGap));
     }
 
@@ -1321,6 +1331,53 @@ class BookingController extends Controller
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
 	$newBookingID = BookingApi::duplicateBooking($em, $booking, $gap, $connectedUser, $userContext->getCurrentFile());
+
+	return $this->redirectToRoute('booking_'.($many ? 'many' : 'one').'_duplicate',
+		array('planningDate' => $planningDate->format('Ymd'), 'bookingID' => $booking->getID(), 'planificationID' => $planification->getID(), 'planificationPeriodID' => $planificationPeriod->getID(),
+			'resourceID' => $resource->getID(), 'gap' => $gap));
+	}
+
+	// Suppression d'une réservation dupliquée
+    /**
+     * @Route("/bookingmany/deleteduplicate/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{gap}/{newBookingID}", name="booking_many_delete_duplicate", requirements={"gap"="\d+"})
+	 * @ParamConverter("planningDate", options={"format": "Ymd"})
+	 * @ParamConverter("booking", options={"mapping": {"bookingID": "id"}})
+	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+     * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
+     * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
+     */
+	public function many_delete_duplicate(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $gap, $newBookingID)
+	{
+	return BookingController::delete_duplicate($planningDate, $booking, $planification, $planificationPeriod, $resource, $gap, $newBookingID, 1);
+	}
+
+	// Suppression d'une réservation dupliquée
+    /**
+     * @Route("/bookingone/deleteduplicate/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}/{gap}/{newBookingID}", name="booking_one_delete_duplicate", requirements={"gap"="\d+"})
+	 * @ParamConverter("planningDate", options={"format": "Ymd"})
+	 * @ParamConverter("booking", options={"mapping": {"bookingID": "id"}})
+	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+     * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
+     * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
+     */
+	public function one_delete_duplicate(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $gap, $newBookingID)
+	{
+	return BookingController::delete_duplicate($planningDate, $booking, $planification, $planificationPeriod, $resource, $gap, $newBookingID, 0);
+	}
+
+	// Suppression d'une réservation dupliquée
+	public function delete_duplicate(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $gap, $newBookingID, $many)
+    {
+    $connectedUser = $this->getUser();
+    $em = $this->getDoctrine()->getManager();
+
+	$bRepository = $em->getRepository(Booking::Class);
+
+	$newBooking = $bRepository->find($newBookingID);
+	if ($newBooking !== null) {
+		$em->remove($newBooking);
+		$em->flush();
+	}
 
 	return $this->redirectToRoute('booking_'.($many ? 'many' : 'one').'_duplicate',
 		array('planningDate' => $planningDate->format('Ymd'), 'bookingID' => $booking->getID(), 'planificationID' => $planification->getID(), 'planificationPeriodID' => $planificationPeriod->getID(),

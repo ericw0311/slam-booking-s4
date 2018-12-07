@@ -7,8 +7,10 @@
 {% if previousGap > 0 %}
 	<a href="{{ path('booking_one_duplicate', { 'planningDate': planningDate|date('Ymd'), 'bookingID': booking.id, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'gap': previousGap }) }}" class="btn btn-primary"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'week.previous'|trans }}</a>
 {% endif %}
-{% if ctrlBookingLineID <= 0 %}
+{% if newBookingID <= 0 and ctrlBookingLineID <= 0 %}
 	<a href="{{ path('booking_one_validate_duplicate', { 'planningDate': planningDate|date('Ymd'), 'bookingID': booking.id, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'gap': gap }) }}" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> {{ 'duplicate'|trans }}</a>
+{% elseif newBookingID > 0 %}
+	<a href="{{ path('booking_one_delete_duplicate', { 'planningDate': planningDate|date('Ymd'), 'bookingID': booking.id, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'gap': gap, 'newBookingID': newBookingID }) }}" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> {{ 'delete'|trans }}</a>
 {% endif %}
 <a href="{{ path('booking_one_duplicate', { 'planningDate': planningDate|date('Ymd'), 'bookingID': booking.id, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'gap': nextGap }) }}" class="btn btn-primary"><i class="glyphicon glyphicon-chevron-right"></i> {{ 'week.next'|trans }}</a>
 {% endblock %}
