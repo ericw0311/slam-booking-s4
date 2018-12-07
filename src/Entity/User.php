@@ -93,6 +93,7 @@ class User implements UserInterface, \Serializable
         $this->bookingLabels = new ArrayCollection();
         $this->queryBookings = new ArrayCollection();
         $this->fileParameters = new ArrayCollection();
+        $this->bookingDuplications = new ArrayCollection();
     }
 
     public function getId()
@@ -341,6 +342,11 @@ class User implements UserInterface, \Serializable
   * @ORM\OneToMany(targetEntity="App\Entity\FileParameter", mappedBy="user", orphanRemoval=true)
   */
  private $fileParameters;
+
+ /**
+  * @ORM\OneToMany(targetEntity="App\Entity\BookingDuplication", mappedBy="user", orphanRemoval=true)
+  */
+ private $bookingDuplications;
 
 
 
@@ -873,6 +879,37 @@ class User implements UserInterface, \Serializable
             // set the owning side to null (unless already changed)
             if ($fileParameter->getUser() === $this) {
                 $fileParameter->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|BookingDuplication[]
+     */
+    public function getBookingDuplications(): Collection
+    {
+        return $this->bookingDuplications;
+    }
+
+    public function addBookingDuplication(BookingDuplication $bookingDuplication): self
+    {
+        if (!$this->bookingDuplications->contains($bookingDuplication)) {
+            $this->bookingDuplications[] = $bookingDuplication;
+            $bookingDuplication->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBookingDuplication(BookingDuplication $bookingDuplication): self
+    {
+        if ($this->bookingDuplications->contains($bookingDuplication)) {
+            $this->bookingDuplications->removeElement($bookingDuplication);
+            // set the owning side to null (unless already changed)
+            if ($bookingDuplication->getUser() === $this) {
+                $bookingDuplication->setUser(null);
             }
         }
 

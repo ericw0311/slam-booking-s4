@@ -14,6 +14,7 @@ use App\Entity\BookingLabel;
 use App\Entity\BookingDateNDB;
 use App\Entity\BookingPeriodNDB;
 use App\Entity\BookingNDB;
+use App\Entity\BookingDuplication;
 use App\Entity\SelectedEntity;
 use App\Entity\AddEntity;
 use App\Entity\Constants;
@@ -579,7 +580,7 @@ class BookingApi
 	$newBooking->setEndDate(date_create_from_format('YmdHi', $newBookingEndDate->format('Ymd').$lastBookingLine->getTimetableLine()->getEndTime()->format('Hi')));
 
 	$newBooking->setNote($booking->getNote());
-	$newBooking->setFormNote($booking->getFormNote());
+	// $newBooking->setFormNote($booking->getFormNote());
 	$em->persist($newBooking);
 
 	$bookingLines = $bliRepository->findBy(array('booking' => $booking), array('id' => 'asc'));
@@ -614,8 +615,11 @@ class BookingApi
 		$newBookingLabel->setOrder($bookingLabel->getOrder());
 		$em->persist($newBookingLabel);
 	}
+
+	$bookingDuplication = new BookingDuplication($connectedUser, $booking, $newBookingBeginningDate, $gap, $newBooking);
+	$em->persist($bookingDuplication);
+
 	$em->flush();
 	return $newBooking->getID();
 	}
-
 }

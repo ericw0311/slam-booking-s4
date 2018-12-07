@@ -88,6 +88,16 @@ class Booking
      */
     private $bookingLabels;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\BookingDuplication", mappedBy="originBooking", orphanRemoval=true)
+     */
+    private $originBookingDuplications;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\BookingDuplication", mappedBy="newBooking", orphanRemoval=true)
+     */
+    private $newBookingDuplications;
+
 
     public function __construct(\App\Entity\User $user, \App\Entity\File $file, \App\Entity\Planification $planification, \App\Entity\Resource $resource)
     {
@@ -98,6 +108,8 @@ class Booking
 	$this->bookingUsers = new ArrayCollection();
 	$this->bookingLines = new ArrayCollection();
 	$this->bookingLabels = new ArrayCollection();
+ $this->originBookingDuplications = new ArrayCollection();
+ $this->newBookingDuplications = new ArrayCollection();
     }
 
     public function getId()
@@ -304,6 +316,68 @@ class Booking
                 $bookingLabel->setBooking(null);
             }
         }
+        return $this;
+    }
+
+    /**
+     * @return Collection|BookingDuplication[]
+     */
+    public function getOriginBookingDuplications(): Collection
+    {
+        return $this->originBookingDuplications;
+    }
+
+    public function addOriginBookingDuplication(BookingDuplication $bookingDuplication): self
+    {
+        if (!$this->originBookingDuplications->contains($bookingDuplication)) {
+            $this->originBookingDuplications[] = $bookingDuplication;
+            $bookingDuplication->setOriginBooking($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOriginBookingDuplication(BookingDuplication $bookingDuplication): self
+    {
+        if ($this->originBookingDuplications->contains($bookingDuplication)) {
+            $this->originBookingDuplications->removeElement($bookingDuplication);
+            // set the owning side to null (unless already changed)
+            if ($bookingDuplication->getOriginBooking() === $this) {
+                $bookingDuplication->setOriginBooking(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|BookingDuplication[]
+     */
+    public function getNewBookingDuplications(): Collection
+    {
+        return $this->newBookingDuplications;
+    }
+
+    public function addNewBookingDuplication(BookingDuplication $newBookingDuplication): self
+    {
+        if (!$this->newBookingDuplications->contains($newBookingDuplication)) {
+            $this->newBookingDuplications[] = $newBookingDuplication;
+            $newBookingDuplication->setNewBooking($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNewBookingDuplication(BookingDuplication $newBookingDuplication): self
+    {
+        if ($this->newBookingDuplications->contains($newBookingDuplication)) {
+            $this->newBookingDuplications->removeElement($newBookingDuplication);
+            // set the owning side to null (unless already changed)
+            if ($newBookingDuplication->getNewBooking() === $this) {
+                $newBookingDuplication->setNewBooking(null);
+            }
+        }
+
         return $this;
     }
 }
