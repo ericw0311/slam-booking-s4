@@ -20,30 +20,14 @@ class PlanningContext
 	{
 	$this->planningType = $planningType;
 
-	if ($this->getPlanningType() == 'P') {
-		$this->initPlanning($em, $user, $file);
+	if ($this->getPlanningType() == 'D') { // En duplication, le nombre de colonnes est 1 et le nombre de lignes, le nombre de jours sur de la réservation à dupliquer
+		$this->numberColumns =  1;
+		$this->numberLines =  $numberDays+1;
 	} else {
-		$this->initDuplicate($beginningDate, $numberDays);
-	}
-	$this->days = array();
-	$this->initDays($em, $planificationPeriod, 1, $beginningDate);
-
-	if ($this->getPlanningType() == 'D') { // En duplication, on traite les jours de la réservation à créer.
-		$this->initDays($em, $planificationPeriod, 2, $newBookingBeginningDate);
-	}
-	return $this;
+		$this->numberColumns = PlanningApi::getNumberColumns($em, $user);
+		$this->numberLines = PlanningApi::getNumberLines($em, $user);
 	}
 
-	public function initPlanning($em, \App\Entity\User $user, \App\Entity\File $file)
-	{
-	$upRepository = $em->getRepository(UserParameter::class);
-
-	$userParameter = $upRepository->findOneBy(array('user' => $user, 'parameterGroup' => 'planning.number.lines.columns', 'parameter' => 'number.lines'));
-	if ($userParameter != null) { $this->numberLines = $userParameter->getIntegerValue(); } else { $this->numberLines =  constant(Constants::class.'::PLANNING_DEFAULT_NUMBER_LINES'); }
-	
-	$userParameter = $upRepository->findOneBy(array('user' => $user, 'parameterGroup' => 'planning.number.lines.columns', 'parameter' => 'number.columns'));
-	if ($userParameter != null) { $this->numberColumns = $userParameter->getIntegerValue(); } else { $this->numberColumns = constant(Constants::class.'::PLANNING_DEFAULT_NUMBER_COLUMNS'); }
-	
 	$this->before = AdministrationApi::getFileBookingPeriodBefore($em, $file);
 	$beforeType = AdministrationApi::getFileBookingPeriodBeforeType($em, $file);
 	$beforeNumber = AdministrationApi::getFileBookingPeriodBeforeNumber($em, $file);
@@ -60,17 +44,14 @@ class PlanningContext
 	} else {
 		$this->lastAllowedBookingDate = new \DateTime();
 	}
-	}
 
-	public function initDuplicate($firstBookingDate, $numberDays)
-	{
-	$this->numberColumns =  1;
-	// Nombre de jours dans la réservation
-	$this->numberLines =  $numberDays+1;
-	$this->before = false;
-	$this->after = false;
-	$this->firstAllowedBookingDate = new \DateTime();
-	$this->lastAllowedBookingDate = new \DateTime();
+	$this->days = array();
+	$this->initDays($em, $planificationPeriod, 1, $beginningDate);
+
+	if ($this->getPlanningType() == 'D') { // En duplication, on traite les jours de la réservation à créer.
+		$this->initDays($em, $planificationPeriod, 2, $newBookingBeginningDate);
+	}
+	return $this;
 	}
 
 	// Planning: keyPrefix = 1
@@ -85,13 +66,17 @@ class PlanningContext
 			if ($dayNum > 0) {
 				$dayDate->add(new \DateInterval('P'.$dayNum.'D'));
 			}
+			// En duplication, on ne contrôle la date que pour le premier jour de la réservation à créer
+			$ctrlBefore = ($this->before and ($this->getPlanningType() != 'D' or ($keyPrefix == 2 and $i == 1 and $j == 1)));
+			$ctrlAfter = ($this->after and ($this->getPlanningType() != 'D' or ($keyPrefix == 2 and $i == 1 and $j == 1)));
+
 			$beforeSign = '+';
-			if ($this->before) {
+			if ($ctrlBefore) {
 				$interval = $this->firstAllowedBookingDate->diff($dayDate);
 				$beforeSign = $interval->format('%R');
 			}
 			$afterSign = '+';
-			if ($this->after) {
+			if ($ctrlAfter) {
 				$interval = $dayDate->diff($this->lastAllowedBookingDate);
 				$afterSign = $interval->format('%R');
 			}

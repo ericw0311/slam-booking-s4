@@ -26,9 +26,9 @@ use App\Api\BookingApi;
 class PlanningController extends Controller
 {
     /**
-     * @Route("/planning", name="planning")
+     * @Route("/planning/access", name="planning")
      */
-	public function acces()
+	public function access()
 	{
 	$connectedUser = $this->getUser();
 	$em = $this->getDoctrine()->getManager();
@@ -48,6 +48,30 @@ class PlanningController extends Controller
 		return $this->redirectToRoute('planning_one_pp', array('planificationID' => $planifications[0]['ID'], 'planificationPeriodID' => $planifications[0]['planificationPeriodID'], 'date' => $currentDate));
 	}
 	}
+
+
+	// Affichage des planifications du dossier en cours
+    /**
+     * @Route("/planning/{page}", name="planning_list", requirements={"page"="\d+"})
+     */
+	public function index($page)
+	{
+	$connectedUser = $this->getUser();
+	$em = $this->getDoctrine()->getManager();
+	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+	$currentDate = date("Ymd");
+
+	$pRepository = $em->getRepository(Planification::Class);
+    $numberRecords = $pRepository->getPlanningPlanificationsCount($userContext->getCurrentFile(), new \DateTime());
+	
+	$listContext = new ListContext($em, $connectedUser, 'planning', 'planification', $page, $numberRecords);
+    $listPlanifications = $pRepository->getPlanningPlanifications($userContext->getCurrentFile(), new \DateTime());
+
+	return $this->render('planning/index.html.twig', 
+	array('userContext' => $userContext, 'listContext' => $listContext, 'listPlanifications' => $listPlanifications, 'date' => $currentDate));
+    }
+
 
     /**
      * @Route("/planning/noplanification", name="planning_no_planification")

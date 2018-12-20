@@ -52,6 +52,20 @@ class PlanificationRepository extends ServiceEntityRepository
 
 	// 2) Planifications affichées dans le planning
 
+	// Nombre de planifications affichées dans le planning
+	public function getPlanningPlanificationsCount($file, \Datetime $date)
+	{
+	$qb = $this->createQueryBuilder('p');
+	$qb->select($qb->expr()->count('p'));
+	$qb->where('p.file = :file')->setParameter('file', $file);
+	$this->getPlanningPlanificationsPeriod($qb);
+	$this->getPlanningPlanificationsPeriodParameters($qb, $date);
+
+    $query = $qb->getQuery();
+    $singleScalar = $query->getSingleScalarResult();
+    return $singleScalar;
+	}
+
 	// Retourne la première planification affichée dans le planning
 	public function getFirstPlanningPlanification($file, \Datetime $date)
     {

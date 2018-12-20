@@ -20,6 +20,7 @@
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img src="{{ asset('images/booking-16.png') }}"> Slam Booking<span class="caret"></span></a>
 				<ul class="dropdown-menu">
 <li><a href="{{ path('planning') }}"><img src="{{ asset('images/planning-16.png') }}"> {{ 'planning'|trans }}</a></li>
+<li><a href="{{ path('planning_list', { 'page': 1 }) }}"><img src="{{ asset('images/planning-16.png') }}"> {{ 'planning'|trans }}</a></li>
 <li><a href="{{ path('query_booking', { 'page': 1 }) }}"><img src="{{ asset('images/dashboard-16.png') }}"> {{ 'dashboard.plural'|trans }}</a></li>
 
 				</ul>
