@@ -60,12 +60,12 @@ class PlanningController extends Controller
 	$em = $this->getDoctrine()->getManager();
 	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
-	$currentDate = date("Ymd");
+	$currentDate = new \DateTime();
 
 	$pRepository = $em->getRepository(Planification::Class);
     $numberRecords = $pRepository->getPlanningPlanificationsCount($userContext->getCurrentFile(), new \DateTime());
 	
-	$listContext = new ListContext($em, $connectedUser, 'planning', 'planification', $page, $numberRecords);
+	$listContext = new ListContext($em, $connectedUser, 'planning', 'planning', $page, $numberRecords);
     $listPlanifications = $pRepository->getPlanningPlanifications($userContext->getCurrentFile(), new \DateTime());
 
 	return $this->render('planning/index.html.twig', 
