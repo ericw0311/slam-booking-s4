@@ -102,6 +102,8 @@ booking.ask.delete: Do you really want to delete this booking ?
 booking.back.to.list: Back to bookings list
 booking.bna.after: Booking not allowed after %lastBookingDate%
 booking.bna.before: Booking not allowed before %firstBookingDate%
+booking.bna.day.closed: Day closed for booking
+booking.bna.end.period: Current booking period is closed on %periodEndDate%
 booking.book: Book
 booking.create: Booking create
 booking.created.ok: The booking has been created
@@ -111,6 +113,7 @@ booking.duplicate.exists: The booking is duplicated on %newBookingDate%
 booking.duplicate.ko: The booking cannot be duplicated on %newBookingDate%
 booking.duplicate.ok: The booking can be duplicated on %newBookingDate%
 booking.entered.on.by: Booking entered on %bookingDate% at %bookingTime% by %userName%
+booking.duplicate.previous.week.ko: No duplication previous date for this booking
 booking.in.progress: Bookings in progress
 booking.not.allowed: Booking not allowed
 booking.period: Booking period

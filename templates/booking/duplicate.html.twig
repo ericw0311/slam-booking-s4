@@ -51,7 +51,10 @@
 {% block planning_link %}{% endblock %}
 {% if previousGap > 0 %}
 	{% block duplicate_previous_week_link %}{% endblock %}
+{% else %}
+	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#naPreviousWeek"><span class="glyphicon glyphicon-chevron-left"></span> <del>{{ 'week.previous'|trans }}</del></button>
 {% endif %}
+
 {% if newBookingID <= 0 and ctrlBookingLineID <= 0 %}
 	{% if planningContext.getDay('2-1-1').periodType == 'B' %}
 		<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#bnaBefore"><span class="glyphicon glyphicon-ok"></span> <del>{{ 'duplicate'|trans }}</del></button>

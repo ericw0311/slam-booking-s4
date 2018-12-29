@@ -102,6 +102,8 @@ booking.ask.delete: Voulez-vous vraiment supprimer cette réservation ?
 booking.back.to.list: Retour à la liste des réservations
 booking.bna.after: Réservation interdite au delà de la date du %lastBookingDate%
 booking.bna.before: Réservation interdite avant la date du %firstBookingDate%
+booking.bna.day.closed: Journée fermée à la réservation
+booking.bna.end.period: La période de réservation en cours est clôturée en date du %periodEndDate%
 booking.book: Réserver
 booking.create: Création d'une réservation
 booking.created.ok: La réservation a bien été créée
@@ -110,6 +112,7 @@ booking.deleted.ok: La réservation a bien été supprimée
 booking.duplicate.exists: La réservation est duppliquée en date du %newBookingDate%
 booking.duplicate.ko: La réservation ne peut pas être duppliquée en date du %newBookingDate%
 booking.duplicate.ok: La réservation peut être duppliquée en date du %newBookingDate%
+booking.duplicate.previous.week.ko: Pas de date de duplication antérieure pour cette réservation
 booking.entered.on.by: Réservation saisie le %bookingDate% à %bookingTime% par %userName%
 booking.in.progress: Les réservations en cours
 booking.not.allowed: Réservation interdite

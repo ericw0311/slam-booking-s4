@@ -76,7 +76,7 @@ class PlanificationPeriod
 		$this->setPlanification($planification);
 		$this->planificationLines = new ArrayCollection();
 		$this->planificationResources = new ArrayCollection();
-  $this->bookingLines = new ArrayCollection();
+		$this->bookingLines = new ArrayCollection();
     }
 
     public function getId()
@@ -110,6 +110,20 @@ class PlanificationPeriod
     {
         $this->endDate = null;
         return $this;
+    }
+
+	public function isEndDateNull(): ?bool
+	{
+		return ($this->endDate == null);
+	}
+
+    public function getPlanningEndDate(): ?\DateTimeInterface
+    {
+		if (!$this->isEndDateNull()) {
+			return $this->endDate;
+		} else {
+			return (new \DateTime());
+		}
     }
 
     public function getPlanification(): ?Planification

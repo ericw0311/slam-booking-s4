@@ -8,6 +8,7 @@ class PlanningContext
 	private $planningType; // Type de planning: P = Planning, D = Dupplication de réservation
 	private $numberLines; // Nombre de lignes pouvant etre affichees sur une page
 	private $numberColumns; // Nombre de colonnes pouvant etre affichees sur une page
+    private $planificationPeriod;
 	private $days;
 	private $before; // Appliquer une restriction avant la date du jour
 	private $after; // Appliquer une restriction après la date du jour
@@ -18,6 +19,7 @@ class PlanningContext
 	function __construct($em, \App\Entity\User $user, \App\Entity\File $file, PlanificationPeriod $planificationPeriod, $planningType, \Datetime $beginningDate,
 		\Datetime $newBookingBeginningDate, $numberDays)
 	{
+	$this->setPlanificationPeriod($planificationPeriod);
 	$this->planningType = $planningType;
 
 	if ($this->getPlanningType() == 'D') { // En duplication, le nombre de colonnes est 1 et le nombre de lignes, le nombre de jours sur de la réservation à dupliquer
@@ -46,17 +48,17 @@ class PlanningContext
 	}
 
 	$this->days = array();
-	$this->initDays($em, $planificationPeriod, 1, $beginningDate);
+	$this->initDays($em, 1, $beginningDate);
 
 	if ($this->getPlanningType() == 'D') { // En duplication, on traite les jours de la réservation à créer.
-		$this->initDays($em, $planificationPeriod, 2, $newBookingBeginningDate);
+		$this->initDays($em, 2, $newBookingBeginningDate);
 	}
 	return $this;
 	}
 
 	// Planning: keyPrefix = 1
 	// Duplication: keyPrefix = 1 pour la réservation origine et keyPrefix = 2 pour la réservation à créer
-	public function initDays($em, PlanificationPeriod $planificationPeriod, $keyPrefix, \Datetime $beginningDate)
+	public function initDays($em, $keyPrefix, \Datetime $beginningDate)
 	{
 	for($j = 1; $j <= $this->getNumberColumns(); $j++) {
 		for($i = 1; $i <= $this->getNumberLines(); $i++) {
@@ -66,9 +68,17 @@ class PlanningContext
 			if ($dayNum > 0) {
 				$dayDate->add(new \DateInterval('P'.$dayNum.'D'));
 			}
+
+			$inPeriod = true;
+			if (!$this->getPlanificationPeriod()->isEndDateNull()) { // La periode de planification est cloturée
+				$interval = $dayDate->diff($this->getPlanificationPeriod()->getEndDate());
+				$periodSign = $interval->format('%R');
+				if ($periodSign == '-') { $inPeriod = false; } // La date affichée est après la date de cloture de la période
+			}
+
 			// En duplication, on ne contrôle la date que pour le premier jour de la réservation à créer
-			$ctrlBefore = ($this->before and ($this->getPlanningType() != 'D' or ($keyPrefix == 2 and $i == 1 and $j == 1)));
-			$ctrlAfter = ($this->after and ($this->getPlanningType() != 'D' or ($keyPrefix == 2 and $i == 1 and $j == 1)));
+			$ctrlBefore = ($inPeriod and $this->before and ($this->getPlanningType() != 'D' or ($keyPrefix == 2 and $i == 1 and $j == 1)));
+			$ctrlAfter = ($inPeriod and $this->after and ($this->getPlanningType() != 'D' or ($keyPrefix == 2 and $i == 1 and $j == 1)));
 
 			$beforeSign = '+';
 			if ($ctrlBefore) {
@@ -83,7 +93,7 @@ class PlanningContext
 			$periodType = 'O'; // OK pour réservation
 			if ($beforeSign == '-') { $periodType = 'B'; } // Avant période de réservation
 			if ($afterSign == '-') { $periodType = 'A'; } // Après période de réservation
-			$this->days[$dayKey] = new Day($em, $planificationPeriod, $dayDate, $periodType);
+			$this->days[$dayKey] = new Day($em, $this->getPlanificationPeriod(), $dayDate, $inPeriod, $periodType);
 		}
 	}
 	}
@@ -101,6 +111,17 @@ class PlanningContext
 	public function getNumberColumns()
 	{
 	return $this->numberColumns;
+	}
+
+	public function getPlanificationPeriod(): ?PlanificationPeriod
+	{
+		return $this->planificationPeriod;
+	}
+	
+	public function setPlanificationPeriod(?PlanificationPeriod $planificationPeriod): self
+	{
+		$this->planificationPeriod = $planificationPeriod;
+		return $this;
 	}
 
 	// Jour

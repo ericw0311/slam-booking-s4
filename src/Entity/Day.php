@@ -64,20 +64,26 @@ class Day
 	return $this;
 	}
 
-	public function __construct($em, PlanificationPeriod $planificationPeriod, \Datetime $date, $periodType)
+	public function __construct($em, PlanificationPeriod $planificationPeriod, \Datetime $date, $inPeriod, $periodType)
 	{
+	$plRepository = $em->getRepository(PlanificationLine::Class);
+
 	$this->setDate($date);
 	$this->setPeriodType($periodType);
 
-	$plRepository = $em->getRepository(PlanificationLine::Class);
-$planificationLine = $plRepository->findOneBy(array('planificationPeriod' => $planificationPeriod, 'weekDay' => strtoupper($this->getDate()->format('D'))));
-
-	if ($planificationLine === null || $planificationLine->getActive() < 1) {
-		$this->setType('C'); // La journée est fermée
+	if (!$inPeriod) {
+		$this->setType('X'); // La journée est cloturée
+		$this->setPlanificationLine(null);
 	} else {
-		$this->setType('O'); // La journée est ouverte
+		$planificationLine = $plRepository->findOneBy(array('planificationPeriod' => $planificationPeriod, 'weekDay' => strtoupper($this->getDate()->format('D'))));
+
+		if ($planificationLine === null || $planificationLine->getActive() < 1) {
+			$this->setType('C'); // La journée est fermée
+		} else {
+			$this->setType('O'); // La journée est ouverte
+		}
+		$this->setPlanificationLine($planificationLine);
 	}
-	$this->setPlanificationLine($planificationLine);
 
 	if ($this->getType() == 'O') {
 		$tlRepository = $em->getRepository(TimetableLine::Class);

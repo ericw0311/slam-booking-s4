@@ -84,14 +84,17 @@ _{{ day_key }}_{{ planningContext.getDay(day_key).periodType }}_<button type="bu
 {% endif %}
 {% endfor %}
 </tr>
-
 {% endfor %}
+
+{% elseif planningContext.getDay(day_key).type == 'X' %}
+<tr>
+	<td>X</td><td colspan={{ planificationResources|length }}><button type="button" class="glyphicon glyphicon-ban-circle btn-link" style="color:red" data-toggle="modal" data-target="#bnaEndPeriod"></button></td>
+</tr>
 
 {% else %}
 <tr>
-	<td></td><td colspan={{ planificationResources|length }}>C'est fermé</td>
+	<td>N</td><td colspan={{ planificationResources|length }}><button type="button" class="glyphicon glyphicon-remove-circle btn-link" style="color:red" data-toggle="modal" data-target="#bnaDayClosed"></button></td>
 </tr>
 {% endif %}
-
 	</tbody>
 </table>
