@@ -1,6 +1,8 @@
 <?php
 namespace App\Entity;
 
+use Psr\Log\LoggerInterface;
+
 class Day
 {
 	private $date;
@@ -64,7 +66,7 @@ class Day
 	return $this;
 	}
 
-	public function __construct($em, PlanificationPeriod $planificationPeriod, \Datetime $date, $inPeriod, $periodType)
+	public function __construct(LoggerInterface $logger, $em, PlanificationPeriod $planificationPeriod, \Datetime $date, $inPeriod, $periodType)
 	{
 	$plRepository = $em->getRepository(PlanificationLine::Class);
 

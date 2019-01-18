@@ -117,6 +117,7 @@ class PlanificationPeriod
 		return ($this->endDate == null);
 	}
 
+	// Date de fin de planification affichée dans le planning. Elle est affichée que si elle n'est pas nulle mais dans le fichier planning/modal.html.twig, la date transmise ne doit être jamais nulle même apparamment si la fonction n'est pas appelée.
     public function getPlanningEndDate(): ?\DateTimeInterface
     {
 		if (!$this->isEndDateNull()) {

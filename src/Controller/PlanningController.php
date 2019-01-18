@@ -7,7 +7,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 use Psr\Log\LoggerInterface;
-use Psr\Log\NullLogger;
 
 use App\Entity\UserContext;
 use App\Entity\ListContext;
@@ -28,14 +27,15 @@ class PlanningController extends Controller
     /**
      * @Route("/planning/access", name="planning")
      */
-	public function access()
+	public function access(LoggerInterface $logger)
 	{
 	$connectedUser = $this->getUser();
 	$em = $this->getDoctrine()->getManager();
 	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
-    
+
 	$pRepository = $em->getRepository(Planification::Class);
 	$currentDate = date("Ymd");
+	$logger->info('PlanningController.access DBG 1 _'.$currentDate.'_');
     $planifications = $pRepository->getPlanningPlanifications($userContext->getCurrentFile(), new \DateTime());
 	// Aucune planification
 	if (count($planifications) <= 0) {
@@ -185,9 +185,9 @@ class PlanningController extends Controller
 	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
 	 * @ParamConverter("date", options={"format": "Ymd"})
      */
-    public function many(Request $request, Planification $planification, \Datetime $date)
+    public function many(Request $request, LoggerInterface $logger, Planification $planification, \Datetime $date)
     {
-	return PlanningController::planning($request, $planification, $date, 1);
+	return PlanningController::planning($request, $logger, $planification, $date, 1);
     }
 
     // Affichage de la grille horaire journaliere d'une planification
@@ -196,19 +196,21 @@ class PlanningController extends Controller
 	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
 	 * @ParamConverter("date", options={"format": "Ymd"})
 	*/
-    public function one(Request $request, Planification $planification, \Datetime $date)
+    public function one(Request $request, LoggerInterface $logger, Planification $planification, \Datetime $date)
     {
-	return PlanningController::planning($request, $planification, $date, 0);
+	return PlanningController::planning($request, $logger, $planification, $date, 0);
     }
 
 // Affichage de la grille horaire journaliere d'une planification (la période de planification n'est pas passée, elle est déterminée)
-    public function planning(Request $request, Planification $planification, \Datetime $date, $many)
+    public function planning(Request $request, LoggerInterface $logger, Planification $planification, \Datetime $date, $many)
     {
     $connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
-	// $logger = $this->get('logger'); $logger->info('DBG 1');
+
+	$logger->info('PlanningController.planning DBG 1');
 	$lDate = $date;
+
     $ddate = new Ddate();
     $form = $this->createForm(DdateType::class, $ddate);
 	if ($request->isMethod('POST')) {
@@ -217,8 +219,12 @@ class PlanningController extends Controller
 			$lDate = $ddate->getDate();
 		}
     }
+
+	$logger->info('PlanningController.planning DBG 2 _'.$lDate->format('Y-m-d H:i:s').'_');
+	$lDate = new \DateTime($lDate->format('Y-m-d')); // On ignor la partie heures-minutes-secondes
+	$logger->info('PlanningController.planning DBG 3 _'.$lDate->format('Y-m-d H:i:s').'_');
+
     $pRepository = $em->getRepository(Planification::Class);
-	// $logger->info('DBG 3 _'.$lDate->format('Y-m-d H:i:s').'_');
     $planifications = $pRepository->getPlanningPlanifications($userContext->getCurrentFile(), $lDate);
 	if (count($planifications) <= 0) {
 		return $this->redirectToRoute('planning_no_planification');
@@ -243,7 +249,7 @@ class PlanningController extends Controller
 	$nextDate = clone $lDate;
 	$nextDate->add(new \DateInterval('P1D'));
 
-    $planningContext = new PlanningContext($em, $connectedUser, $userContext->getCurrentFile(), $planificationPeriod, 'P', $date, $date, 1);
+    $planningContext = new PlanningContext($logger, $em, $connectedUser, $userContext->getCurrentFile(), $planificationPeriod, 'P', $lDate, $lDate, 1);
 
     $prRepository = $em->getRepository(PlanificationResource::Class);
     $planificationResources = $prRepository->getResources($planificationPeriod);
@@ -264,9 +270,9 @@ class PlanningController extends Controller
 	 * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
 	 * @ParamConverter("date", options={"format": "Ymd"})
      */
-    public function many_pp(Request $request, Planification $planification, PlanificationPeriod $planificationPeriod, \Datetime $date)
+    public function many_pp(Request $request, LoggerInterface $logger, Planification $planification, PlanificationPeriod $planificationPeriod, \Datetime $date)
     {
-	return PlanningController::planning_pp($request, $planification, $planificationPeriod, $date, 1);
+	return PlanningController::planning_pp($request, $logger, $planification, $planificationPeriod, $date, 1);
     }
 
     // Affichage du planning pour une planification (periode de planification connue)
@@ -276,21 +282,20 @@ class PlanningController extends Controller
 	 * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
 	 * @ParamConverter("date", options={"format": "Ymd"})
      */
-    public function one_pp(Request $request, Planification $planification, PlanificationPeriod $planificationPeriod, \Datetime $date)
+    public function one_pp(Request $request, LoggerInterface $logger, Planification $planification, PlanificationPeriod $planificationPeriod, \Datetime $date)
     {
-	return PlanningController::planning_pp($request, $planification, $planificationPeriod, $date, 0);
+	return PlanningController::planning_pp($request, $logger, $planification, $planificationPeriod, $date, 0);
     }
 
 	// Affichage du planning (periode de planification connue)
-	public function planning_pp(Request $request, Planification $planification, PlanificationPeriod $planificationPeriod, \Datetime $date, $many)
+	public function planning_pp(Request $request, LoggerInterface $logger, Planification $planification, PlanificationPeriod $planificationPeriod, \Datetime $date, $many)
 	{
 	$connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
-	
-	// $logger = $this->get('logger');
-	$logger = new NullLogger();
-	$logger->info('DBG 101');
+
+	$logger->info('PlanningController.planning_pp DBG 1');
+
 	$ddate = new Ddate();
 	$form = $this->createForm(DdateType::class, $ddate);
     
@@ -302,25 +307,30 @@ class PlanningController extends Controller
 		}
     }
 
+	$logger->info('PlanningController.planning_pp DBG 2 _'.$date->format('Y-m-d H:i:s').'_');
+
+	$lDate = new \DateTime($date->format('Y-m-d')); // lDate permet d'ignorer la partie heures-minutes-secondes
+	$logger->info('PlanningController.planning_pp DBG 3 _'.$lDate->format('Y-m-d H:i:s').'_');
+
 	$pRepository = $em->getRepository(Planification::Class);
-    $planifications = $pRepository->getPlanningPlanifications($userContext->getCurrentFile(), $date);
-	$previousDate = clone $date;
+    $planifications = $pRepository->getPlanningPlanifications($userContext->getCurrentFile(), $lDate);
+	$previousDate = clone $lDate;
 	$previousDate->sub(new \DateInterval('P1D'));
-	$nextDate = clone $date;
+	$nextDate = clone $lDate;
 	$nextDate->add(new \DateInterval('P1D'));
 
-    $planningContext = new PlanningContext($em, $connectedUser, $userContext->getCurrentFile(), $planificationPeriod, 'P', $date, $date, 1);
+    $planningContext = new PlanningContext($logger, $em, $connectedUser, $userContext->getCurrentFile(), $planificationPeriod, 'P', $lDate, $lDate, 1);
 
     $prRepository = $em->getRepository(PlanificationResource::Class);
     $planificationResources = $prRepository->getResources($planificationPeriod);
 
-	$bookings = BookingApi::getPlanningBookings($em, $userContext->getCurrentFile(), $date, $planningContext->getLastDate(1), $planification, $planificationPeriod, $userContext->getCurrentUserFile());
+	$bookings = BookingApi::getPlanningBookings($em, $userContext->getCurrentFile(), $lDate, $planningContext->getLastDate(1), $planification, $planificationPeriod, $userContext->getCurrentUserFile());
 
 	return $this->render('planning/'.($many ? 'many' : 'one').'.html.twig',
 		array('userContext' => $userContext, 'planningContext' => $planningContext,
 			'planification' => $planification, 'planificationPeriod' => $planificationPeriod,
 			'planifications' => $planifications, 'planificationResources' => $planificationResources,
-			'date' => $date, 'nextDate' => $nextDate, 'previousDate' => $previousDate, 'bookings' => $bookings, 'form' => $form->createView()));
+			'date' => $lDate, 'nextDate' => $nextDate, 'previousDate' => $previousDate, 'bookings' => $bookings, 'form' => $form->createView()));
     }
 
 	// Mise à jour du nombre de lignes pour plusieurs planifications

@@ -355,7 +355,7 @@ class BookingController extends Controller
 	// Validation de la création d'une réservation
     public function validate_create(Request $request, LoggerInterface $logger, \Swift_Mailer $mailer, TranslatorInterface $translator, \Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $userFileIDList, $labelIDList, $noteID, $many)
     {
-	$logger->info('DBG 1');
+	$logger->info('BookingController.validate_create DBG 1');
 	$connectedUser = $this->getUser();
 	$em = $this->getDoctrine()->getManager();
 	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
@@ -420,7 +420,7 @@ class BookingController extends Controller
 	}
 	$order = 0;
 	foreach ($labelIDArray as $labelID) {
-		$logger->info('DBG 4 _'.$labelID.'_');
+		$logger->info('BookingController.validate_create DBG 4 _'.$labelID.'_');
 		$bookingLabel = new BookingLabel($connectedUser, $booking, $lRepository->find($labelID));
 		$bookingLabel->setOrder(++$order);
 		$em->persist($bookingLabel);
@@ -1223,9 +1223,9 @@ class BookingController extends Controller
      * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
      * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
      */
-	public function many_duplicate(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $gap)
+	public function many_duplicate(LoggerInterface $logger, \Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $gap)
 	{
-	return BookingController::duplicate($planningDate, $booking, $planification, $planificationPeriod, $resource, $gap, 1);
+	return BookingController::duplicate($logger, $planningDate, $booking, $planification, $planificationPeriod, $resource, $gap, 1);
 	}
 
 	// Duplication d'une réservation
@@ -1237,17 +1237,19 @@ class BookingController extends Controller
      * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
      * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
      */
-	public function one_duplicate(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $gap)
+	public function one_duplicate(LoggerInterface $logger, \Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $gap)
 	{
-	return BookingController::duplicate($planningDate, $booking, $planification, $planificationPeriod, $resource, $gap, 0);
+	return BookingController::duplicate($logger, $planningDate, $booking, $planification, $planificationPeriod, $resource, $gap, 0);
 	}
 
 	// Duplication d'une réservation
-	public function duplicate(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $gap, $many)
+	public function duplicate(LoggerInterface $logger, \Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $gap, $many)
     {
     $connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+	$logger->info('PlanningController.duplicate DBG 1');
 
 	$blRepository = $em->getRepository(BookingLine::Class);
 	$bdRepository = $em->getRepository(BookingDuplication::Class);
@@ -1267,7 +1269,8 @@ class BookingController extends Controller
 		$newBookingEndDate->add(new \DateInterval('P'.$numberDays.'D'));
 	}
 
-	$planningContext = new PlanningContext($em, $connectedUser, $userContext->getCurrentFile(), $planificationPeriod, 'D', $firstBookingLine->getDate(), $newBookingBeginningDate, $numberDays);
+	$logger->info('PlanningController.duplicate DBG 2 _'.$firstBookingLine->getDate()->format('Y-m-d H:i:s').'_'.$newBookingBeginningDate->format('Y-m-d H:i:s').'_');
+	$planningContext = new PlanningContext($logger, $em, $connectedUser, $userContext->getCurrentFile(), $planificationPeriod, 'D', $firstBookingLine->getDate(), $newBookingBeginningDate, $numberDays);
 
     $prRepository = $em->getRepository(PlanificationResource::Class);
     $planificationResources = $prRepository->getResource($planificationPeriod, $resource);
