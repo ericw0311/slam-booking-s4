@@ -12,6 +12,8 @@ class Constants
 	const PLANNING_MAX_NUMBER_COLUMNS = 4;
 	const PLANNING_MAX_NUMBER_LINES = 4;
 
+	const PLANNING_MIN_NUMBER_PLANIFICATION_LIST = 21; // Nombre de planifications minimum pour accéder au planning via la liste.
+
 	const NUMBER_LINES_BEFORE_AFTER_UPDATE = 3; // Nombre de lignes a afficher avant et apres la ligne mise a jour (cas de multilignes type creneaux horaires)
 	const NUMBER_LINES_MINI_DUAL_BUTTON_LIST = 8; // Nombre de lignes minimum a partir duquel on affiche la serie de bouttons actions avant et après la liste en question
 

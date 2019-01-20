@@ -33,9 +33,11 @@ class UserFileFixtures extends Fixture implements DependentFixtureInterface
 		$userFile->setUniqueName($account->getUniqueName());
 		$userFile->setUserCreated(true);
 		$userFile->setUsername($account->getUsername());
-		$userFile->setResourceUser(true);
 		if ($boResource > 0) {
+			$userFile->setResourceUser(true);
 			$userFile->setResource($resource);
+		} else {
+			$userFile->setResourceUser(false);
 		}
 		$manager->persist($userFile);
 		$manager->flush();

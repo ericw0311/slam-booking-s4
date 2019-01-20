@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 use Psr\Log\LoggerInterface;
 
+use App\Entity\Constants;
 use App\Entity\UserContext;
 use App\Entity\ListContext;
 use App\Entity\PlanningContext;
@@ -41,14 +42,16 @@ class PlanningController extends Controller
 	if (count($planifications) <= 0) {
 		return $this->redirectToRoute('planning_no_planification');
     }
+
 	// Acces au planning d'une planification
-	if (count($planifications) > 1) {
+	if (count($planifications) >= constant(Constants::class.'::PLANNING_MIN_NUMBER_PLANIFICATION_LIST')) { // Via la liste
+		return $this->redirectToRoute('planning_list', array('page' => 1));
+	} else if (count($planifications) > 1) { // Planification unique
 		return $this->redirectToRoute('planning_many_pp', array('planificationID' => $planifications[0]['ID'], 'planificationPeriodID' => $planifications[0]['planificationPeriodID'], 'date' => $currentDate));
 	} else {
 		return $this->redirectToRoute('planning_one_pp', array('planificationID' => $planifications[0]['ID'], 'planificationPeriodID' => $planifications[0]['planificationPeriodID'], 'date' => $currentDate));
 	}
 	}
-
 
 	// Affichage des planifications du dossier en cours
     /**
@@ -201,7 +204,7 @@ class PlanningController extends Controller
 	return PlanningController::planning($request, $logger, $planification, $date, 0);
     }
 
-// Affichage de la grille horaire journaliere d'une planification (la période de planification n'est pas passée, elle est déterminée)
+	// Affichage de la grille horaire journaliere d'une planification (la période de planification n'est pas passée, elle est déterminée)
     public function planning(Request $request, LoggerInterface $logger, Planification $planification, \Datetime $date, $many)
     {
     $connectedUser = $this->getUser();
