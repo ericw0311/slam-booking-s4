@@ -1270,7 +1270,7 @@ class BookingController extends Controller
 	}
 
 	$logger->info('PlanningController.duplicate DBG 2 _'.$firstBookingLine->getDate()->format('Y-m-d H:i:s').'_'.$newBookingBeginningDate->format('Y-m-d H:i:s').'_');
-	$planningContext = new PlanningContext($logger, $em, $connectedUser, $userContext->getCurrentFile(), $planificationPeriod, 'D', $firstBookingLine->getDate(), $newBookingBeginningDate, $numberDays);
+	$planningContext = new PlanningContext($logger, $em, $connectedUser, $userContext->getCurrentFile(), $userContext->getCurrentUserFileAdministrator(), $planificationPeriod, 'D', $firstBookingLine->getDate(), $newBookingBeginningDate, $numberDays);
 
     $prRepository = $em->getRepository(PlanificationResource::Class);
     $planificationResources = $prRepository->getResource($planificationPeriod, $resource);

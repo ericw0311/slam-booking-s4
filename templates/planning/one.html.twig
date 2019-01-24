@@ -57,9 +57,13 @@
 <button type="button" class="glyphicon glyphicon-triangle-bottom btn-link" style="color:grey" disabled="disabled"></button>
 {% endif %}
 
+{% if list_acces %}
+<a href="{{ path('planning_list', { 'page': 1 }) }}" title="{{ 'planning.list'|trans }}"><span class="glyphicon glyphicon-list"></span></a>
+{% else %}
 <a href="{{ path('planning_many_pp', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': date|date('Ymd') }) }}" title="{{ 'planning.global'|trans }}"><span class="glyphicon glyphicon-resize-small"></span></a>
+{% endif %}
 
-{% if planningContext.before or planningContext.after %}
+{% if not userContext.getCurrentUserFileAdministrator() and (planningContext.before or planningContext.after) %}
 <button type="button" class="glyphicon glyphicon-alert btn-link" style="color:red" data-toggle="modal" data-target="#bpAlert"></button>
 {% endif %}
 

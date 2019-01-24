@@ -19,7 +19,8 @@ class PlanningContext
 	private $lastAllowedBookingDate; // Dernière date de réservation autorisée si indicateur after est vrai
 
 	// newBookingBeginningDate et numberDays ne sont utilisés que pour le type Duplication
-	function __construct(LoggerInterface $logger, $em, \App\Entity\User $user, \App\Entity\File $file, PlanificationPeriod $planificationPeriod, $planningType, \Datetime $beginningDate,
+	function __construct(LoggerInterface $logger, $em, \App\Entity\User $user, \App\Entity\File $file, $fileAdministrator, 
+		PlanificationPeriod $planificationPeriod, $planningType, \Datetime $beginningDate,
 		\Datetime $newBookingBeginningDate, $numberDays)
 	{
 	$logger->info('PlanningContext DBG 1 _'.$beginningDate->format('Y-m-d H:i:s').'_');
@@ -53,20 +54,18 @@ class PlanningContext
 	}
 
 	$this->days = array();
-	$this->initDays($logger, $em, 1, $beginningDate);
+	$this->initDays($logger, $em, 1, $beginningDate, $fileAdministrator);
 
 	if ($this->getPlanningType() == 'D') { // En duplication, on traite les jours de la réservation à créer.
-		$this->initDays($logger, $em, 2, $newBookingBeginningDate);
+		$this->initDays($logger, $em, 2, $newBookingBeginningDate, $fileAdministrator);
 	}
 	return $this;
 	}
 
 	// Planning: keyPrefix = 1
 	// Duplication: keyPrefix = 1 pour la réservation origine et keyPrefix = 2 pour la réservation à créer
-	public function initDays(LoggerInterface $logger, $em, $keyPrefix, \Datetime $beginningDate)
+	public function initDays(LoggerInterface $logger, $em, $keyPrefix, \Datetime $beginningDate, $fileAdministrator)
 	{
-	$logger->info('PlanningContext.initDays DBG 1 _'.$beginningDate->format('Y-m-d H:i:s').'_');
-
 	for($j = 1; $j <= $this->getNumberColumns(); $j++) {
 		for($i = 1; $i <= $this->getNumberLines(); $i++) {
 			$dayKey = $keyPrefix.'-'.$i.'-'.$j;
@@ -76,23 +75,18 @@ class PlanningContext
 				$dayDate->add(new \DateInterval('P'.$dayNum.'D'));
 			}
 
-			$logger->info('PlanningContext.initDays DBG 2 _'.$dayDate->format('Y-m-d H:i:s').'_'.$this->getPlanificationPeriod()->isEndDateNull().'_');
-
 			$inPeriod = true;
 			if (!$this->getPlanificationPeriod()->isEndDateNull()) { // La periode de planification est cloturée
 				$interval = $dayDate->diff($this->getPlanificationPeriod()->getEndDate());
 				$periodSign = $interval->format('%R');
 
-				$logger->info('PlanningContext.initDays DBG 3 _'.$this->getPlanificationPeriod()->getEndDate()->format('Y-m-d H:i:s').'_'.$periodSign.'_');
-
 				if ($periodSign == '-') { $inPeriod = false; } // La date affichée est après la date de cloture de la période
 			}
 
-			$logger->info('PlanningContext.initDays DBG 4 _'.$inPeriod.'_');
-
+			// Les administrateurs du dossier ne sont pas soumis aux restrictions de période
 			// En duplication, on ne contrôle la date que pour le premier jour de la réservation à créer
-			$ctrlBefore = ($inPeriod and $this->before and ($this->getPlanningType() != 'D' or ($keyPrefix == 2 and $i == 1 and $j == 1)));
-			$ctrlAfter = ($inPeriod and $this->after and ($this->getPlanningType() != 'D' or ($keyPrefix == 2 and $i == 1 and $j == 1)));
+$ctrlBefore = (!$fileAdministrator and $inPeriod and $this->before and ($this->getPlanningType() != 'D' or ($keyPrefix == 2 and $i == 1 and $j == 1)));
+$ctrlAfter = (!$fileAdministrator and $inPeriod and $this->after and ($this->getPlanningType() != 'D' or ($keyPrefix == 2 and $i == 1 and $j == 1)));
 
 			$beforeSign = '+';
 			if ($ctrlBefore) {

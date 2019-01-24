@@ -229,6 +229,7 @@ planning: Planning
 planning.back: Retour au planning
 planning.calendar: Calendrier
 planning.global: Planning global
+planning.list: Liste des ressources planifiées
 # planning.plural est une bizarrerie qui permet de placer un titre à la liste des planifications associées au planning
 planning.plural: Planifications
 planning.reduce.left: Réduire le planning vers la gauche

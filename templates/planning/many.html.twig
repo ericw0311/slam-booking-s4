@@ -82,7 +82,7 @@
 
 <a href="{{ path('planning_one_pp', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': date|date('Ymd') }) }}" title="{{ 'planning.stretched.out'|trans }}"><span class="glyphicon glyphicon-resize-full"></span></a>
 
-{% if planningContext.before or planningContext.after %}
+{% if not userContext.getCurrentUserFileAdministrator() and (planningContext.before or planningContext.after) %}
 <button type="button" class="glyphicon glyphicon-alert btn-link" style="color:red" data-toggle="modal" data-target="#bpAlert"></button>
 {% endif %}
 

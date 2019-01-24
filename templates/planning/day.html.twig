@@ -73,9 +73,9 @@
 		<td>
 {% if planningContext.displayButtons %}
 {% if planningContext.getDay(day_key).periodType == 'B' %}
-_{{ day_key }}_{{ planningContext.getDay(day_key).periodType }}_<button type="button" class="glyphicon glyphicon-plus btn-link" style="color:red" data-toggle="modal" data-target="#bnaBefore"></button>
+<button type="button" class="glyphicon glyphicon-plus btn-link" style="color:red" data-toggle="modal" data-target="#bnaBefore"></button>
 {% elseif planningContext.getDay(day_key).periodType == 'A' %}
-_{{ day_key }}_{{ planningContext.getDay(day_key).periodType }}_<button type="button" class="glyphicon glyphicon-plus btn-link" style="color:red" data-toggle="modal" data-target="#bnaAfter"></button>
+<button type="button" class="glyphicon glyphicon-plus btn-link" style="color:red" data-toggle="modal" data-target="#bnaAfter"></button>
 {% else %}
 <a href="{{ path(booking_create, { 'planningDate': date|date('Ymd'), 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': planificationResource.resource.ID, 'timetableLinesList': (planningContext.getDay(day_key).date|date('Ymd') ~ '+' ~ timetableLine.timetable.ID ~ '+' ~ timetableLine.ID), 'userFileIDList': userContext.getCurrentUserFile().getID(), 'labelIDList': 0, 'noteID': 0 }) }}" class="glyphicon glyphicon-plus" title="{{ 'booking.book'|trans }}"></a>
 {% endif %}

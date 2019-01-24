@@ -169,7 +169,7 @@ class PlanningApi
 	// Retourne la première date (si mesurée en jours).
 	static function getFirstDate_DAY($numberOfDays): \DateTime
 	{
-	$lDate = New \DateTime();
+	$lDate = New \DateTime(date('Y-m-d'));
 	if ($numberOfDays > 1) {
 		$lDate->sub(new \DateInterval('P'.($numberOfDays-1).'D'));
 	}
@@ -185,7 +185,7 @@ class PlanningApi
 	} else { // Le jour en cours n'est pas un dimanche.
 		$numberOfDays = ($weekDay-1) + (($numberOfWeeks-1)*7);
 	}
-	$lDate = New \DateTime();
+	$lDate = New \DateTime(date('Y-m-d'));
 	if ($numberOfDays > 0) {
 		$lDate->sub(new \DateInterval('P'.$numberOfDays.'D'));
 	}
@@ -229,7 +229,7 @@ class PlanningApi
 	// Retourne la dernière date (si mesurée en jours).
 	static function getLastDate_DAY($numberOfDays): \DateTime
 	{
-	$lDate = New \DateTime();
+	$lDate = New \DateTime(date('Y-m-d'));
 	if ($numberOfDays > 1) {
 		$lDate->add(new \DateInterval('P'.($numberOfDays-1).'D'));
 	}
@@ -245,7 +245,7 @@ class PlanningApi
 	} else { // Le jour en cours n'est pas un dimanche.
 		$numberOfDays = (7-$weekDay) + (($numberOfWeeks-1)*7);
 	}
-	$lDate = New \DateTime();
+	$lDate = New \DateTime(date('Y-m-d'));
 	if ($numberOfDays > 0) {
 		$lDate->add(new \DateInterval('P'.$numberOfDays.'D'));
 	}

@@ -252,18 +252,21 @@ class PlanningController extends Controller
 	$nextDate = clone $lDate;
 	$nextDate->add(new \DateInterval('P1D'));
 
-    $planningContext = new PlanningContext($logger, $em, $connectedUser, $userContext->getCurrentFile(), $planificationPeriod, 'P', $lDate, $lDate, 1);
+    $planningContext = new PlanningContext($logger, $em, $connectedUser, $userContext->getCurrentFile(), $userContext->getCurrentUserFileAdministrator(), $planificationPeriod, 'P', $lDate, $lDate, 1);
 
     $prRepository = $em->getRepository(PlanificationResource::Class);
     $planificationResources = $prRepository->getResources($planificationPeriod);
 
 	$bookings = BookingApi::getPlanningBookings($em, $userContext->getCurrentFile(), $lDate, $planningContext->getLastDate(1), $lPlanification, $planificationPeriod, $userContext->getCurrentUserFile());
 	
+	$listAcces = (count($planifications) >= constant(Constants::class.'::PLANNING_MIN_NUMBER_PLANIFICATION_LIST')); // Accès au planning via la liste des planifications
+
 	return $this->render('planning/'.($many ? 'many' : 'one').'.html.twig',
 		array('userContext' => $userContext, 'planningContext' => $planningContext,
 			'planification' => $lPlanification, 'planificationPeriod' => $planificationPeriod,
 			'planifications' => $planifications, 'planificationResources' => $planificationResources,
-		'date' => $lDate, 'nextDate' => $nextDate, 'previousDate' => $previousDate, 'bookings' => $bookings, 'form' => $form->createView()));
+		 'date' => $lDate, 'nextDate' => $nextDate, 'previousDate' => $previousDate, 'bookings' => $bookings,
+         'list_acces' => $listAcces, 'form' => $form->createView()));
     }
 
     // Affichage du planning pour plusieurs planifications (periode de planification connue)
@@ -322,18 +325,21 @@ class PlanningController extends Controller
 	$nextDate = clone $lDate;
 	$nextDate->add(new \DateInterval('P1D'));
 
-    $planningContext = new PlanningContext($logger, $em, $connectedUser, $userContext->getCurrentFile(), $planificationPeriod, 'P', $lDate, $lDate, 1);
+    $planningContext = new PlanningContext($logger, $em, $connectedUser, $userContext->getCurrentFile(), $userContext->getCurrentUserFileAdministrator(), $planificationPeriod, 'P', $lDate, $lDate, 1);
 
     $prRepository = $em->getRepository(PlanificationResource::Class);
     $planificationResources = $prRepository->getResources($planificationPeriod);
 
 	$bookings = BookingApi::getPlanningBookings($em, $userContext->getCurrentFile(), $lDate, $planningContext->getLastDate(1), $planification, $planificationPeriod, $userContext->getCurrentUserFile());
 
+	$listAcces = (count($planifications) >= constant(Constants::class.'::PLANNING_MIN_NUMBER_PLANIFICATION_LIST'));
+
 	return $this->render('planning/'.($many ? 'many' : 'one').'.html.twig',
 		array('userContext' => $userContext, 'planningContext' => $planningContext,
 			'planification' => $planification, 'planificationPeriod' => $planificationPeriod,
 			'planifications' => $planifications, 'planificationResources' => $planificationResources,
-			'date' => $lDate, 'nextDate' => $nextDate, 'previousDate' => $previousDate, 'bookings' => $bookings, 'form' => $form->createView()));
+			'date' => $lDate, 'nextDate' => $nextDate, 'previousDate' => $previousDate, 'bookings' => $bookings,
+			'list_acces' => $listAcces, 'form' => $form->createView()));
     }
 
 	// Mise à jour du nombre de lignes pour plusieurs planifications
