@@ -97,9 +97,9 @@ class BookingController extends Controller
 	 * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
 	 * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
      */
-    public function many_end_period_create(\Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $firstDateNumber, $userFileIDList, $labelIDList, $noteID)
+    public function many_end_period_create(LoggerInterface $logger, \Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $firstDateNumber, $userFileIDList, $labelIDList, $noteID)
     {
-	return BookingController::end_period_create($planningDate, $planification, $planificationPeriod, $resource, $timetableLinesList, $firstDateNumber, $userFileIDList, $labelIDList, $noteID, 1);
+	return BookingController::end_period_create($logger, $planningDate, $planification, $planificationPeriod, $resource, $timetableLinesList, $firstDateNumber, $userFileIDList, $labelIDList, $noteID, 1);
     }
 
     // Mise a jour de la periode de fin (en création de réservation)
@@ -110,23 +110,30 @@ class BookingController extends Controller
 	 * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
 	 * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
      */
-    public function one_end_period_create(\Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $firstDateNumber, $userFileIDList, $labelIDList, $noteID)
+    public function one_end_period_create(LoggerInterface $logger, \Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $firstDateNumber, $userFileIDList, $labelIDList, $noteID)
     {
-	return BookingController::end_period_create($planningDate, $planification, $planificationPeriod, $resource, $timetableLinesList, $firstDateNumber, $userFileIDList, $labelIDList, $noteID, 0);
+	return BookingController::end_period_create($logger, $planningDate, $planification, $planificationPeriod, $resource, $timetableLinesList, $firstDateNumber, $userFileIDList, $labelIDList, $noteID, 0);
     }
 
     // Mise a jour de la periode de fin (en création de réservation)
-    public function end_period_create(\Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $firstDateNumber, $userFileIDList, $labelIDList, $noteID, $many)
+    public function end_period_create(LoggerInterface $logger, \Datetime $planningDate, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $firstDateNumber, $userFileIDList, $labelIDList, $noteID, $many)
     {
     $connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
-	$cellArray  = explode("-", $timetableLinesList);
-    $ttlRepository = $em->getRepository(TimetableLine::Class);
-	list($beginningDateString, $beginningTimetableID, $beginningTimetableLineID) = explode("+", $cellArray[0]);
+	$logger->info('BookingController.end_period_create DBG 1');
+
+	$timetableLines = BookingApi::getTimetableLines($timetableLinesList);
+	list($beginningDateString, $beginningTimetableID, $beginningTimetableLineID) = explode("-", $timetableLines[0]);
+
+	$logger->info('BookingController.end_period_create DBG 2 _'.$beginningTimetableLineID.'_');
+
 	$beginningDate = date_create_from_format("Ymd", $beginningDateString);
+
+    $ttlRepository = $em->getRepository(TimetableLine::Class);
 	$beginningTimetableLine = $ttlRepository->find($beginningTimetableLineID);
+
     $endPeriods = BookingApi::getEndPeriods($em, $planificationPeriod, $resource, $beginningDate, $beginningTimetableLine, 0, $firstDateNumber, $nextFirstDateNumber);
 	// Calucl du premier jour affiché précedent
 	$previousFirstDateNumber = ($firstDateNumber < Constants::MAXIMUM_NUMBER_BOOKING_DATES_DISPLAYED) ? 0 : ($firstDateNumber - Constants::MAXIMUM_NUMBER_BOOKING_DATES_DISPLAYED);
@@ -568,9 +575,9 @@ class BookingController extends Controller
      * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
      * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
      */
-    public function many_end_period_update(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $firstDateNumber, $userFileIDList, $labelIDList, $noteID)
+    public function many_end_period_update(LoggerInterface $logger, \Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $firstDateNumber, $userFileIDList, $labelIDList, $noteID)
     {
-	return BookingController::end_period_update($planningDate, $booking, $planification, $planificationPeriod, $resource, $timetableLinesList, $firstDateNumber, $userFileIDList, $labelIDList, $noteID, 1);
+	return BookingController::end_period_update($logger, $planningDate, $booking, $planification, $planificationPeriod, $resource, $timetableLinesList, $firstDateNumber, $userFileIDList, $labelIDList, $noteID, 1);
     }
 
     // Mise a jour de la periode de fin (en mise à jour de réservation)
@@ -582,23 +589,30 @@ class BookingController extends Controller
      * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
      * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
      */
-    public function one_end_period_update(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $firstDateNumber, $userFileIDList, $labelIDList, $noteID)
+    public function one_end_period_update(LoggerInterface $logger, \Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $firstDateNumber, $userFileIDList, $labelIDList, $noteID)
     {
-	return BookingController::end_period_update($planningDate, $booking, $planification, $planificationPeriod, $resource, $timetableLinesList, $firstDateNumber, $userFileIDList, $labelIDList, $noteID, 0);
+	return BookingController::end_period_update($logger, $planningDate, $booking, $planification, $planificationPeriod, $resource, $timetableLinesList, $firstDateNumber, $userFileIDList, $labelIDList, $noteID, 0);
     }
 
     // Mise a jour de la periode de fin (en mise à jour de réservation)
-    public function end_period_update(\Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $firstDateNumber, $userFileIDList, $labelIDList, $noteID, $many)
+    public function end_period_update(LoggerInterface $logger, \Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $timetableLinesList, $firstDateNumber, $userFileIDList, $labelIDList, $noteID, $many)
     {
     $connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
-	$cellArray  = explode("-", $timetableLinesList);
-    $ttlRepository = $em->getRepository(TimetableLine::Class);
-	list($beginningDateString, $beginningTimetableID, $beginningTimetableLineID) = explode("+", $cellArray[0]);
+	$logger->info('BookingController.end_period_update DBG 1');
+
+	$timetableLines = BookingApi::getTimetableLines($timetableLinesList);
+	list($beginningDateString, $beginningTimetableID, $beginningTimetableLineID) = explode("-", $timetableLines[0]);
+
+	$logger->info('BookingController.end_period_update DBG 2 _'.$beginningTimetableLineID.'_');
+
 	$beginningDate = date_create_from_format("Ymd", $beginningDateString);
+
+    $ttlRepository = $em->getRepository(TimetableLine::Class);
 	$beginningTimetableLine = $ttlRepository->find($beginningTimetableLineID);
+
     $endPeriods = BookingApi::getEndPeriods($em, $planificationPeriod, $resource, $beginningDate, $beginningTimetableLine, $booking->getID(), $firstDateNumber, $nextFirstDateNumber);
 	// Calucl du premier jour affiché précedent
 	$previousFirstDateNumber = ($firstDateNumber < Constants::MAXIMUM_NUMBER_BOOKING_DATES_DISPLAYED) ? 0 : ($firstDateNumber - Constants::MAXIMUM_NUMBER_BOOKING_DATES_DISPLAYED);

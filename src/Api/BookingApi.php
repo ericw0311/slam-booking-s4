@@ -35,6 +35,7 @@ class BookingApi
 	$numberDates = 0;
 	$numberPeriods = 0;
 	$continue = true;
+	$reachFollowingDates = true; // Atteindre les dates suivantes. Sert au calcul de la premiere date affichee suivante
 	while ($continue) {
 		$date = clone $beginningDate;
 		$date->add(new \DateInterval('P'.$dateIndex.'D'));
@@ -62,13 +63,14 @@ class BookingApi
 	} else { // Une réservation existe sur ce créneau (ou une autre réservation que celle à mettre à jour)
 					$status = "KO";
 					$continue = false;
+					$reachFollowingDates = false;
 	}
 					$endPeriod = new BookingPeriodNDB($timetableLine, $periodTimetableLinesList, $status);
 					$endDate->addPeriod($endPeriod);
 				}
 			
 				$firstDatePeriod = false;
-				if ($numberPeriods >= Constants::MAXIMUM_NUMBER_BOOKING_LINES) { $continue = false; } // Nombre maximum de periodes pour une reservation atteint
+				if ($numberPeriods >= Constants::MAXIMUM_NUMBER_BOOKING_LINES) { $continue = false; $reachFollowingDates = false; } // Nombre maximum de periodes pour une reservation atteint
 			}
 			
 			if ($numberDates >= $firstDateNumber) { $endPeriods[] = $endDate; }
@@ -78,8 +80,9 @@ class BookingApi
 		}
 		$dateIndex++;
 	}
-	// Premiere date affichee suivante: 0 si on a atteint le nombre de periodes de réservation maximum, calculée sinon
-	$nextFirstDateNumber = ($numberPeriods >= Constants::MAXIMUM_NUMBER_BOOKING_LINES) ? 0 : ($firstDateNumber + Constants::MAXIMUM_NUMBER_BOOKING_DATES_DISPLAYED);
+
+	// Premiere date affichee suivante
+	$nextFirstDateNumber = ($reachFollowingDates ? ($firstDateNumber + Constants::MAXIMUM_NUMBER_BOOKING_DATES_DISPLAYED) : 0);
 	return $endPeriods;
     }
     
