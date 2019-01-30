@@ -20,8 +20,16 @@
 	</tr>
 	</thead>
 	<tbody>
-{% if planningContext.getDay(day_key).type == 'O' %}
+{% if planningContext.getDay(day_key).type == 'X' %}
+<tr>
+	<td></td><td colspan={{ planificationResources|length }}><button type="button" class="glyphicon glyphicon-ban-circle btn-link" style="color:red" data-toggle="modal" data-target="#bnaEndPeriod"></button></td>
+</tr>
 
+{% elseif planningContext.getDay(day_key).type == 'C' %}
+<tr>
+	<td></td><td colspan={{ planificationResources|length }}><button type="button" class="glyphicon glyphicon-remove-circle btn-link" style="color:red" data-toggle="modal" data-target="#bnaDayClosed"></button></td>
+</tr>
+{% else %}
 {% for timetableLine in planningContext.getDay(day_key).timetableLines %}
 <tr>
 	<td>{{ timetableLine(timetableLine) }}</td>
@@ -72,9 +80,9 @@
 {% else %}
 		<td>
 {% if planningContext.displayButtons %}
-{% if planningContext.getDay(day_key).periodType == 'B' %}
+{% if planningContext.getDay(day_key).type == 'B' %}
 <button type="button" class="glyphicon glyphicon-plus btn-link" style="color:red" data-toggle="modal" data-target="#bnaBefore"></button>
-{% elseif planningContext.getDay(day_key).periodType == 'A' %}
+{% elseif planningContext.getDay(day_key).type == 'A' %}
 <button type="button" class="glyphicon glyphicon-plus btn-link" style="color:red" data-toggle="modal" data-target="#bnaAfter"></button>
 {% else %}
 <a href="{{ path(booking_create, { 'planningDate': date|date('Ymd'), 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': planificationResource.resource.ID, 'timetableLinesList': (planningContext.getDay(day_key).date|date('Ymd') ~ '+' ~ timetableLine.timetable.ID ~ '+' ~ timetableLine.ID), 'userFileIDList': userContext.getCurrentUserFile().getID(), 'labelIDList': 0, 'noteID': 0 }) }}" class="glyphicon glyphicon-plus" title="{{ 'booking.book'|trans }}"></a>
@@ -85,16 +93,6 @@
 {% endfor %}
 </tr>
 {% endfor %}
-
-{% elseif planningContext.getDay(day_key).type == 'X' %}
-<tr>
-	<td></td><td colspan={{ planificationResources|length }}><button type="button" class="glyphicon glyphicon-ban-circle btn-link" style="color:red" data-toggle="modal" data-target="#bnaEndPeriod"></button></td>
-</tr>
-
-{% else %}
-<tr>
-	<td></td><td colspan={{ planificationResources|length }}><button type="button" class="glyphicon glyphicon-remove-circle btn-link" style="color:red" data-toggle="modal" data-target="#bnaDayClosed"></button></td>
-</tr>
 {% endif %}
 	</tbody>
 </table>

@@ -56,9 +56,9 @@
 {% endif %}
 
 {% if newBookingID <= 0 and ctrlBookingLineID <= 0 %}
-	{% if planningContext.getDay('2-1-1').periodType == 'B' %}
+	{% if planningContext.getDay('2-1-1').type == 'B' %}
 		<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#bnaBefore"><span class="glyphicon glyphicon-ok"></span> <del>{{ 'duplicate'|trans }}</del></button>
-	{% elseif planningContext.getDay('2-1-1').periodType == 'A' %}
+	{% elseif planningContext.getDay('2-1-1').type == 'A' %}
 		<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#bnaAfter"><span class="glyphicon glyphicon-ok"></span> <del>{{ 'duplicate'|trans }}</del></button>
 	{% else %}
 		{% block duplicate_validate_link %}{% endblock %}

@@ -75,33 +75,12 @@ class PlanningContext
 				$dayDate->add(new \DateInterval('P'.$dayNum.'D'));
 			}
 
-			$inPeriod = true;
-			if (!$this->getPlanificationPeriod()->isEndDateNull()) { // La periode de planification est cloturée
-				$interval = $dayDate->diff($this->getPlanificationPeriod()->getEndDate());
-				$periodSign = $interval->format('%R');
-
-				if ($periodSign == '-') { $inPeriod = false; } // La date affichée est après la date de cloture de la période
-			}
-
 			// Les administrateurs du dossier ne sont pas soumis aux restrictions de période
 			// En duplication, on ne contrôle la date que pour le premier jour de la réservation à créer
-$ctrlBefore = (!$fileAdministrator and $inPeriod and $this->before and ($this->getPlanningType() != 'D' or ($keyPrefix == 2 and $i == 1 and $j == 1)));
-$ctrlAfter = (!$fileAdministrator and $inPeriod and $this->after and ($this->getPlanningType() != 'D' or ($keyPrefix == 2 and $i == 1 and $j == 1)));
+			$ctrlBefore = (!$fileAdministrator and $this->before and ($this->getPlanningType() != 'D' or ($keyPrefix == 2 and $i == 1 and $j == 1)));
+			$ctrlAfter = (!$fileAdministrator and $this->after and ($this->getPlanningType() != 'D' or ($keyPrefix == 2 and $i == 1 and $j == 1)));
 
-			$beforeSign = '+';
-			if ($ctrlBefore) {
-				$interval = $this->firstAllowedBookingDate->diff($dayDate);
-				$beforeSign = $interval->format('%R');
-			}
-			$afterSign = '+';
-			if ($ctrlAfter) {
-				$interval = $dayDate->diff($this->lastAllowedBookingDate);
-				$afterSign = $interval->format('%R');
-			}
-			$periodType = 'O'; // OK pour réservation
-			if ($beforeSign == '-') { $periodType = 'B'; } // Avant période de réservation
-			if ($afterSign == '-') { $periodType = 'A'; } // Après période de réservation
-			$this->days[$dayKey] = new Day($logger, $em, $this->getPlanificationPeriod(), $dayDate, $inPeriod, $periodType);
+			$this->days[$dayKey] = new Day($logger, $em, $this->getPlanificationPeriod(), $dayDate, $ctrlBefore, $this->firstAllowedBookingDate, $ctrlAfter, $this->lastAllowedBookingDate);
 		}
 	}
 	}
