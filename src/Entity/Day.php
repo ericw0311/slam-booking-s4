@@ -69,7 +69,6 @@ class Day
 		if ($periodSign == '-') { $inPeriod = false; } // La date affichée est après la date de cloture de la période
 	}
 
-
 	if (!$inPeriod) {
 		$this->setType('X'); // La journée est cloturée
 		$this->setPlanificationLine(null);
