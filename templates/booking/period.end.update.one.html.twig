@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block createOrUpdateBookingLink %}
-	<a href="{{ path('booking_one_update', { 'planningDate': planningDate|date('Ymd'), 'bookingID': booking.ID, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'timetableLinesList': period.timetableLinesList, 'userFileIDList': userFileIDList, 'labelIDList': labelIDList, 'noteID': noteID }) }}" class="list-group-item"><img src="{{ asset('images/time-32.png') }}">&nbsp;{{ dateLongue(endPeriod.date) }}&nbsp;&rarr;&nbsp;{{ timetableLine(period.timetableLine) }}</a>
+	<a href="{{ path('booking_one_update', { 'planningDate': planningDate|date('Ymd'), 'bookingID': booking.ID, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'timetableLinesList': planningLine.timetableLinesList, 'userFileIDList': userFileIDList, 'labelIDList': labelIDList, 'noteID': noteID }) }}" class="list-group-item"><img src="{{ asset('images/time-32.png') }}">&nbsp;{{ dateLongue(endPeriodDay.date) }}&nbsp;&rarr;&nbsp;{{ timetableLine(planningLine.timetableLine) }}</a>
 {% endblock %}
 
 {% block booking_buttons %}

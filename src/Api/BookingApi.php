@@ -1,12 +1,16 @@
 <?php
 namespace App\Api;
 
+use Psr\Log\LoggerInterface;
+
+use App\Entity\File;
 use App\Entity\UserFile;
 use App\Entity\Resource;
 use App\Entity\Label;
 use App\Entity\TimetableLine;
 use App\Entity\PlanificationPeriod;
 use App\Entity\PlanificationLine;
+use App\Entity\PlanningDayOA;
 use App\Entity\Booking;
 use App\Entity\BookingLine;
 use App\Entity\BookingUser;
@@ -23,68 +27,90 @@ use App\Api\ResourceApi;
 
 class BookingApi
 {
-	// firstDateNumber: Premiere date affichee
+	// firstDayNumber: Premier jour affiché
 	// bookingID: Identifient de la réservation mise à jour (0 si création de réservation)
-	static function getEndPeriods($em, PlanificationPeriod $planificationPeriod, Resource $resource, \Datetime $beginningDate, TimetableLine $beginningTimetableLine, $bookingID, $firstDateNumber, &$nextFirstDateNumber)
+	static function getEndPeriods(LoggerInterface $logger, $em, File $file, bool $fileAdministrator, PlanificationPeriod $planificationPeriod, Resource $resource,
+		\Datetime $beginningDate, TimetableLine $beginningTimetableLine, int $bookingID, int $firstDayNumber, int &$nextFirstDayNumber)
 	{
 	$plRepository = $em->getRepository(PlanificationLine::Class);
 	$tlRepository = $em->getRepository(TimetableLine::Class);
-	$blRepository = $em->getRepository(BookingLine::Class);
-	$endPeriods = array();
-	$dateIndex = 0;
-	$numberDates = 0;
-	$numberPeriods = 0;
+	$endPeriodDays = array();
+	$dayIndex = 0;
+	$numberDays = 0;
+	$numberPlanningLines = 0;
 	$continue = true;
-	$reachFollowingDates = true; // Atteindre les dates suivantes. Sert au calcul de la premiere date affichee suivante
-	while ($continue) {
-		$date = clone $beginningDate;
-		$date->add(new \DateInterval('P'.$dateIndex.'D'));
-		$planificationLine = $plRepository->findOneBy(array('planificationPeriod' => $planificationPeriod, 'weekDay' => strtoupper($date->format('D'))));
-		if ($planificationLine !== null && $planificationLine->getActive() > 0) {
-			$numberDates++;
-			$endDate = new BookingDateNDB($date);
-			if ($dateIndex > 0) {
-				$timetableLines = $tlRepository->getTimetableLines($planificationLine->getTimetable());
-			} else {
-				$timetableLines = $tlRepository->getCurrentAndNextTimetableLines($planificationLine->getTimetable(), $beginningTimetableLine->getID());
-			}
-			$dateTimetableLinesList = $date->format('Ymd').'+'.$planificationLine->getTimetable()->getID();
-			$firstDatePeriod = true; // Premiere période de la date
-			foreach ($timetableLines as $timetableLine) {
-				if ($continue) {
-	$dateTimetableLinesList = ($firstDatePeriod) ? ($dateTimetableLinesList.'+'.$timetableLine->getID()) : ($dateTimetableLinesList.'*'.$timetableLine->getID());
-	$periodTimetableLinesList = ($numberDates <= 1) ? $dateTimetableLinesList : ($timetableLinesList.'-'.$dateTimetableLinesList);
-	
-	// Recherche d'une ligne de réservation existante.
-	$bookingLineDB = $blRepository->findOneBy(array('resource' => $resource, 'ddate' => $date, 'timetable' => $timetableLine->getTimetable(), 'timetableLine' => $timetableLine));
-	if ($bookingLineDB === null || $bookingLineDB->getBooking()->getID() == $bookingID) { // La ressource n'est pas réservée pour le créneau (ou bien on est en mise à jour de réservation et le créneau est réservé pour la réservation à mettre à jour).
-					$status = "OK";
-					$numberPeriods++;
-	} else { // Une réservation existe sur ce créneau (ou une autre réservation que celle à mettre à jour)
-					$status = "KO";
-					$continue = false;
-					$reachFollowingDates = false;
+	$reachFollowingDays = true; // Atteindre les jours suivants. Sert au calcul du premier jour affiché suivant
+	$firstDay = true;
+	$previousDaysTimetableLinesList = '';
+
+	// Période pendant laquelle les réservations sont autorisées
+	if ($fileAdministrator) { // Les administrateurs du dossier ne sont pas limités en période de réservation
+		$ctrlBefore = false; $beforeType = "DAY"; $beforeNumber = 1;
+		$ctrlAfter = false; $afterType = "DAY"; $afterNumber = 1;
+	} else {
+		$ctrlBefore = AdministrationApi::getFileBookingPeriodBefore($em, $file);
+		$beforeType = AdministrationApi::getFileBookingPeriodBeforeType($em, $file);
+		$beforeNumber = AdministrationApi::getFileBookingPeriodBeforeNumber($em, $file);
+		$ctrlAfter = AdministrationApi::getFileBookingPeriodAfter($em, $file);
+		$afterType = AdministrationApi::getFileBookingPeriodAfterType($em, $file);
+		$afterNumber = AdministrationApi::getFileBookingPeriodAfterNumber($em, $file);
 	}
-					$endPeriod = new BookingPeriodNDB($timetableLine, $periodTimetableLinesList, $status);
-					$endDate->addPeriod($endPeriod);
-				}
-			
-				$firstDatePeriod = false;
-				if ($numberPeriods >= Constants::MAXIMUM_NUMBER_BOOKING_LINES) { $continue = false; $reachFollowingDates = false; } // Nombre maximum de periodes pour une reservation atteint
+
+	if ($ctrlBefore) {
+		$firstAllowedBookingDate = PlanningApi::getFirstDate($beforeType, $beforeNumber);
+	} else {
+		$firstAllowedBookingDate = new \DateTime();
+	}
+	if ($ctrlAfter) {
+		$lastAllowedBookingDate = PlanningApi::getLastDate($afterType, $afterNumber);
+	} else {
+		$lastAllowedBookingDate = new \DateTime();
+	}
+
+	while ($continue) {
+		// $date = clone $beginningDate;
+		$date = new \DateTime($beginningDate->format('Y-m-d')); // On ignor la partie heures-minutes-secondes
+		if ($dayIndex > 0) { $date->add(new \DateInterval('P'.$dayIndex.'D')); }
+
+		$logger->info('BookingApi.getEndPeriods DBG 1 _'.$date->format('Y-m-d H:i:s').'_');
+
+		$planningDay = new PlanningDayOA($logger, $em, $planificationPeriod, $date, $resource, $bookingID,
+			$firstDay, $beginningTimetableLine, $numberPlanningLines, $previousDaysTimetableLinesList,
+			$ctrlBefore, $firstAllowedBookingDate, $ctrlAfter, $lastAllowedBookingDate);
+
+		if (!$planningDay->isClosed()) { // La journée n'est pas fermée.
+
+			$numberDays++;
+			if ($planningDay->isOpened()) {
+
+				$numberPlanningLines += $planningDay->getNumberPlanningLines();
+
+				$previousDaysTimetableLinesList = $firstDay ?
+					$planningDay->getTimetableLinesList() :
+					($previousDaysTimetableLinesList.'-'.$planningDay->getTimetableLinesList());
+
+				$firstDay = false;
 			}
-			
-			if ($numberDates >= $firstDateNumber) { $endPeriods[] = $endDate; }
-			
-			$timetableLinesList = ($numberDates <= 1) ? $dateTimetableLinesList : ($timetableLinesList.'-'.$dateTimetableLinesList);
-			if ($numberDates >= ($firstDateNumber - 1 + Constants::MAXIMUM_NUMBER_BOOKING_DATES_DISPLAYED)) { $continue = false; } // Nombre maximum de dates affichées atteint
+
+			if ($numberDays >= $firstDayNumber) { $endPeriodDays[] = $planningDay; }
 		}
-		$dateIndex++;
+
+		if ($planningDay->isLastDay() or // Dernier jour affiché
+			$numberDays >= ($firstDayNumber - 1 + Constants::MAXIMUM_NUMBER_BOOKING_DATES_DISPLAYED) or // Nombre maximum de jours affichés atteint
+			($numberPlanningLines >= Constants::MAXIMUM_NUMBER_BOOKING_LINES)) // Nombre maximum de lignes pour une reservation atteint
+			{ $continue = false; } 
+		
+		if ($planningDay->isLastDay() or // Dernier jour affiché
+			($numberPlanningLines >= Constants::MAXIMUM_NUMBER_BOOKING_LINES)) // Nombre maximum de lignes pour une reservation atteint
+			{ $reachFollowingDays = false; } 
+		
+		$dayIndex++;
 	}
 
 	// Premiere date affichee suivante
-	$nextFirstDateNumber = ($reachFollowingDates ? ($firstDateNumber + Constants::MAXIMUM_NUMBER_BOOKING_DATES_DISPLAYED) : 0);
-	return $endPeriods;
-    }
+	$nextFirstDayNumber = $reachFollowingDays ? ($firstDayNumber + Constants::MAXIMUM_NUMBER_BOOKING_DATES_DISPLAYED) : 0;
+	return $endPeriodDays;
+	}
     
 	// Gestion des utilisateurs des réservations
 	// Retourne un tableau des utilisateurs sélectionnés

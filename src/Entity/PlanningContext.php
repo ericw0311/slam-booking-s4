@@ -1,6 +1,8 @@
 <?php
 namespace App\Entity;
 
+use App\Entity\PlanningLineA;
+
 use App\Api\AdministrationApi;
 use App\Api\PlanningApi;
 
@@ -80,7 +82,7 @@ class PlanningContext
 			$ctrlBefore = (!$fileAdministrator and $this->before and ($this->getPlanningType() != 'D' or ($keyPrefix == 2 and $i == 1 and $j == 1)));
 			$ctrlAfter = (!$fileAdministrator and $this->after and ($this->getPlanningType() != 'D' or ($keyPrefix == 2 and $i == 1 and $j == 1)));
 
-			$this->days[$dayKey] = new Day($logger, $em, $this->getPlanificationPeriod(), $dayDate, $ctrlBefore, $this->firstAllowedBookingDate, $ctrlAfter, $this->lastAllowedBookingDate);
+			$this->days[$dayKey] = new PlanningDayA($logger, $em, $this->getPlanificationPeriod(), $dayDate, $ctrlBefore, $this->firstAllowedBookingDate, $ctrlAfter, $this->lastAllowedBookingDate);
 		}
 	}
 	}

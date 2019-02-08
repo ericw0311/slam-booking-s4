@@ -134,13 +134,14 @@ class BookingController extends Controller
     $ttlRepository = $em->getRepository(TimetableLine::Class);
 	$beginningTimetableLine = $ttlRepository->find($beginningTimetableLineID);
 
-    $endPeriods = BookingApi::getEndPeriods($em, $planificationPeriod, $resource, $beginningDate, $beginningTimetableLine, 0, $firstDateNumber, $nextFirstDateNumber);
+	$nextFirstDateNumber = 0;
+    $endPeriodDays = BookingApi::getEndPeriods($logger, $em, $userContext->getCurrentFile(), $userContext->getCurrentUserFileAdministrator(), $planificationPeriod, $resource, $beginningDate, $beginningTimetableLine, 0, $firstDateNumber, $nextFirstDateNumber);
 	// Calucl du premier jour affiché précedent
 	$previousFirstDateNumber = ($firstDateNumber < Constants::MAXIMUM_NUMBER_BOOKING_DATES_DISPLAYED) ? 0 : ($firstDateNumber - Constants::MAXIMUM_NUMBER_BOOKING_DATES_DISPLAYED);
 
 	return $this->render('booking/period.end.create.'.($many ? 'many' : 'one').'.html.twig',
 		array('userContext' => $userContext, 'planningDate' => $planningDate, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource, 'timetableLinesList' => $timetableLinesList,
-			'beginningDate' => $beginningDate, 'beginningTimetableLine' => $beginningTimetableLine, 'endPeriods' => $endPeriods, 'firstDateNumber' => $firstDateNumber, 
+			'beginningDate' => $beginningDate, 'beginningTimetableLine' => $beginningTimetableLine, 'endPeriodDays' => $endPeriodDays, 'firstDateNumber' => $firstDateNumber, 
 			'previousFirstDateNumber' => $previousFirstDateNumber, 'nextFirstDateNumber' => $nextFirstDateNumber, 'userFileIDList' => $userFileIDList, 'labelIDList' => $labelIDList, 'noteID' => $noteID));
     }
 
@@ -613,14 +614,16 @@ class BookingController extends Controller
     $ttlRepository = $em->getRepository(TimetableLine::Class);
 	$beginningTimetableLine = $ttlRepository->find($beginningTimetableLineID);
 
-    $endPeriods = BookingApi::getEndPeriods($em, $planificationPeriod, $resource, $beginningDate, $beginningTimetableLine, $booking->getID(), $firstDateNumber, $nextFirstDateNumber);
+	$nextFirstDateNumber = 0;
+    $endPeriodDays = BookingApi::getEndPeriods($logger, $em, $userContext->getCurrentFile(), $userContext->getCurrentUserFileAdministrator(),
+    $planificationPeriod, $resource, $beginningDate, $beginningTimetableLine, $booking->getID(), $firstDateNumber, $nextFirstDateNumber);
 	// Calucl du premier jour affiché précedent
 	$previousFirstDateNumber = ($firstDateNumber < Constants::MAXIMUM_NUMBER_BOOKING_DATES_DISPLAYED) ? 0 : ($firstDateNumber - Constants::MAXIMUM_NUMBER_BOOKING_DATES_DISPLAYED);
 
 	return $this->render('booking/period.end.update.'.($many ? 'many' : 'one').'.html.twig',
 		array('userContext' => $userContext, 'planningDate' => $planningDate, 'booking' => $booking, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod,
 			'resource' => $resource, 'timetableLinesList' => $timetableLinesList, 'beginningDate' => $beginningDate,
-			'beginningTimetableLine' => $beginningTimetableLine, 'endPeriods' => $endPeriods, 'firstDateNumber' => $firstDateNumber,
+			'beginningTimetableLine' => $beginningTimetableLine, 'endPeriodDays' => $endPeriodDays, 'firstDateNumber' => $firstDateNumber,
 			'previousFirstDateNumber' => $previousFirstDateNumber, 'nextFirstDateNumber' => $nextFirstDateNumber, 'userFileIDList' => $userFileIDList,
 			'labelIDList' => $labelIDList, 'noteID' => $noteID));
     }

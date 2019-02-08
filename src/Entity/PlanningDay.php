@@ -3,22 +3,21 @@ namespace App\Entity;
 
 use Psr\Log\LoggerInterface;
 
-class Day
+class PlanningDay
 {
 	private $date;
 	private $type; // O = ouvert, B = before (ouvert mais avant période de réservation), A = after (ouvert mais après période de réservation), C = fermé (closed), X = clôturé
 	private $planificationLine;
-	private $timetableLines;
 
 	public function setDate(\Datetime $date)
 	{
-		$this->date = $date;
-		return $this;
+	$this->date = $date;
+	return $this;
 	}
     
     public function getDate()
 	{
-		return $this->date;
+	return $this->date;
 	}
 
 	public function getType(): ?string
@@ -43,22 +42,6 @@ class Day
 	return $this;
 	}
 
-	public function getTimetableLines()
-	{
-	return $this->timetableLines;
-	}
-
-	public function setTimetableLines($timetableLines): self
-	{
-	$this->timetableLines = $timetableLines;
-	return $this;
-	}
-
-	public function getDisplayTimetableLines() // Les lignes de creneau horaire sont affichées si la journée est ni fermée ni au dela de la période de cloture
-	{
-	return ($this->getType() != 'C' and $this->getType() != 'X');
-	}
-
 	public function __construct(LoggerInterface $logger, $em, PlanificationPeriod $planificationPeriod, \Datetime $date, $ctrlBefore, \Datetime $firstAllowedBookingDate, $ctrlAfter, \Datetime $lastAllowedBookingDate)
 	{
 	$plRepository = $em->getRepository(PlanificationLine::Class);
@@ -68,7 +51,7 @@ class Day
 	if (!$planificationPeriod->isEndDateNull()) { // La periode de planification est cloturée
 		$interval = $this->getDate()->diff($planificationPeriod->getEndDate());
 		$periodSign = $interval->format('%R');
-		$logger->info('Day.construct DBG 1 _'.$planificationPeriod->getEndDate()->format('Y-m-d H:i:s').'_'.$periodSign.'_');
+		$logger->info('PlanningDay.construct DBG 1 _'.$planificationPeriod->getEndDate()->format('Y-m-d H:i:s').'_'.$periodSign.'_');
 
 		if ($periodSign == '-') { $inPeriod = false; } // La date affichée est après la date de cloture de la période
 	}
@@ -103,11 +86,5 @@ class Day
 
 	if ($beforeSign == '-') { $this->setType('B'); } // Avant période de réservation
 	if ($afterSign == '-') { $this->setType('A'); } // Après période de réservation
-
-	if ($this->getDisplayTimetableLines()) {
-		$tlRepository = $em->getRepository(TimetableLine::Class);
-		$timetableLines = $tlRepository->getTimetableLines($this->getPlanificationLine()->getTimetable());
-		$this->setTimetableLines($timetableLines);
-	}
 	}
 }

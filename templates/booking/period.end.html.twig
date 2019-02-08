@@ -10,11 +10,11 @@
 	<li>{% block previousFirstDateNumberLink %}{% endblock %}</li>
 {% endif %}
 
-{% for endPeriod in endPeriods %}
+{% for endPeriodDay in endPeriodDays %}
 {% if loop.index <= 1 %}
-	<li class="active"><a data-toggle="pill" href="#{{ endPeriod.date|date('Ymd') }}">{{ dateCourte(endPeriod.date) }}</a></li>
+	<li class="active"><a data-toggle="pill" href="#{{ endPeriodDay.date|date('Ymd') }}">{{ dateCourte(endPeriodDay.date) }}</a></li>
 {% else %}
-	<li><a data-toggle="pill" href="#{{ endPeriod.date|date('Ymd') }}">{{ dateCourte(endPeriod.date) }}</a></li>
+	<li><a data-toggle="pill" href="#{{ endPeriodDay.date|date('Ymd') }}">{{ dateCourte(endPeriodDay.date) }}</a></li>
 {% endif %}
 {% endfor %}
 
@@ -26,25 +26,34 @@
 
 <div class="tab-content">
 
-{% for endPeriod in endPeriods %}
+{% for endPeriodDay in endPeriodDays %}
 {% if loop.index <= 1 %}
-	<div id="{{ endPeriod.date|date('Ymd') }}" class="tab-pane fade in active">
+	<div id="{{ endPeriodDay.date|date('Ymd') }}" class="tab-pane fade in active">
 {% else %}
-	<div id="{{ endPeriod.date|date('Ymd') }}" class="tab-pane fade">
+	<div id="{{ endPeriodDay.date|date('Ymd') }}" class="tab-pane fade">
 {% endif %}
 
-{% for period in endPeriod.periods %}
-
-{% if period.status == 'OK' %}
+{% if endPeriodDay.type == 'O' %}
+{% for planningLine in endPeriodDay.planningLines %}
+{% if planningLine.type == 'O' %}
 	{% block createOrUpdateBookingLink %}{% endblock %}
 {% else %}
-<a href="#" class="list-group-item list-group-item-warning"><img src="{{ asset('images/forbidden-32.png') }}">&nbsp;{{ dateLongue(endPeriod.date) }}&nbsp;&rarr;&nbsp;{{ timetableLine(period.timetableLine) }}</a>
+<a href="#" class="list-group-item list-group-item-warning"><img src="{{ asset('images/forbidden-32.png') }}">&nbsp;{{ dateLongue(endPeriodDay.date) }}&nbsp;&rarr;&nbsp;{{ timetableLine(planningLine.timetableLine) }} réservé</a>
 {% endif %}
-
 {% endfor %}
+
+{% elseif endPeriodDay.type == 'C' %}
+<a href="#" class="list-group-item list-group-item-warning"><img src="{{ asset('images/forbidden-32.png') }}">&nbsp;{{ dateLongue(endPeriodDay.date) }} fermé</a>
+{% elseif endPeriodDay.type == 'A' %}
+<a href="#" class="list-group-item list-group-item-warning"><img src="{{ asset('images/forbidden-32.png') }}">&nbsp;{{ dateLongue(endPeriodDay.date) }} après</a>
+{% elseif endPeriodDay.type == 'B' %}
+<a href="#" class="list-group-item list-group-item-warning"><img src="{{ asset('images/forbidden-32.png') }}">&nbsp;{{ dateLongue(endPeriodDay.date) }} avant</a>
+{% elseif endPeriodDay.type == 'X' %}
+<a href="#" class="list-group-item list-group-item-warning"><img src="{{ asset('images/forbidden-32.png') }}">&nbsp;{{ dateLongue(endPeriodDay.date) }} cloturé</a>
+{% endif %}
 	</div>
-{% endfor %}
 
+{% endfor %}
 </div>
 
 {% endblock %}
