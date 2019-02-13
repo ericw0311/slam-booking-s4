@@ -1,7 +1,10 @@
 <?php
 namespace App\Entity;
 
+use App\Entity\User;
+use App\Entity\File;
 use App\Entity\PlanningLineA;
+use App\Entity\BookingPeriod;
 
 use App\Api\AdministrationApi;
 use App\Api\PlanningApi;
@@ -15,15 +18,10 @@ class PlanningContext
 	private $numberColumns; // Nombre de colonnes pouvant etre affichees sur une page
     private $planificationPeriod;
 	private $days;
-	private $before; // Appliquer une restriction avant la date du jour
-	private $after; // Appliquer une restriction après la date du jour
-	private $firstAllowedBookingDate; // Première date de réservation autorisée si indicateur before est vrai
-	private $lastAllowedBookingDate; // Dernière date de réservation autorisée si indicateur after est vrai
 
 	// newBookingBeginningDate et numberDays ne sont utilisés que pour le type Duplication
-	function __construct(LoggerInterface $logger, $em, \App\Entity\User $user, \App\Entity\File $file, $fileAdministrator, 
-		PlanificationPeriod $planificationPeriod, $planningType, \Datetime $beginningDate,
-		\Datetime $newBookingBeginningDate, $numberDays)
+	function __construct(LoggerInterface $logger, $em, User $user, File $file, BookingPeriod $bookingPeriod, 
+		PlanificationPeriod $planificationPeriod, $planningType, \Datetime $beginningDate, \Datetime $newBookingBeginningDate, $numberDays)
 	{
 	$logger->info('PlanningContext DBG 1 _'.$beginningDate->format('Y-m-d H:i:s').'_');
 
@@ -38,35 +36,18 @@ class PlanningContext
 		$this->numberLines = PlanningApi::getNumberLines($em, $user);
 	}
 
-	$this->before = AdministrationApi::getFileBookingPeriodBefore($em, $file);
-	$beforeType = AdministrationApi::getFileBookingPeriodBeforeType($em, $file);
-	$beforeNumber = AdministrationApi::getFileBookingPeriodBeforeNumber($em, $file);
-	$this->after = AdministrationApi::getFileBookingPeriodAfter($em, $file);
-	$afterType = AdministrationApi::getFileBookingPeriodAfterType($em, $file);
-	$afterNumber = AdministrationApi::getFileBookingPeriodAfterNumber($em, $file);
-	if ($this->before) {
-		$this->firstAllowedBookingDate = PlanningApi::getFirstDate($beforeType, $beforeNumber);
-	} else {
-		$this->firstAllowedBookingDate = new \DateTime();
-	}
-	if ($this->after) {
-		$this->lastAllowedBookingDate = PlanningApi::getLastDate($afterType, $afterNumber);
-	} else {
-		$this->lastAllowedBookingDate = new \DateTime();
-	}
-
 	$this->days = array();
-	$this->initDays($logger, $em, 1, $beginningDate, $fileAdministrator);
+	$this->initDays($logger, $em, 1, $bookingPeriod, $beginningDate);
 
 	if ($this->getPlanningType() == 'D') { // En duplication, on traite les jours de la réservation à créer.
-		$this->initDays($logger, $em, 2, $newBookingBeginningDate, $fileAdministrator);
+		$this->initDays($logger, $em, 2, $bookingPeriod, $newBookingBeginningDate);
 	}
 	return $this;
 	}
 
 	// Planning: keyPrefix = 1
 	// Duplication: keyPrefix = 1 pour la réservation origine et keyPrefix = 2 pour la réservation à créer
-	public function initDays(LoggerInterface $logger, $em, $keyPrefix, \Datetime $beginningDate, $fileAdministrator)
+	public function initDays(LoggerInterface $logger, $em, $keyPrefix, BookingPeriod $bookingPeriod, \Datetime $beginningDate)
 	{
 	for($j = 1; $j <= $this->getNumberColumns(); $j++) {
 		for($i = 1; $i <= $this->getNumberLines(); $i++) {
@@ -79,10 +60,10 @@ class PlanningContext
 
 			// Les administrateurs du dossier ne sont pas soumis aux restrictions de période
 			// En duplication, on ne contrôle la date que pour le premier jour de la réservation à créer
-			$ctrlBefore = (!$fileAdministrator and $this->before and ($this->getPlanningType() != 'D' or ($keyPrefix == 2 and $i == 1 and $j == 1)));
-			$ctrlAfter = (!$fileAdministrator and $this->after and ($this->getPlanningType() != 'D' or ($keyPrefix == 2 and $i == 1 and $j == 1)));
+			$ctrlBefore = ($bookingPeriod->getBefore() and ($this->getPlanningType() != 'D' or ($keyPrefix == 2 and $i == 1 and $j == 1)));
+			$ctrlAfter = ($bookingPeriod->getAfter() and ($this->getPlanningType() != 'D' or ($keyPrefix == 2 and $i == 1 and $j == 1)));
 
-			$this->days[$dayKey] = new PlanningDayA($logger, $em, $this->getPlanificationPeriod(), $dayDate, $ctrlBefore, $this->firstAllowedBookingDate, $ctrlAfter, $this->lastAllowedBookingDate);
+			$this->days[$dayKey] = new PlanningDayA($logger, $em, $ctrlBefore, $ctrlAfter, $bookingPeriod, $this->getPlanificationPeriod(), $dayDate);
 		}
 	}
 	}
@@ -148,26 +129,6 @@ class PlanningContext
 	{
 	return ($this->getDay($keyPrefix.'-'.$this->getNumberLines().'-'.$this->getNumberColumns())->getDate());
 	}
-
-	public function getBefore()
-	{
-	return $this->before;
-	}
-
-	public function getAfter()
-	{
-	return $this->after;
-	}
-
-    public function getFirstAllowedBookingDate()
-    {
-    return $this->firstAllowedBookingDate;
-    }
-
-	public function getLastAllowedBookingDate()
-    {
-    return $this->lastAllowedBookingDate;
-    }
 
 	// Affichage des boutons dans le planning (pas pour la duplication)
 	public function getDisplayButtons()

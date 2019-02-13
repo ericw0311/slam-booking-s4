@@ -42,7 +42,8 @@ class PlanningDay
 	return $this;
 	}
 
-	public function __construct(LoggerInterface $logger, $em, PlanificationPeriod $planificationPeriod, \Datetime $date, $ctrlBefore, \Datetime $firstAllowedBookingDate, $ctrlAfter, \Datetime $lastAllowedBookingDate)
+	// Les indicateurs ctrlBefore et ctrlAfter sont passés indépendamment de l'objet bookingPeriod car en dupplication de réservation on redéfinit ces indicateurs selon le jour du planning
+	public function __construct(LoggerInterface $logger, $em, bool $ctrlBefore, bool $ctrlAfter, BookingPeriod $bookingPeriod, PlanificationPeriod $planificationPeriod, \Datetime $date)
 	{
 	$plRepository = $em->getRepository(PlanificationLine::Class);
 	$this->setDate($date);
@@ -75,11 +76,11 @@ class PlanningDay
 
 	if ($this->getType() == 'O') {
 		if ($ctrlBefore) {
-			$interval = $firstAllowedBookingDate->diff($this->getDate());
+			$interval = $bookingPeriod->getFirstAllowedBookingDate()->diff($this->getDate());
 			$beforeSign = $interval->format('%R');
 		}
 		if ($ctrlAfter) {
-			$interval = $this->getDate()->diff($lastAllowedBookingDate);
+			$interval = $this->getDate()->diff($bookingPeriod->getLastAllowedBookingDate());
 			$afterSign = $interval->format('%R');
 		}
 	}

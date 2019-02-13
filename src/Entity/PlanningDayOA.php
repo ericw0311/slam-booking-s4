@@ -58,14 +58,11 @@ class PlanningDayOA extends PlanningDay
 	return ($this->getType() == 'O');
 	}
 
-	public function __construct(LoggerInterface $logger, $em,
-		PlanificationPeriod $planificationPeriod, \Datetime $date,
-		Resource $resource, int $bookingID,
-		bool $firstDay, TimetableLine $beginningTimetableLine, int $previousDaysNumberLines, string $previousDaysTimetableLinesList,
-		bool $ctrlBefore, \Datetime $firstAllowedBookingDate,
-		bool $ctrlAfter, \Datetime $lastAllowedBookingDate)
+	public function __construct(LoggerInterface $logger, $em, BookingPeriod $bookingPeriod,
+		PlanificationPeriod $planificationPeriod, \Datetime $date, Resource $resource, int $bookingID,
+		bool $firstDay, TimetableLine $beginningTimetableLine, int $previousDaysNumberLines, string $previousDaysTimetableLinesList)
 	{
-	parent::__construct($logger, $em, $planificationPeriod, $date, $ctrlBefore, $firstAllowedBookingDate, $ctrlAfter, $lastAllowedBookingDate);
+	parent::__construct($logger, $em, $bookingPeriod->getBefore(), $bookingPeriod->getAfter(), $bookingPeriod, $planificationPeriod, $date);
 	
 	$this->setLastDay($this->getType() != 'O' and $this->getType() != 'C'); // Si le jour n'est ni ouvert, ni fermé (Clôturé, Before, After) c'est le dernier affiché.
 

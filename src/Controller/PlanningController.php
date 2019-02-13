@@ -11,6 +11,7 @@ use Psr\Log\LoggerInterface;
 use App\Entity\Constants;
 use App\Entity\UserContext;
 use App\Entity\ListContext;
+use App\Entity\BookingPeriod;
 use App\Entity\PlanningContext;
 use App\Entity\Planification;
 use App\Entity\PlanificationPeriod;
@@ -252,7 +253,9 @@ class PlanningController extends Controller
 	$nextDate = clone $lDate;
 	$nextDate->add(new \DateInterval('P1D'));
 
-    $planningContext = new PlanningContext($logger, $em, $connectedUser, $userContext->getCurrentFile(), $userContext->getCurrentUserFileAdministrator(), $planificationPeriod, 'P', $lDate, $lDate, 1);
+	$bookingPeriod = new BookingPeriod($em, $userContext); // période de réservation
+
+    $planningContext = new PlanningContext($logger, $em, $connectedUser, $userContext->getCurrentFile(), $bookingPeriod, $planificationPeriod, 'P', $lDate, $lDate, 1);
 
     $prRepository = $em->getRepository(PlanificationResource::Class);
     $planificationResources = $prRepository->getResources($planificationPeriod);
@@ -262,7 +265,7 @@ class PlanningController extends Controller
 	$listAcces = (count($planifications) >= constant(Constants::class.'::PLANNING_MIN_NUMBER_PLANIFICATION_LIST')); // Accès au planning via la liste des planifications
 
 	return $this->render('planning/'.($many ? 'many' : 'one').'.html.twig',
-		array('userContext' => $userContext, 'planningContext' => $planningContext,
+		array('userContext' => $userContext, 'planningContext' => $planningContext, 'bookingPeriod' => $bookingPeriod,
 			'planification' => $lPlanification, 'planificationPeriod' => $planificationPeriod,
 			'planifications' => $planifications, 'planificationResources' => $planificationResources,
 		 'date' => $lDate, 'nextDate' => $nextDate, 'previousDate' => $previousDate, 'bookings' => $bookings,
@@ -325,7 +328,9 @@ class PlanningController extends Controller
 	$nextDate = clone $lDate;
 	$nextDate->add(new \DateInterval('P1D'));
 
-    $planningContext = new PlanningContext($logger, $em, $connectedUser, $userContext->getCurrentFile(), $userContext->getCurrentUserFileAdministrator(), $planificationPeriod, 'P', $lDate, $lDate, 1);
+	$bookingPeriod = new BookingPeriod($em, $userContext); // période de réservation
+
+    $planningContext = new PlanningContext($logger, $em, $connectedUser, $userContext->getCurrentFile(), $bookingPeriod, $planificationPeriod, 'P', $lDate, $lDate, 1);
 
     $prRepository = $em->getRepository(PlanificationResource::Class);
     $planificationResources = $prRepository->getResources($planificationPeriod);
@@ -335,7 +340,7 @@ class PlanningController extends Controller
 	$listAcces = (count($planifications) >= constant(Constants::class.'::PLANNING_MIN_NUMBER_PLANIFICATION_LIST'));
 
 	return $this->render('planning/'.($many ? 'many' : 'one').'.html.twig',
-		array('userContext' => $userContext, 'planningContext' => $planningContext,
+		array('userContext' => $userContext, 'planningContext' => $planningContext, 'bookingPeriod' => $bookingPeriod,
 			'planification' => $planification, 'planificationPeriod' => $planificationPeriod,
 			'planifications' => $planifications, 'planificationResources' => $planificationResources,
 			'date' => $lDate, 'nextDate' => $nextDate, 'previousDate' => $previousDate, 'bookings' => $bookings,

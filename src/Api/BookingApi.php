@@ -29,11 +29,9 @@ class BookingApi
 {
 	// firstDayNumber: Premier jour affiché
 	// bookingID: Identifient de la réservation mise à jour (0 si création de réservation)
-	static function getEndPeriods(LoggerInterface $logger, $em, File $file, bool $fileAdministrator, PlanificationPeriod $planificationPeriod, Resource $resource,
+	static function getEndPeriods(LoggerInterface $logger, $em, File $file, BookingPeriod $bookingPeriod, PlanificationPeriod $planificationPeriod, Resource $resource,
 		\Datetime $beginningDate, TimetableLine $beginningTimetableLine, int $bookingID, int $firstDayNumber, int &$nextFirstDayNumber)
 	{
-	$plRepository = $em->getRepository(PlanificationLine::Class);
-	$tlRepository = $em->getRepository(TimetableLine::Class);
 	$endPeriodDays = array();
 	$dayIndex = 0;
 	$numberDays = 0;
@@ -43,30 +41,6 @@ class BookingApi
 	$firstDay = true;
 	$previousDaysTimetableLinesList = '';
 
-	// Période pendant laquelle les réservations sont autorisées
-	if ($fileAdministrator) { // Les administrateurs du dossier ne sont pas limités en période de réservation
-		$ctrlBefore = false; $beforeType = "DAY"; $beforeNumber = 1;
-		$ctrlAfter = false; $afterType = "DAY"; $afterNumber = 1;
-	} else {
-		$ctrlBefore = AdministrationApi::getFileBookingPeriodBefore($em, $file);
-		$beforeType = AdministrationApi::getFileBookingPeriodBeforeType($em, $file);
-		$beforeNumber = AdministrationApi::getFileBookingPeriodBeforeNumber($em, $file);
-		$ctrlAfter = AdministrationApi::getFileBookingPeriodAfter($em, $file);
-		$afterType = AdministrationApi::getFileBookingPeriodAfterType($em, $file);
-		$afterNumber = AdministrationApi::getFileBookingPeriodAfterNumber($em, $file);
-	}
-
-	if ($ctrlBefore) {
-		$firstAllowedBookingDate = PlanningApi::getFirstDate($beforeType, $beforeNumber);
-	} else {
-		$firstAllowedBookingDate = new \DateTime();
-	}
-	if ($ctrlAfter) {
-		$lastAllowedBookingDate = PlanningApi::getLastDate($afterType, $afterNumber);
-	} else {
-		$lastAllowedBookingDate = new \DateTime();
-	}
-
 	while ($continue) {
 		// $date = clone $beginningDate;
 		$date = new \DateTime($beginningDate->format('Y-m-d')); // On ignor la partie heures-minutes-secondes
@@ -74,9 +48,8 @@ class BookingApi
 
 		$logger->info('BookingApi.getEndPeriods DBG 1 _'.$date->format('Y-m-d H:i:s').'_');
 
-		$planningDay = new PlanningDayOA($logger, $em, $planificationPeriod, $date, $resource, $bookingID,
-			$firstDay, $beginningTimetableLine, $numberPlanningLines, $previousDaysTimetableLinesList,
-			$ctrlBefore, $firstAllowedBookingDate, $ctrlAfter, $lastAllowedBookingDate);
+		$planningDay = new PlanningDayOA($logger, $em, $bookingPeriod, $planificationPeriod, $date, $resource, $bookingID,
+			$firstDay, $beginningTimetableLine, $numberPlanningLines, $previousDaysTimetableLinesList);
 
 		if (!$planningDay->isClosed()) { // La journée n'est pas fermée.
 
