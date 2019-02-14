@@ -43,16 +43,16 @@ class PlanningDay
 	}
 
 	// Les indicateurs ctrlBefore et ctrlAfter sont passés indépendamment de l'objet bookingPeriod car en dupplication de réservation on redéfinit ces indicateurs selon le jour du planning
-	public function __construct(LoggerInterface $logger, $em, bool $ctrlBefore, bool $ctrlAfter, BookingPeriod $bookingPeriod, PlanificationPeriod $planificationPeriod, \Datetime $date)
+	public function __construct(LoggerInterface $logger, $em, bool $ctrlBefore, bool $ctrlAfter, BookingPeriod $bookingPeriod, \Datetime $date)
 	{
 	$plRepository = $em->getRepository(PlanificationLine::Class);
 	$this->setDate($date);
 
 	$inPeriod = true;
-	if (!$planificationPeriod->isEndDateNull()) { // La periode de planification est cloturée
-		$interval = $this->getDate()->diff($planificationPeriod->getEndDate());
+	if (!$bookingPeriod->getPlanificationPeriod()->isEndDateNull()) { // La periode de planification est cloturée
+		$interval = $this->getDate()->diff($bookingPeriod->getPlanificationPeriod()->getEndDate());
 		$periodSign = $interval->format('%R');
-		$logger->info('PlanningDay.construct DBG 1 _'.$planificationPeriod->getEndDate()->format('Y-m-d H:i:s').'_'.$periodSign.'_');
+		$logger->info('PlanningDay.construct DBG 1 _'.$bookingPeriod->getPlanificationPeriod()->getEndDate()->format('Y-m-d H:i:s').'_'.$periodSign.'_');
 
 		if ($periodSign == '-') { $inPeriod = false; } // La date affichée est après la date de cloture de la période
 	}
@@ -61,7 +61,7 @@ class PlanningDay
 		$this->setType('X'); // La journée est cloturée
 		$this->setPlanificationLine(null);
 	} else {
-		$planificationLine = $plRepository->findOneBy(array('planificationPeriod' => $planificationPeriod, 'weekDay' => strtoupper($this->getDate()->format('D'))));
+		$planificationLine = $plRepository->findOneBy(array('planificationPeriod' => $bookingPeriod->getPlanificationPeriod(), 'weekDay' => strtoupper($this->getDate()->format('D'))));
 
 		if ($planificationLine === null || $planificationLine->getActive() < 1) {
 			$this->setType('C'); // La journée est fermée

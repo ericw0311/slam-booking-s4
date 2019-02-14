@@ -63,7 +63,7 @@
 <a href="{{ path('planning_many_pp', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': date|date('Ymd') }) }}" title="{{ 'planning.global'|trans }}"><span class="glyphicon glyphicon-resize-small"></span></a>
 {% endif %}
 
-{% if not userContext.getCurrentUserFileAdministrator() and (planningContext.before or planningContext.after) %}
+{% if not userContext.getCurrentUserFileAdministrator() and (bookingPeriod.before or bookingPeriod.after) %}
 <button type="button" class="glyphicon glyphicon-alert btn-link" style="color:red" data-toggle="modal" data-target="#bpAlert"></button>
 {% endif %}
 

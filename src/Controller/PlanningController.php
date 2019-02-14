@@ -253,9 +253,9 @@ class PlanningController extends Controller
 	$nextDate = clone $lDate;
 	$nextDate->add(new \DateInterval('P1D'));
 
-	$bookingPeriod = new BookingPeriod($em, $userContext); // période de réservation
+	$bookingPeriod = new BookingPeriod($em, $userContext, $planificationPeriod); // période de réservation
 
-    $planningContext = new PlanningContext($logger, $em, $connectedUser, $userContext->getCurrentFile(), $bookingPeriod, $planificationPeriod, 'P', $lDate, $lDate, 1);
+    $planningContext = new PlanningContext($logger, $em, $connectedUser, $userContext->getCurrentFile(), $bookingPeriod, 'P', $lDate, $lDate, 1);
 
     $prRepository = $em->getRepository(PlanificationResource::Class);
     $planificationResources = $prRepository->getResources($planificationPeriod);
@@ -328,9 +328,9 @@ class PlanningController extends Controller
 	$nextDate = clone $lDate;
 	$nextDate->add(new \DateInterval('P1D'));
 
-	$bookingPeriod = new BookingPeriod($em, $userContext); // période de réservation
+	$bookingPeriod = new BookingPeriod($em, $userContext, $planificationPeriod); // période de réservation
 
-    $planningContext = new PlanningContext($logger, $em, $connectedUser, $userContext->getCurrentFile(), $bookingPeriod, $planificationPeriod, 'P', $lDate, $lDate, 1);
+    $planningContext = new PlanningContext($logger, $em, $connectedUser, $userContext->getCurrentFile(), $bookingPeriod, 'P', $lDate, $lDate, 1);
 
     $prRepository = $em->getRepository(PlanificationResource::Class);
     $planificationResources = $prRepository->getResources($planificationPeriod);

@@ -16,16 +16,14 @@ class PlanningContext
 	private $planningType; // Type de planning: P = Planning, D = Dupplication de réservation
 	private $numberLines; // Nombre de lignes pouvant etre affichees sur une page
 	private $numberColumns; // Nombre de colonnes pouvant etre affichees sur une page
-    private $planificationPeriod;
 	private $days;
 
 	// newBookingBeginningDate et numberDays ne sont utilisés que pour le type Duplication
 	function __construct(LoggerInterface $logger, $em, User $user, File $file, BookingPeriod $bookingPeriod, 
-		PlanificationPeriod $planificationPeriod, $planningType, \Datetime $beginningDate, \Datetime $newBookingBeginningDate, $numberDays)
+		$planningType, \Datetime $beginningDate, \Datetime $newBookingBeginningDate, $numberDays)
 	{
 	$logger->info('PlanningContext DBG 1 _'.$beginningDate->format('Y-m-d H:i:s').'_');
 
-	$this->setPlanificationPeriod($planificationPeriod);
 	$this->planningType = $planningType;
 
 	if ($this->getPlanningType() == 'D') { // En duplication, le nombre de colonnes est 1 et le nombre de lignes, le nombre de jours sur de la réservation à dupliquer
@@ -63,7 +61,7 @@ class PlanningContext
 			$ctrlBefore = ($bookingPeriod->getBefore() and ($this->getPlanningType() != 'D' or ($keyPrefix == 2 and $i == 1 and $j == 1)));
 			$ctrlAfter = ($bookingPeriod->getAfter() and ($this->getPlanningType() != 'D' or ($keyPrefix == 2 and $i == 1 and $j == 1)));
 
-			$this->days[$dayKey] = new PlanningDayA($logger, $em, $ctrlBefore, $ctrlAfter, $bookingPeriod, $this->getPlanificationPeriod(), $dayDate);
+			$this->days[$dayKey] = new PlanningDayA($logger, $em, $ctrlBefore, $ctrlAfter, $bookingPeriod, $dayDate);
 		}
 	}
 	}
@@ -81,17 +79,6 @@ class PlanningContext
 	public function getNumberColumns()
 	{
 	return $this->numberColumns;
-	}
-
-	public function getPlanificationPeriod(): ?PlanificationPeriod
-	{
-		return $this->planificationPeriod;
-	}
-	
-	public function setPlanificationPeriod(?PlanificationPeriod $planificationPeriod): self
-	{
-		$this->planificationPeriod = $planificationPeriod;
-		return $this;
 	}
 
 	// Jour

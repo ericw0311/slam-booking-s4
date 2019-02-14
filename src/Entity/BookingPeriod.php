@@ -2,19 +2,23 @@
 namespace App\Entity;
 
 use App\Entity\UserContext;
+use App\Entity\PlanificationPeriod;
 use App\Api\AdministrationApi;
 use App\Api\PlanningApi;
 
 class BookingPeriod
 {
+    private $planificationPeriod; // Période de planification
 	private $before; // Appliquer une restriction avant la date du jour
 	private $after; // Appliquer une restriction après la date du jour
 	private $firstAllowedBookingDate; // Première date de réservation autorisée si indicateur before est vrai
 	private $lastAllowedBookingDate; // Dernière date de réservation autorisée si indicateur after est vrai
 
 	// newBookingBeginningDate et numberDays ne sont utilisés que pour le type Duplication
-	function __construct($em, UserContext $userContext)
+	function __construct($em, UserContext $userContext, PlanificationPeriod $planificationPeriod)
 	{
+	$this->setPlanificationPeriod($planificationPeriod);
+
 	$file = $userContext->getCurrentFile();
 	$fileAdministrator = $userContext->getCurrentUserFileAdministrator();
 
@@ -41,6 +45,17 @@ class BookingPeriod
 		$this->setLastAllowedBookingDate(new \DateTime());
 	}
 	return $this;
+	}
+
+	public function getPlanificationPeriod(): ?PlanificationPeriod
+	{
+		return $this->planificationPeriod;
+	}
+	
+	public function setPlanificationPeriod(?PlanificationPeriod $planificationPeriod): self
+	{
+		$this->planificationPeriod = $planificationPeriod;
+		return $this;
 	}
 
 	public function setBefore(bool $before)

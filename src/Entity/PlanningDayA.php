@@ -24,9 +24,9 @@ class PlanningDayA extends PlanningDay
 	return ($this->getType() != 'C' and $this->getType() != 'X');
 	}
 
-	public function __construct(LoggerInterface $logger, $em, bool $ctrlBefore, bool $ctrlAfter, BookingPeriod $bookingPeriod, PlanificationPeriod $planificationPeriod, \Datetime $date)
+	public function __construct(LoggerInterface $logger, $em, bool $ctrlBefore, bool $ctrlAfter, BookingPeriod $bookingPeriod, \Datetime $date)
 	{
-	parent::__construct($logger, $em, $ctrlBefore, $ctrlAfter, $bookingPeriod, $planificationPeriod, $date);
+	parent::__construct($logger, $em, $ctrlBefore, $ctrlAfter, $bookingPeriod, $date);
 
 	if ($this->getDisplayTimetableLines()) {
 		$tlRepository = $em->getRepository(TimetableLine::Class);

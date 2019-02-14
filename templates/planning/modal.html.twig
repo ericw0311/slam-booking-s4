@@ -46,7 +46,7 @@
 {% elseif bookingPeriod.before %}
 			<p>{{ 'booking.period.from'|trans({'%firstBookingDate%': dateLongue(bookingPeriod.firstAllowedBookingDate)}) }}</p>
 {% elseif bookingPeriod.after %}
-			<p>{{ 'booking.period.until'|trans({'%lastBookingDate%': dateLongue(bookingPeriod4512.lastAllowedBookingDate)}) }}</p>
+			<p>{{ 'booking.period.until'|trans({'%lastBookingDate%': dateLongue(bookingPeriod.lastAllowedBookingDate)}) }}</p>
 {% else %}
 			<p>{{ 'booking.period'|trans }}</p>
 {% endif %}
@@ -66,7 +66,7 @@
 			<h4 class="modal-title">{{ 'booking.not.allowed'|trans }}</h4>
 		</div>
 		<div class="modal-body">
-			<p>{{ 'booking.bna.end.period'|trans({'%periodEndDate%': dateLongue(planningContext.planificationPeriod.planningEndDate)}) }}</p>
+			<p>{{ 'booking.bna.end.period'|trans({'%periodEndDate%': dateLongue(bookingPeriod.planificationPeriod.planningEndDate)}) }}</p>
 		</div>
 		<div class="modal-footer">
 			<button type="button" class="btn btn-default" data-dismiss="modal">{{ 'close'|trans }}</button>

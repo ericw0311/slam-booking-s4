@@ -45,7 +45,7 @@
 {% elseif endPeriodDay.type == 'C' %}
 <a href="#" class="list-group-item list-group-item-warning"><img src="{{ asset('images/forbidden-32.png') }}">&nbsp;{{ dateLongue(endPeriodDay.date) }} fermé</a>
 {% elseif endPeriodDay.type == 'A' %}
-<a href="#" class="list-group-item list-group-item-warning"><img src="{{ asset('images/forbidden-32.png') }}">&nbsp;{{ dateLongue(endPeriodDay.date) }} après</a>
+<button type="button" class="list-group-item list-group-item-warning" style="color:red" data-toggle="modal" data-target="#bnaAfter"></button>
 {% elseif endPeriodDay.type == 'B' %}
 <a href="#" class="list-group-item list-group-item-warning"><img src="{{ asset('images/forbidden-32.png') }}">&nbsp;{{ dateLongue(endPeriodDay.date) }} avant</a>
 {% elseif endPeriodDay.type == 'X' %}
@@ -55,5 +55,11 @@
 
 {% endfor %}
 </div>
+
+{% endblock %}
+
+{% block modal %}
+
+{{ include('planning/modal.html.twig') }}
 
 {% endblock %}

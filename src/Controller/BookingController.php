@@ -11,6 +11,7 @@ use Psr\Log\LoggerInterface;
 
 use App\Entity\Constants;
 use App\Entity\UserContext;
+use App\Entity\BookingPeriod;
 use App\Entity\UserFile;
 use App\Entity\Label;
 use App\Entity\Resource;
@@ -134,14 +135,18 @@ class BookingController extends Controller
     $ttlRepository = $em->getRepository(TimetableLine::Class);
 	$beginningTimetableLine = $ttlRepository->find($beginningTimetableLineID);
 
+	$bookingPeriod = new BookingPeriod($em, $userContext, $planificationPeriod); // période de réservation
+
 	$nextFirstDateNumber = 0;
-    $endPeriodDays = BookingApi::getEndPeriods($logger, $em, $userContext->getCurrentFile(), $userContext->getCurrentUserFileAdministrator(), $planificationPeriod, $resource, $beginningDate, $beginningTimetableLine, 0, $firstDateNumber, $nextFirstDateNumber);
+    $endPeriodDays = BookingApi::getEndPeriods($logger, $em, $userContext->getCurrentFile(), $bookingPeriod,
+		$resource, $beginningDate, $beginningTimetableLine, 0, $firstDateNumber, $nextFirstDateNumber);
+
 	// Calucl du premier jour affiché précedent
 	$previousFirstDateNumber = ($firstDateNumber < Constants::MAXIMUM_NUMBER_BOOKING_DATES_DISPLAYED) ? 0 : ($firstDateNumber - Constants::MAXIMUM_NUMBER_BOOKING_DATES_DISPLAYED);
 
 	return $this->render('booking/period.end.create.'.($many ? 'many' : 'one').'.html.twig',
-		array('userContext' => $userContext, 'planningDate' => $planningDate, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource, 'timetableLinesList' => $timetableLinesList,
-			'beginningDate' => $beginningDate, 'beginningTimetableLine' => $beginningTimetableLine, 'endPeriodDays' => $endPeriodDays, 'firstDateNumber' => $firstDateNumber, 
+		array('userContext' => $userContext, 'bookingPeriod' => $bookingPeriod, 'planningDate' => $planningDate, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource,
+			'timetableLinesList' => $timetableLinesList, 'beginningDate' => $beginningDate, 'beginningTimetableLine' => $beginningTimetableLine, 'endPeriodDays' => $endPeriodDays, 'firstDateNumber' => $firstDateNumber, 
 			'previousFirstDateNumber' => $previousFirstDateNumber, 'nextFirstDateNumber' => $nextFirstDateNumber, 'userFileIDList' => $userFileIDList, 'labelIDList' => $labelIDList, 'noteID' => $noteID));
     }
 
@@ -614,15 +619,19 @@ class BookingController extends Controller
     $ttlRepository = $em->getRepository(TimetableLine::Class);
 	$beginningTimetableLine = $ttlRepository->find($beginningTimetableLineID);
 
+
+	$bookingPeriod = new BookingPeriod($em, $userContext, $planificationPeriod); // période de réservation
+
 	$nextFirstDateNumber = 0;
-    $endPeriodDays = BookingApi::getEndPeriods($logger, $em, $userContext->getCurrentFile(), $userContext->getCurrentUserFileAdministrator(),
-    $planificationPeriod, $resource, $beginningDate, $beginningTimetableLine, $booking->getID(), $firstDateNumber, $nextFirstDateNumber);
+    $endPeriodDays = BookingApi::getEndPeriods($logger, $em, $userContext->getCurrentFile(), $bookingPeriod,
+		$resource, $beginningDate, $beginningTimetableLine, $booking->getID(), $firstDateNumber, $nextFirstDateNumber);
+
 	// Calucl du premier jour affiché précedent
 	$previousFirstDateNumber = ($firstDateNumber < Constants::MAXIMUM_NUMBER_BOOKING_DATES_DISPLAYED) ? 0 : ($firstDateNumber - Constants::MAXIMUM_NUMBER_BOOKING_DATES_DISPLAYED);
 
 	return $this->render('booking/period.end.update.'.($many ? 'many' : 'one').'.html.twig',
-		array('userContext' => $userContext, 'planningDate' => $planningDate, 'booking' => $booking, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod,
-			'resource' => $resource, 'timetableLinesList' => $timetableLinesList, 'beginningDate' => $beginningDate,
+		array('userContext' => $userContext, 'bookingPeriod' => $bookingPeriod, 'planningDate' => $planningDate, 'booking' => $booking, 'planification' => $planification,
+			'planificationPeriod' => $planificationPeriod, 'resource' => $resource, 'timetableLinesList' => $timetableLinesList, 'beginningDate' => $beginningDate,
 			'beginningTimetableLine' => $beginningTimetableLine, 'endPeriodDays' => $endPeriodDays, 'firstDateNumber' => $firstDateNumber,
 			'previousFirstDateNumber' => $previousFirstDateNumber, 'nextFirstDateNumber' => $nextFirstDateNumber, 'userFileIDList' => $userFileIDList,
 			'labelIDList' => $labelIDList, 'noteID' => $noteID));
@@ -1287,7 +1296,10 @@ class BookingController extends Controller
 	}
 
 	$logger->info('PlanningController.duplicate DBG 2 _'.$firstBookingLine->getDate()->format('Y-m-d H:i:s').'_'.$newBookingBeginningDate->format('Y-m-d H:i:s').'_');
-	$planningContext = new PlanningContext($logger, $em, $connectedUser, $userContext->getCurrentFile(), $userContext->getCurrentUserFileAdministrator(), $planificationPeriod, 'D', $firstBookingLine->getDate(), $newBookingBeginningDate, $numberDays);
+
+	$bookingPeriod = new BookingPeriod($em, $userContext, $planificationPeriod); // période de réservation
+
+	$planningContext = new PlanningContext($logger, $em, $connectedUser, $userContext->getCurrentFile(), $bookingPeriod, 'D', $firstBookingLine->getDate(), $newBookingBeginningDate, $numberDays);
 
     $prRepository = $em->getRepository(PlanificationResource::Class);
     $planificationResources = $prRepository->getResource($planificationPeriod, $resource);
@@ -1309,7 +1321,7 @@ class BookingController extends Controller
 	$nextGap = $gap+7;
 
 	return $this->render('booking/duplicate.'.($many ? 'many' : 'one').'.html.twig',
-		array('userContext' => $userContext, 'planningContext' => $planningContext, 'planningDate' => $planningDate,
+		array('userContext' => $userContext, 'planningContext' => $planningContext, 'bookingPeriod' => $bookingPeriod, 'planningDate' => $planningDate,
 			'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'planificationResources' => $planificationResources,
 			'resource' => $resource, 'booking' => $booking, 'bookings' => $bookings, 'newBookingID' => $newBookingID,
 			'ctrlBookingLineID' => $ctrlBookingLineID, 'gap' => $gap, 'previousGap' => $previousGap, 'nextGap' => $nextGap));

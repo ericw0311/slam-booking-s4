@@ -5,6 +5,7 @@ use Psr\Log\LoggerInterface;
 
 use App\Entity\File;
 use App\Entity\UserFile;
+use App\Entity\BookingPeriod;
 use App\Entity\Resource;
 use App\Entity\Label;
 use App\Entity\TimetableLine;
@@ -29,7 +30,7 @@ class BookingApi
 {
 	// firstDayNumber: Premier jour affiché
 	// bookingID: Identifient de la réservation mise à jour (0 si création de réservation)
-	static function getEndPeriods(LoggerInterface $logger, $em, File $file, BookingPeriod $bookingPeriod, PlanificationPeriod $planificationPeriod, Resource $resource,
+	static function getEndPeriods(LoggerInterface $logger, $em, File $file, BookingPeriod $bookingPeriod, Resource $resource,
 		\Datetime $beginningDate, TimetableLine $beginningTimetableLine, int $bookingID, int $firstDayNumber, int &$nextFirstDayNumber)
 	{
 	$endPeriodDays = array();
@@ -48,7 +49,7 @@ class BookingApi
 
 		$logger->info('BookingApi.getEndPeriods DBG 1 _'.$date->format('Y-m-d H:i:s').'_');
 
-		$planningDay = new PlanningDayOA($logger, $em, $bookingPeriod, $planificationPeriod, $date, $resource, $bookingID,
+		$planningDay = new PlanningDayOA($logger, $em, $bookingPeriod, $date, $resource, $bookingID,
 			$firstDay, $beginningTimetableLine, $numberPlanningLines, $previousDaysTimetableLinesList);
 
 		if (!$planningDay->isClosed()) { // La journée n'est pas fermée.
