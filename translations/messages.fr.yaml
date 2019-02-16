@@ -106,6 +106,7 @@ booking.bna.day.closed: Journée fermée à la réservation
 booking.bna.end.period: La période de réservation en cours est clôturée en date du %periodEndDate%
 booking.book: Réserver
 booking.create: Création d'une réservation
+booking.created.by.another.user: Réservation saisie par un autre utilisateur
 booking.created.ok: La réservation a bien été créée
 booking.delete: Suppression d'une réservation
 booking.deleted.ok: La réservation a bien été supprimée
@@ -116,6 +117,9 @@ booking.duplicate.previous.week.ko: Pas de date de duplication antérieure pour 
 booking.entered.on.by: Réservation saisie le %bookingDate% à %bookingTime% par %userName%
 booking.in.progress: Les réservations en cours
 booking.not.allowed: Réservation interdite
+booking.out.of.period.from: Réservation en dehors de la période autorisée. à partir du %firstBookingDate%
+booking.out.of.period.from.until: Réservation en dehors de la période autorisée. à partir du %firstBookingDate% jusqu'au %lastBookingDate%
+booking.out.of.period.until: Réservation en dehors de la période autorisée. jusqu'au %lastBookingDate%
 booking.period: Période de réservation
 booking.period.beginning.update: Modifier la période de début
 booking.period.end.update: Modifier la période de fin

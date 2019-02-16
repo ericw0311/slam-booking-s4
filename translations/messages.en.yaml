@@ -106,6 +106,7 @@ booking.bna.day.closed: Day closed for booking
 booking.bna.end.period: Current booking period is closed on %periodEndDate%
 booking.book: Book
 booking.create: Booking create
+booking.created.by.another.user: Booking entered by another user
 booking.created.ok: The booking has been created
 booking.delete: Booking delete
 booking.deleted.ok: The booking has been deleted
@@ -116,6 +117,9 @@ booking.entered.on.by: Booking entered on %bookingDate% at %bookingTime% by %use
 booking.duplicate.previous.week.ko: No duplication previous date for this booking
 booking.in.progress: Bookings in progress
 booking.not.allowed: Booking not allowed
+booking.out.of.period.from: Booking out of allowed period. from %firstBookingDate%
+booking.out.of.period.from.until: Booking out of allowed period. from %firstBookingDate% until %lastBookingDate%
+booking.out.of.period.until: Booking out of allowed period. until %lastBookingDate%
 booking.period: Booking period
 booking.period.beginning.update: Modify beginning period
 booking.period.end.update: Modify end period

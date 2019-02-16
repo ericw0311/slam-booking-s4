@@ -1154,6 +1154,7 @@ class BookingController extends Controller
 
 	$timetableLinesList = BookingApi::getBookingLinesUrl($em, $booking);
 	BookingApi::getBookingLinesUrlBeginningAndEndPeriod($em, $timetableLinesList, $beginningDate, $beginningTimetableLine, $endDate, $endTimetableLine);
+
 	// Utilisateurs
 	$userFileIDList = BookingApi::getBookingUsersUrl($em, $booking);
 	$userFileIDArray = explode("-", $userFileIDList);
@@ -1187,11 +1188,14 @@ class BookingController extends Controller
 		$note = $nRepository->find($noteID);
 	}
 
+	$bookingPeriod = new BookingPeriod($em, $userContext, $planificationPeriod); // période de réservation
+	$authorisationType = BookingApi::getBookingAuthorisationType($userContext, $bookingPeriod, $booking, $beginningDate, $endDate);
+
 	return $this->render('booking/view.'.($many ? 'many' : 'one').'.html.twig',
-		array('userContext' => $userContext, 'planningDate' => $planningDate, 'booking' => $booking, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource,
-			'timetableLinesList' => $timetableLinesList, 'beginningDate' => $beginningDate, 'beginningTimetableLine' => $beginningTimetableLine,
-			'endDate' => $endDate, 'endTimetableLine' => $endTimetableLine, 'userFiles' => $userFiles, 'userFileIDList' => $userFileIDList,
-			'numberLabels' => $numberLabels, 'labels' => $labels, 'labelIDList' => $labelIDList, 'noteID' => $noteID, 'note' => $note));
+		array('userContext' => $userContext, 'planningDate' => $planningDate, 'bookingPeriod' => $bookingPeriod, 'booking' => $booking, 'planification' => $planification,
+			'planificationPeriod' => $planificationPeriod, 'resource' => $resource, 'timetableLinesList' => $timetableLinesList, 'beginningDate' => $beginningDate, 
+			'beginningTimetableLine' => $beginningTimetableLine, 'endDate' => $endDate, 'endTimetableLine' => $endTimetableLine, 'userFiles' => $userFiles, 'userFileIDList' => $userFileIDList,
+			'numberLabels' => $numberLabels, 'labels' => $labels, 'labelIDList' => $labelIDList, 'noteID' => $noteID, 'note' => $note, 'authorisationType' => $authorisationType));
     }
 
 	// Initialisation de la duplication d'une réservation

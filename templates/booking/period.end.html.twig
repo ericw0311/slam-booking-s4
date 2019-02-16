@@ -33,7 +33,15 @@
 	<div id="{{ endPeriodDay.date|date('Ymd') }}" class="tab-pane fade">
 {% endif %}
 
-{% if endPeriodDay.type == 'O' %}
+{% if endPeriodDay.type == 'A' %}
+<button type="button" class="list-group-item" data-toggle="modal" data-target="#bnaAfter"><img src="{{ asset('images/forbidden-32.png') }}"></button>
+{% elseif endPeriodDay.type == 'B' %}
+<button type="button" class="list-group-item" data-toggle="modal" data-target="#bnaBefore"><img src="{{ asset('images/forbidden-32.png') }}"></button>
+{% elseif endPeriodDay.type == 'X' %}
+<button type="button" class="list-group-item" data-toggle="modal" data-target="#bnaEndPeriod"><img src="{{ asset('images/forbidden-32.png') }}"></button>
+
+{% else %}
+
 {% for planningLine in endPeriodDay.planningLines %}
 {% if planningLine.type == 'O' %}
 	{% block createOrUpdateBookingLink %}{% endblock %}
@@ -42,14 +50,6 @@
 {% endif %}
 {% endfor %}
 
-{% elseif endPeriodDay.type == 'C' %}
-<a href="#" class="list-group-item list-group-item-warning"><img src="{{ asset('images/forbidden-32.png') }}">&nbsp;{{ dateLongue(endPeriodDay.date) }} fermé</a>
-{% elseif endPeriodDay.type == 'A' %}
-<button type="button" class="list-group-item list-group-item-warning" style="color:red" data-toggle="modal" data-target="#bnaAfter"></button>
-{% elseif endPeriodDay.type == 'B' %}
-<a href="#" class="list-group-item list-group-item-warning"><img src="{{ asset('images/forbidden-32.png') }}">&nbsp;{{ dateLongue(endPeriodDay.date) }} avant</a>
-{% elseif endPeriodDay.type == 'X' %}
-<a href="#" class="list-group-item list-group-item-warning"><img src="{{ asset('images/forbidden-32.png') }}">&nbsp;{{ dateLongue(endPeriodDay.date) }} cloturé</a>
 {% endif %}
 	</div>
 

@@ -5,6 +5,7 @@ use Psr\Log\LoggerInterface;
 
 use App\Entity\File;
 use App\Entity\UserFile;
+use App\Entity\UserContext;
 use App\Entity\BookingPeriod;
 use App\Entity\Resource;
 use App\Entity\Label;
@@ -624,5 +625,39 @@ class BookingApi
 
 	$em->flush();
 	return $newBooking->getID();
+	}
+	
+	// Détermine un type d'autorisation de mise à jour et suppression d'une réservation: O = autorisé. U = non autorisé car saisie par un autre utilisateur. P = non autorisé car en dehors de la période de réservation
+	static function getBookingAuthorisationType(UserContext $userContext, BookingPeriod $bookingPeriod, Booking $booking, \Datetime $beginningDate, \Datetime $endDate)
+	{
+	$authorisationType = 'O';
+
+	if ($userContext->getCurrentUserFileAdministrator() or $booking->getUser()->getID() == $userContext->getUser()->getID()) {
+		$authorisationType = 'O';
+	} else {
+		$authorisationType = 'U'; // L'utilisateur n'est pas adminsitrateur du dossier et n'est pas à l'origine de la réservation.
+	}
+
+	if ($authorisationType != 'O') { return ($authorisationType); }
+
+	$beforeSign = '+';
+
+	if ($bookingPeriod->getBefore()) {
+		$interval = $bookingPeriod->getFirstAllowedBookingDate()->diff($endDate);
+		$beforeSign = $interval->format('%R');
+	}
+	if ($beforeSign == '-') { $authorisationType = 'P'; } // La date de fin de réservation est antérieure à la date de début de période autorisée
+
+	if ($authorisationType != 'O') { return ($authorisationType); }
+
+	$afterSign = '+';
+
+	if ($bookingPeriod->getAfter()) {
+		$interval = $beginningDate->diff($bookingPeriod->getLastAllowedBookingDate());
+		$afterSign = $interval->format('%R');
+	}
+	if ($afterSign == '-') { $authorisationType = 'P'; } // La date de début de réservation est postérieure à la date de fin de période autorisée
+
+	return ($authorisationType);
 	}
 }

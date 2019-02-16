@@ -27,7 +27,7 @@
 
 {% elseif planningContext.getDay(day_key).type == 'C' %}
 <tr>
-	<td></td><td colspan={{ planificationResources|length }}><button type="button" class="glyphicon glyphicon-remove-circle btn-link" style="color:red" data-toggle="modal" data-target="#bnaDayClosed"></button></td>
+	<td></td><td colspan={{ planificationResources|length }}><button type="button" class="glyphicon glyphicon-ban-circle btn-link" style="color:red" data-toggle="modal" data-target="#bnaDayClosed"></button></td>
 </tr>
 {% else %}
 {% for timetableLine in planningContext.getDay(day_key).timetableLines %}

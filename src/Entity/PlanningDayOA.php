@@ -64,7 +64,7 @@ class PlanningDayOA extends PlanningDay
 	{
 	parent::__construct($logger, $em, $bookingPeriod->getBefore(), $bookingPeriod->getAfter(), $bookingPeriod, $date);
 	
-	$this->setLastDay($this->getType() != 'O' and $this->getType() != 'C'); // Si le jour n'est ni ouvert, ni fermé (Clôturé, Before, After) c'est le dernier affiché.
+	$this->setLastDay($this->getType() == 'A' or $this->getType() == 'X'); // Si le jour est clôturé ou après la période de réservation, c'est le dernier affiché.
 
 	$this->planningLines = array();
 	$tlRepository = $em->getRepository(TimetableLine::Class);
