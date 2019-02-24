@@ -1,0 +1,36 @@
+{# templates/documentation/index.html.twig #}
+
+{% extends 'base.basic.html.twig' %}
+
+{% block body %}
+
+<div class="col-sm-3">
+
+<div class="list-group">
+{% if pageCode == 'USER' %}
+	<a href="{{ path('documentation', { 'pageCode': 'USER' }) }}" class="list-group-item active"><img src="{{ asset('images/user-32.png') }}"> {{ 'users'|trans }}</a>
+{% else %}
+	<a href="{{ path('documentation', { 'pageCode': 'USER' }) }}" class="list-group-item"><img src="{{ asset('images/user-32.png') }}"> {{ 'users'|trans }}</a>
+{% endif %}
+{% if pageCode == 'FILE' %}
+	<a href="{{ path('documentation', { 'pageCode': 'FILE' }) }}" class="list-group-item active"><img src="{{ asset('images/file-32.png') }}"> {{ 'file.plural'|trans }}</a>
+{% else %}
+	<a href="{{ path('documentation', { 'pageCode': 'FILE' }) }}" class="list-group-item"><img src="{{ asset('images/file-32.png') }}"> {{ 'file.plural'|trans }}</a>
+{% endif %}
+{% if pageCode == 'TIMETABLE' %}
+	<a href="{{ path('documentation', { 'pageCode': 'TIMETABLE' }) }}" class="list-group-item active"><img src="{{ asset('images/time-32.png') }}"> {{ 'timetable.plural'|trans }}</a>
+{% else %}
+	<a href="{{ path('documentation', { 'pageCode': 'TIMETABLE' }) }}" class="list-group-item"><img src="{{ asset('images/time-32.png') }}"> {{ 'timetable.plural'|trans }}</a>
+{% endif %}
+
+</div>
+
+</div>
+
+<div class="col-sm-9">
+
+{{ include('documentation/help.' ~ pageCode ~ '.html.twig') }}
+
+</div>
+
+{% endblock %}
