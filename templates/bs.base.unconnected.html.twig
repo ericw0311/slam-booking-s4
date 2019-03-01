@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block navbar %}
+
+<nav class="navbar navbar-default">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="{{ path('user_logout') }}"><span class="label label-primary">Slam Booking</span></a>
+			<ul class="nav navbar-nav navbar-left">
+				<li><a href="{{ path('documentation', { 'pageCode': 'USER' })}}" target="_blank"><span class="glyphicon glyphicon-book"></span>&nbsp;{{ 'documentation'|trans }}</a></li>
+			</ul>
+		</div>
+		<ul class="nav navbar-nav navbar-right">
+			<li><a href="{{ path('user_registration')}}"><span class="glyphicon glyphicon-user"></span>&nbsp;{{ 'user.register'|trans }}</a></li>
+			<li><a href="{{ path('user_login')}}"><span class="glyphicon glyphicon-log-in"></span>&nbsp;{{ 'user.login'|trans }}</a></li>
+		</ul>
+	</div>
+</nav> 
+
+{% endblock %}

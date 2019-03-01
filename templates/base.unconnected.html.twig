@@ -2,19 +2,10 @@
 
 {% block navbar %}
 
-<nav class="navbar navbar-default">
-	<div class="container-fluid">
-		<div class="navbar-header">
-			<a class="navbar-brand" href="{{ path('user_logout') }}"><span class="label label-primary">Slam Booking</span></a>
-			<ul class="nav navbar-nav navbar-left">
-				<li><a href="{{ path('documentation', { 'pageCode': 'USER' })}}" target="_blank"><span class="glyphicon glyphicon-book"></span>&nbsp;{{ 'documentation'|trans }}</a></li>
-			</ul>
-		</div>
-		<ul class="nav navbar-nav navbar-right">
-			<li><a href="{{ path('user_registration')}}"><span class="glyphicon glyphicon-user"></span>&nbsp;{{ 'user.register'|trans }}</a></li>
-			<li><a href="{{ path('user_login')}}"><span class="glyphicon glyphicon-log-in"></span>&nbsp;{{ 'user.login'|trans }}</a></li>
-		</ul>
-	</div>
-</nav> 
+<div class="w3-bar w3-light-grey">
+	<a href="{{ path('user_logout')}}" class="w3-bar-item w3-button"><i class="fa fa-home w3-xlarge"></i>&nbsp;Slam Booking</a>
+	<a href="{{ path('user_login')}}" class="w3-bar-item w3-button w3-right"><i class="fa fa-sign-in w3-xlarge"></i>&nbsp;{{ 'user.login'|trans }}</a>
+	<a href="{{ path('user_registration')}}" class="w3-bar-item w3-button w3-right"><i class="fa fa-user w3-xlarge"></i>&nbsp;{{ 'user.register'|trans }}</a>
+</div> 
 
 {% endblock %}
