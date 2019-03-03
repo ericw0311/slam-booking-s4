@@ -2,45 +2,37 @@
 
 {% block body %}
 
-<div class="col-sm-3"></div>
-<div class="col-sm-6">
-		<legend><span class="glyphicon glyphicon-log-in">&nbsp;<i class="fa fa-lock" aria-hidden="true"></i>{{ 'user.connection'|trans }}</legend>
-{% if error %}
-		<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-{% endif %}
+<div class="w3-container w3-blue-grey">
+	<h4><i class="fa fa-sign-in w3-xlarge"></i>&nbsp;{{ 'user.connection'|trans }}</h4>
+</div>
+
+<div class="w3-row">
+	<div class="w3-quarter w3-container"></div>
+	<div class="w3-half w3-container">
+
 	<form action="{{ path('user_login') }}" method="post">
-		<fieldset>
-			<div class="form-group">
-				<label for="username">{{ 'user.name'|trans }}</label>
-				<input type="text" id="username" name="_username" value="{{ last_username }}" class="form-control"/>
-			</div>
-			<div class="form-group">
-				<label for="password">{{ 'user.password'|trans }}</label>
-				<input type="password" id="password" name="_password" class="form-control" />
-			</div>
-		<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"/>
-		<div class="btn-group sb-margin-top">
-		<button type="submit" class="btn btn-primary">
-			<i class="fa fa-sign-in" aria-hidden="true"></i>{{ 'user.login'|trans }}
-		</button>
-<a href="{{ path('user_forgot_login_or_password') }}" class="btn btn-link">{{ 'user.forgot.login.or.password'|trans }}</a>
-		</div>
-		</fieldset>
+
+{% if error %}
+	<div class="w3-panel w3-red">
+		<p>{{ error.messageKey|trans(error.messageData, 'security') }}</p>
+	</div>
+{% endif %}
+
+	<form class="w3-container">
+		<p><label>{{ 'user.name'|trans }}</label>
+		<input class="w3-input w3-border w3-pale-green form-control" type="text" id="username" name="_username" value="{{ last_username }}"></p>
+
+		<p><label>{{ 'user.password'|trans }}</label>
+		<input class="w3-input w3-border w3-pale-green form-control" type="password" id="password" name="_password"></p>
+
+		<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+		<button type="submit" class="w3-btn w3-green"><i class="fa fa-check"></i>&nbsp;{{ 'user.login'|trans }}</button>
+		<a href="{{ path('user_forgot_login_or_password') }}" class="btn btn-link">{{ 'user.forgot.login.or.password'|trans }}</a>
 	</form>
-</div>
-<div class="col-sm-3"></div>
 
-{% endblock %}
-
-{% block message %}
-
-<div class="col-sm-12">
-{% for flash_message in app.session.flashBag.get('notice') %}
-<div class="alert alert-success sb-message">
-	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-	{{ flash_message|trans }}
-</div>
-{% endfor %}
-</div>
+	</div>
+	<div class="w3-quarter w3-container"></div>
+</div> 
 
 {% endblock %}
