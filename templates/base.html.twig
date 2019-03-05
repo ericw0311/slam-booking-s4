@@ -10,6 +10,13 @@
 
 {% block navbar %}{% endblock %}
 {% block body %}{% endblock %}
+
+<div class="w3-panel w3-khaki w3-round-large">
+{% for flash_message in app.session.flashBag.get('notice') %}
+	<p>{{ flash_message|trans }}</p>
+{% endfor %}
+</div>
+
 {% block javascripts %}{% endblock %}
 
 </div> 
