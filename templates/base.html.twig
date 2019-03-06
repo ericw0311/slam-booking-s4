@@ -11,11 +11,12 @@
 {% block navbar %}{% endblock %}
 {% block body %}{% endblock %}
 
-<div class="w3-panel w3-khaki w3-round-large">
 {% for flash_message in app.session.flashBag.get('notice') %}
+<div class="w3-panel w3-khaki w3-round-large">
+	<span onclick="this.parentElement.style.display='none'" class="w3-button w3-large w3-right">x</span>
 	<p>{{ flash_message|trans }}</p>
-{% endfor %}
 </div>
+{% endfor %}
 
 {% block javascripts %}{% endblock %}
 

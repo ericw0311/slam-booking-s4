@@ -13,8 +13,14 @@
 <p>{{ form_row(form.accountType) }}</p>
 <p>{{ form_row(form.firstName) }}</p>
 <p>{{ form_row(form.lastName) }}</p>
-<p>{{ form_row(form.userName) }}</p>
-<p>{{ form_row(form.email) }}</p>
+
+<p><label>{{ 'user.name'|trans }}</label>
+{{ form_widget(form.userName) }}
+<span class="w3-text-red">{{ form_errors(form.userName) }}</span></p>
+
+<p><label>{{ 'user.email'|trans }}</label>
+{{ form_widget(form.email) }}
+<span class="w3-text-red">{{ form_errors(form.email) }}</span></p>
 
 <p><label>{{ 'user.organisation.name'|trans }}</label>
 {{ form_widget(form.uniqueName) }}
