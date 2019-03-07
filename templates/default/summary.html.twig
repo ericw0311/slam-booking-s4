@@ -6,15 +6,15 @@
 
 {% if userContext.getCurrentUserFileAdministrator() %}
 
-<div class="w3-bar w3-black">
-	<button class="w3-bar-item w3-button" onclick="displayTab('flow')">{{ 'summary'|trans }}</button>
-	<button class="w3-bar-item w3-button" onclick="displayTab('administration')">{{ 'administration'|trans }}</button>
+<div class="w3-bar w3-margin-top">
+	<button class="w3-bar-item w3-button w3-khaki w3-border w3-hover-light-blue" onclick="displayTab('flow')">{{ 'summary'|trans }}</button>
+	<button class="w3-bar-item w3-button w3-khaki w3-border w3-hover-light-blue" onclick="displayTab('administration')">{{ 'administration'|trans }}</button>
 </div>
 
-<div id="flow" class="w3-container city">
+<div id="flow" class="city">
 	{{ include('default/flow.html.twig') }}
 </div>
-<div id="administration" class="w3-container city" style="display:none">
+<div id="administration" class="city" style="display:none">
 	{{ include('default/administration.html.twig') }}
 </div>
 

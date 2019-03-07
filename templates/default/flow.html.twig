@@ -1,73 +1,41 @@
 {# templates/default/flow.html.twig #}
 
-<div class="w3-bar-block">
-	<a href="#" class="w3-bar-item w3-button w3-pale-green"><img src="{{ asset('images/user-group-32.png') }}">&nbsp;{{ 'booking.all'|trans }}<span class="w3-badge w3-right w3-margin-right w3-green">8</span></a>
-	<a href="#" class="w3-bar-item w3-button">Paris</a>
-	<a href="#" class="w3-bar-item w3-button">Tokyo</a>
-</div> 
-
-
-<div class="w3-cell-row w3-bar-block">
-	<a href="#" class="w3-cell w3-bar-item w3-button w3-pale-green"><img src="{{ asset('images/user-group-32.png') }}">&nbsp;{{ 'booking.all'|trans }}<span class="w3-badge w3-right w3-margin-right w3-green">8</span></a>
-	<a href="#" class="w3-cell w3-bar-item w3-button">Paris</a>
-</div> 
-
-
-
-<div class="w3-cell-row">
-<a href="{{ path('planning_all_booking_list', { 'page': 1 }) }}" class="w3-cell w3-pale-green"><img src="{{ asset('images/user-group-32.png') }}">&nbsp;{{ 'booking.all'|trans }}<span class="w3-badge w3-right w3-margin-right w3-green">8</span></a>
-	<div class="w3-container w3-green w3-cell">
-		<p>Hello W3.CSS Layout.</p>
-	</div>
-</div> 
-
-<div class="w3-cell-row">
-	<div class="w3-container w3-red w3-cell">
-<p><a href="{{ path('planning_all_booking_list', { 'page': 1 }) }}" class="w3-pale-green"><img src="{{ asset('images/user-group-32.png') }}">&nbsp;{{ 'booking.all'|trans }}<span class="w3-badge w3-right w3-margin-right w3-green">8</span></a></p>
-	</div>
-	<div class="w3-container w3-green w3-cell">
-		<p>Hello W3.CSS Layout.</p>
-	</div>
-</div> 
-
-<div class="w3-cell-row">
-	<a href="{{ path('planning_all_booking_list', { 'page': 1 }) }}" class="w3-cell w3-button w3-pale-green"><img src="{{ asset('images/user-group-32.png') }}">&nbsp;{{ 'booking.all'|trans }}<span class="w3-badge w3-right w3-margin-right w3-green">8</span></a>
-	<a href="{{ path('planning_all_booking_list', { 'page': 1 }) }}" class="w3-cell w3-button w3-red"><img src="{{ asset('images/user-group-32.png') }}">&nbsp;{{ 'booking.all'|trans }}<span class="w3-badge w3-right w3-margin-right w3-green">8</span></a>
-</div> 
-
 {% if fileContext.allBookingsCount > 0 %}
 
-<div class="col-sm-6">
+<div class="w3-half">
 
-<a href="{{ path('planning_all_booking_list', { 'page': 1 }) }}" class="list-group-item list-group-item-success"><img src="{{ asset('images/user-group-32.png') }}"> {{ 'booking.all'|trans }} <span class="badge">{{ fileContext.allBookingsCount }}</span></a>
+<div class="w3-bar-block w3-border w3-margin-right">
+	<a href="{{ path('planning_all_booking_list', { 'page': 1 }) }}" class="w3-bar-item w3-button w3-pale-green"><img src="{{ asset('images/user-group-32.png') }}">&nbsp;{{ 'booking.all'|trans }}<span class="w3-badge w3-right w3-green">{{ fileContext.allBookingsCount }}</span></a>
 
 {% if fileContext.currentUserBookingsCount > 0 %}
-	<a href="{{ path('planning_current_user_booking_list', { 'page': 1 }) }}" class="list-group-item list-group-item-success"><img src="{{ asset('images/user-32.png') }}"> {{ 'booking.your'|trans }} <span class="badge">{{ fileContext.currentUserBookingsCount }}</span></a>
+	<a href="{{ path('planning_current_user_booking_list', { 'page': 1 }) }}" class="w3-bar-item w3-button w3-pale-green"><img src="{{ asset('images/user-32.png') }}">&nbsp;{{ 'booking.your'|trans }}<span class="w3-badge w3-right w3-green">{{ fileContext.currentUserBookingsCount }}</span></a>
 {% else %}
-	<ul class="list-group"><li class="list-group-item"><img src="{{ asset('images/user-32.png') }}"> {{ 'booking.your'|trans }} <span class="badge">{{ fileContext.currentUserBookingsCount }}</span></li></ul> 
+	<div class="w3-bar-item w3-pale-red"><img src="{{ asset('images/user-32.png') }}">&nbsp;{{ 'booking.your'|trans }}<span class="w3-badge w3-right w3-red">{{ fileContext.currentUserBookingsCount }}</span></div>
 {% endif %}
-
 </div>
 
-<div class="col-sm-6">
+</div>
+<div class="w3-half">
 
+<div class="w3-bar-block w3-border">
 {% if fileContext.inProgressBookingsCount > 0 %}
-<a href="{{ path('planning_in_progress_booking_list', { 'page': 1 }) }}" class="list-group-item list-group-item-warning"><img src="{{ asset('images/user-group-32.png') }}"> {{ 'booking.in.progress'|trans }} <span class="badge">{{ fileContext.inProgressBookingsCount }}</span></a>
+	<a href="{{ path('planning_in_progress_booking_list', { 'page': 1 }) }}" class="w3-bar-item w3-button w3-pale-green"><img src="{{ asset('images/user-group-32.png') }}">&nbsp;{{ 'booking.in.progress'|trans }}<span class="w3-badge w3-right w3-green">{{ fileContext.inProgressBookingsCount }}</span></a>
 
 {% if fileContext.currentUserInProgressBookingsCount > 0 %}
-<a href="{{ path('planning_current_user_in_progress_booking_list', { 'page': 1 }) }}" class="list-group-item list-group-item-warning"><img src="{{ asset('images/user-32.png') }}"> {{ 'booking.your.in.progress'|trans }} <span class="badge">{{ fileContext.currentUserInProgressBookingsCount }}</span></a>
+	<a href="{{ path('planning_current_user_in_progress_booking_list', { 'page': 1 }) }}" class="w3-bar-item w3-button w3-pale-green"><img src="{{ asset('images/user-32.png') }}">&nbsp;{{ 'booking.your.in.progress'|trans }}<span class="w3-badge w3-right w3-green">{{ fileContext.currentUserInProgressBookingsCount }}</span></a>
 {% else %}
-<ul class="list-group"><li class="list-group-item"><img src="{{ asset('images/user-32.png') }}"> {{ 'booking.your.in.progress'|trans }} <span class="badge">{{ fileContext.currentUserInProgressBookingsCount }}</span></li></ul> 
+	<div class="w3-bar-item w3-pale-red"><img src="{{ asset('images/user-32.png') }}">&nbsp;{{ 'booking.your.in.progress'|trans }}<span class="w3-badge w3-right w3-red">{{ fileContext.currentUserInProgressBookingsCount }}</span></div>
 {% endif %}
 
 {% else %}
-<ul class="list-group"><li class="list-group-item"><img src="{{ asset('images/user-group-32.png') }}"> {{ 'booking.in.progress'|trans }} <span class="badge">{{ fileContext.inProgressBookingsCount }}</span></li></ul> 
+	<div class="w3-bar-item w3-pale-red"><img src="{{ asset('images/user-group-32.png') }}">&nbsp;{{ 'booking.in.progress'|trans }}<span class="w3-badge w3-right w3-red">{{ fileContext.inProgressBookingsCount }}</span></div>
 {% endif %}
+</div>
 
 </div>
 
 {% else %}
 
-<ul class="list-group"><li class="list-group-item"><img src="{{ asset('images/booking-32.png') }}"> {{ 'booking.all'|trans }} <span class="badge">{{ fileContext.allBookingsCount }}</span></li></ul> 
+<div class="w3-pale-red"><img src="{{ asset('images/booking-32.png') }}">&nbsp;{{ 'booking.all'|trans }}<span class="w3-badge w3-right w3-red">{{ fileContext.allBookingsCount }}</span></div>
 
 {% endif %}
