@@ -1,5 +1,40 @@
 {# templates/default/flow.html.twig #}
 
+<div class="w3-bar-block">
+	<a href="#" class="w3-bar-item w3-button w3-pale-green"><img src="{{ asset('images/user-group-32.png') }}">&nbsp;{{ 'booking.all'|trans }}<span class="w3-badge w3-right w3-margin-right w3-green">8</span></a>
+	<a href="#" class="w3-bar-item w3-button">Paris</a>
+	<a href="#" class="w3-bar-item w3-button">Tokyo</a>
+</div> 
+
+
+<div class="w3-cell-row w3-bar-block">
+	<a href="#" class="w3-cell w3-bar-item w3-button w3-pale-green"><img src="{{ asset('images/user-group-32.png') }}">&nbsp;{{ 'booking.all'|trans }}<span class="w3-badge w3-right w3-margin-right w3-green">8</span></a>
+	<a href="#" class="w3-cell w3-bar-item w3-button">Paris</a>
+</div> 
+
+
+
+<div class="w3-cell-row">
+<a href="{{ path('planning_all_booking_list', { 'page': 1 }) }}" class="w3-cell w3-pale-green"><img src="{{ asset('images/user-group-32.png') }}">&nbsp;{{ 'booking.all'|trans }}<span class="w3-badge w3-right w3-margin-right w3-green">8</span></a>
+	<div class="w3-container w3-green w3-cell">
+		<p>Hello W3.CSS Layout.</p>
+	</div>
+</div> 
+
+<div class="w3-cell-row">
+	<div class="w3-container w3-red w3-cell">
+<p><a href="{{ path('planning_all_booking_list', { 'page': 1 }) }}" class="w3-pale-green"><img src="{{ asset('images/user-group-32.png') }}">&nbsp;{{ 'booking.all'|trans }}<span class="w3-badge w3-right w3-margin-right w3-green">8</span></a></p>
+	</div>
+	<div class="w3-container w3-green w3-cell">
+		<p>Hello W3.CSS Layout.</p>
+	</div>
+</div> 
+
+<div class="w3-cell-row">
+	<a href="{{ path('planning_all_booking_list', { 'page': 1 }) }}" class="w3-cell w3-button w3-pale-green"><img src="{{ asset('images/user-group-32.png') }}">&nbsp;{{ 'booking.all'|trans }}<span class="w3-badge w3-right w3-margin-right w3-green">8</span></a>
+	<a href="{{ path('planning_all_booking_list', { 'page': 1 }) }}" class="w3-cell w3-button w3-red"><img src="{{ asset('images/user-group-32.png') }}">&nbsp;{{ 'booking.all'|trans }}<span class="w3-badge w3-right w3-margin-right w3-green">8</span></a>
+</div> 
+
 {% if fileContext.allBookingsCount > 0 %}
 
 <div class="col-sm-6">
