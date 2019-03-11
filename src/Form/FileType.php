@@ -14,7 +14,9 @@ class FileType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('name', TextType::class, array('label' => 'file.name', 'translation_domain' => 'messages'));
+        $builder->add('name', TextType::class, array('label' => 'file.name',
+			'translation_domain' => 'messages',
+			'attr' => ['class' => 'w3-input w3-pale-green']));
     }
 
 	public function configureOptions(OptionsResolver $resolver)

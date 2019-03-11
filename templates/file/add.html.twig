@@ -2,25 +2,43 @@
  
 {% block body %}
 
-{{ form_start(form, {'action': path('file_add'), 'method': 'POST', 'class': 'form-horizontal'}) }}
-
-<fieldset>
-	<legend><img src="{{ asset('images/file-32.png') }}">&nbsp;</img>{{ 'file.new'|trans }}</legend>
-	{{ form_row(form.name) }}
-	{{ form_rest(form) }}
-</fieldset>
-
-<div class="btn-group">
-<a href="{{ path('file', { 'page': 1 }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
-<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> {{ 'validate'|trans }}</button>
+<div class="w3-container w3-margin-top w3-blue-grey">
+	<h4><img src="{{ asset('images/file-32.png') }}">&nbsp;</img>{{ 'file.new'|trans }}</h4>
 </div>
 
+<div class="w3-row">
+
+<div class="w3-quarter w3-container"></div>
+
+<div class="w3-half w3-container">
+
+{{ form_start(form, {'action': path('file_add'), 'method': 'POST'}) }}
+
+<form class="w3-container">
+
+<p>{{ form_row(form.name) }}</p>
+
+{{ form_rest(form) }}
+
+<div class="w3-show-inline-block">
+<div class="w3-bar w3-border w3-round">
+	<a href="{{ path('file', { 'page': 1 }) }}" class="w3-bar-item w3-button w3-light-gray"><i class="fa fa-user"></i>&nbsp;{{ 'cancel'|trans }}</a>
+	<button type="submit" class="w3-bar-item w3-button w3-green"><i class="fa fa-check"></i>&nbsp;{{ 'validate'|trans }}</button>
+</div>
+</div>
+
+</form>
+
 {{ form_end(form) }}
+
+</div>
+
+<div class="w3-quarter w3-container"></div>
+
+</div> 
 
 {% endblock %}
 
 {% block javascripts %}
-
 <script>document.getElementById('file_name').focus();</script>
-
 {% endblock %}

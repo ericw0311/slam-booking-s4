@@ -2,11 +2,17 @@
  
 {% block body %}
 
-{{ form_start(form, {'action': path('user_registration'), 'method': 'POST'}) }}
-
-<div class="w3-container w3-blue-grey">
+<div class="w3-container w3-margin-top w3-blue-grey">
 	<h4><i class="fa fa-user w3-xlarge"></i>&nbsp;{{ 'user.registration'|trans }}</h4>
 </div>
+
+<div class="w3-row">
+
+<div class="w3-quarter w3-container"></div>
+
+<div class="w3-half w3-container">
+
+{{ form_start(form, {'action': path('user_registration'), 'method': 'POST'}) }}
 
 <form class="w3-container">
 
@@ -39,6 +45,12 @@
 </form>
 
 {{ form_end(form) }}
+
+</div>
+
+<div class="w3-quarter w3-container"></div>
+
+</div> 
 
 {% endblock %}
 

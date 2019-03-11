@@ -2,45 +2,35 @@
 
 {% block body %}
 
-<legend><img src="{{ asset('images/' ~ listContext.image ~ '-32.png') }}">&nbsp;</img>{{ (listContext.entityCode ~ '.plural')|trans }}</legend>
+<div class="w3-container w3-margin-top w3-blue-grey">
+	<h4><img src="{{ asset('images/' ~ listContext.image ~ '-32.png') }}">&nbsp;</img>{{ (listContext.entityCode ~ '.plural')|trans }}</h4>
+</div>
 
-<div class="btn-group sb-margin-bottom">
+<div class="w3-show-inline-block w3-margin-top">
+<div class="w3-bar w3-border w3-round">
 {% if display_create_path %}
-<a href="{{ path(create_path) }}" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> {{ (listContext.entityCode ~ '.create')|trans }}</a>
+	<a href="{{ path(create_path) }}" class="w3-bar-item w3-button w3-indigo"><i class="fa fa-plus"></i>&nbsp;{{ (listContext.entityCode ~ '.create')|trans }}</a>
 {% endif %}
-<a href="{{ path('parameter_numberLinesColumns', { 'entityCode': listContext.entityCode, 'listPath': list_path }) }}" class="btn btn-default"><i class="glyphicon glyphicon-wrench"></i> {{ 'parameters'|trans }}</a>
+	<a href="{{ path('parameter_numberLinesColumns', { 'entityCode': listContext.entityCode, 'listPath': list_path }) }}" class="w3-bar-item w3-button w3-light-gray"><i class="fa fa-wrench"></i>&nbsp;{{ 'parameters'|trans }}</a>
 
 {% if (listContext.numberPages > 1) %}
-  
 {% if listContext.page > 2 %}
-	<a href="{{ path(list_path, { 'page': 1 }) }}" class="btn btn-default sb-page">1</a>
+	<a href="{{ path(list_path, { 'page': 1 }) }}" class="w3-bar-item w3-button">1</a>
 {% endif %}
 {% if listContext.page > 1 %}
-	<a href="{{ path(list_path, { 'page': (listContext.page-1) }) }}" class="btn btn-default sb-page">{{ (listContext.page-1) }}</a>
+	<a href="{{ path(list_path, { 'page': (listContext.page-1) }) }}" class="w3-bar-item w3-button">{{ (listContext.page-1) }}</a>
 {% endif %}
-	<a href="{{ path(list_path, { 'page': listContext.page }) }}" class="btn btn-default sb-current-page">{{ listContext.page }}</a>
+	<a href="{{ path(list_path, { 'page': listContext.page }) }}" class="w3-bar-item w3-button w3-indigo">{{ listContext.page }}</a>
 {% if listContext.page < listContext.numberPages %}
-	<a href="{{ path(list_path, { 'page': (listContext.page+1) }) }}" class="btn btn-default sb-page">{{ (listContext.page+1) }}</a>
+	<a href="{{ path(list_path, { 'page': (listContext.page+1) }) }}" class="w3-bar-item w3-button">{{ (listContext.page+1) }}</a>
 {% endif %}
 {% if listContext.page < (listContext.numberPages-1) %}
-	<a href="{{ path(list_path, { 'page': listContext.numberPages }) }}" class="btn btn-default sb-page">{{ listContext.numberPages }}</a>
+	<a href="{{ path(list_path, { 'page': listContext.numberPages }) }}" class="w3-bar-item w3-button">{{ listContext.numberPages }}</a>
 {% endif %}
-
 {% endif %}
+</div>
 </div>
 
 {% block list %}{% endblock %}
-
-{% endblock %}
-
-
-{% block message %}
-
-{% for flash_message in app.session.flashBag.get('notice') %}
-<div class="alert alert-success sb-message">
-<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-    {{ flash_message|trans }}
-</div>
-{% endfor %}
 
 {% endblock %}

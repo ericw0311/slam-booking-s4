@@ -6,18 +6,23 @@
 
 {% block list %}
 
-<div class="row">
+<div class="w3-row">
 
 {% for i in 0..listContext.numberColumnsDisplayed-1 if listContext.numberColumnsDisplayed > 0 %}
-    <div class="col-sm-{{ (12/listContext.numberColumnsDisplayed) }}">
+	<div class="w3-col m{{ (12/listContext.numberColumnsDisplayed) }}">
+{% set lineNumber = 0 %}
+	<div class="w3-bar-block">
 {% for j in 0..listContext.numberLinesDisplayed-1 if (i*listContext.numberLinesDisplayed+j) < listContext.numberRecordsDisplayed %}
-    {% if listFiles[i*listContext.numberLinesDisplayed+j].ID == userContext.currentFileID %}
-    <a href="{{ path('file_edit', { 'fileID': listFiles[i*listContext.numberLinesDisplayed+j].ID }) }}" class="list-group-item"><img src="{{ asset('images/file-32.png') }}">&nbsp;{{ listFiles[i*listContext.numberLinesDisplayed+j].name }}&nbsp;&nbsp;&nbsp;<img src="{{ asset('images/administrator-32.png') }}">&nbsp;{{ listFiles[i*listContext.numberLinesDisplayed+j].user.userName }}<span class="badge">{{ 'file.current'|trans }}</span></a>
-    {% else %}
-    <a href="{{ path('file_edit', { 'fileID': listFiles[i*listContext.numberLinesDisplayed+j].ID }) }}" class="list-group-item"><img src="{{ asset('images/file-32.png') }}">&nbsp;{{ listFiles[i*listContext.numberLinesDisplayed+j].name }}&nbsp;&nbsp;&nbsp;<img src="{{ asset('images/administrator-32.png') }}">&nbsp;{{ listFiles[i*listContext.numberLinesDisplayed+j].user.userName }}</a>
-    {% endif %}
+{% set lineNumber = lineNumber + 1 %}
+{% set lineColor = (lineNumber % 2 == 0) ? 'sand' : 'pale-green' %}
+	{% if listFiles[i*listContext.numberLinesDisplayed+j].ID == userContext.currentFileID %}
+	<a href="{{ path('file_edit', { 'fileID': listFiles[i*listContext.numberLinesDisplayed+j].ID }) }}" class="w3-bar-item w3-button w3-{{ lineColor }} w3-round-large"><img src="{{ asset('images/file-32.png') }}">&nbsp;{{ listFiles[i*listContext.numberLinesDisplayed+j].name }}&nbsp;&nbsp;&nbsp;<img src="{{ asset('images/administrator-32.png') }}">&nbsp;{{ listFiles[i*listContext.numberLinesDisplayed+j].user.userName }}<span class="badge">{{ 'file.current'|trans }}</span></a>
+	{% else %}
+	<a href="{{ path('file_edit', { 'fileID': listFiles[i*listContext.numberLinesDisplayed+j].ID }) }}" class="w3-bar-item w3-button w3-{{ lineColor }} w3-round-large"><img src="{{ asset('images/file-32.png') }}">&nbsp;{{ listFiles[i*listContext.numberLinesDisplayed+j].name }}&nbsp;&nbsp;&nbsp;<img src="{{ asset('images/administrator-32.png') }}">&nbsp;{{ listFiles[i*listContext.numberLinesDisplayed+j].user.userName }}</a>
+	{% endif %}
 {% endfor %}
-    </div>
+	</div>
+	</div>
 {% endfor %}
 
 </div>
