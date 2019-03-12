@@ -9,7 +9,22 @@
 <div class="w3-container">
 
 {% block navbar %}{% endblock %}
-{% block body %}{% endblock %}
+
+<div class="w3-container w3-margin-top w3-blue-grey">
+	<h4>{% block title %}{% endblock %}</h4>
+</div>
+
+<div class="w3-row">
+
+<div class="w3-quarter w3-container"></div>
+
+<div class="w3-half w3-container">
+	{% block body %}{% endblock %}
+</div>
+
+<div class="w3-quarter w3-container"></div>
+
+</div>
 
 {% for flash_message in app.session.flashBag.get('notice') %}
 <div class="w3-panel w3-khaki w3-round-large">
@@ -17,12 +32,6 @@
 	<p>{{ flash_message|trans }}</p>
 </div>
 {% endfor %}
-
-{% if is_granted('IS_AUTHENTICATED_FULLY') %}
-	<p>FULLY Oui</p>
-{% else %}
-	<p>FULLY Non</p>
-{% endif %}
 
 {% block javascripts %}{% endblock %}
 
