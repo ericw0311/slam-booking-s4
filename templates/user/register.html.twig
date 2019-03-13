@@ -1,17 +1,11 @@
-{% extends 'base.unconnected.html.twig' %}
- 
-{% block body %}
+{% extends 'base.half.html.twig' %}
 
-<div class="w3-container w3-margin-top w3-blue-grey">
-	<h4><i class="fa fa-user w3-xlarge"></i>&nbsp;{{ 'user.registration'|trans }}</h4>
-</div>
+{% block title %}
+<i class="fa fa-user w3-xlarge"></i>&nbsp;{{ 'user.registration'|trans }}
+{% endblock %}
 
-<div class="w3-row">
 
-<div class="w3-quarter w3-container"></div>
-
-<div class="w3-half w3-container">
-
+{% block content %}
 {{ form_start(form, {'action': path('user_registration'), 'method': 'POST'}) }}
 
 <form class="w3-container">
@@ -45,14 +39,9 @@
 </form>
 
 {{ form_end(form) }}
-
-</div>
-
-<div class="w3-quarter w3-container"></div>
-
-</div> 
-
 {% endblock %}
+
+
 
 {% block javascripts %}
 <script src="{{ asset('scripts/user_register.js') }}"></script>

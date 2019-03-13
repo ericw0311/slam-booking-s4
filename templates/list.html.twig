@@ -1,10 +1,6 @@
-{% extends 'base.connected.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block body %}
-
-<div class="w3-container w3-margin-top w3-blue-grey">
-	<h4><img src="{{ asset('images/' ~ listContext.image ~ '-32.png') }}">&nbsp;</img>{{ (listContext.entityCode ~ '.plural')|trans }}</h4>
-</div>
 
 <div class="w3-show-inline-block w3-margin-top">
 <div class="w3-bar w3-border w3-round">
@@ -31,6 +27,21 @@
 </div>
 </div>
 
-{% block list %}{% endblock %}
+<div class="w3-row">
+
+{% for i in 0..listContext.numberColumnsDisplayed-1 if listContext.numberColumnsDisplayed > 0 %}
+	<div class="w3-col m{{ (12/listContext.numberColumnsDisplayed) }}">
+{% set lineNumber = 0 %}
+	<div class="w3-bar-block">
+{% for j in 0..listContext.numberLinesDisplayed-1 if (i*listContext.numberLinesDisplayed+j) < listContext.numberRecordsDisplayed %}
+{% set lineNumber = lineNumber + 1 %}
+{% set lineColor = (lineNumber is odd) ? 'pale-green' : 'sand' %}
+{% block link %}{% endblock %}
+{% endfor %}
+	</div>
+	</div>
+{% endfor %}
+
+</div>
 
 {% endblock %}

@@ -1,14 +1,16 @@
-{% extends 'base.connected.html.twig' %}
+{% extends 'base.full.html.twig' %}
  
-{% block body %}
-
-<legend><img src="{{ asset('images/file-32.png') }}"></img>&nbsp;{{ file.name }}&nbsp;
+{% block title %}
+<img src="{{ asset('images/file-32.png') }}"></img>&nbsp;{{ file.name }}&nbsp;
 {% if file.user.id != userContext.user.id %}
 	<button type="button" class="glyphicon glyphicon-pencil btn-link" style="color:red" data-toggle="modal" data-target="#unaCreator"></button>
 {% else %}
-	<a href="{{ path('file_modify', { 'fileID': file.ID }) }}" class="glyphicon glyphicon-pencil" title="{{ 'modify'|trans }}"></a>
+	<a href="{{ path('file_modify', { 'fileID': file.ID }) }}" class="fa fa-pencil w3-xlarge" title="{{ 'modify'|trans }}"></a>
 {% endif %}
-</legend>
+{% endblock %}
+
+
+{% block content %}
 
 <p><img src="{{ asset('images/administrator-32.png') }}"></img>&nbsp;{{ 'file.created.by'|trans }}&nbsp;{{ file.user.getFirstAndLastName() }}</p>
 
@@ -127,17 +129,5 @@
 	</div>
 </div>
 </div>
-
-{% endblock %}
-
-
-{% block message %}
-
-{% for flash_message in app.session.flashBag.get('notice') %}
-<div class="alert alert-success sb-message">
-	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-	{{ flash_message|trans }}
-</div>
-{% endfor %}
 
 {% endblock %}

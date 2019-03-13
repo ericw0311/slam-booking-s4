@@ -2,54 +2,48 @@
 
 {% block navbar %}
 
-<nav class="navbar navbar-default">
-	<div class="container-fluid">
-		<div class="navbar-header">
+<div class="w3-bar w3-light-grey">
+
 {% if userContext.getCurrentUserFileAdministrator() %}
-			<a class="navbar-brand" href="{{ path('default') }}"><span class="label label-success">{{ userContext.getCurrentFileName() }}</span></a>
+	<a href="{{ path('default')}}" class="w3-bar-item w3-button w3-green"><i class="fa fa-home w3-xlarge"></i>&nbsp;{{ userContext.getCurrentFileName() }}</a>
 {% else %}
-			<a class="navbar-brand" href="{{ path('default') }}"><span class="label label-warning">{{ userContext.getCurrentFileName() }}</span></a>
+	<a href="{{ path('default')}}" class="w3-bar-item w3-button w3-orange"><i class="fa fa-home w3-xlarge"></i>&nbsp;{{ userContext.getCurrentFileName() }}</a>
 {% endif %}
-		</div>
-		<ul class="nav navbar-nav">
-			<li><a href="{{ path('file', { 'page': 1 }) }}"><img src="{{ asset('images/file-16.png') }}"> {{ 'file.plural'|trans }}</a></li>
 
-
+<a href="{{ path('file', { 'page': 1 })}}" class="w3-bar-item w3-button"><img src="{{ asset('images/file-16.png') }}">&nbsp;{{ 'file.plural'|trans }}</a>
+	
 {% if (userContext.getCurrentFileID() > 0) %}
-			<li class="dropdown">
-				<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img src="{{ asset('images/booking-16.png') }}"> Slam Booking<span class="caret"></span></a>
-				<ul class="dropdown-menu">
-<li><a href="{{ path('planning') }}"><img src="{{ asset('images/planning-16.png') }}"> {{ 'planning'|trans }}</a></li>
-<li><a href="{{ path('query_booking', { 'page': 1 }) }}"><img src="{{ asset('images/dashboard-16.png') }}"> {{ 'dashboard.plural'|trans }}</a></li>
-
-				</ul>
-			</li>
-{% endif %}
-{% if userContext.getCurrentUserFileAdministrator() %}
-			<li class="dropdown">
-				<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img src="{{ asset('images/administration-16.png') }}"> {{ 'administration'|trans }}<span class="caret"></span></a>
-				<ul class="dropdown-menu">
-<li><a href="{{ path('user_file', { 'page': 1 }) }}"><img src="{{ asset('images/user-16.png') }}"> {{ 'users'|trans }}</a></li>
-<li><a href="{{ path('timetable', { 'page': 1 }) }}"><img src="{{ asset('images/time-16.png') }}"> {{ 'timetable.plural'|trans }}</a></li>
-<li><a href="{{ path('resource_classification_index', { 'resourceType': 'PLACE' }) }}"><img src="{{ asset('images/box-16.png') }}"> {{ 'resourceClassification.plural'|trans }}</a></li>
-<li><a href="{{ path('resource', { 'page': 1 }) }}"><img src="{{ asset('images/resource-16.png') }}"> {{ 'resource.plural'|trans }}</a></li>
-<li><a href="{{ path('planification', { 'page': 1 }) }}"><img src="{{ asset('images/planification-16.png') }}"> {{ 'planification.plural'|trans }}</a></li>
-<li><a href="{{ path('label', { 'page': 1 }) }}"><img src="{{ asset('images/label-16.png') }}"> {{ 'label.plural'|trans }}</a></li>
-				</ul>
-			</li>
-{% endif %}
-		</ul>
-		<ul class="nav navbar-nav navbar-right">
-			<li class="dropdown">
-				<a class="dropdown-toggle" data-toggle="dropdown" href="#">{{ app.user.username }}
-				<span class="caret"></span></a>
-				<ul class="dropdown-menu">
-					<li><a href="{{ path('user_edit') }}"><span class="glyphicon glyphicon-user"></span>&nbsp;{{ 'user.accountt'|trans }}</a></li>
-					<li><a href="{{ path('user_logout') }}"><span class="glyphicon glyphicon-log-out"></span>&nbsp;{{ 'user.logout'|trans }}</a></li>
-				</ul>
-			</li>
-		</ul>
+<div class="w3-dropdown-hover">
+	<button class="w3-button"><img src="{{ asset('images/booking-16.png') }}">&nbsp;Slam Booking</button>
+	<div class="w3-dropdown-content w3-bar-block w3-card-4">
+		<a href="{{ path('planning') }}" class="w3-bar-item w3-button"><img src="{{ asset('images/planning-16.png') }}">&nbsp;{{ 'planning'|trans }}</a>
+		<a href="{{ path('query_booking', { 'page': 1 }) }}" class="w3-bar-item w3-button"><img src="{{ asset('images/dashboard-16.png') }}">&nbsp;{{ 'dashboard.plural'|trans }}</a>
 	</div>
-</nav> 
+</div>	
+{% endif %}
+
+{% if userContext.getCurrentUserFileAdministrator() %}
+<div class="w3-dropdown-hover">
+	<button class="w3-button"><img src="{{ asset('images/administration-16.png') }}">&nbsp;{{ 'administration'|trans }}</button>
+	<div class="w3-dropdown-content w3-bar-block w3-card-4">
+		<a href="{{ path('user_file', { 'page': 1 }) }}" class="w3-bar-item w3-button"><img src="{{ asset('images/user-16.png') }}">&nbsp;{{ 'users'|trans }}</a>
+		<a href="{{ path('timetable', { 'page': 1 }) }}" class="w3-bar-item w3-button"><img src="{{ asset('images/time-16.png') }}">&nbsp;{{ 'timetable.plural'|trans }}</a>
+		<a href="{{ path('resource_classification_index', { 'resourceType': 'PLACE' }) }}" class="w3-bar-item w3-button"><img src="{{ asset('images/box-16.png') }}">&nbsp;{{ 'resourceClassification.plural'|trans }}</a>
+		<a href="{{ path('resource', { 'page': 1 }) }}" class="w3-bar-item w3-button"><img src="{{ asset('images/resource-16.png') }}">&nbsp;{{ 'resource.plural'|trans }}</a>
+		<a href="{{ path('planification', { 'page': 1 }) }}" class="w3-bar-item w3-button"><img src="{{ asset('images/planification-16.png') }}">&nbsp;{{ 'planification.plural'|trans }}</a>
+		<a href="{{ path('label', { 'page': 1 }) }}" class="w3-bar-item w3-button"><img src="{{ asset('images/label-16.png') }}">&nbsp;{{ 'label.plural'|trans }}</a>
+	</div>
+</div>	
+{% endif %}
+
+<div class="w3-dropdown-hover w3-right">
+	<button class="w3-button"><i class="fa fa-user"></i>&nbsp;{{ app.user.username }}</button>
+	<div class="w3-dropdown-content w3-bar-block w3-card-4" style="right:0">
+		<a href="{{ path('user_edit') }}" class="w3-bar-item w3-button"><i class="fa fa-user"></i>&nbsp;{{ 'user.accountt'|trans }}</a>
+		<a href="{{ path('user_logout') }}" class="w3-bar-item w3-button"><i class="fa fa-sign-out"></i>&nbsp;{{ 'user.logout'|trans }}</a>
+	</div>
+</div>	
+
+</div> 
 
 {% endblock %}

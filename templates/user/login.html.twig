@@ -1,17 +1,10 @@
-{% extends 'base.unconnected.html.twig' %}
+{% extends 'base.half.html.twig' %}
 
-{% block body %}
+{% block title %}
+<i class="fa fa-sign-in w3-xlarge"></i>&nbsp;{{ 'user.connection'|trans }}
+{% endblock %}
 
-<div class="w3-container w3-margin-top w3-blue-grey">
-	<h4><i class="fa fa-sign-in w3-xlarge"></i>&nbsp;{{ 'user.connection'|trans }}</h4>
-</div>
-
-<div class="w3-row">
-
-<div class="w3-quarter w3-container"></div>
-
-<div class="w3-half w3-container">
-
+{% block content %}
 <form action="{{ path('user_login') }}" method="post">
 
 {% if error %}
@@ -36,11 +29,4 @@
 	</div>
 	</div>
 </form>
-
-</div>
-
-<div class="w3-quarter w3-container"></div>
-
-</div> 
-
 {% endblock %}

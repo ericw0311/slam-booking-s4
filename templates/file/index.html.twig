@@ -4,27 +4,12 @@
 
 {% set create_path, list_path, display_create_path = 'file_add', 'file', true %}
 
-{% block list %}
+{% block link %}
 
-<div class="w3-row">
-
-{% for i in 0..listContext.numberColumnsDisplayed-1 if listContext.numberColumnsDisplayed > 0 %}
-	<div class="w3-col m{{ (12/listContext.numberColumnsDisplayed) }}">
-{% set lineNumber = 0 %}
-	<div class="w3-bar-block">
-{% for j in 0..listContext.numberLinesDisplayed-1 if (i*listContext.numberLinesDisplayed+j) < listContext.numberRecordsDisplayed %}
-{% set lineNumber = lineNumber + 1 %}
-{% set lineColor = (lineNumber is odd) ? 'pale-green' : 'sand' %}
-	{% if listFiles[i*listContext.numberLinesDisplayed+j].ID == userContext.currentFileID %}
-	<a href="{{ path('file_edit', { 'fileID': listFiles[i*listContext.numberLinesDisplayed+j].ID }) }}" class="w3-bar-item w3-button w3-{{ lineColor }} w3-round-large"><img src="{{ asset('images/file-32.png') }}">&nbsp;{{ listFiles[i*listContext.numberLinesDisplayed+j].name }}&nbsp;&nbsp;&nbsp;<img src="{{ asset('images/administrator-32.png') }}">&nbsp;{{ listFiles[i*listContext.numberLinesDisplayed+j].user.userName }}<span class="badge">{{ 'file.current'|trans }}</span></a>
-	{% else %}
+{% if listFiles[i*listContext.numberLinesDisplayed+j].ID == userContext.currentFileID %}
+	<a href="{{ path('file_edit', { 'fileID': listFiles[i*listContext.numberLinesDisplayed+j].ID }) }}" class="w3-bar-item w3-button w3-{{ lineColor }} w3-round-large"><img src="{{ asset('images/file-32.png') }}">&nbsp;{{ listFiles[i*listContext.numberLinesDisplayed+j].name }}&nbsp;&nbsp;&nbsp;<img src="{{ asset('images/administrator-32.png') }}">&nbsp;{{ listFiles[i*listContext.numberLinesDisplayed+j].user.userName }}<span class="w3-badge w3-right w3-green">{{ 'file.current'|trans }}</span></a>
+{% else %}
 	<a href="{{ path('file_edit', { 'fileID': listFiles[i*listContext.numberLinesDisplayed+j].ID }) }}" class="w3-bar-item w3-button w3-{{ lineColor }} w3-round-large"><img src="{{ asset('images/file-32.png') }}">&nbsp;{{ listFiles[i*listContext.numberLinesDisplayed+j].name }}&nbsp;&nbsp;&nbsp;<img src="{{ asset('images/administrator-32.png') }}">&nbsp;{{ listFiles[i*listContext.numberLinesDisplayed+j].user.userName }}</a>
-	{% endif %}
-{% endfor %}
-	</div>
-	</div>
-{% endfor %}
-
-</div>
+{% endif %}
 
 {% endblock %}
