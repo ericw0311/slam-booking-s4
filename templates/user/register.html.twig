@@ -1,11 +1,13 @@
+{# templates/user/register.html.twig #}
+
 {% extends 'base.half.html.twig' %}
 
-{% block title %}
-<i class="fa fa-user w3-xlarge"></i>&nbsp;{{ 'user.registration'|trans }}
-{% endblock %}
-
-
 {% block content %}
+
+<div class="w3-panel w3-border-bottom w3-text-indigo">
+	<p><i class="fa fa-user w3-xlarge"></i>&nbsp;{{ 'user.registration'|trans }}</p>
+</div>
+
 {{ form_start(form, {'action': path('user_registration'), 'method': 'POST'}) }}
 
 <form class="w3-container">

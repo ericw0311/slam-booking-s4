@@ -1,18 +1,12 @@
 {# templates/file/add.html.twig #}
 
-{% extends 'base.connected.html.twig' %}
+{% extends 'base.half.html.twig' %}
  
-{% block body %}
+{% block content %}
 
-<div class="w3-container w3-margin-top w3-blue-grey">
-	<h4><img src="{{ asset('images/file-32.png') }}">&nbsp;</img>{{ 'file.new'|trans }}</h4>
+<div class="w3-panel w3-border-bottom w3-text-indigo">
+	<p><img src="{{ asset('images/file-32.png') }}">&nbsp;</img>{{ 'file.new'|trans }}</p>
 </div>
-
-<div class="w3-row">
-
-<div class="w3-quarter w3-container"></div>
-
-<div class="w3-half w3-container">
 
 {{ form_start(form, {'action': path('file_add'), 'method': 'POST'}) }}
 
@@ -24,7 +18,7 @@
 
 <div class="w3-show-inline-block">
 <div class="w3-bar w3-border w3-round">
-	<a href="{{ path('file', { 'page': 1 }) }}" class="w3-bar-item w3-button w3-light-gray"><i class="fa fa-user"></i>&nbsp;{{ 'cancel'|trans }}</a>
+	<a href="{{ path('file', { 'page': 1 }) }}" class="w3-bar-item w3-button w3-light-gray"><i class="fa fa-times"></i>&nbsp;{{ 'cancel'|trans }}</a>
 	<button type="submit" class="w3-bar-item w3-button w3-green"><i class="fa fa-check"></i>&nbsp;{{ 'validate'|trans }}</button>
 </div>
 </div>
@@ -32,12 +26,6 @@
 </form>
 
 {{ form_end(form) }}
-
-</div>
-
-<div class="w3-quarter w3-container"></div>
-
-</div> 
 
 {% endblock %}
 
