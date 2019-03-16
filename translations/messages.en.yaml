@@ -26,6 +26,7 @@ days.next: Next days
 days.previous: Previous days
 delete: Delete
 delete.not.allowed: Delete not allowed
+deletion: Deletion
 documentation: Documentation
 duplicate: Duplicate
 end.time: End time

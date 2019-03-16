@@ -69,7 +69,7 @@
 {% elseif (fileEditContext.userFilesCount + fileEditContext.userTimetablesCount + fileEditContext.resourcesCount + fileEditContext.labelsCount) > 0 %}
 	<a href="{{ path('file_foreign', { 'fileID': file.ID }) }}" class="w3-bar-item w3-button w3-red"><del>{{ 'delete'|trans }}</del></a>
 {% else %}
-	<a href="{{ path('file_delete', { 'fileID': file.ID }) }}" class="w3-bar-item w3-button w3-red">{{ 'delete'|trans }}</a>
+	<button onclick="document.getElementById('askDelete').style.display='block'" class="w3-bar-item w3-button w3-red">{{ 'delete'|trans }}</button>
 {% endif %}
 
 {% if file.ID != userContext.currentFileID %}
@@ -111,6 +111,24 @@
 		</header>
 		<div class="w3-container w3-bottombar w3-border-red">
 			<p>{{ 'file.dna.booking'|trans({'%name%': file.name}) }}</p>
+		</div>
+	</div>
+</div>
+
+<div id="askDelete" class="w3-modal w3-animate-opacity">
+	<div class="w3-modal-content">
+		<header class="w3-container w3-khaki">
+			<span onclick="document.getElementById('askDelete').style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
+			<h3>{{ 'deletion'|trans }}</h3>
+		</header>
+		<div class="w3-container w3-bottombar w3-border-khaki">
+			<p>{{ 'file.ask.delete'|trans({'%name%': file.name}) }}</p>
+			<div class="w3-show-inline-block w3-right w3-margin-bottom">
+			<div class="w3-bar w3-border w3-round">
+				<button onclick="document.getElementById('askDelete').style.display='none'" class="w3-bar-item w3-button w3-light-gray"><i class="fa fa-times"></i>&nbsp;{{ 'cancel'|trans }}</button>
+				<a href="{{ path('file_delete', { 'fileID': file.ID }) }}" class="w3-bar-item w3-button w3-red"><i class="fa fa-check"></i>&nbsp;{{ 'validate'|trans }}</a>
+			</div>
+			</div>
 		</div>
 	</div>
 </div>

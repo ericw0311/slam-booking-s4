@@ -12,7 +12,9 @@
 
 <form class="w3-container">
 
-<p>{{ form_row(form.name) }}</p>
+<p><label>{{ 'file.name'|trans }}</label>
+{{ form_widget(form.name) }}
+<span class="w3-text-red">{{ form_errors(form.name) }}</span></p>
 
 {{ form_rest(form) }}
 
