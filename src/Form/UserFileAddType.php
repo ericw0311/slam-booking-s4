@@ -21,11 +21,12 @@ class UserFileAddType extends AbstractType
 				'label' => 'user.account.type',
 				'translation_domain' => 'messages',
 				'choices' => array('INDIVIDUAL' => 'INDIVIDUAL', 'ORGANISATION' => 'ORGANISATION'),
-				'choice_label' => function ($value, $key, $index) { return 'user.account.type.'.$key; }
+				'choice_label' => function ($value, $key, $index) { return 'user.account.type.'.$key; },
+				'attr' => ['class' => 'w3-input w3-pale-green']
 			))
-			->add('firstName', TextType::class, array('label' => 'user.firstName', 'translation_domain' => 'messages'))
-			->add('lastName', TextType::class, array('label' => 'user.lastName', 'translation_domain' => 'messages'))
-			->add('uniqueName', TextType::class, array('label' => 'user.organisation.name', 'translation_domain' => 'messages', 'required' => false))
+			->add('firstName', TextType::class, array('label' => 'user.firstName', 'translation_domain' => 'messages', 'attr' => ['class' => 'w3-input w3-pale-green']))
+			->add('lastName', TextType::class, array('label' => 'user.lastName', 'translation_domain' => 'messages', 'attr' => ['class' => 'w3-input w3-pale-green']))
+			->add('uniqueName', TextType::class, array('label' => 'user.organisation.name', 'translation_domain' => 'messages', 'required' => false, 'attr' => ['class' => 'w3-input w3-pale-green']))
 			->add('administrator', HiddenType::class, array('data' => 0));
 	}
 

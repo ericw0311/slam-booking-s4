@@ -1,28 +1,36 @@
-{% extends 'base.connected.html.twig' %}
+{# templates/user_file/email.html.twig #}
+
+{% extends 'base.half.html.twig' %}
  
-{% block body %}
+{% block content %}
 
-{{ form_start(form, {'action': path('user_file_email'), 'method': 'POST', 'class': 'form-horizontal'}) }}
-
-<fieldset>
-	<legend><img src="{{ asset('images/user-32.png') }}">&nbsp;</img>{{ 'user.new'|trans }}</legend>
-	{{ form_row(form.email) }}
-	{{ form_row(form.firstName) }}
-	{{ form_row(form.lastName) }}
-	{{ form_rest(form) }}
-</fieldset>
-
-<div class="btn-group">
-<a href="{{ path('user_file', { 'page': 1 }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
-<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> {{ 'validate'|trans }}</button>
+<div class="w3-panel w3-border-bottom w3-text-indigo">
+	<p><img src="{{ asset('images/user-32.png') }}">&nbsp;</img>{{ 'user.new'|trans }}</p>
 </div>
+
+{{ form_start(form, {'action': path('user_file_email'), 'method': 'POST'}) }}
+
+<form class="w3-container">
+
+<p>{{ form_row(form.email) }}</p>
+<p>{{ form_row(form.firstName) }}</p>
+<p>{{ form_row(form.lastName) }}</p>
+
+{{ form_rest(form) }}
+
+<div class="w3-show-inline-block">
+<div class="w3-bar w3-border w3-round">
+	<a href="{{ path('user_file', { 'page': 1 }) }}" class="w3-bar-item w3-button w3-light-gray"><i class="fa fa-times"></i>&nbsp;{{ 'cancel'|trans }}</a>
+	<button type="submit" class="w3-bar-item w3-button w3-green"><i class="fa fa-check"></i>&nbsp;{{ 'validate'|trans }}</button>
+</div>
+</div>
+
+</form>
 
 {{ form_end(form) }}
 
 {% endblock %}
 
 {% block javascripts %}
-
-<script>document.getElementById('user_file_email_email').focus();</script>
-
+	<script>document.getElementById('user_file_email_email').focus();</script>
 {% endblock %}
