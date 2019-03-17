@@ -13,8 +13,8 @@ class FileBookingEmailType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-		$builder->add('fileAdministrator', CheckboxType::class, array('label' => 'file.booking.email.administrator', 'translation_domain' => 'messages', 'required' => false))
-			->add('bookingUser', CheckboxType::class, array('label' => 'file.booking.email.user', 'translation_domain' => 'messages', 'required' => false));
+	$builder->add('fileAdministrator', CheckboxType::class, array('label' => 'file.booking.email.administrator', 'translation_domain' => 'messages', 'required' => false))
+		->add('bookingUser', CheckboxType::class, array('label' => 'file.booking.email.user', 'translation_domain' => 'messages', 'required' => false));
 	}
 
 	public function configureOptions(OptionsResolver $resolver)

@@ -119,37 +119,6 @@ class FileController extends Controller
 
     // Suppression d'un dossier
 	/**
-     * @Route("/file/delete_sav/{fileID}", name="file_delete")
-     * @ParamConverter("file", options={"mapping": {"fileID": "id"}})
-     */
-    public function delete_sav(Request $request, File $file)
-    {
-	$connectedUser = $this->getUser();
-	$em = $this->getDoctrine()->getManager();
- 	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
-
-	$currentFile = ($file->getId() == $userContext->getCurrentFileID()); // On repere si le dossier a supprimer est le dossier en cours.
-	$form = $this->get('form.factory')->create();
-
-	if ($request->isMethod('POST')) {
-		$form->submit($request->request->get($form->getName()));
-		if ($form->isSubmitted() && $form->isValid()) {
-			$em->remove($file);
-			$em->flush();
-			if ($currentFile) { // Si le dossier supprime etait le dossier en cours, on positionne le premier dossier de la liste comme dossier en cours
-				AdministrationApi::setFirstFileAsCurrent($em, $connectedUser);
-			}
-			$request->getSession()->getFlashBag()->add('notice', 'file.deleted.ok');
-			return $this->redirectToRoute('file', array('page' => 1));
-		}
-    }
-	return $this->render('file/delete.html.twig', array('userContext' => $userContext, 'file' => $file, 'form' => $form->createView()));
-    }
-
-
-
-    // Suppression d'un dossier
-	/**
      * @Route("/file/delete/{fileID}", name="file_delete")
      * @ParamConverter("file", options={"mapping": {"fileID": "id"}})
      */

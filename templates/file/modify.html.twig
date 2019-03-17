@@ -1,28 +1,36 @@
 {# templates/file/modify.html.twig #}
 
-{% extends 'base.connected.html.twig' %}
+{% extends 'base.half.html.twig' %}
  
-{% block body %}
+{% block content %}
 
-{{ form_start(form, {'action': path('file_modify', { 'fileID': file.ID }), 'method': 'POST', 'class': 'form-horizontal'}) }}
-
-<fieldset>
-	<legend><img src="{{ asset('images/file-32.png') }}">&nbsp;</img>&nbsp;{{ file.name }}</legend>
-	{{ form_row(form.name) }}
-	{{ form_rest(form) }}
-</fieldset>
-
-<div class="btn-group">
-<a href="{{ path('file_edit', { 'fileID': file.ID }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
-<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> {{ 'validate'|trans }}</button>
+<div class="w3-panel w3-border-bottom w3-text-indigo">
+	<p><img src="{{ asset('images/file-32.png') }}">&nbsp;</img>{{ file.name }}</p>
 </div>
+
+{{ form_start(form, {'action': path('file_modify', { 'fileID': file.ID }), 'method': 'POST'}) }}
+
+<form class="w3-container">
+
+<p><label>{{ 'file.name'|trans }}</label>
+{{ form_widget(form.name) }}
+<span class="w3-text-red">{{ form_errors(form.name) }}</span></p>
+
+{{ form_rest(form) }}
+
+<div class="w3-show-inline-block">
+<div class="w3-bar w3-border w3-round">
+	<a href="{{ path('file_edit', { 'fileID': file.ID }) }}" class="w3-bar-item w3-button w3-light-gray"><i class="fa fa-times"></i>&nbsp;{{ 'cancel'|trans }}</a>
+	<button type="submit" class="w3-bar-item w3-button w3-green"><i class="fa fa-check"></i>&nbsp;{{ 'validate'|trans }}</button>
+</div>
+</div>
+
+</form>
 
 {{ form_end(form) }}
 
 {% endblock %}
 
 {% block javascripts %}
-
-<script>document.getElementById('file_name').focus();</script>
-
+	<script>document.getElementById('file_name').focus();</script>
 {% endblock %}
