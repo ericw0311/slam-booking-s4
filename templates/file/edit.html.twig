@@ -65,13 +65,13 @@
 	<a href="{{ path('file', { 'page': 1 }) }}" class="w3-bar-item w3-button w3-light-gray"><i class="fa fa-arrow-left"></i>&nbsp;{{ 'file.back.to.list'|trans }}</a>
 
 {% if file.user.id != userContext.user.id %}
-	<button onclick="document.getElementById('dnaCreator').style.display='block'" class="w3-bar-item w3-button w3-red"><del>{{ 'delete'|trans }}</del></button>
+	<button onclick="document.getElementById('dnaCreator').style.display='block'" class="w3-bar-item w3-button w3-red"><i class="fa fa-trash"></i>&nbsp;<del>{{ 'delete'|trans }}</del></button>
 {% elseif fileEditContext.bookingsCount > 0 %}
-	<button onclick="document.getElementById('dnaBooking').style.display='block'" class="w3-bar-item w3-button w3-red"><del>{{ 'delete'|trans }}</del></button>
+	<button onclick="document.getElementById('dnaBooking').style.display='block'" class="w3-bar-item w3-button w3-red"><i class="fa fa-trash"></i>&nbsp;<del>{{ 'delete'|trans }}</del></button>
 {% elseif (fileEditContext.userFilesCount + fileEditContext.userTimetablesCount + fileEditContext.resourcesCount + fileEditContext.labelsCount) > 0 %}
-	<a href="{{ path('file_foreign', { 'fileID': file.ID }) }}" class="w3-bar-item w3-button w3-red"><del>{{ 'delete'|trans }}</del></a>
+	<a href="{{ path('file_foreign', { 'fileID': file.ID }) }}" class="w3-bar-item w3-button w3-red"><i class="fa fa-trash"></i>&nbsp;<del>{{ 'delete'|trans }}</del></a>
 {% else %}
-	<button onclick="document.getElementById('askDelete').style.display='block'" class="w3-bar-item w3-button w3-red">{{ 'delete'|trans }}</button>
+	<button onclick="document.getElementById('askDelete').style.display='block'" class="w3-bar-item w3-button w3-red"><i class="fa fa-trash"></i>&nbsp;{{ 'delete'|trans }}</button>
 {% endif %}
 
 {% if file.ID != userContext.currentFileID %}

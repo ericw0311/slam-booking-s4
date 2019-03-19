@@ -1,43 +1,40 @@
-{% extends 'base.connected.html.twig' %}
+{# templates/user_file/add.html.twig #}
+
+{% extends 'base.half.html.twig' %}
  
-{% block body %}
+{% block content %}
 
-{{ form_start(form, {'action': path('user_file_modify', { 'userFileID': userFile.ID }), 'method': 'POST', 'class': 'form-horizontal'}) }}
-
-<fieldset>
-	<legend><img src="{{ asset('images/user-32.png') }}">&nbsp;</img>{{ userFile.getFirstAndLastName() }}</legend>
-	
-	{{ form_row(form.email) }}
-	{{ form_row(form.accountType) }}
-	{{ form_row(form.firstName) }}
-	{{ form_row(form.lastName) }}
-	{{ form_row(form.uniqueName) }}
-	{{ form_row(form.administrator) }}
-	{{ form_rest(form) }}
-</fieldset>
-
-<div class="btn-group">
-<a href="{{ path('user_file_edit', { 'userFileID': userFile.ID }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
-<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> {{ 'validate'|trans }}</button>
+<div class="w3-panel w3-border-bottom w3-text-indigo">
+	<p><img src="{{ asset('images/user-32.png') }}">&nbsp;</img>{{ userFile.getFirstAndLastName() }}</p>
 </div>
+
+{{ form_start(form, {'action': path('user_file_modify', { 'userFileID': userFile.ID }), 'method': 'POST'}) }}
+
+<form class="w3-container">
+
+<p>{{ form_row(form.email) }}</p>
+<p>{{ form_row(form.accountType) }}</p>
+<p>{{ form_row(form.administrator) }}</p>
+<p>{{ form_row(form.firstName) }}</p>
+<p>{{ form_row(form.lastName) }}</p>
+<p>{{ form_row(form.uniqueName) }}</p>
+<p>{{ form_row(form.administrator) }}</p>
+
+{{ form_rest(form) }}
+
+<div class="w3-show-inline-block">
+<div class="w3-bar w3-border w3-round">
+	<a href="{{ path('user_file', { 'page': 1 }) }}" class="w3-bar-item w3-button w3-light-gray"><i class="fa fa-times"></i>&nbsp;{{ 'cancel'|trans }}</a>
+	<button type="submit" class="w3-bar-item w3-button w3-green"><i class="fa fa-check"></i>&nbsp;{{ 'validate'|trans }}</button>
+</div>
+</div>
+
+</form>
 
 {{ form_end(form) }}
 
 {% endblock %}
 
-{% block message %}
-
-{% for flash_message in app.session.flashBag.get('notice') %}
-<div class="alert alert-warning sb-message">
-<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-	{{ flash_message|trans }}
-</div>
-{% endfor %}
-
-{% endblock %}
-
 {% block javascripts %}
-
 <script src="{{ asset('scripts/userFile_modify.js') }}"></script>
-
 {% endblock %}

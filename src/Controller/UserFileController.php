@@ -239,27 +239,18 @@ class UserFileController extends Controller
 	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
 	$userAccount = $userFile->getAccount(); // Compte utilisateur attaché au userFile
-	$form = $this->get('form.factory')->create();
+	$em->remove($userFile);
+	$em->flush();
 
-	if ($request->isMethod('POST')) {
-		$form->submit($request->request->get($form->getName()));
-		if ($form->isSubmitted() && $form->isValid()) {
-			$em->remove($userFile);
-			$em->flush();
-        
-			if ($userAccount != null) { // Le userFile a un compte utilisateur attaché
-				$currentFileID = AdministrationApi::getCurrentFileID($em, $userAccount);
-				if ($currentFileID == $userContext->getCurrentFileID()) { // Son dossier en cours est le dossier en cours de l'utilisateur connecte
-					AdministrationApi::setFirstFileAsCurrent($em, $userAccount); // On met a jour son dossier en cours
-				}
-			}
-			$request->getSession()->getFlashBag()->add('notice', 'userFile.deleted.ok');
-			return $this->redirectToRoute('user_file', array('page' => 1));
+	if ($userAccount != null) { // Le userFile a un compte utilisateur attaché
+		$currentFileID = AdministrationApi::getCurrentFileID($em, $userAccount);
+		if ($currentFileID == $userContext->getCurrentFileID()) { // Son dossier en cours est le dossier en cours de l'utilisateur connecte
+			AdministrationApi::setFirstFileAsCurrent($em, $userAccount); // On met a jour son dossier en cours
 		}
 	}
-	return $this->render('user_file/delete.html.twig', array('userContext' => $userContext, 'userFile' => $userFile, 'form' => $form->createView()));
+	$request->getSession()->getFlashBag()->add('notice', 'userFile.deleted.ok');
+	return $this->redirectToRoute('user_file', array('page' => 1));
     }
-
 
     //  Gestion des utilisateurs ressource
     /**
