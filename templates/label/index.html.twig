@@ -4,18 +4,6 @@
 
 {% set create_path, list_path, display_create_path = 'label_add', 'label', true %}
 
-{% block list %}
-
-<div class="row">
-
-{% for i in 0..listContext.numberColumnsDisplayed-1 if listContext.numberColumnsDisplayed > 0 %}
-    <div class="col-sm-{{ (12/listContext.numberColumnsDisplayed) }}">
-{% for j in 0..listContext.numberLinesDisplayed-1 if (i*listContext.numberLinesDisplayed+j) < listContext.numberRecordsDisplayed %}
-	<a href="{{ path('label_edit', { 'labelID': listLabels[i*listContext.numberLinesDisplayed+j].ID }) }}" class="list-group-item"><img src="{{ asset('images/label-32.png') }}">&nbsp;{{ listLabels[i*listContext.numberLinesDisplayed+j].name }}</a>
-{% endfor %}
-    </div>
-{% endfor %}
-
-</div>
-
+{% block link %}
+	<a href="{{ path('label_edit', { 'labelID': listLabels[i*listContext.numberLinesDisplayed+j].ID }) }}" class="w3-bar-item w3-button w3-{{ lineColor }} w3-round-large"><img src="{{ asset('images/label-32.png') }}">&nbsp;{{ listLabels[i*listContext.numberLinesDisplayed+j].name }}</a>
 {% endblock %}

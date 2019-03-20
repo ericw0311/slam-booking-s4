@@ -105,17 +105,10 @@ class QueryBookingController extends Controller
 	$connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
-    $form = $this->get('form.factory')->create();
 
-	if ($request->isMethod('POST')) {
-		$form->submit($request->request->get($form->getName()));
-		if ($form->isSubmitted() && $form->isValid()) {
-			$em->remove($queryBooking);
-			$em->flush();
-			$request->getSession()->getFlashBag()->add('notice', 'queryBooking.deleted.ok');
-			return $this->redirectToRoute('query_booking', array('page' => 1));
-		}
-    }
-	return $this->render('query_booking/delete.html.twig', array('userContext' => $userContext, 'queryBooking' => $queryBooking, 'form' => $form->createView()));
+	$em->remove($queryBooking);
+	$em->flush();
+	$request->getSession()->getFlashBag()->add('notice', 'queryBooking.deleted.ok');
+	return $this->redirectToRoute('query_booking', array('page' => 1));
     }
 }

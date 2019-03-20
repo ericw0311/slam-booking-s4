@@ -113,18 +113,11 @@ class LabelController extends Controller
 	$connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
-    $form = $this->get('form.factory')->create();
 
-	if ($request->isMethod('POST')) {
-		$form->submit($request->request->get($form->getName()));
-		if ($form->isSubmitted() && $form->isValid()) {
-			$em->remove($label);
-			$em->flush();
-			$request->getSession()->getFlashBag()->add('notice', 'label.deleted.ok');
-			return $this->redirectToRoute('label', array('page' => 1));
-		}
-    }
-	return $this->render('label/delete.html.twig', array('userContext' => $userContext, 'label' => $label, 'form' => $form->createView()));
+	$em->remove($label);
+	$em->flush();
+	$request->getSession()->getFlashBag()->add('notice', 'label.deleted.ok');
+	return $this->redirectToRoute('label', array('page' => 1));
     }
 
     /**

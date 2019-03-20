@@ -1,28 +1,36 @@
 {# templates/label/add.html.twig #}
 
-{% extends 'base.connected.html.twig' %}
+{% extends 'base.half.html.twig' %}
  
-{% block body %}
+{% block content %}
 
-{{ form_start(form, {'action': path('label_add'), 'method': 'POST', 'class': 'form-horizontal'}) }}
-
-<fieldset>
-	<legend><img src="{{ asset('images/label-32.png') }}">&nbsp;</img>{{ 'label.new'|trans }}</legend>
-	{{ form_row(form.name) }}
-	{{ form_rest(form) }}
-</fieldset>
-
-<div class="btn-group">
-<a href="{{ path('label', { 'page': 1 }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
-<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> {{ 'validate'|trans }}</button>
+<div class="w3-panel w3-border-bottom w3-text-indigo">
+	<p><img src="{{ asset('images/label-32.png') }}">&nbsp;</img>{{ 'label.new'|trans }}</p>
 </div>
+
+{{ form_start(form, {'action': path('label_add'), 'method': 'POST'}) }}
+
+<form class="w3-container">
+
+<p><label>{{ 'label.name'|trans }}</label>
+{{ form_widget(form.name) }}
+<span class="w3-text-red">{{ form_errors(form.name) }}</span></p>
+
+{{ form_rest(form) }}
+
+<div class="w3-show-inline-block">
+<div class="w3-bar w3-border w3-round">
+	<a href="{{ path('label', { 'page': 1 }) }}" class="w3-bar-item w3-button w3-light-gray"><i class="fa fa-times"></i>&nbsp;{{ 'cancel'|trans }}</a>
+	<button type="submit" class="w3-bar-item w3-button w3-green"><i class="fa fa-check"></i>&nbsp;{{ 'validate'|trans }}</button>
+</div>
+</div>
+
+</form>
 
 {{ form_end(form) }}
 
 {% endblock %}
 
 {% block javascripts %}
-
-<script>document.getElementById('label_name').focus();</script>
-
+	<script>document.getElementById('label_name').focus();</script>
 {% endblock %}
