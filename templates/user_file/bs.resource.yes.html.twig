@@ -1,0 +1,35 @@
+{# templates/user_file/resource.yes.html.twig #}
+
+{% extends 'user_file/resource.html.twig' %}
+
+{% block link_yes_no %}
+
+{% if internal > 0 %}
+<a href="{{ path('user_file_resource_internal', { 'userFileID': userFile.ID, 'resourceClassificationCode': resourceClassificationCode, 'yes': 0 }) }}" class="list-group-item"><img src="{{ asset('images/red-cross-32.png') }}">&nbsp;{{ 'no'|trans }}</a>
+<a href="{{ path('user_file_resource_internal', { 'userFileID': userFile.ID, 'resourceClassificationCode': resourceClassificationCode, 'yes': 1 }) }}" class="list-group-item active"><img src="{{ asset('images/green-check-32.png') }}">&nbsp;{{ 'yes'|trans }}</a>
+{% else %}
+<a href="{{ path('user_file_resource_external', { 'userFileID': userFile.ID, 'resourceClassificationID': resourceClassificationID, 'yes': 0 }) }}" class="list-group-item"><img src="{{ asset('images/red-cross-32.png') }}">&nbsp;{{ 'no'|trans }}</a>
+<a href="{{ path('user_file_resource_external', { 'userFileID': userFile.ID, 'resourceClassificationID': resourceClassificationID, 'yes': 1 }) }}" class="list-group-item active"><img src="{{ asset('images/green-check-32.png') }}">&nbsp;{{ 'yes'|trans }}</a>
+{% endif %}
+
+{% endblock %}
+
+{% block link_internal %}
+
+{% if internal > 0 and i_RCCode == resourceClassificationCode %}
+<a href="{{ path('user_file_resource_internal', { 'userFileID': userFile.ID, 'resourceClassificationCode': i_RCCode, 'yes': 1 }) }}" class="list-group-item active"><img src="{{ asset('images/' ~ resourceClassificationIcons[i_RCCode] ~ '-32.png') }}">&nbsp;{{ ('resourceClassification.singular.' ~ i_RCCode)|trans }}</a>
+{% else %}
+<a href="{{ path('user_file_resource_internal', { 'userFileID': userFile.ID, 'resourceClassificationCode': i_RCCode, 'yes': 1 }) }}" class="list-group-item"><img src="{{ asset('images/' ~ resourceClassificationIcons[i_RCCode] ~ '-32.png') }}">&nbsp;{{ ('resourceClassification.singular.' ~ i_RCCode)|trans }}</a>
+{% endif %}
+
+{% endblock %}
+
+{% block link_external %}
+
+{% if internal <= 0 and i_RC.ID == resourceClassificationID %}
+<a href="{{ path('user_file_resource_external', { 'userFileID': userFile.ID, 'resourceClassificationID': i_RC.ID, 'yes': 1 }) }}" class="list-group-item active"><img src="{{ asset('images/' ~ resourceTypeIcons[resourceType] ~ '-32.png') }}">&nbsp;{{ i_RC.name }}</a>
+{% else %}
+<a href="{{ path('user_file_resource_external', { 'userFileID': userFile.ID, 'resourceClassificationID': i_RC.ID, 'yes': 1 }) }}" class="list-group-item"><img src="{{ asset('images/' ~ resourceTypeIcons[resourceType] ~ '-32.png') }}">&nbsp;{{ i_RC.name }}</a>
+{% endif %}
+
+{% endblock %}

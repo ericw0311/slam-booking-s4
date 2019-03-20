@@ -1,39 +1,48 @@
 {# templates/user_file/resource.html.twig #}
 
 {% set resourceTypes = constant('App\\Entity\\Constants::RESOURCE_TYPE') %}
-{% set resourceTypeIcons = constant('App\\Entity\\Constants::RESOURCE_TYPE_ICON') %}
 {% set internalResourceClassifications = constant('App\\Entity\\Constants::RESOURCE_CLASSIFICATION') %}
-{% set resourceClassificationIcons = constant('App\\Entity\\Constants::RESOURCE_CLASSIFICATION_ICON') %}
 
-{% extends 'base.connected.html.twig' %}
+{% set rtIcons = constant('App\\Entity\\Constants::RESOURCE_TYPE_ICON') %}
+{% set rcIcons = constant('App\\Entity\\Constants::RESOURCE_CLASSIFICATION_ICON') %}
+
+{% extends 'base.html.twig' %}
  
 {% block body %}
 
-<div class="col-sm-4 list-group">
-{% block link_yes_no %}{% endblock %}
+<div class="w3-panel w3-border-bottom w3-text-indigo">
+	<p><img src="{{ asset('images/user-32.png') }}">&nbsp;</img>{{ userFile.getFirstAndLastName() }}</p>
 </div>
 
-<div class="col-sm-8 list-group">
+<div class="w3-row">
+	<div class="w3-third w3-container">
+{% block link_yes_no %}{% endblock %}
+	</div>
 
+	<div class="w3-twothird w3-container">
+	{% block div_open %}{% endblock %}
 {% for i_RCCode in internalResourceClassifications[resourceType] %}
 {% if i_RCCode in listActiveInternalRC %}
-{% block link_internal %}{% endblock %}
+		{% block link_internal %}{% endblock %}
 {% endif %}
 {% endfor %}
 
 {% for i_RC in listExternalRC %}
-{% block link_external %}{% endblock %}
+		{% block link_external %}{% endblock %}
 {% endfor %}
-
+	{% block div_close %}{% endblock %}
+	</div>
 </div>
 
-<div class="btn-group">
-<a href="{{ path('user_file_edit', { 'userFileID': userFile.ID }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
+<div class="w3-show-inline-block w3-margin-top">
+<div class="w3-bar w3-border w3-round">
+	<a href="{{ path('user_file_edit', { 'userFileID': userFile.ID }) }}" class="w3-bar-item w3-button w3-light-gray"><i class="fa fa-times"></i>&nbsp;{{ 'cancel'|trans }}</a>
 {% if internal > 0 %}
-<a href="{{ path('user_file_resource_validate_internal', { 'userFileID': userFile.ID, 'resourceClassificationCode': resourceClassificationCode, 'yes': yes }) }}" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> {{ 'validate'|trans }}</a>
+	<a href="{{ path('user_file_resource_validate_internal', { 'userFileID': userFile.ID, 'resourceClassificationCode': resourceClassificationCode, 'yes': yes }) }}" class="w3-bar-item w3-button w3-green"><i class="fa fa-check"></i>&nbsp;{{ 'validate'|trans }}</a>
 {% else %}
-<a href="{{ path('user_file_resource_validate_external', { 'userFileID': userFile.ID, 'resourceClassificationID': resourceClassificationID, 'yes': yes }) }}" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> {{ 'validate'|trans }}</a>
+	<a href="{{ path('user_file_resource_validate_external', { 'userFileID': userFile.ID, 'resourceClassificationID': resourceClassificationID, 'yes': yes }) }}" class="w3-bar-item w3-button w3-green"><i class="fa fa-check"></i>&nbsp;{{ 'validate'|trans }}</a>
 {% endif %}
+</div>
 </div>
 
 {% endblock %}

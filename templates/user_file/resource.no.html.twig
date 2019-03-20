@@ -5,19 +5,23 @@
 {% block link_yes_no %}
 
 {% if internal > 0 %}
-<a href="{{ path('user_file_resource_internal', { 'userFileID': userFile.ID, 'resourceClassificationCode': resourceClassificationCode, 'yes': 0 }) }}" class="list-group-item active"><img src="{{ asset('images/red-cross-32.png') }}">&nbsp;{{ 'no'|trans }}</a>
-<a href="{{ path('user_file_resource_internal', { 'userFileID': userFile.ID, 'resourceClassificationCode': resourceClassificationCode, 'yes': 1 }) }}" class="list-group-item"><img src="{{ asset('images/green-check-32.png') }}">&nbsp;{{ 'yes'|trans }}</a>
+<a href="{{ path('user_file_resource_internal', { 'userFileID': userFile.ID, 'resourceClassificationCode': resourceClassificationCode, 'yes': 0 }) }}" class="w3-bar-item w3-button w3-indigo w3-round-large"><img src="{{ asset('images/red-cross-32.png') }}">&nbsp;{{ 'no'|trans }}</a>
+<a href="{{ path('user_file_resource_internal', { 'userFileID': userFile.ID, 'resourceClassificationCode': resourceClassificationCode, 'yes': 1 }) }}" class="w3-bar-item w3-button w3-round-large"><img src="{{ asset('images/green-check-32.png') }}">&nbsp;{{ 'yes'|trans }}</a>
 {% else %}
-<a href="{{ path('user_file_resource_external', { 'userFileID': userFile.ID, 'resourceClassificationID': resourceClassificationID, 'yes': 0 }) }}" class="list-group-item active"><img src="{{ asset('images/red-cross-32.png') }}">&nbsp;{{ 'no'|trans }}</a>
-<a href="{{ path('user_file_resource_external', { 'userFileID': userFile.ID, 'resourceClassificationID': resourceClassificationID, 'yes': 1 }) }}" class="list-group-item"><img src="{{ asset('images/green-check-32.png') }}">&nbsp;{{ 'yes'|trans }}</a>
+<a href="{{ path('user_file_resource_external', { 'userFileID': userFile.ID, 'resourceClassificationID': resourceClassificationID, 'yes': 0 }) }}" class="w3-bar-item w3-button w3-indigo w3-round-large"><img src="{{ asset('images/red-cross-32.png') }}">&nbsp;{{ 'no'|trans }}</a>
+<a href="{{ path('user_file_resource_external', { 'userFileID': userFile.ID, 'resourceClassificationID': resourceClassificationID, 'yes': 1 }) }}" class="w3-bar-item w3-button w3-round-large"><img src="{{ asset('images/green-check-32.png') }}">&nbsp;{{ 'yes'|trans }}</a>
 {% endif %}
 
 {% endblock %}
 
+{% block div_open %}<ul class="w3-ul">{% endblock %}
+
+{% block div_close %}</ul>{% endblock %}
+
 {% block link_internal %}
-<li class="list-group-item disabled"><img src="{{ asset('images/' ~ resourceClassificationIcons[i_RCCode] ~ '-32.png') }}">&nbsp;{{ ('resourceClassification.singular.' ~ i_RCCode)|trans }}</li>
+<li class="disabled"><img src="{{ asset('images/' ~ rcIcons[i_RCCode] ~ '-32.png') }}">&nbsp;{{ ('resourceClassification.singular.' ~ i_RCCode)|trans }}</li>
 {% endblock %}
 
 {% block link_external %}
-<li class="list-group-item disabled"><img src="{{ asset('images/' ~ resourceTypeIcons[resourceType] ~ '-32.png') }}">&nbsp;{{ i_RC.name }}</li>
+<li class="disabled"><img src="{{ asset('images/' ~ rtIcons[resourceType] ~ '-32.png') }}">&nbsp;{{ i_RC.name }}</li>
 {% endblock %}
