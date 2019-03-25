@@ -21,12 +21,20 @@ class Constants
 	
 	const DISPLAYED_RESOURCE_TYPE = array('PLACE', 'VEHICLE', 'TOOL', 'SPORT');
 	
-	const RESOURCE_TYPE_ICON = array(
+	const RESOURCE_TYPE_ICON_OLD = array(
 			'PLACE' => 'place',
 			'VEHICLE' => 'vehicle',
 			'TOOL' => 'tool',
 			'SPORT' => 'sport',
 			'USER' => 'user'
+		);
+
+	const RESOURCE_TYPE_ICON = array(
+			'PLACE' => 'map-marker',
+			'VEHICLE' => 'bus',
+			'TOOL' => 'television',
+			'SPORT' => 'futbol-o',
+			'USER' => 'user-o'
 		);
 
 	const RESOURCE_CLASSIFICATION = array(
