@@ -1,33 +1,43 @@
 {# templates/resource_classification/add.html.twig #}
 
-{% extends 'base.connected.html.twig' %}
+{% extends 'base.html.twig' %}
  
+{% set rtIcons = constant('App\\Entity\\Constants::RESOURCE_TYPE_ICON') %}
+{% set rcIcons = constant('App\\Entity\\Constants::RESOURCE_CLASSIFICATION_ICON') %}
+
 {% block body %}
 
-<legend><img src="{{ asset('images/box-32.png') }}">&nbsp;</img>{{ ('resourceType.create.classification.' ~ resourceType)|trans }}</legend>
-
-<div class="alert alert-warning">
-	{{ 'resourceClassification.create.warning'|trans }}
+<div class="w3-panel w3-border-bottom w3-text-indigo">
+	<p><i class="w3-xlarge fa fa-{{ rtIcons[resourceType] }}"></i>&nbsp;{{ ('resourceType.create.classification.' ~ resourceType)|trans }}</p>
 </div>
 
-{{ form_start(form, {'action': path('resource_classification_add', { 'resourceType': resourceType }), 'method': 'POST', 'class': 'form-horizontal'}) }}
-
-<fieldset>
-	{{ form_row(form.name) }}
-	{{ form_rest(form) }}
-</fieldset>
-
-<div class="btn-group">
-<a href="{{ path('resource_classification_index', { 'resourceType': resourceType }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
-<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> {{ 'validate'|trans }}</button>
+<div class="w3-panel w3-sand w3-round-large">
+	<p>{{ 'resourceClassification.create.warning'|trans }}</p>
 </div>
+
+{{ form_start(form, {'action': path('resource_classification_add', { 'resourceType': resourceType }), 'method': 'POST'}) }}
+
+<form class="w3-container">
+
+<p><label>{{ 'resourceClassification.name'|trans }}</label>
+{{ form_widget(form.name) }}
+<span class="w3-text-red">{{ form_errors(form.name) }}</span></p>
+
+{{ form_rest(form) }}
+
+<div class="w3-show-inline-block">
+<div class="w3-bar w3-border w3-round">
+	<a href="{{ path('resource_classification_index', { 'resourceType': resourceType }) }}" class="w3-bar-item w3-button w3-light-gray"><i class="fa fa-times"></i>&nbsp;{{ 'cancel'|trans }}</a>
+	<button type="submit" class="w3-bar-item w3-button w3-green"><i class="fa fa-check"></i>&nbsp;{{ 'validate'|trans }}</button>
+</div>
+</div>
+
+</form>
 
 {{ form_end(form) }}
 
 {% endblock %}
 
 {% block javascripts %}
-
-<script>document.getElementById('resource_classification_name').focus();</script>
-
+	<script>document.getElementById('resource_classification_name').focus();</script>
 {% endblock %}

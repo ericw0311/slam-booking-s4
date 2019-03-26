@@ -1,0 +1,33 @@
+{# templates/resource_classification/add.html.twig #}
+
+{% extends 'base.connected.html.twig' %}
+ 
+{% block body %}
+
+<legend><img src="{{ asset('images/box-32.png') }}">&nbsp;</img>{{ ('resourceType.create.classification.' ~ resourceType)|trans }}</legend>
+
+<div class="alert alert-warning">
+	{{ 'resourceClassification.create.warning'|trans }}
+</div>
+
+{{ form_start(form, {'action': path('resource_classification_add', { 'resourceType': resourceType }), 'method': 'POST', 'class': 'form-horizontal'}) }}
+
+<fieldset>
+	{{ form_row(form.name) }}
+	{{ form_rest(form) }}
+</fieldset>
+
+<div class="btn-group">
+<a href="{{ path('resource_classification_index', { 'resourceType': resourceType }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
+<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> {{ 'validate'|trans }}</button>
+</div>
+
+{{ form_end(form) }}
+
+{% endblock %}
+
+{% block javascripts %}
+
+<script>document.getElementById('resource_classification_name').focus();</script>
+
+{% endblock %}

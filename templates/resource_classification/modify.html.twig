@@ -1,28 +1,39 @@
 {# templates/resource_classification/modify.html.twig #}
 
-{% extends 'base.connected.html.twig' %}
+{% extends 'base.half.html.twig' %}
  
-{% block body %}
+{% set rtIcons = constant('App\\Entity\\Constants::RESOURCE_TYPE_ICON') %}
+{% set rcIcons = constant('App\\Entity\\Constants::RESOURCE_CLASSIFICATION_ICON') %}
 
-{{ form_start(form, {'action': path('resource_classification_modify', { 'resourceType': resourceType, 'resourceClassificationID': resourceClassification.ID }), 'method': 'POST', 'class': 'form-horizontal'}) }}
+{% block content %}
 
-<fieldset>
-	<legend><img src="{{ asset('images/box-32.png') }}">&nbsp;</img>&nbsp;{{ resourceClassification.name }}</legend>
-	{{ form_row(form.name) }}
-	{{ form_rest(form) }}
-</fieldset>
-
-<div class="btn-group">
-<a href="{{ path('resource_classification_index', { 'resourceType': resourceType }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
-<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> {{ 'validate'|trans }}</button>
+<div class="w3-panel w3-border-bottom w3-text-indigo">
+	<p><i class="w3-xlarge fa fa-{{ rtIcons[resourceType] }}"></i>&nbsp;{{ resourceClassification.name }}</p>
 </div>
+
+{{ form_start(form, {'action': path('resource_classification_modify', { 'resourceType': resourceType, 'resourceClassificationID': resourceClassification.ID }), 'method': 'POST'}) }}
+
+<form class="w3-container">
+
+<p><label>{{ 'resourceClassification.name'|trans }}</label>
+{{ form_widget(form.name) }}
+<span class="w3-text-red">{{ form_errors(form.name) }}</span></p>
+
+{{ form_rest(form) }}
+
+<div class="w3-show-inline-block">
+<div class="w3-bar w3-border w3-round">
+	<a href="{{ path('resource_classification_index', { 'resourceType': resourceType }) }}" class="w3-bar-item w3-button w3-light-gray"><i class="fa fa-times"></i>&nbsp;{{ 'cancel'|trans }}</a>
+	<button type="submit" class="w3-bar-item w3-button w3-green"><i class="fa fa-check"></i>&nbsp;{{ 'validate'|trans }}</button>
+</div>
+</div>
+
+</form>
 
 {{ form_end(form) }}
 
 {% endblock %}
 
 {% block javascripts %}
-
-<script>document.getElementById('resource_classification_name').focus();</script>
-
+	<script>document.getElementById('resource_classification_name').focus();</script>
 {% endblock %}

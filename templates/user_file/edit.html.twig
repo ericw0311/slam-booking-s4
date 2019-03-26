@@ -2,7 +2,8 @@
 
 {% extends 'base.html.twig' %}
  
-{% set resourceClassificationIcons = constant('App\\Entity\\Constants::RESOURCE_CLASSIFICATION_ICON') %}
+{% set rtIcons = constant('App\\Entity\\Constants::RESOURCE_TYPE_ICON') %}
+{% set rcIcons = constant('App\\Entity\\Constants::RESOURCE_CLASSIFICATION_ICON') %}
  
 {% block body %}
 
@@ -23,9 +24,9 @@
 
 {% if userFile.resourceUser %}
 {% if userFile.resource.internal %}
-<p><img src="{{ asset('images/' ~ resourceClassificationIcons[userFile.resource.code] ~ '-32.png') }}">&nbsp;{{ ('resourceClassification.singular.' ~ userFile.resource.code)|trans }}</p>
+<p><img src="{{ asset('images/' ~ rcIcons[userFile.resource.code] ~ '-32.png') }}">&nbsp;{{ ('resourceClassification.singular.' ~ userFile.resource.code)|trans }}</p>
 {% else %}
-<p><img src="{{ asset('images/user-32.png') }}">&nbsp;{{ userFile.resource.classification.name }}</p>
+<p><i class="w3-xlarge fa fa-{{ rtIcons['USER'] }}"></i>&nbsp;{{ userFile.resource.classification.name }}</p>
 {% endif %}
 {% endif %}
 

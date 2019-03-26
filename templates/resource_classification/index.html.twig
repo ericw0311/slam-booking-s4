@@ -34,7 +34,7 @@
 {% if classificationCode in activeInternalRC %}
 	<td><img src="{{ asset('images/green-check-32.png') }}"></td>
 
-{% if listExternalRC|length > 0 %}<td colspan=3>{% else %}<td>{% endif %}
+	<td>
 {% if numberResourcesInternalRC[classificationCode] <= 0 %}
 	<a href="{{ path('resource_classification_unactivate_internal', { 'resourceType': resourceType, 'resourceClassificationCode': classificationCode }) }}" class="w3-button w3-light-gray"><i class="fa fa-times"></i>&nbsp;{{ 'unactivate'|trans }}</a>
 {% else %}
@@ -43,39 +43,39 @@
 	</td>
 {% else %}
 	<td><img src="{{ asset('images/red-cross-32.png') }}"></td>
-
-{% if listExternalRC|length > 0 %}<td colspan=3>{% else %}<td>{% endif %}
+	<td>
 	<a href="{{ path('resource_classification_activate_internal', { 'resourceType': resourceType, 'resourceClassificationCode': classificationCode }) }}" class="w3-button w3-green"><i class="fa fa-check"></i>&nbsp;{{ 'activate'|trans }}</a>
 	</td>
-
 {% endif %}
 	</tr>
 {% endfor %}
 
 {% for externalRC in listExternalRC %}
 	<tr>
-	<td><i class="w3-xlarge fa fa-{{ rtIcons[l_resourceType] }}"></i>&nbsp;{{ externalRC.name }}&nbsp;({{ numberResourcesExternalRC[externalRC.ID] }})</td>
+	<td><i class="w3-xlarge fa fa-{{ rtIcons[externalRC.type] }}"></i>&nbsp;{{ externalRC.name }}&nbsp;({{ numberResourcesExternalRC[externalRC.ID] }})</td>
 {% if externalRC.active %}
 	<td><img src="{{ asset('images/green-check-32.png') }}"></td>
-	<td>
-{% if numberResourcesExternalRC[externalRC.ID] <= 0 %}
-	<a href="{{ path('resource_classification_unactivate_external', { 'resourceType': resourceType, 'resourceClassificationID': externalRC.id }) }}" class="w3-button w3-light-gray"><i class="fa fa-times"></i>&nbsp;{{ 'unactivate'|trans }}</a>
-{% else %}
-	<a href="{{ path('resource_classification_foreign_external', { 'resourceType': resourceType, 'resourceClassificationID': externalRC.id, 'action': 'unactivate' }) }}" class="w3-button w3-light-gray"><i class="fa fa-times"></i>&nbsp;<del>{{ 'unactivate'|trans }}</del></a>
-{% endif %}
-	</td>
 {% else %}
 	<td><img src="{{ asset('images/red-cross-32.png') }}"></td>
-	<td><a href="{{ path('resource_classification_activate_external', { 'resourceType': resourceType, 'resourceClassificationID': externalRC.id }) }}" class="w3-button w3-green"><i class="fa fa-check"></i>&nbsp;{{ 'activate'|trans }}</a></td>
 {% endif %}
-	<td><a href="{{ path('resource_classification_modify', { 'resourceType': resourceType, 'resourceClassificationID': externalRC.ID }) }}" class="w3-button w3-blue"><i class="fa fa-pencil"></i>&nbsp;{{ 'modify'|trans }}</a></td>
 	<td>
+<div class="w3-bar">
+{% if externalRC.active %}
 {% if numberResourcesExternalRC[externalRC.ID] <= 0 %}
-	<button onclick="document.getElementById('askDelete').style.display='block'" class="w3-bar-item w3-button w3-red"><i class="fa fa-trash"></i>&nbsp;{{ 'delete'|trans }}</button>
-	<a href="{{ path('resource_classification_delete', { 'resourceType': resourceType, 'resourceClassificationID': externalRC.ID }) }}" class="glyphicon glyphicon-trash" title="{{ 'delete'|trans }}"></a>
+	<a href="{{ path('resource_classification_unactivate_external', { 'resourceType': resourceType, 'resourceClassificationID': externalRC.id }) }}" class="w3-bar-item w3-button w3-light-gray"><i class="fa fa-times"></i>&nbsp;{{ 'unactivate'|trans }}</a>
 {% else %}
-	<a href="{{ path('resource_classification_foreign_external', { 'resourceType': resourceType, 'resourceClassificationID': externalRC.id, 'action': 'delete' }) }}" class="w3-button w3-light-gray"><i class="fa fa-times"></i>&nbsp;<del>{{ 'delete'|trans }}</del></a>
+	<a href="{{ path('resource_classification_foreign_external', { 'resourceType': resourceType, 'resourceClassificationID': externalRC.id, 'action': 'unactivate' }) }}" class="w3-bar-item w3-button w3-light-gray"><i class="fa fa-times"></i>&nbsp;<del>{{ 'unactivate'|trans }}</del></a>
 {% endif %}
+{% else %}
+	<a href="{{ path('resource_classification_activate_external', { 'resourceType': resourceType, 'resourceClassificationID': externalRC.id }) }}" class="w3-bar-item w3-button w3-green"><i class="fa fa-check"></i>&nbsp;{{ 'activate'|trans }}</a>
+{% endif %}
+	<a href="{{ path('resource_classification_modify', { 'resourceType': resourceType, 'resourceClassificationID': externalRC.ID }) }}" class="w3-bar-item w3-button w3-blue"><i class="fa fa-pencil"></i>&nbsp;{{ 'modify'|trans }}</a>
+{% if numberResourcesExternalRC[externalRC.ID] <= 0 %}
+	<a href="{{ path('resource_classification_delete', { 'resourceType': resourceType, 'resourceClassificationID': externalRC.ID }) }}" class="w3-bar-item w3-button w3-red"><i class="fa fa-trash"></i>&nbsp;{{ 'delete'|trans }}</a>
+{% else %}
+	<a href="{{ path('resource_classification_foreign_external', { 'resourceType': resourceType, 'resourceClassificationID': externalRC.id, 'action': 'delete' }) }}" class="w3-bar-item w3-button w3-red"><i class="fa fa-trash"></i>&nbsp;<del>{{ 'delete'|trans }}</del></a>
+{% endif %}
+</div>
 	</td>
 	</tr>
 {% endfor %}
@@ -83,8 +83,7 @@
 	<tr>
 	<td><i class="w3-xlarge fa fa-{{ rtIcons[resourceType] }}"></i></td>
 	<td></td>
-
-{% if listExternalRC|length > 0 %}<td colspan=3>{% else %}<td>{% endif %}
+	<td>
 	<a href="{{ path('resource_classification_add', { 'resourceType': resourceType }) }}" class="w3-button w3-indigo"><i class="fa fa-plus"></i>&nbsp;{{ ('resourceType.create.classification.' ~ resourceType)|trans }}</a>
 	</td>
 	</tr>
