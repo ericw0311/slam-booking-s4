@@ -1,0 +1,45 @@
+{# templates/file/foreign.html.twig #}
+
+{% set rtIcons = constant('App\\Entity\\Constants::RESOURCE_TYPE_ICON') %}
+{% set rcIcons = constant('App\\Entity\\Constants::RESOURCE_CLASSIFICATION_ICON') %}
+
+{% extends 'base.connected.html.twig' %}
+ 
+{% block body %}
+
+<legend><img src="{{ asset('images/file-32.png') }}"></img>&nbsp;{{ file.name }}:&nbsp;{{ 'delete.not.allowed'|trans }}</legend>
+
+<div class="panel">
+
+{% for userFile in listUserFiles %}
+{% if userFile.administrator %} {% set image = 'administrator-32.png' %} {% else %} {% set image = 'user-32.png' %} {% endif %}
+{% if userFile.userCreated %}
+	<a href="{{ path('user_file_edit', { 'userFileID': userFile.ID }) }}" class="list-group-item list-group-item-warning"><img src="{{ asset('images/' ~ image) }}">&nbsp;{{ userFile.getFirstAndLastName() }}&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-user"></span>&nbsp;{{ userFile.username }}</a>
+{% else %}
+	<a href="{{ path('user_file_edit', { 'userFileID': userFile.ID }) }}" class="list-group-item list-group-item-warning"><img src="{{ asset('images/' ~ image) }}">&nbsp;{{ userFile.getFirstAndLastName() }}</a>
+{% endif %}
+{% endfor %}
+
+{% for timetable in listUserTimetables %}
+	<a href="{{ path('timetable_edit', { 'timetableID': timetable.ID }) }}" class="list-group-item list-group-item-warning"><img src="{{ asset('images/time-32.png') }}">&nbsp;{{ timetable.name }}</a>
+{% endfor %}
+
+{% for resource in listResources %}
+{% if resource.internal %}
+	<a href="{{ path('resource_edit', { 'resourceID': resource.ID }) }}" class="list-group-item list-group-item-warning"><img src="{{ asset('images/' ~ rcIcons[resource.code] ~ '-32.png') }}">&nbsp;{{ resource.name }}</a>
+{% else %}
+	<a href="{{ path('resource_edit', { 'resourceID': resource.ID }) }}" class="list-group-item list-group-item-warning"><img src="{{ asset('images/' ~ rtIcons[resource.type] ~ '-32.png') }}">&nbsp;{{ resource.name }}</a>
+{% endif %}
+{% endfor %}
+
+{% for label in listLabels %}
+	<a href="{{ path('label_edit', { 'labelID': label.ID }) }}" class="list-group-item list-group-item-warning"><img src="{{ asset('images/label-32.png') }}">&nbsp;{{ label.name }}</a>
+{% endfor %}
+
+</div>
+
+<div class="btn-group">
+	<a href="{{ path('file_edit', { 'fileID': file.ID }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'file.back'|trans }}</a>
+</div>
+
+{% endblock %}

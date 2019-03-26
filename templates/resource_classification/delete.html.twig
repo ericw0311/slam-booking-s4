@@ -1,16 +1,26 @@
-{% extends 'base.connected.html.twig' %}
+{# templates/resource_classification/delete.html.twig #}
+
+{% extends 'base.html.twig' %}
  
+{% set rtIcons = constant('App\\Entity\\Constants::RESOURCE_TYPE_ICON') %}
+
 {% block body %}
 
-{{ form_start(form, {'action': path('resource_classification_delete', { 'resourceType': resourceType, 'resourceClassificationID': resourceClassification.ID }), 'method': 'POST', 'class': 'form-horizontal'}) }}
+<div class="w3-panel w3-border-bottom w3-text-indigo">
+	<p><i class="w3-xlarge fa fa-{{ rtIcons[resourceType] }}"></i>&nbsp;{{ resourceClassification.name }}</p>
+</div>
 
-<legend><img src="{{ asset('images/box-32.png') }}">&nbsp;</img>&nbsp;{{ resourceClassification.name }}</legend>
+{{ form_start(form, {'action': path('resource_classification_delete', { 'resourceType': resourceType, 'resourceClassificationID': resourceClassification.ID }), 'method': 'POST'}) }}
 
-<p>{{ 'resourceClassification.ask.delete'|trans({'%name%': resourceClassification.name}) }}</p>
+<div class="w3-panel w3-red w3-round-large">
+	<p>{{ 'resourceClassification.ask.delete'|trans({'%name%': resourceClassification.name}) }}</p>
+</div>
 
-<div class="btn-group">
-<a href="{{ path('resource_classification_index', { 'resourceType': resourceType }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
-<button type="submit" class="btn btn-danger"><i class="glyphicon glyphicon-ok"></i> {{ 'validate'|trans }}</button>
+<div class="w3-show-inline-block">
+<div class="w3-bar w3-border w3-round">
+	<a href="{{ path('resource_classification_index', { 'resourceType': resourceType }) }}" class="w3-bar-item w3-button w3-light-gray"><i class="fa fa-times"></i>&nbsp;{{ 'cancel'|trans }}</a>
+	<button type="submit" class="w3-bar-item w3-button w3-green"><i class="fa fa-check"></i>&nbsp;{{ 'validate'|trans }}</button>
+</div>
 </div>
 
 {{ form_end(form) }}

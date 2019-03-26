@@ -1,0 +1,24 @@
+{# templates/resource/classification.html.twig #}
+
+{% set rtIcons = constant('App\\Entity\\Constants::RESOURCE_TYPE_ICON') %}
+{% set rcIcons = constant('App\\Entity\\Constants::RESOURCE_CLASSIFICATION_ICON') %}
+
+{% extends 'base.connected.html.twig' %}
+ 
+{% block body %}
+
+<div class="alert alert-info">
+<span class="glyphicon glyphicon-star"></span>&nbsp;{{ 'resourceClassification.select'|trans }}
+</div>
+
+{% for rc in activeRC %}
+{% if rc.internal %}
+	<a href="{{ path('resource_add_internal', { 'type': rc.type, 'code': rc.code }) }}" class="list-group-item"><img src="{{ asset('images/' ~ rcIcons[rc.code] ~ '-32.png') }}">&nbsp;{{ ('resourceClassification.singular.' ~ rc.code)|trans }}</a>
+{% else %}
+	<a href="{{ path('resource_add_external', { 'type': rc.type, 'resourceClassificationID': rc.ID }) }}" class="list-group-item"><img src="{{ asset('images/' ~ rtIcons[rc.type] ~ '-32.png') }}">&nbsp;{{ rc.name }}</a>
+{% endif %}
+{% endfor %}
+
+<a href="{{ path('resource', { 'page': 1 }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
+
+{% endblock %}

@@ -3,43 +3,47 @@
 {% set rtIcons = constant('App\\Entity\\Constants::RESOURCE_TYPE_ICON') %}
 {% set rcIcons = constant('App\\Entity\\Constants::RESOURCE_CLASSIFICATION_ICON') %}
 
-{% extends 'base.connected.html.twig' %}
+{% extends 'base.html.twig' %}
  
 {% block body %}
 
-<legend><img src="{{ asset('images/file-32.png') }}"></img>&nbsp;{{ file.name }}:&nbsp;{{ 'delete.not.allowed'|trans }}</legend>
+<div class="w3-panel w3-border-bottom w3-text-indigo"><h4>
+<img src="{{ asset('images/file-32.png') }}"></img>&nbsp;{{ file.name }}:&nbsp;{{ 'delete.not.allowed'|trans }}
+</h4></div>
 
-<div class="panel">
+<div class="w3-bar-block">
 
 {% for userFile in listUserFiles %}
 {% if userFile.administrator %} {% set image = 'administrator-32.png' %} {% else %} {% set image = 'user-32.png' %} {% endif %}
 {% if userFile.userCreated %}
-	<a href="{{ path('user_file_edit', { 'userFileID': userFile.ID }) }}" class="list-group-item list-group-item-warning"><img src="{{ asset('images/' ~ image) }}">&nbsp;{{ userFile.getFirstAndLastName() }}&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-user"></span>&nbsp;{{ userFile.username }}</a>
+	<a href="{{ path('user_file_edit', { 'userFileID': userFile.ID }) }}" class="w3-bar-item w3-button w3-round-large w3-sand"><img src="{{ asset('images/' ~ image) }}">&nbsp;{{ userFile.getFirstAndLastName() }}&nbsp;&nbsp;&nbsp;<i class="w3-xlarge fa fa-{{ rtIcons['USER'] }}"></i>&nbsp;{{ userFile.username }}</a>
 {% else %}
-	<a href="{{ path('user_file_edit', { 'userFileID': userFile.ID }) }}" class="list-group-item list-group-item-warning"><img src="{{ asset('images/' ~ image) }}">&nbsp;{{ userFile.getFirstAndLastName() }}</a>
+	<a href="{{ path('user_file_edit', { 'userFileID': userFile.ID }) }}" class="w3-bar-item w3-button w3-round-large w3-sand"><img src="{{ asset('images/' ~ image) }}">&nbsp;{{ userFile.getFirstAndLastName() }}</a>
 {% endif %}
 {% endfor %}
 
 {% for timetable in listUserTimetables %}
-	<a href="{{ path('timetable_edit', { 'timetableID': timetable.ID }) }}" class="list-group-item list-group-item-warning"><img src="{{ asset('images/time-32.png') }}">&nbsp;{{ timetable.name }}</a>
+	<a href="{{ path('timetable_edit', { 'timetableID': timetable.ID }) }}" class="w3-bar-item w3-button w3-round-large w3-sand"><img src="{{ asset('images/time-32.png') }}">&nbsp;{{ timetable.name }}</a>
 {% endfor %}
 
 {% for resource in listResources %}
 {% if resource.internal %}
-	<a href="{{ path('resource_edit', { 'resourceID': resource.ID }) }}" class="list-group-item list-group-item-warning"><img src="{{ asset('images/' ~ rcIcons[resource.code] ~ '-32.png') }}">&nbsp;{{ resource.name }}</a>
+	<a href="{{ path('resource_edit', { 'resourceID': resource.ID }) }}" class="w3-bar-item w3-button w3-round-large w3-sand"><img src="{{ asset('images/' ~ rcIcons[resource.code] ~ '-32.png') }}">&nbsp;{{ resource.name }}</a>
 {% else %}
-	<a href="{{ path('resource_edit', { 'resourceID': resource.ID }) }}" class="list-group-item list-group-item-warning"><img src="{{ asset('images/' ~ rtIcons[resource.type] ~ '-32.png') }}">&nbsp;{{ resource.name }}</a>
+	<a href="{{ path('resource_edit', { 'resourceID': resource.ID }) }}" class="w3-bar-item w3-button w3-round-large w3-sand"><i class="w3-xlarge fa fa-{{ rtIcons[resource.type] }}"></i>&nbsp;{{ resource.name }}</a>
 {% endif %}
 {% endfor %}
 
 {% for label in listLabels %}
-	<a href="{{ path('label_edit', { 'labelID': label.ID }) }}" class="list-group-item list-group-item-warning"><img src="{{ asset('images/label-32.png') }}">&nbsp;{{ label.name }}</a>
+	<a href="{{ path('label_edit', { 'labelID': label.ID }) }}" class="w3-bar-item w3-button w3-round-large w3-sand"><img src="{{ asset('images/label-32.png') }}">&nbsp;{{ label.name }}</a>
 {% endfor %}
 
 </div>
 
-<div class="btn-group">
-	<a href="{{ path('file_edit', { 'fileID': file.ID }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'file.back'|trans }}</a>
+<div class="w3-show-inline-block w3-margin-top">
+<div class="w3-bar w3-border w3-round">
+	<a href="{{ path('file_edit', { 'fileID': file.ID }) }}" class="w3-bar-item w3-button w3-light-gray"><i class="fa fa-arrow-left"></i>&nbsp;{{ 'file.back'|trans }}</a>
+</div>
 </div>
 
 {% endblock %}

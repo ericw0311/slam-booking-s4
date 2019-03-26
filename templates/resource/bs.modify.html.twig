@@ -1,0 +1,36 @@
+{# templates/resource/modify.html.twig #}
+
+{% set resourceTypeIcons = constant('App\\Entity\\Constants::RESOURCE_TYPE_ICON') %}
+{% set resourceClassificationIcons = constant('App\\Entity\\Constants::RESOURCE_CLASSIFICATION_ICON') %}
+
+{% extends 'base.connected.html.twig' %}
+ 
+{% block body %}
+
+{{ form_start(form, {'action': path('resource_modify', { 'resourceID': resource.ID }), 'method': 'POST', 'class': 'form-horizontal'}) }}
+
+<fieldset>
+{% if resource.internal %}
+	<legend><img src="{{ asset('images/' ~ resourceClassificationIcons[resource.code] ~ '-32.png') }}">&nbsp;{{ ('resourceClassification.singular.' ~ resource.code)|trans }}</legend>
+{% else %}
+	<legend><img src="{{ asset('images/' ~ resourceTypeIcons[resource.type] ~ '-32.png') }}">&nbsp;{{ resource.classification.name }}</legend>
+{% endif %}
+	{{ form_errors(form) }}
+	{{ form_row(form.name) }}
+	{{ form_rest(form) }}
+</fieldset>
+
+<div class="btn-group">
+<a href="{{ path('resource_edit', { 'resourceID': resource.ID }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
+<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> {{ 'validate'|trans }}</button>
+</div>
+
+{{ form_end(form) }}
+
+{% endblock %}
+
+{% block javascripts %}
+
+<script>document.getElementById('resource_name').focus();</script>
+
+{% endblock %}

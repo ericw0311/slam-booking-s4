@@ -7,30 +7,26 @@
 
 {% set create_path, list_path, display_create_path = 'resource_classification', 'resource', true %}
 
-{% block list %}
-
-<div class="row">
-
-{% for i in 0..listContext.numberColumnsDisplayed-1 if listContext.numberColumnsDisplayed > 0 %}
-    <div class="col-sm-{{ (12/listContext.numberColumnsDisplayed) }}">
-	{% for j in 0..listContext.numberLinesDisplayed-1 if (i*listContext.numberLinesDisplayed+j) < listContext.numberRecordsDisplayed %}
+{% block link %}
 
 {% if listResources[i*listContext.numberLinesDisplayed+j].internal %}
+
 {% set resource_image = rcIcons[listResources[i*listContext.numberLinesDisplayed+j].code] %}
-{% else %}
-{% set resource_image = rtIcons[listResources[i*listContext.numberLinesDisplayed+j].type] %}
-{% endif %}
-
 {% if listResources[i*listContext.numberLinesDisplayed+j].planified %}
-	<a href="{{ path('resource_edit', { 'resourceID': listResources[i*listContext.numberLinesDisplayed+j].ID }) }}" class="list-group-item"><img src="{{ asset('images/' ~ resource_image ~ '-32.png') }}">&nbsp;{{ listResources[i*listContext.numberLinesDisplayed+j].name }}<span class="badge badge-info">P</span></a>
+	<a href="{{ path('resource_edit', { 'resourceID': listResources[i*listContext.numberLinesDisplayed+j].ID }) }}" class="w3-bar-item w3-button w3-{{ lineColor }} w3-round-large"><img src="{{ asset('images/' ~ resource_image ~ '-32.png') }}">&nbsp;{{ listResources[i*listContext.numberLinesDisplayed+j].name }}<span class="w3-badge w3-right w3-green">P</span></a>
 {% else %}
-	<a href="{{ path('resource_edit', { 'resourceID': listResources[i*listContext.numberLinesDisplayed+j].ID }) }}" class="list-group-item"><img src="{{ asset('images/' ~ resource_image ~ '-32.png') }}">&nbsp;{{ listResources[i*listContext.numberLinesDisplayed+j].name }}</a>
+	<a href="{{ path('resource_edit', { 'resourceID': listResources[i*listContext.numberLinesDisplayed+j].ID }) }}" class="w3-bar-item w3-button w3-{{ lineColor }} w3-round-large"><img src="{{ asset('images/' ~ resource_image ~ '-32.png') }}">&nbsp;{{ listResources[i*listContext.numberLinesDisplayed+j].name }}</a>
 {% endif %}
 
-	{% endfor %}
-    </div>
-{% endfor %}
+{% else %}
 
-</div>
+{% set resource_icon = rtIcons[listResources[i*listContext.numberLinesDisplayed+j].type] %}
+{% if listResources[i*listContext.numberLinesDisplayed+j].planified %}
+	<a href="{{ path('resource_edit', { 'resourceID': listResources[i*listContext.numberLinesDisplayed+j].ID }) }}" class="w3-bar-item w3-button w3-{{ lineColor }} w3-round-large"><i class="w3-xlarge fa fa-{{ resource_icon }}"></i>&nbsp;{{ listResources[i*listContext.numberLinesDisplayed+j].name }}<span class="w3-badge w3-right w3-green">P</span></a>
+{% else %}
+	<a href="{{ path('resource_edit', { 'resourceID': listResources[i*listContext.numberLinesDisplayed+j].ID }) }}" class="w3-bar-item w3-button w3-{{ lineColor }} w3-round-large"><i class="w3-xlarge fa fa-{{ resource_icon }}"></i>&nbsp;{{ listResources[i*listContext.numberLinesDisplayed+j].name }}</a>
+{% endif %}
+
+{% endif %}
 
 {% endblock %}

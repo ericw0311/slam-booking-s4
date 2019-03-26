@@ -1,0 +1,82 @@
+{# templates/resource/edit.html.twig #}
+
+{% set rtIcons = constant('App\\Entity\\Constants::RESOURCE_TYPE_ICON') %}
+{% set rcIcons = constant('App\\Entity\\Constants::RESOURCE_CLASSIFICATION_ICON') %}
+
+{% extends 'base.connected.html.twig' %}
+ 
+{% block body %}
+
+<legend>
+
+{% if resource.internal %}
+<img src="{{ asset('images/' ~ rcIcons[resource.code] ~ '-32.png') }}">&nbsp;{{ resource.name }}
+{% else %}
+<img src="{{ asset('images/' ~ rtIcons[resource.type] ~ '-32.png') }}">&nbsp;{{ resource.name }}
+{% endif %}
+
+</legend>
+
+<p><img src="{{ asset('images/' ~ rtIcons[resource.type] ~ '-32.png') }}">&nbsp;{{ ('resourceType.singular.' ~ resource.type)|trans }}</p>
+
+{% if resource.internal %}
+<p><img src="{{ asset('images/' ~ rcIcons[resource.code] ~ '-32.png') }}">&nbsp;{{ ('resourceClassification.singular.' ~ resource.code)|trans }}</p>
+{% else %}
+<p><img src="{{ asset('images/' ~ rtIcons[resource.type] ~ '-32.png') }}">&nbsp;{{ resource.classification.name }}</p>
+{% endif %}
+
+{% if resourceContext.planificationsCount > 0 %}
+<p><img src="{{ asset('images/planification-32.png') }}">&nbsp;{{ 'resource.planified'|trans }}</p>
+{% endif %}
+
+<div>
+{% if numberBookings > 0 %}
+<a href="{{ path('resource_booking_list', { 'resourceID': resource.ID, 'page': 1 }) }}"><img src="{{ asset('images/booking-32.png') }}"> {{ 'booking.plural'|trans }} <span class="badge">{{ numberBookings }}</span></a>
+{% else %}
+<img src="{{ asset('images/booking-32.png') }}"> {{ 'booking.plural'|trans }} <span class="badge">{{ numberBookings }}</span>
+{% endif %}
+</div>
+
+<div class="btn-group sb-margin-top">
+
+<a href="{{ path('resource', { 'page': 1 }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'resource.back.to.list'|trans }}</a>
+<a href="{{ path('resource_modify', { 'resourceID': resource.ID }) }}" class="btn btn-primary"><i class="glyphicon glyphicon-pencil"></i> {{ 'modify'|trans }}</a>
+{% if numberBookings > 0 %}
+	<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#dnaBooking"><span class="glyphicon glyphicon-trash"></span> <del>{{ 'delete'|trans }}</del></button>
+{% elseif resourceContext.planificationsCount > 0 %}
+	<a href="{{ path('resource_foreign', { 'resourceID': resource.ID }) }}" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> <del>{{ 'delete'|trans }}</del></a>
+{% else %}
+	<a href="{{ path('resource_delete', { 'resourceID': resource.ID }) }}" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> {{ 'delete'|trans }}</a>
+{% endif %}
+
+</div>
+
+<div id="dnaBooking" class="modal fade" role="dialog">
+<div class="modal-dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">&times;</button>
+			<h4 class="modal-title">{{ 'delete.not.allowed'|trans }}</h4>
+		</div>
+		<div class="modal-body">
+			<p>{{ 'resource.dna.booking'|trans({'%name%': resource.name}) }}</p>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">{{ 'close'|trans }}</button>
+		</div>
+	</div>
+</div>
+</div>
+
+{% endblock %}
+
+{% block message %}
+
+{% for flash_message in app.session.flashBag.get('notice') %}
+<div class="alert alert-success sb-message">
+	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+	{{ flash_message|trans }}
+</div>
+{% endfor %}
+
+{% endblock %}

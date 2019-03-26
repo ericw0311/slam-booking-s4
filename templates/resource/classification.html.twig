@@ -3,22 +3,30 @@
 {% set rtIcons = constant('App\\Entity\\Constants::RESOURCE_TYPE_ICON') %}
 {% set rcIcons = constant('App\\Entity\\Constants::RESOURCE_CLASSIFICATION_ICON') %}
 
-{% extends 'base.connected.html.twig' %}
+{% extends 'base.half.html.twig' %}
  
-{% block body %}
+{% block content %}
 
-<div class="alert alert-info">
-<span class="glyphicon glyphicon-star"></span>&nbsp;{{ 'resourceClassification.select'|trans }}
+<div class="w3-panel w3-border-bottom w3-text-indigo">
+	<p><img src="{{ asset('images/resource-32.png') }}">&nbsp;{{ 'resourceClassification.select'|trans }}</p>
 </div>
+
+<div class="w3-bar-block">
 
 {% for rc in activeRC %}
 {% if rc.internal %}
-	<a href="{{ path('resource_add_internal', { 'type': rc.type, 'code': rc.code }) }}" class="list-group-item"><img src="{{ asset('images/' ~ rcIcons[rc.code] ~ '-32.png') }}">&nbsp;{{ ('resourceClassification.singular.' ~ rc.code)|trans }}</a>
+	<a href="{{ path('resource_add_internal', { 'type': rc.type, 'code': rc.code }) }}" class="w3-bar-item w3-button w3-round-large w3-pale-green"><img src="{{ asset('images/' ~ rcIcons[rc.code] ~ '-32.png') }}">&nbsp;{{ ('resourceClassification.singular.' ~ rc.code)|trans }}</a>
 {% else %}
-	<a href="{{ path('resource_add_external', { 'type': rc.type, 'resourceClassificationID': rc.ID }) }}" class="list-group-item"><img src="{{ asset('images/' ~ rtIcons[rc.type] ~ '-32.png') }}">&nbsp;{{ rc.name }}</a>
+	<a href="{{ path('resource_add_external', { 'type': rc.type, 'resourceClassificationID': rc.ID }) }}" class="w3-bar-item w3-button w3-round-large w3-sand"><i class="w3-xlarge fa fa-{{ rtIcons[rc.type] }}"></i>&nbsp;{{ rc.name }}</a>
 {% endif %}
 {% endfor %}
 
-<a href="{{ path('resource', { 'page': 1 }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
+</div>
+
+<div class="w3-show-inline-block">
+<div class="w3-bar w3-border w3-round">
+	<a href="{{ path('resource', { 'page': 1 }) }}" class="w3-bar-item w3-button w3-light-gray"><i class="fa fa-times"></i>&nbsp;{{ 'cancel'|trans }}</a>
+</div>
+</div>
 
 {% endblock %}

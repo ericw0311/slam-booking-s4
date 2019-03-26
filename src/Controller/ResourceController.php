@@ -234,19 +234,10 @@ class ResourceController extends Controller
 	$em = $this->getDoctrine()->getManager();
  	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
-	$form = $this->get('form.factory')->create();
-
-	if ($request->isMethod('POST')) {
-		$form->submit($request->request->get($form->getName()));
-		if ($form->isSubmitted() && $form->isValid()) {
-			$em->remove($resource);
-			$em->flush();
-			$request->getSession()->getFlashBag()->add('notice', 'resource.deleted.ok');
-			return $this->redirectToRoute('resource', array('page' => 1));
-		}
-    }
-
-	return $this->render('resource/delete.html.twig', array('userContext' => $userContext, 'resource' => $resource, 'form' => $form->createView()));
+	$em->remove($resource);
+	$em->flush();
+	$request->getSession()->getFlashBag()->add('notice', 'resource.deleted.ok');
+	return $this->redirectToRoute('resource', array('page' => 1));
     }
 
 	/**

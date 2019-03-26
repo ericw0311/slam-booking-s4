@@ -3,26 +3,24 @@
 {% set rtIcons = constant('App\\Entity\\Constants::RESOURCE_TYPE_ICON') %}
 {% set rcIcons = constant('App\\Entity\\Constants::RESOURCE_CLASSIFICATION_ICON') %}
 
-{% extends 'base.connected.html.twig' %}
+{% extends 'base.html.twig' %}
  
 {% block body %}
 
-<legend>
-
+<div class="w3-panel w3-border-bottom w3-text-indigo"><h4>
 {% if resource.internal %}
 <img src="{{ asset('images/' ~ rcIcons[resource.code] ~ '-32.png') }}">&nbsp;{{ resource.name }}
 {% else %}
-<img src="{{ asset('images/' ~ rtIcons[resource.type] ~ '-32.png') }}">&nbsp;{{ resource.name }}
+<i class="w3-xlarge fa fa-{{ rtIcons[resource.type] }}"></i>&nbsp;{{ resource.name }}
 {% endif %}
+</h4></div>
 
-</legend>
-
-<p><img src="{{ asset('images/' ~ rtIcons[resource.type] ~ '-32.png') }}">&nbsp;{{ ('resourceType.singular.' ~ resource.type)|trans }}</p>
+<p><i class="w3-xlarge fa fa-{{ rtIcons[resource.type] }}"></i>&nbsp;{{ ('resourceType.singular.' ~ resource.type)|trans }}</p>
 
 {% if resource.internal %}
 <p><img src="{{ asset('images/' ~ rcIcons[resource.code] ~ '-32.png') }}">&nbsp;{{ ('resourceClassification.singular.' ~ resource.code)|trans }}</p>
 {% else %}
-<p><img src="{{ asset('images/' ~ rtIcons[resource.type] ~ '-32.png') }}">&nbsp;{{ resource.classification.name }}</p>
+<p><i class="w3-xlarge fa fa-{{ rtIcons[resource.type] }}"></i>&nbsp;{{ resource.classification.name }}</p>
 {% endif %}
 
 {% if resourceContext.planificationsCount > 0 %}
@@ -31,52 +29,56 @@
 
 <div>
 {% if numberBookings > 0 %}
-<a href="{{ path('resource_booking_list', { 'resourceID': resource.ID, 'page': 1 }) }}"><img src="{{ asset('images/booking-32.png') }}"> {{ 'booking.plural'|trans }} <span class="badge">{{ numberBookings }}</span></a>
+<a href="{{ path('resource_booking_list', { 'resourceID': resource.ID, 'page': 1 }) }}" class="w3-text-indigo"><img src="{{ asset('images/booking-32.png') }}">&nbsp;{{ 'booking.plural'|trans }}&nbsp;<span class="w3-badge w3-indigo">{{ numberBookings }}</span></a>
 {% else %}
-<img src="{{ asset('images/booking-32.png') }}"> {{ 'booking.plural'|trans }} <span class="badge">{{ numberBookings }}</span>
+<img src="{{ asset('images/booking-32.png') }}">&nbsp;<span class="w3-text-indigo">{{ 'booking.plural'|trans }}</span>&nbsp;<span class="w3-badge w3-indigo">{{ numberBookings }}</span>
 {% endif %}
 </div>
 
-<div class="btn-group sb-margin-top">
+<div class="w3-show-inline-block">
+<div class="w3-bar w3-border w3-round">
+	<a href="{{ path('resource', { 'page': 1 }) }}" class="w3-bar-item w3-button w3-light-gray"><i class="fa fa-arrow-left"></i>&nbsp;{{ 'resource.back.to.list'|trans }}</a>
+	<a href="{{ path('resource_modify', { 'resourceID': resource.ID }) }}" class="w3-bar-item w3-button w3-blue"><i class="fa fa-pencil"></i>&nbsp;{{ 'modify'|trans }}</a>
 
-<a href="{{ path('resource', { 'page': 1 }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'resource.back.to.list'|trans }}</a>
-<a href="{{ path('resource_modify', { 'resourceID': resource.ID }) }}" class="btn btn-primary"><i class="glyphicon glyphicon-pencil"></i> {{ 'modify'|trans }}</a>
 {% if numberBookings > 0 %}
-	<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#dnaBooking"><span class="glyphicon glyphicon-trash"></span> <del>{{ 'delete'|trans }}</del></button>
+	<button onclick="document.getElementById('dnaBooking').style.display='block'" class="w3-bar-item w3-button w3-red"><i class="fa fa-trash"></i>&nbsp;<del>{{ 'delete'|trans }}</del></button>
 {% elseif resourceContext.planificationsCount > 0 %}
 	<a href="{{ path('resource_foreign', { 'resourceID': resource.ID }) }}" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> <del>{{ 'delete'|trans }}</del></a>
 {% else %}
-	<a href="{{ path('resource_delete', { 'resourceID': resource.ID }) }}" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> {{ 'delete'|trans }}</a>
+	<button onclick="document.getElementById('askDelete').style.display='block'" class="w3-bar-item w3-button w3-red"><i class="fa fa-trash"></i>&nbsp;{{ 'delete'|trans }}</button>
 {% endif %}
-
+</div>
 </div>
 
-<div id="dnaBooking" class="modal fade" role="dialog">
-<div class="modal-dialog">
-	<div class="modal-content">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal">&times;</button>
-			<h4 class="modal-title">{{ 'delete.not.allowed'|trans }}</h4>
-		</div>
-		<div class="modal-body">
+<!-- Modal -->
+<div id="dnaBooking" class="w3-modal w3-animate-opacity">
+	<div class="w3-modal-content">
+		<header class="w3-container w3-red"> 
+			<span onclick="document.getElementById('dnaBooking').style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
+			<h3>{{ 'delete.not.allowed'|trans }}</h3>
+		</header>
+		<div class="w3-container w3-bottombar w3-border-red">
 			<p>{{ 'resource.dna.booking'|trans({'%name%': resource.name}) }}</p>
-		</div>
-		<div class="modal-footer">
-			<button type="button" class="btn btn-default" data-dismiss="modal">{{ 'close'|trans }}</button>
 		</div>
 	</div>
 </div>
+
+<div id="askDelete" class="w3-modal w3-animate-opacity">
+	<div class="w3-modal-content">
+		<header class="w3-container w3-khaki">
+			<span onclick="document.getElementById('askDelete').style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
+			<h3>{{ 'deletion'|trans }}</h3>
+		</header>
+		<div class="w3-container w3-bottombar w3-border-khaki">
+			<p>{{ 'resource.ask.delete'|trans({'%name%': resource.name}) }}</p>
+			<div class="w3-show-inline-block w3-right w3-margin-bottom">
+			<div class="w3-bar w3-border w3-round">
+				<button onclick="document.getElementById('askDelete').style.display='none'" class="w3-bar-item w3-button w3-light-gray"><i class="fa fa-times"></i>&nbsp;{{ 'cancel'|trans }}</button>
+				<a href="{{ path('resource_delete', { 'resourceID': resource.ID }) }}" class="w3-bar-item w3-button w3-red"><i class="fa fa-check"></i>&nbsp;{{ 'validate'|trans }}</a>
+			</div>
+			</div>
+		</div>
+	</div>
 </div>
-
-{% endblock %}
-
-{% block message %}
-
-{% for flash_message in app.session.flashBag.get('notice') %}
-<div class="alert alert-success sb-message">
-	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-	{{ flash_message|trans }}
-</div>
-{% endfor %}
 
 {% endblock %}
