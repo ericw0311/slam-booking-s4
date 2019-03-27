@@ -6,24 +6,12 @@
 
 {% set internalTypes = ['D', 'HD'] %}
 
-{% block list %}
+{% block link %}
 
-<div class="row">
-
-{% for i in 0..listContext.numberColumnsDisplayed-1 if listContext.numberColumnsDisplayed > 0 %}
-    <div class="col-sm-{{ (12/listContext.numberColumnsDisplayed) }}">
-	{% for j in 0..listContext.numberLinesDisplayed-1 if (i*listContext.numberLinesDisplayed+j) < listContext.numberRecordsDisplayed %}
-
-	{% if listTimetables[i*listContext.numberLinesDisplayed+j].type in internalTypes %}
-	<a href="{{ path('timetable_edit', { 'timetableID': listTimetables[i*listContext.numberLinesDisplayed+j].ID }) }}" class="list-group-item list-group-item-warning"><img src="{{ asset('images/time-32.png') }}">&nbsp;{{ listTimetables[i*listContext.numberLinesDisplayed+j].name }}</a>
-    {% else %}
-	<a href="{{ path('timetable_edit', { 'timetableID': listTimetables[i*listContext.numberLinesDisplayed+j].ID }) }}" class="list-group-item"><img src="{{ asset('images/time-32.png') }}">&nbsp;{{ listTimetables[i*listContext.numberLinesDisplayed+j].name }}</a>
-    {% endif %}
-
-	{% endfor %}
-    </div>
-{% endfor %}
-
-</div>
+{% if listTimetables[i*listContext.numberLinesDisplayed+j].type in internalTypes %}
+	<a href="{{ path('timetable_edit', { 'timetableID': listTimetables[i*listContext.numberLinesDisplayed+j].ID }) }}" class="w3-bar-item w3-button w3-pale-red w3-round-large"><img src="{{ asset('images/time-32.png') }}">&nbsp;{{ listTimetables[i*listContext.numberLinesDisplayed+j].name }}</a>
+{% else %}
+	<a href="{{ path('timetable_edit', { 'timetableID': listTimetables[i*listContext.numberLinesDisplayed+j].ID }) }}" class="w3-bar-item w3-button w3-{{ lineColor }} w3-round-large"><img src="{{ asset('images/time-32.png') }}">&nbsp;{{ listTimetables[i*listContext.numberLinesDisplayed+j].name }}</a>
+{% endif %}
 
 {% endblock %}

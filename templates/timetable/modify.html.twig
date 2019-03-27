@@ -1,26 +1,36 @@
-{% extends 'base.connected.html.twig' %}
+{# templates/timetable/modify.html.twig #}
+
+{% extends 'base.half.html.twig' %}
  
-{% block body %}
+{% block content %}
 
-{{ form_start(form, {'action': path('timetable_modify', { 'timetableID': timetable.ID }), 'method': 'POST', 'class': 'form-horizontal'}) }}
-
-<fieldset>
-	<legend><img src="{{ asset('images/time-32.png') }}">&nbsp;</img>&nbsp;{{ timetable.name }}</legend>
-	{{ form_row(form.name) }}
-	{{ form_rest(form) }}
-</fieldset>
-
-<div class="btn-group">
-<a href="{{ path('timetable_edit', { 'timetableID': timetable.ID }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
-<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> {{ 'validate'|trans }}</button>
+<div class="w3-panel w3-border-bottom w3-text-indigo">
+	<p><img src="{{ asset('images/time-32.png') }}">&nbsp;</img>{{ timetable.name }}</p>
 </div>
+
+{{ form_start(form, {'action': path('timetable_modify', { 'timetableID': timetable.ID }), 'method': 'POST'}) }}
+
+<form class="w3-container">
+
+<p><label>{{ 'timetable.name'|trans }}</label>
+{{ form_widget(form.name) }}
+<span class="w3-text-red">{{ form_errors(form.name) }}</span></p>
+
+{{ form_rest(form) }}
+
+<div class="w3-show-inline-block">
+<div class="w3-bar w3-border w3-round">
+	<a href="{{ path('timetable_edit', { 'timetableID': timetable.ID }) }}" class="w3-bar-item w3-button w3-light-gray"><i class="fa fa-times"></i>&nbsp;{{ 'cancel'|trans }}</a>
+	<button type="submit" class="w3-bar-item w3-button w3-green"><i class="fa fa-check"></i>&nbsp;{{ 'validate'|trans }}</button>
+</div>
+</div>
+
+</form>
 
 {{ form_end(form) }}
 
 {% endblock %}
 
 {% block javascripts %}
-
-<script>document.getElementById('timetable_name').focus();</script>
-
+	<script>document.getElementById('timetable_name').focus();</script>
 {% endblock %}

@@ -131,18 +131,10 @@ class TimetableController extends Controller
 	$em = $this->getDoctrine()->getManager();
  	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
-	$form = $this->get('form.factory')->create();
-
-	if ($request->isMethod('POST')) {
-		$form->submit($request->request->get($form->getName()));
-		if ($form->isSubmitted() && $form->isValid()) {
-			$em->remove($timetable);
-			$em->flush();
-			$request->getSession()->getFlashBag()->add('notice', 'timetable.deleted.ok');
-			return $this->redirectToRoute('timetable', array('page' => 1));
-		}
-    }
-	return $this->render('timetable/delete.html.twig', array('userContext' => $userContext, 'timetable' => $timetable, 'form' => $form->createView()));
+	$em->remove($timetable);
+	$em->flush();
+	$request->getSession()->getFlashBag()->add('notice', 'timetable.deleted.ok');
+	return $this->redirectToRoute('timetable', array('page' => 1));
     }
 	
     // Affichage des periodes de planification d'une grille horaire (message de suppression)

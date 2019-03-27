@@ -1,0 +1,191 @@
+{# templates/timetable/edit.html.twig #}
+
+{% extends 'base.connected.html.twig' %}
+ 
+{% set numberLinesDualButtons = constant('App\\Entity\\Constants::NUMBER_LINES_MINI_DUAL_BUTTON_LIST') %}
+
+{% block body %}
+
+<div class="col-sm-8">
+
+<legend>
+
+<img src="{{ asset('images/time-32.png') }}"></img>&nbsp;{{ timetable.name }}
+{% if timetable.type == 'T' %}
+	<a href="{{ path('timetable_modify', { 'timetableID': timetable.ID }) }}" class="glyphicon glyphicon-pencil" title="{{ 'modify'|trans }}"></a>
+{% endif %}
+
+</legend>
+
+</div>
+
+<div class="col-sm-4">
+
+{% if timetableContext.bookingsCount > 0 %}
+<a href="{{ path('timetable_booking_list', { 'timetableID': timetable.ID, 'page': 1 }) }}"><img src="{{ asset('images/booking-32.png') }}"> {{ 'booking.plural'|trans }} <span class="badge">{{ timetableContext.bookingsCount }}</span></a>
+{% else %}
+<img src="{{ asset('images/booking-32.png') }}"> {{ 'booking.plural'|trans }} <span class="badge">{{ timetableContext.bookingsCount }}</span>
+{% endif %}
+
+</div>
+
+<div class="col-sm-12">
+
+{% if listTimetableLines|length > numberLinesDualButtons %}
+{{ include('timetable/edit.button.html.twig') }}
+{% endif %}
+
+{% if listTimetableLines|length > 0 %}
+<table class="table table-striped">
+	<thead>
+	<tr>
+		<th>{{ 'from'|trans }}</th>
+		<th>{{ 'to'|trans }}</th>
+{% if timetable.type == 'T' %}
+		<th>{{ 'modify'|trans }}</th>
+		<th>{{ 'delete'|trans }}</th>
+{% endif %}
+	</tr>
+	</thead>
+	<tbody>
+{% for timetableLine in listTimetableLines %}
+	<tr>
+		<td>{{ timetableLine.beginningTime|date("H:i") }}</td>
+		<td>{{ timetableLine.endTime|date("H:i") }}</td>
+{% if timetable.type == 'T' %}
+		<td><a href="{{ path('timetable_modify_line', { 'timetableID': timetable.ID, 'timetableLineID': timetableLine.ID }) }}" class="glyphicon glyphicon-pencil"></a></td>
+{% if timetableContext.planificationsCount > 0 %}
+		<td><a href="{{ path('timetable_foreign_update', { 'timetableID': timetable.ID }) }}" class="glyphicon glyphicon-trash" style="color:red"></a></td>
+{% else %}
+		<td><a href="{{ path('timetable_delete_line', { 'timetableID': timetable.ID, 'timetableLineID': timetableLine.ID }) }}" class="glyphicon glyphicon-trash"></a></td>
+{% endif %}
+{% endif %}
+	</tr>
+{% endfor %}
+	</tbody>
+</table>
+{% endif %}
+
+{{ include('timetable/edit.button.html.twig') }}
+
+<!-- Modal -->
+<div id="unaDay" class="modal fade" role="dialog">
+<div class="modal-dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">&times;</button>
+			<h4 class="modal-title">{{ 'update.not.allowed'|trans }}</h4>
+		</div>
+		<div class="modal-body">
+			<p>{{ 'timetable.una.day'|trans }}</p>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">{{ 'close'|trans }}</button>
+		</div>
+	</div>
+</div>
+</div>
+
+<div id="unaHalfDay" class="modal fade" role="dialog">
+<div class="modal-dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">&times;</button>
+			<h4 class="modal-title">{{ 'update.not.allowed'|trans }}</h4>
+		</div>
+		<div class="modal-body">
+			<p>{{ 'timetable.una.half.day'|trans }}</p>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">{{ 'close'|trans }}</button>
+		</div>
+	</div>
+</div>
+</div>
+
+<div id="unaBooking" class="modal fade" role="dialog">
+<div class="modal-dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">&times;</button>
+			<h4 class="modal-title">{{ 'update.not.allowed'|trans }}</h4>
+		</div>
+		<div class="modal-body">
+			<p>{{ 'timetable.una.booking'|trans({'%name%': timetable.name}) }}</p>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">{{ 'close'|trans }}</button>
+		</div>
+	</div>
+</div>
+</div>
+
+<div id="dnaDay" class="modal fade" role="dialog">
+<div class="modal-dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">&times;</button>
+			<h4 class="modal-title">{{ 'delete.not.allowed'|trans }}</h4>
+		</div>
+		<div class="modal-body">
+			<p>{{ 'timetable.dna.day'|trans }}</p>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">{{ 'close'|trans }}</button>
+		</div>
+	</div>
+</div>
+</div>
+
+<div id="dnaHalfDay" class="modal fade" role="dialog">
+<div class="modal-dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">&times;</button>
+			<h4 class="modal-title">{{ 'delete.not.allowed'|trans }}</h4>
+		</div>
+		<div class="modal-body">
+			<p>{{ 'timetable.dna.half.day'|trans }}</p>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">{{ 'close'|trans }}</button>
+		</div>
+	</div>
+</div>
+</div>
+
+<div id="dnaBooking" class="modal fade" role="dialog">
+<div class="modal-dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">&times;</button>
+			<h4 class="modal-title">{{ 'delete.not.allowed'|trans }}</h4>
+		</div>
+		<div class="modal-body">
+			<p>{{ 'timetable.dna.booking'|trans({'%name%': timetable.name}) }}</p>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">{{ 'close'|trans }}</button>
+		</div>
+	</div>
+</div>
+</div>
+
+</div>
+
+{% endblock %}
+
+{% block message %}
+
+<div class="col-sm-12">
+
+{% for flash_message in app.session.flashBag.get('notice') %}
+<div class="alert alert-success sb-message">
+	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+	{{ flash_message|trans }}
+</div>
+{% endfor %}
+
+</div>
+
+{% endblock %}
