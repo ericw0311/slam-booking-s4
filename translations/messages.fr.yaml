@@ -70,6 +70,7 @@ period.from: A partir du %beginningDate%
 period.from.to: Du %beginningDate% au %endDate%
 period.next: Période suivante
 period.previous: Période précédente
+period.type: Type de période
 period.until: Jusqu'au %endDate%
 sort.after: Trier après
 sort.before: Trier avant

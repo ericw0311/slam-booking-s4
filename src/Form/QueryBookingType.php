@@ -24,9 +24,9 @@ class QueryBookingType extends AbstractType
 			'attr' => ['class' => 'w3-input w3-pale-green']
         ))
 		->add('beginningDate', DateType::class, array('label' => 'from', 'translation_domain' => 'messages',
-			'widget' => 'single_text', 'html5' => false, 'format' => 'dd/MM/yyyy', 'attr' => ['class' => 'datepicker w3-input w3-pale-green']))
+			'widget' => 'single_text', 'html5' => false, 'format' => 'dd/MM/yyyy', 'attr' => ['class' => 'datepicker w3-input w3-border']))
 			->add('endDate', DateType::class, array('label' => 'to', 'translation_domain' => 'messages',
-			'widget' => 'single_text', 'html5' => false, 'format' => 'dd/MM/yyyy', 'attr' => ['class' => 'datepicker w3-input w3-pale-green']));
+			'widget' => 'single_text', 'html5' => false, 'format' => 'dd/MM/yyyy', 'attr' => ['class' => 'datepicker w3-input w3-border']));
     }
 
 	public function configureOptions(OptionsResolver $resolver)
