@@ -50,11 +50,11 @@
 		<td>{{ timetableLine.beginningTime|date("H:i") }}</td>
 		<td>{{ timetableLine.endTime|date("H:i") }}</td>
 {% if timetable.type == 'T' %}
-		<td><a href="{{ path('timetable_modify_line', { 'timetableID': timetable.ID, 'timetableLineID': timetableLine.ID }) }}" class="w3-bar-item w3-button w3-blue"><i class="fa fa-pencil"></i>&nbsp;{{ 'modify'|trans }}</a></td>
+		<td><a href="{{ path('timetable_modify_line', { 'timetableID': timetable.ID, 'timetableLineID': timetableLine.ID }) }}" class="w3-bar-item w3-button" title="{{ 'modify'|trans }}"><i class="fa fa-pencil"></i></a></td>
 {% if timetableContext.planificationsCount > 0 %}
-		<td><a href="{{ path('timetable_foreign_update', { 'timetableID': timetable.ID }) }}" class="w3-bar-item w3-button w3-red"><i class="fa fa-trash"></i>&nbsp;<del>{{ 'delete'|trans }}</del></a></td>
+		<td><a href="{{ path('timetable_foreign_update', { 'timetableID': timetable.ID }) }}" class="w3-bar-item w3-button w3-red" title="{{ 'delete'|trans }}"><i class="fa fa-trash"></i></a></td>
 {% else %}
-		<td><a href="{{ path('timetable_delete_line', { 'timetableID': timetable.ID, 'timetableLineID': timetableLine.ID }) }}" class="w3-bar-item w3-button w3-red"><i class="fa fa-trash"></i>&nbsp;{{ 'delete'|trans }}</a></td>
+		<td><a href="{{ path('timetable_delete_line', { 'timetableID': timetable.ID, 'timetableLineID': timetableLine.ID }) }}" class="w3-bar-item w3-button" title="{{ 'delete'|trans }}"><i class="fa fa-trash"></i></a></td>
 {% endif %}
 {% endif %}
 	</tr>
