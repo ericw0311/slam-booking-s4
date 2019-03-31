@@ -1,16 +1,15 @@
 {# templates/planification/line.html.twig #}
 
-{% extends 'base.html.twig' %}
+{% extends 'base.connected.html.twig' %}
 
 {% block body %}
 
-<div class="w3-panel w3-border-bottom w3-text-indigo">
-	<p><img src="{{ asset('images/planification-32.png') }}">&nbsp;</img>{{ planification.name }}</p>
-</div>
+<legend><img src="{{ asset('images/planification-32.png') }}">&nbsp;{{ planification.name }}</legend>
 
-{{ form_start(form, {'action': path('planification_line', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID }), 'method': 'POST'}) }}
+{{ form_start(form, {'action': path('planification_line', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID }), 'method': 'POST', 'class': 'form-horizontal'}) }}
 
-<table class="w3-table w3-striped">
+<table class="table table-striped">
+    <tbody>
 <tr>
 	<td><img src="{{ asset('images/time-32.png') }}">&nbsp;{{ ('day.MON')|trans }}</td>
 	<td>{{ form_row(form.activate_MON) }}</td>
@@ -46,23 +45,33 @@
 	<td>{{ form_row(form.activate_SUN) }}</td>
 	<td>{{ form_row(form.timetable_SUN) }}</td>
 </tr>
+    </tbody>
 </table>
 
 {{ form_errors(form) }}
 
 {{ form_rest(form) }}
 
-<div class="w3-show-inline-block">
-<div class="w3-bar w3-border w3-round">
-	<a href="{{ path('planification_edit', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID }) }}" class="w3-bar-item w3-button w3-light-gray"><i class="fa fa-times"></i>&nbsp;{{ 'cancel'|trans }}</a>
-	<button type="submit" class="w3-bar-item w3-button w3-green"><i class="fa fa-check"></i>&nbsp;{{ 'validate'|trans }}</button>
+<div class="btn-group">
+	<a href="{{ path('planification_edit', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i>{{ 'cancel'|trans }}</a>
+	<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> {{ 'validate'|trans }}</button>
 </div>
-</div>
-
-{{ form_end(form) }}
 
 {% endblock %}
 
 {% block javascripts %}
-	<script src="{{ asset('scripts/planification_line.js') }}"></script>
+
+<script src="{{ asset('scripts/planification_line.js') }}"></script>
+
+{% endblock %}
+
+{% block message %}
+
+{% for flash_message in app.session.flashBag.get('notice') %}
+<div class="alert alert-success sb-message">
+	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+	{{ flash_message|trans }}
+</div>
+{% endfor %}
+
 {% endblock %}

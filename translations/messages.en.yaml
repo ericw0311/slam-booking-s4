@@ -212,6 +212,7 @@ planification.deleted.ok: The planification has been deleted
 planification.dna.booking: La planification %name% est référencée par des réservations. Suppression impossible
 planification.line.updated.ok: Per day planifications have been updated
 planification.name: Planification name
+planification.new: New planification
 planification.no.resources.to.planify: There is no resource to planify
 planification.plural: Planifications
 planification.resource.select: Select resource
@@ -224,6 +225,7 @@ planification.type.select: Select type of resources to planify
 planification.updated.ok: The planification has been updated
 planification.validate.not.allowed: You must select at least one resource
 
+planificationPeriod.ask.delete: Do you really want to delete last period planification ?
 planificationPeriod.beginning.date: Period beginning date
 planificationPeriod.create.minimum.date: La nouvelle période doit débuter au delà de la date de la dernière réservation %date%
 planificationPeriod.created.ok: New planification period has been created

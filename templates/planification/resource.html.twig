@@ -1,24 +1,26 @@
 {# templates/planification/resource.html.twig #}
 
-{% extends 'base.connected.html.twig' %}
+{% extends 'base.html.twig' %}
  
 {% block body %}
 
-{% block planification %}{% endblock %}
+<div class="w3-panel w3-border-bottom w3-text-indigo">
+	{% block planification %}{% endblock %}
+</div>
 
-<div class="col-sm-6">
+<div class="w3-row">
 
-<table class="table table-striped">
-
-	<thead><tr>
+<div class="w3-half">
+<table class="w3-table w3-striped">
+	<tr>
 {% if selectedResources|length > 1 %}
 	<th colspan=4>
 {% else %}
 	<th colspan=2>
 {% endif %}
-	{{ 'planification.resource.selected'|trans }}</th></tr></thead>
+	{{ 'planification.resource.selected'|trans }}</th>
+    </tr>
 
-	<tbody>
 {% for resource in selectedResources %}
 	<tr>
 {% if selectedResources|length > 1 %}
@@ -37,54 +39,45 @@
 	<td>{% block link_unselect %}{% endblock %}</td>
 	</tr>
 {% endfor %}
-	</tbody>
 </table>
-
 </div>
 
-<div class="col-sm-6">
-
-<table class="table table-striped">
-	<thead><tr><th colspan=2>{{ 'planification.resource.to.planify'|trans }}</th></tr></thead>
-	<tbody>
+<div class="w3-half">
+<table class="w3-table w3-striped">
+	<tr><th colspan=2>{{ 'planification.resource.to.planify'|trans }}</th></tr>
 {% for resource in availableResources %}
 	<tr>
 	<td>{% block link_select %}{% endblock %}</td>
 	<td><img src="{{ asset('images/' ~ resource.imageName) }}">&nbsp;{{ resource.name }}</td>
 	</tr>
 {% endfor %}
-	</tbody>
 </table>
-
 </div>
 
-<div class="col-sm-12 btn-group sb-margin-top">
+</div> 
+
+<div class="w3-show-inline-block">
+<div class="w3-bar w3-border w3-round">
 	{% block link_cancel %}{% endblock %}
 {% if selectedResources|length < 1 %}
-	<button type="button" class="btn btn-success" data-toggle="modal" data-target="#validateModal"><span class="glyphicon glyphicon-ok"></span> <del>{{ 'validate'|trans }}</del></button>
+	<button onclick="document.getElementById('validateModal').style.display='block'" class="w3-bar-item w3-button w3-green"><i class="fa fa-pencil"></i>&nbsp;<del>{{ 'validate'|trans }}</del></button>
 {% else %}
 	{% block link_validate %}{% endblock %}
 {% endif %}
 </div>
+</div>
 
 <!-- Modal -->
-<div id="validateModal" class="modal fade" role="dialog">
-  <div class="modal-dialog">
-
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">{{ 'validate.not.allowed'|trans }}</h4>
-      </div>
-      <div class="modal-body">
-        <p>{{ 'planification.validate.not.allowed'|trans }}</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'close'|trans }}</button>
-      </div>
-    </div>
-
-  </div>
+<div id="validateModal" class="w3-modal w3-animate-opacity">
+	<div class="w3-modal-content">
+		<header class="w3-container w3-red"> 
+			<span onclick="document.getElementById('validateModal').style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
+			<h3>{{ 'validate.not.allowed'|trans }}</h3>
+		</header>
+		<div class="w3-container w3-bottombar w3-border-red">
+			<p>{{ 'planification.validate.not.allowed'|trans }}</p>
+		</div>
+	</div>
 </div>
 
 {% endblock %}

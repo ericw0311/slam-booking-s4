@@ -1,0 +1,29 @@
+{# templates/planification/modify.html.twig #}
+
+{% extends 'base.connected.html.twig' %}
+ 
+{% block body %}
+
+{{ form_start(form, {'action': path('planification_modify', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID }), 'method': 'POST', 'class': 'form-horizontal'}) }}
+
+<fieldset>
+	<legend><img src="{{ asset('images/planification-32.png') }}">&nbsp;{{ planification.name }}&nbsp;</legend>
+	{{ form_errors(form) }}
+	{{ form_row(form.name) }}
+	{{ form_rest(form) }}
+</fieldset>
+
+<div class="btn-group">
+<a href="{{ path('planification_edit', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
+<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> {{ 'validate'|trans }}</button>
+</div>
+
+{{ form_end(form) }}
+
+{% endblock %}
+
+{% block javascripts %}
+
+<script>document.getElementById('planification_name').focus();</script>
+
+{% endblock %}

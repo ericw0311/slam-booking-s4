@@ -3,29 +3,30 @@
 {% extends 'planification/resource.html.twig' %}
 
 {% block planification %}
-	<legend><img src="{{ asset('images/planification-32.png') }}">&nbsp;{{ planification.name }}&nbsp;</legend>
+	<p><img src="{{ asset('images/planification-32.png') }}">&nbsp;</img>{{ planification.name }}</p>
 {% endblock %}
 
+
 {% block link_sortBefore %}
-	<a href="{{ path('planification_update_resource', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceIDList': resource.entityIDList_sortBefore }) }}" class="glyphicon glyphicon-arrow-up" title="{{ 'sort.before'|trans }}"></a>
+	<a href="{{ path('planification_update_resource', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceIDList': resource.entityIDList_sortBefore }) }}" class="w3-button" title="{{ 'sort.before'|trans }}"><i class="fa fa-arrow-up"></i></a>
 {% endblock %}
 
 {% block link_sortAfter %}
-	<a href="{{ path('planification_update_resource', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceIDList': resource.entityIDList_sortAfter }) }}" class="glyphicon glyphicon-arrow-down" title="{{ 'sort.after'|trans }}"></a>
+	<a href="{{ path('planification_update_resource', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceIDList': resource.entityIDList_sortAfter }) }}" class="w3-button" title="{{ 'sort.after'|trans }}"><i class="fa fa-arrow-down"></i></a>
 {% endblock %}
 
 {% block link_unselect %}
-	<a href="{{ path('planification_update_resource', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceIDList': resource.entityIDList_unselect }) }}" class="glyphicon glyphicon-arrow-right" title="{{ 'planification.resource.unselect'|trans }}"></a>
+	<a href="{{ path('planification_update_resource', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceIDList': resource.entityIDList_unselect }) }}" class="w3-button" title="{{ 'planification.resource.unselect'|trans }}"><i class="fa fa-arrow-right"></i></a>
 {% endblock %}
 
 {% block link_select %}
-	<a href="{{ path('planification_update_resource', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceIDList': resource.entityIDList_select }) }}" class="glyphicon glyphicon-arrow-left" title="{{ 'planification.resource.select'|trans }}"></a>
+	<a href="{{ path('planification_update_resource', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceIDList': resource.entityIDList_select }) }}" class="w3-button" title="{{ 'planification.resource.select'|trans }}"><i class="fa fa-arrow-left"></i></a>
 {% endblock %}
 
 {% block link_cancel %}
-	<a href="{{ path('planification_edit', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i>{{ 'cancel'|trans }}</a>
+	<a href="{{ path('planification_edit', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID }) }}" class="w3-bar-item w3-button w3-light-gray"><i class="fa fa-times"></i>&nbsp;{{ 'cancel'|trans }}</a>
 {% endblock %}
 
 {% block link_validate %}
-	<a href="{{ path('planification_validate_update_resource', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceIDList': selectedResourcesIDList }) }}" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i>&nbsp;{{ 'validate'|trans }}</a>
+	<a href="{{ path('planification_validate_update_resource', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceIDList': selectedResourcesIDList }) }}" class="w3-bar-item w3-button w3-green"><i class="fa fa-check"></i>&nbsp;{{ 'validate'|trans }}</a>
 {% endblock %}

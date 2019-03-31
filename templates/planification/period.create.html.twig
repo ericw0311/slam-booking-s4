@@ -1,26 +1,35 @@
 {# templates/planification/period.create.html.twig #}
 
-{% extends 'base.connected.html.twig' %}
+{% extends 'base.half.html.twig' %}
  
-{% block body %}
+{% block content %}
 
-<legend><img src="{{ asset('images/planification-32.png') }}">&nbsp;{{ planification.name }}</legend>
-
-<div class="alert alert-warning">
-{{ 'planificationPeriod.create.minimum.date'|trans({'%date%': ppCreateDate.bookingMaxDate|date('d/m/Y')}) }}
+<div class="w3-panel w3-border-bottom w3-text-indigo">
+	<p><img src="{{ asset('images/planification-32.png') }}">&nbsp;</img>{{ planification.name }}</p>
 </div>
 
-{{ form_start(form, {'action': path('planification_period_create', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID }), 'method': 'POST', 'class': 'form-horizontal'}) }}
-
-<fieldset>
-	{{ form_row(form.date) }}
-	{{ form_rest(form) }}
-</fieldset>
-
-<div class="btn-group">
-	<a href="{{ path('planification_edit', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i>{{ 'cancel'|trans }}</a>
-	<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> {{ 'validate'|trans }}</button>
+<div class="w3-panel w3-sand w3-round-large">
+	<p>{{ 'planificationPeriod.create.minimum.date'|trans({'%date%': ppCreateDate.bookingMaxDate|date('d/m/Y')}) }}</p>
 </div>
+
+{{ form_start(form, {'action': path('planification_period_create', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID }), 'method': 'POST'}) }}
+
+<form class="w3-container">
+
+<p><label>{{ 'planificationPeriod.beginning.date'|trans }}</label>
+{{ form_widget(form.date) }}
+<span class="w3-text-red">{{ form_errors(form.date) }}</span></p>
+
+{{ form_rest(form) }}
+
+<div class="w3-show-inline-block">
+<div class="w3-bar w3-border w3-round">
+	<a href="{{ path('planification_edit', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID }) }}" class="w3-bar-item w3-button w3-light-gray"><i class="fa fa-times"></i>&nbsp;{{ 'cancel'|trans }}</a>
+	<button type="submit" class="w3-bar-item w3-button w3-green"><i class="fa fa-check"></i>&nbsp;{{ 'validate'|trans }}</button>
+</div>
+</div>
+
+</form>
 
 {{ form_end(form) }}
 

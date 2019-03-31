@@ -1,0 +1,28 @@
+{# templates/planification/index.html.twig #}
+
+{% set rtIcons = constant('App\\Entity\\Constants::RESOURCE_TYPE_ICON') %}
+{% set rcIcons = constant('App\\Entity\\Constants::RESOURCE_CLASSIFICATION_ICON') %}
+
+{% extends 'list.html.twig' %}
+
+{% set create_path, list_path, display_create_path = 'planification_type', 'planification', true %}
+
+{% block list %}
+
+<div class="row">
+
+{% for i in 0..listContext.numberColumnsDisplayed-1 if listContext.numberColumnsDisplayed > 0 %}
+    <div class="col-sm-{{ (12/listContext.numberColumnsDisplayed) }}">
+	{% for j in 0..listContext.numberLinesDisplayed-1 if (i*listContext.numberLinesDisplayed+j) < listContext.numberRecordsDisplayed %}
+{% if listPlanifications[i*listContext.numberLinesDisplayed+j].internal %}
+	<a href="{{ path('planification_edit_lp', { 'planificationID': listPlanifications[i*listContext.numberLinesDisplayed+j].ID }) }}" class="list-group-item"><img src="{{ asset('images/' ~ rcIcons[listPlanifications[i*listContext.numberLinesDisplayed+j].code] ~ '-32.png') }}">&nbsp;{{ listPlanifications[i*listContext.numberLinesDisplayed+j].name }}</a>
+{% else %}
+	<a href="{{ path('planification_edit_lp', { 'planificationID': listPlanifications[i*listContext.numberLinesDisplayed+j].ID }) }}" class="list-group-item"><img src="{{ asset('images/' ~ rtIcons[listPlanifications[i*listContext.numberLinesDisplayed+j].type] ~ '-32.png') }}">&nbsp;{{ listPlanifications[i*listContext.numberLinesDisplayed+j].name }}</a>
+{% endif %}
+	{% endfor %}
+    </div>
+{% endfor %}
+
+</div>
+
+{% endblock %}
