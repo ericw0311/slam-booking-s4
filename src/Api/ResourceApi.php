@@ -103,7 +103,7 @@ class ResourceApi
 			if ($resourceDB->getInternal()) {
 				$resource->setImageName(Constants::RESOURCE_CLASSIFICATION_ICON[$resourceDB->getCode()]."-32.png");
 			} else {
-				$resource->setImageName(Constants::RESOURCE_TYPE_ICON[$resourceDB->getType()]."-32.png");
+				$resource->setIconName(Constants::RESOURCE_TYPE_ICON[$resourceDB->getType()]);
 			}
 			$resourceIDArray_tprr = $resourceIDArray;
 			unset($resourceIDArray_tprr[$i]);
@@ -143,7 +143,7 @@ class ResourceApi
 			if ($resourceDB->getInternal()) {
 				$resource->setImageName(Constants::RESOURCE_CLASSIFICATION_ICON[$resourceDB->getCode()]."-32.png");
 			} else {
-				$resource->setImageName(Constants::RESOURCE_TYPE_ICON[$resourceDB->getType()]."-32.png");
+				$resource->setIconName(Constants::RESOURCE_TYPE_ICON[$resourceDB->getType()]);
 			}
 			$resource->setEntityIDList_select(($selectedResourceIDList == '') ? $resourceDB->getId() : ($selectedResourceIDList.'-'.$resourceDB->getId())); // Liste des ressources sélectionnées si l'utilisateur sélectionne la ressource
 			array_push($availableResources, $resource);

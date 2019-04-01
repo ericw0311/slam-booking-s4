@@ -35,7 +35,11 @@
 	<td></td>
 {% endif %}
 {% endif %}
+{% if resource.imageType == 'C' %}
+	<td><i class="w3-xlarge fa fa-{{ resource.imageName }}"></i>&nbsp;{{ resource.name }}</td>
+{% else %}
 	<td><img src="{{ asset('images/' ~ resource.imageName) }}">&nbsp;{{ resource.name }}</td>
+{% endif %}
 	<td>{% block link_unselect %}{% endblock %}</td>
 	</tr>
 {% endfor %}
@@ -48,7 +52,11 @@
 {% for resource in availableResources %}
 	<tr>
 	<td>{% block link_select %}{% endblock %}</td>
+{% if resource.imageType == 'C' %}
+	<td><i class="w3-xlarge fa fa-{{ resource.imageName }}"></i>&nbsp;{{ resource.name }}</td>
+{% else %}
 	<td><img src="{{ asset('images/' ~ resource.imageName) }}">&nbsp;{{ resource.name }}</td>
+{% endif %}
 	</tr>
 {% endfor %}
 </table>
@@ -56,7 +64,7 @@
 
 </div> 
 
-<div class="w3-show-inline-block">
+<div class="w3-show-inline-block w3-margin-top">
 <div class="w3-bar w3-border w3-round">
 	{% block link_cancel %}{% endblock %}
 {% if selectedResources|length < 1 %}

@@ -31,7 +31,8 @@ class PlanificationLinesNDBType extends AbstractType
 						{
 						return $tr->getTimetablesQB($this->currentFile);
 						},
-		'choice_label' => 'name'))
+		'choice_label' => 'name',
+		'attr' => ['class' => 'w3-input w3-pale-green']))
 			->add('timetable_TUE', EntityType::class, array(
 		'label' => false,
 		'class' => 'App\Entity\Timetable',
@@ -39,7 +40,8 @@ class PlanificationLinesNDBType extends AbstractType
 						{
 						return $tr->getTimetablesQB($this->currentFile);
 						},
-		'choice_label' => 'name'))
+		'choice_label' => 'name',
+		'attr' => ['class' => 'w3-input w3-pale-green']))
 			->add('timetable_WED', EntityType::class, array(
 		'label' => false,
 		'class' => 'App\Entity\Timetable',
@@ -47,7 +49,8 @@ class PlanificationLinesNDBType extends AbstractType
 						{
 						return $tr->getTimetablesQB($this->currentFile);
 						},
-		'choice_label' => 'name'))
+		'choice_label' => 'name',
+		'attr' => ['class' => 'w3-input w3-pale-green']))
 			->add('timetable_THU', EntityType::class, array(
 		'label' => false,
 		'class' => 'App\Entity\Timetable',
@@ -55,7 +58,8 @@ class PlanificationLinesNDBType extends AbstractType
 						{
 						return $tr->getTimetablesQB($this->currentFile);
 						},
-		'choice_label' => 'name'))
+		'choice_label' => 'name',
+		'attr' => ['class' => 'w3-input w3-pale-green']))
 			->add('timetable_FRI', EntityType::class, array(
 		'label' => false,
 		'class' => 'App\Entity\Timetable',
@@ -63,7 +67,8 @@ class PlanificationLinesNDBType extends AbstractType
 						{
 						return $tr->getTimetablesQB($this->currentFile);
 						},
-		'choice_label' => 'name'))
+		'choice_label' => 'name',
+		'attr' => ['class' => 'w3-input w3-pale-green']))
 			->add('timetable_SAT', EntityType::class, array(
 		'label' => false,
 		'class' => 'App\Entity\Timetable',
@@ -71,7 +76,8 @@ class PlanificationLinesNDBType extends AbstractType
 						{
 						return $tr->getTimetablesQB($this->currentFile);
 						},
-		'choice_label' => 'name'))
+		'choice_label' => 'name',
+		'attr' => ['class' => 'w3-input w3-pale-green']))
 			->add('timetable_SUN', EntityType::class, array(
 		'label' => false,
 		'class' => 'App\Entity\Timetable',
@@ -79,7 +85,8 @@ class PlanificationLinesNDBType extends AbstractType
 						{
 						return $tr->getTimetablesQB($this->currentFile);
 						},
-		'choice_label' => 'name'))
+		'choice_label' => 'name',
+		'attr' => ['class' => 'w3-input w3-pale-green']))
 			->add('activate_MON', CheckboxType::class, array(
 		'label' => false,
 		'required' => false))

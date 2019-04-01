@@ -6,6 +6,7 @@ class AddEntity
     private $id = 0;
     private $name;
     private $imageName;
+    private $imageType; // M = iMage, C = iCone
     private $entityIDList_select;
 
     public function setId($id)
@@ -32,13 +33,26 @@ class AddEntity
     
     public function setImageName($imageName)
     {
+        $this->imageType = 'M';
         $this->imageName = $imageName;
+        return $this;
+    }
+    
+    public function setIconName($iconName)
+    {
+        $this->imageType = 'C';
+        $this->imageName = $iconName;
         return $this;
     }
     
     public function getImageName()
     {
         return $this->imageName;
+    }
+    
+    public function getImageType()
+    {
+        return $this->imageType;
     }
     
     public function setEntityIDList_select($entityIDList)
