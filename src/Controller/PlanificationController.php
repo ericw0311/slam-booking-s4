@@ -214,7 +214,11 @@ class PlanificationController extends Controller
 		}
 	}
 	$planification->setInternal($internal);
-	$planification->setCode($classificationCode);
+	if ($internal > 0) {
+		$planification->setCode($classificationCode);
+	} else {
+		$planification->setCodeNull();
+	}
 	$em->persist($planification);
 	$em->flush();
 
@@ -406,19 +410,10 @@ $resourceIDList = ($resourceIDList == '') ? $planificationResourceDB->getResourc
     $em = $this->getDoctrine()->getManager();
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
-    $form = $this->get('form.factory')->create();
-
-	if ($request->isMethod('POST')) {
-		$form->submit($request->request->get($form->getName()));
-		if ($form->isSubmitted() && $form->isValid()) {
-			$em->remove($planification);
-			$em->flush();
-			$request->getSession()->getFlashBag()->add('notice', 'planification.deleted.ok');
-			return $this->redirectToRoute('planification', array('page' => 1));
-		}
-    }
-
-    return $this->render('planification/delete.html.twig', array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'form' => $form->createView()));
+	$em->remove($planification);
+	$em->flush();
+	$request->getSession()->getFlashBag()->add('notice', 'planification.deleted.ok');
+	return $this->redirectToRoute('planification', array('page' => 1));
     }
 
   /**
