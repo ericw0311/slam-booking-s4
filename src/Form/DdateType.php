@@ -15,7 +15,7 @@ class DdateType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-		$builder->add('date', DateType::class, array('widget' => 'single_text', 'html5' => false, 'format' => 'dd/MM/yyyy', 'attr' => ['class' => 'datepicker']));
+		$builder->add('date', DateType::class, array('widget' => 'single_text', 'html5' => false, 'format' => 'dd/MM/yyyy', 'attr' => ['class' => 'datepicker w3-border']));
     }
 
 	public function configureOptions(OptionsResolver $resolver)

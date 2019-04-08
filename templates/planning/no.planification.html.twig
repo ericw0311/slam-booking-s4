@@ -1,9 +1,14 @@
 {# templates/planning/no.planification.html.twig #}
 
-{% extends 'base.connected.html.twig' %}
+{% extends 'base.html.twig' %}
  
 {% block body %}
+
+<div class="w3-panel w3-border-bottom w3-text-indigo"><h4>
+	<p><img src="{{ asset('images/planning-32.png') }}">&nbsp;</img>{{ 'planning'|trans }}</p>
+</h4></div>
 
 Pas de planification
 
 {% endblock %}
+

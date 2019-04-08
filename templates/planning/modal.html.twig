@@ -1,46 +1,35 @@
-<div id="bnaBefore" class="modal fade" role="dialog">
-<div class="modal-dialog">
-	<div class="modal-content">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal">&times;</button>
-			<h4 class="modal-title">{{ 'booking.not.allowed'|trans }}</h4>
-		</div>
-		<div class="modal-body">
+<div id="bnaBefore" class="w3-modal w3-animate-opacity">
+	<div class="w3-modal-content">
+		<header class="w3-container w3-red"> 
+			<span onclick="document.getElementById('bnaBefore').style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
+			<h3>{{ 'booking.not.allowed'|trans }}</h3>
+		</header>
+		<div class="w3-container w3-bottombar w3-border-red">
 			<p>{{ 'booking.bna.before'|trans({'%firstBookingDate%': dateLongue(bookingPeriod.firstAllowedBookingDate)}) }}</p>
 		</div>
-		<div class="modal-footer">
-			<button type="button" class="btn btn-default" data-dismiss="modal">{{ 'close'|trans }}</button>
-		</div>
 	</div>
-</div>
 </div>
 
-<div id="bnaAfter" class="modal fade" role="dialog">
-<div class="modal-dialog">
-	<div class="modal-content">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal">&times;</button>
-			<h4 class="modal-title">{{ 'booking.not.allowed'|trans }}</h4>
-		</div>
-		<div class="modal-body">
+<div id="bnaAfter" class="w3-modal w3-animate-opacity">
+	<div class="w3-modal-content">
+		<header class="w3-container w3-red"> 
+			<span onclick="document.getElementById('bnaAfter').style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
+			<h3>{{ 'booking.not.allowed'|trans }}</h3>
+		</header>
+		<div class="w3-container w3-bottombar w3-border-red">
 			<p>{{ 'booking.bna.after'|trans({'%lastBookingDate%': dateLongue(bookingPeriod.lastAllowedBookingDate)}) }}</p>
 		</div>
-		<div class="modal-footer">
-			<button type="button" class="btn btn-default" data-dismiss="modal">{{ 'close'|trans }}</button>
-		</div>
 	</div>
-</div>
 </div>
 
 <!-- Booking period alert -->
-<div id="bpAlert" class="modal fade" role="dialog">
-<div class="modal-dialog">
-	<div class="modal-content">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal">&times;</button>
-			<h4 class="modal-title">{{ 'booking.period'|trans }}</h4>
-		</div>
-		<div class="modal-body">
+<div id="bpAlert" class="w3-modal w3-animate-opacity">
+	<div class="w3-modal-content">
+		<header class="w3-container w3-red"> 
+			<span onclick="document.getElementById('bpAlert').style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
+			<h3>{{ 'booking.period'|trans }}</h3>
+		</header>
+		<div class="w3-container w3-bottombar w3-border-red">
 {% if bookingPeriod.before and bookingPeriod.after %}
 			<p>{{ 'booking.period.from.until'|trans({'%firstBookingDate%': dateLongue(bookingPeriod.firstAllowedBookingDate), '%lastBookingDate%': dateLongue(bookingPeriod.lastAllowedBookingDate)}) }}</p>
 {% elseif bookingPeriod.before %}
@@ -51,56 +40,41 @@
 			<p>{{ 'booking.period'|trans }}</p>
 {% endif %}
 		</div>
-		<div class="modal-footer">
-			<button type="button" class="btn btn-default" data-dismiss="modal">{{ 'close'|trans }}</button>
-		</div>
 	</div>
 </div>
-</div>
 
-<div id="bnaEndPeriod" class="modal fade" role="dialog">
-<div class="modal-dialog">
-	<div class="modal-content">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal">&times;</button>
-			<h4 class="modal-title">{{ 'booking.not.allowed'|trans }}</h4>
-		</div>
-		<div class="modal-body">
+<div id="bnaEndPeriod" class="w3-modal w3-animate-opacity">
+	<div class="w3-modal-content">
+		<header class="w3-container w3-red"> 
+			<span onclick="document.getElementById('bnaEndPeriod').style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
+			<h3>{{ 'booking.not.allowed'|trans }}</h3>
+		</header>
+		<div class="w3-container w3-bottombar w3-border-red">
 			<p>{{ 'booking.bna.end.period'|trans({'%periodEndDate%': dateLongue(bookingPeriod.planificationPeriod.planningEndDate)}) }}</p>
 		</div>
-		<div class="modal-footer">
-			<button type="button" class="btn btn-default" data-dismiss="modal">{{ 'close'|trans }}</button>
-		</div>
 	</div>
-</div>
 </div>
 
-<div id="bnaDayClosed" class="modal fade" role="dialog">
-<div class="modal-dialog">
-	<div class="modal-content">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal">&times;</button>
-			<h4 class="modal-title">{{ 'booking.not.allowed'|trans }}</h4>
-		</div>
-		<div class="modal-body">
+<div id="bnaDayClosed" class="w3-modal w3-animate-opacity">
+	<div class="w3-modal-content">
+		<header class="w3-container w3-red"> 
+			<span onclick="document.getElementById('bnaDayClosed').style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
+			<h3>{{ 'booking.not.allowed'|trans }}</h3>
+		</header>
+		<div class="w3-container w3-bottombar w3-border-red">
 			<p>{{ 'booking.bna.day.closed'|trans }}</p>
 		</div>
-		<div class="modal-footer">
-			<button type="button" class="btn btn-default" data-dismiss="modal">{{ 'close'|trans }}</button>
-		</div>
 	</div>
-</div>
 </div>
 
 <!-- Booking out of period alert -->
-<div id="boopAlert" class="modal fade" role="dialog">
-<div class="modal-dialog">
-	<div class="modal-content">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal">&times;</button>
-			<h4 class="modal-title">{{ 'booking.period'|trans }}</h4>
-		</div>
-		<div class="modal-body">
+<div id="boopAlert" class="w3-modal w3-animate-opacity">
+	<div class="w3-modal-content">
+		<header class="w3-container w3-red"> 
+			<span onclick="document.getElementById('boopAlert').style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
+			<h3>{{ 'booking.period'|trans }}</h3>
+		</header>
+		<div class="w3-container w3-bottombar w3-border-red">
 {% if bookingPeriod.before and bookingPeriod.after %}
 			<p>{{ 'booking.out.of.period.from.until'|trans({'%firstBookingDate%': dateLongue(bookingPeriod.firstAllowedBookingDate), '%lastBookingDate%': dateLongue(bookingPeriod.lastAllowedBookingDate)}) }}</p>
 {% elseif bookingPeriod.before %}
@@ -111,45 +85,31 @@
 			<p>{{ 'booking.period'|trans }}</p>
 {% endif %}
 		</div>
-		<div class="modal-footer">
-			<button type="button" class="btn btn-default" data-dismiss="modal">{{ 'close'|trans }}</button>
-		</div>
 	</div>
-</div>
 </div>
 
 <!-- Duplication -->
-<div id="naPreviousWeek" class="modal fade" role="dialog">
-<div class="modal-dialog">
-	<div class="modal-content">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal">&times;</button>
-			<h4 class="modal-title">{{ 'booking.not.allowed'|trans }}</h4>
-		</div>
-		<div class="modal-body">
+<div id="naPreviousWeek" class="w3-modal w3-animate-opacity">
+	<div class="w3-modal-content">
+		<header class="w3-container w3-red"> 
+			<span onclick="document.getElementById('naPreviousWeek').style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
+			<h3>{{ 'booking.not.allowed'|trans }}</h3>
+		</header>
+		<div class="w3-container w3-bottombar w3-border-red">
 			<p>{{ 'booking.duplicate.previous.week.ko'|trans }}</p>
 		</div>
-		<div class="modal-footer">
-			<button type="button" class="btn btn-default" data-dismiss="modal">{{ 'close'|trans }}</button>
-		</div>
 	</div>
-</div>
 </div>
 
 <!-- Contrôle utilisateur de la réservation -->
-<div id="buAlert" class="modal fade" role="dialog">
-<div class="modal-dialog">
-	<div class="modal-content">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal">&times;</button>
-			<h4 class="modal-title">{{ 'update.not.allowed'|trans }}</h4>
-		</div>
-		<div class="modal-body">
+<div id="unaCreator" class="w3-modal w3-animate-opacity">
+	<div class="w3-modal-content">
+		<header class="w3-container w3-red"> 
+			<span onclick="document.getElementById('unaCreator').style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
+			<h3>{{ 'update.not.allowed'|trans }}</h3>
+		</header>
+		<div class="w3-container w3-bottombar w3-border-red">
 			<p>{{ 'booking.created.by.another.user'|trans }}</p>
 		</div>
-		<div class="modal-footer">
-			<button type="button" class="btn btn-default" data-dismiss="modal">{{ 'close'|trans }}</button>
-		</div>
 	</div>
-</div>
 </div>
