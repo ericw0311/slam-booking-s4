@@ -7,10 +7,8 @@
  
 {% block body %}
 
-<div class="w3-row">
-<div class="w3-twothird">
-
 <div class="w3-panel w3-border-bottom w3-text-indigo"><h4>
+
 <img src="{{ asset('images/planification-32.png') }}"></img>&nbsp;{{ planification.name }}
 &nbsp;<a href="{{ path('planification_modify', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID }) }}" class="fa fa-pencil w3-xlarge" title="{{ 'modify'|trans }}"></a>
 
@@ -29,23 +27,15 @@
 {% if not planificationContext.isLastPeriod() %}
 <a href="{{ path('planification_edit', { 'planificationID': planification.ID, 'planificationPeriodID': planificationContext.nextPlanificationPeriod.ID }) }}" class="w3-button" title="{{ 'period.next'|trans }}"><i class="fa fa-chevron-circle-right"></i></a>
 {% endif %}
-</h4></div>
 
-</div>
-
-<div class="w3-third">
-
-<div>
+<span class="w3-right w3-margin-right">
 {% if planificationContext.periodBookingsCount > 0 %}
 <a href="{{ path('planification_period_booking_list', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'page': 1 }) }}" class="w3-text-indigo"><img src="{{ asset('images/booking-32.png') }}">&nbsp;{{ 'booking.plural'|trans }}&nbsp;<span class="w3-badge w3-indigo">{{ planificationContext.periodBookingsCount }}</span></a>
 {% else %}
 <img src="{{ asset('images/booking-32.png') }}">&nbsp;<span class="w3-text-indigo">{{ 'booking.plural'|trans }}</span>&nbsp;<span class="w3-badge w3-indigo">{{ planificationContext.periodBookingsCount }}</span>
 {% endif %}
-</div>
-
-</div>
-</div>
-
+</span>
+</h4></div>
 
 <div class="w3-row">
 

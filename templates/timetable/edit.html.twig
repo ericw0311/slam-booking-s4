@@ -6,30 +6,20 @@
 
 {% block body %}
 
-<div class="w3-row">
-<div class="w3-twothird w3-container">
-
 <div class="w3-panel w3-border-bottom w3-text-indigo"><h4>
 <img src="{{ asset('images/time-32.png') }}"></img>&nbsp;{{ timetable.name }}
 {% if timetable.type == 'T' %}
 	&nbsp;<a href="{{ path('timetable_modify', { 'timetableID': timetable.ID }) }}" class="fa fa-pencil w3-xlarge" title="{{ 'modify'|trans }}"></a>
 {% endif %}
-</h4></div>
 
-</div>
-
-<div class="w3-third w3-container">
-
-<div>
+<span class="w3-right w3-margin-right">
 {% if timetableContext.bookingsCount > 0 %}
 <a href="{{ path('timetable_booking_list', { 'timetableID': timetable.ID, 'page': 1 }) }}" class="w3-text-indigo"><img src="{{ asset('images/booking-32.png') }}">&nbsp;{{ 'booking.plural'|trans }}&nbsp;<span class="w3-badge w3-indigo">{{ timetableContext.bookingsCount }}</span></a>
 {% else %}
 <img src="{{ asset('images/booking-32.png') }}">&nbsp;<span class="w3-text-indigo">{{ 'booking.plural'|trans }}</span>&nbsp;<span class="w3-badge w3-indigo">{{ timetableContext.bookingsCount }}</span>
 {% endif %}
-</div>
-
-</div>
-</div>
+</span>
+</h4></div>
 
 {% if listTimetableLines|length > numberLinesDualButtons %}
 {{ include('timetable/edit.button.html.twig') }}
