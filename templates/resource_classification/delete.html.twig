@@ -6,9 +6,9 @@
 
 {% block body %}
 
-<div class="w3-panel w3-border-bottom w3-text-indigo">
-	<p><i class="w3-xlarge fa fa-{{ rtIcons[resourceType] }}"></i>&nbsp;{{ resourceClassification.name }}</p>
-</div>
+<div class="w3-panel w3-border-bottom w3-text-indigo"><h4>
+	<i class="w3-xlarge fa fa-{{ rtIcons[resourceType] }}"></i>&nbsp;{{ resourceClassification.name }}
+</h4></div>
 
 {{ form_start(form, {'action': path('resource_classification_delete', { 'resourceType': resourceType, 'resourceClassificationID': resourceClassification.ID }), 'method': 'POST'}) }}
 

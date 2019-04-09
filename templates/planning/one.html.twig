@@ -6,7 +6,7 @@
 {% set maxNumberColumns = constant('App\\Entity\\Constants::PLANNING_MAX_NUMBER_COLUMNS') %}
 {% set maxNumberLines = constant('App\\Entity\\Constants::PLANNING_MAX_NUMBER_LINES') %}
 
-{% extends 'base.connected.html.twig' %}
+{% extends 'base.html.twig' %}
  
 {% block body %}
 
@@ -16,67 +16,73 @@
 						'method': 'POST',
 					}}) }}
 
-<legend>
-
+<div class="w3-panel w3-border-bottom"><h4>
 {% if planification.internal %}
 <img src="{{ asset('images/' ~ rcIcons[planification.code] ~ '-32.png') }}">
 {% else %}
-<img src="{{ asset('images/' ~ rtIcons[planification.type] ~ '-32.png') }}">
+<i class="w3-xlarge fa fa-{{ rtIcons[planification.type] }}"></i>
 {% endif %}
-
 {{ planification.name }}
-<a href="{{ path('planning_one', { 'planificationID': planification.ID, 'date': previousDate|date('Ymd') }) }}" class="glyphicon glyphicon-chevron-left" title="{{ 'day.previous'|trans }}"></a>
-<span style="color:blue">{{ dateLongue(date) }}</span>
-<a href="{{ path('planning_one', { 'planificationID': planification.ID, 'date': nextDate|date('Ymd') }) }}" class="glyphicon glyphicon-chevron-right" title="{{ 'day.next'|trans }}"></a>
+
+<a href="{{ path('planning_one', { 'planificationID': planification.ID, 'date': previousDate|date('Ymd') }) }}" class="w3-button w3-text-indigo" title="{{ 'day.previous'|trans }}"><i class="fa fa-chevron-circle-left"></i></a>
+<span class="w3-text-blue">{{ dateLongue(date) }}</span>
+<a href="{{ path('planning_one', { 'planificationID': planification.ID, 'date': nextDate|date('Ymd') }) }}" class="w3-button w3-text-indigo" title="{{ 'day.next'|trans }}"><i class="fa fa-chevron-circle-right"></i></a>
 {{ form_widget(form.date) }}
-<button type="submit" class="btn btn-default" title="{{ 'planning.display.date'|trans }}">
-	<span class="glyphicon glyphicon-th"></span>
-</button>
+<button type="submit" class="w3-button w3-text-indigo" title="{{ 'planning.display.date'|trans }}"><i class="fa fa-calendar-check-o"></i></button>
 
 {% if planningContext.numberColumns > 1 %}
-<a href="{{ path('planning_one_set_number_columns', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': date|date('Ymd'), 'numberColumns': (planningContext.numberColumns-1) }) }}" title="{{ 'planning.reduce.left'|trans }}"><span class="glyphicon glyphicon-triangle-left"></span></a>
+<a href="{{ path('planning_one_set_number_columns', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': date|date('Ymd'), 'numberColumns': (planningContext.numberColumns-1) }) }}" class="w3-button w3-text-indigo" title="{{ 'planning.reduce.left'|trans }}"><i class="fa fa-caret-left"></i></a>
 {% else %}
-<button type="button" class="glyphicon glyphicon-triangle-left btn-link" style="color:grey" disabled="disabled"></button>
+<button type="button" class="w3-button" disabled="disabled"><i class="fa fa-caret-left"></i></button>
 {% endif %}
 
 {% if planningContext.numberColumns < maxNumberColumns %}
-<a href="{{ path('planning_one_set_number_columns', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': date|date('Ymd'), 'numberColumns': (planningContext.numberColumns+1) }) }}" title="{{ 'planning.stretch.right'|trans }}"><span class="glyphicon glyphicon-triangle-right"></span></a>
+<a href="{{ path('planning_one_set_number_columns', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': date|date('Ymd'), 'numberColumns': (planningContext.numberColumns+1) }) }}" class="w3-button w3-text-indigo" title="{{ 'planning.stretch.right'|trans }}"><i class="fa fa-caret-right"></i></a>
 {% else %}
-<button type="button" class="glyphicon glyphicon-triangle-right btn-link" style="color:grey" disabled="disabled"></button>
+<button type="button" class="w3-button" disabled="disabled"><i class="fa fa-caret-right"></i></button>
 {% endif %}
 
 {% if planningContext.numberLines > 1 %}
-<a href="{{ path('planning_one_set_number_lines', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': date|date('Ymd'), 'numberLines': (planningContext.numberLines-1) }) }}" title="{{ 'planning.reduce.top'|trans }}"><span class="glyphicon glyphicon-triangle-top"></span></a>
+<a href="{{ path('planning_one_set_number_lines', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': date|date('Ymd'), 'numberLines': (planningContext.numberLines-1) }) }}" class="w3-button w3-text-indigo" title="{{ 'planning.reduce.top'|trans }}"><i class="fa fa-caret-up"></i></a>
 {% else %}
-<button type="button" class="glyphicon glyphicon-triangle-top btn-link" style="color:grey" disabled="disabled"></button>
+<button type="button" class="w3-button" disabled="disabled"><i class="fa fa-caret-up"></i></button>
 {% endif %}
 
 {% if planningContext.numberLines < maxNumberLines %}
-<a href="{{ path('planning_one_set_number_lines', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': date|date('Ymd'), 'numberLines': (planningContext.numberLines+1) }) }}" title="{{ 'planning.stretch.bottom'|trans }}"><span class="glyphicon glyphicon-triangle-bottom"></span></a>
+<a href="{{ path('planning_one_set_number_lines', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': date|date('Ymd'), 'numberLines': (planningContext.numberLines+1) }) }}" class="w3-button w3-text-indigo" title="{{ 'planning.stretch.bottom'|trans }}"><i class="fa fa-caret-down"></i></a>
 {% else %}
-<button type="button" class="glyphicon glyphicon-triangle-bottom btn-link" style="color:grey" disabled="disabled"></button>
+<button type="button" class="w3-button" disabled="disabled"><i class="fa fa-caret-down"></i></button>
 {% endif %}
 
 {% if list_acces %}
-<a href="{{ path('planning_list', { 'page': 1 }) }}" title="{{ 'planning.list'|trans }}"><span class="glyphicon glyphicon-list"></span></a>
+<a href="{{ path('planning_list', { 'page': 1 }) }}" class="w3-button w3-text-indigo" title="{{ 'planning.list'|trans }}"><i class="fa fa-list"></i></a>
 {% else %}
-<a href="{{ path('planning_many_pp', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': date|date('Ymd') }) }}" title="{{ 'planning.global'|trans }}"><span class="glyphicon glyphicon-resize-small"></span></a>
+<a href="{{ path('planning_many_pp', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'date': date|date('Ymd') }) }}" class="w3-button w3-text-indigo" title="{{ 'planning.global'|trans }}"><i class="fa fa-compress"></i></a>
 {% endif %}
 
 {% if not userContext.getCurrentUserFileAdministrator() and (bookingPeriod.before or bookingPeriod.after) %}
-<button type="button" class="glyphicon glyphicon-alert btn-link" style="color:red" data-toggle="modal" data-target="#bpAlert"></button>
+<button type="button" onclick="document.getElementById('bpAlert').style.display='block'" class="w3-button w3-text-red"><i class="fa fa-exclamation"></i></button>
 {% endif %}
+</h4></div>
 
-</legend>
-
-<div class="row">
+<div class="w3-row">
 
 {% for j in 1..planningContext.numberColumns %}
-    <div class="col-sm-{{ (12/planningContext.numberColumns) }}">
+	<div class="w3-col m{{ (12/planningContext.numberColumns) }}">
 {% for i in 1..planningContext.numberLines %}
+{% if j < planningContext.numberColumns and i < planningContext.numberLines %}
+<div class="w3-margin-right w3-margin-bottom">
+{% elseif j < planningContext.numberColumns %}
+<div class="w3-margin-right">
+{% elseif i < planningContext.numberLines %}
+<div class="w3-margin-bottom">
+{% else %}
+<div>
+{% endif %}
 {{ include('planning/day.html.twig', { 'booking_create': 'booking_one_create', 'booking_view': 'booking_one_view', 'day_key': ('1-' ~ i ~ '-' ~ j) }) }}
+</div>
 {% endfor %}
-    </div>
+	</div>
 {% endfor %}
 
 </div>
@@ -84,20 +90,5 @@
 {{ form_end(form) }}
 
 {{ include('planning/modal.html.twig') }}
-
-{% endblock %}
-
-{% block message %}
-
-<div class="col-sm-12">
-
-{% for flash_message in app.session.flashBag.get('notice') %}
-<div class="alert alert-success sb-message">
-	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-	{{ flash_message|trans }}
-</div>
-{% endfor %}
-
-</div>
 
 {% endblock %}

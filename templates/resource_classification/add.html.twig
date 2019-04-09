@@ -7,9 +7,9 @@
 
 {% block body %}
 
-<div class="w3-panel w3-border-bottom w3-text-indigo">
-	<p><i class="w3-xlarge fa fa-{{ rtIcons[resourceType] }}"></i>&nbsp;{{ ('resourceType.create.classification.' ~ resourceType)|trans }}</p>
-</div>
+<div class="w3-panel w3-border-bottom w3-text-indigo"><h4>
+	<i class="w3-xlarge fa fa-{{ rtIcons[resourceType] }}"></i>&nbsp;{{ ('resourceType.create.classification.' ~ resourceType)|trans }}
+</h4></div>
 
 <div class="w3-panel w3-sand w3-round-large">
 	<p>{{ 'resourceClassification.create.warning'|trans }}</p>

@@ -4,9 +4,9 @@
  
 {% block body %}
 
-<div class="w3-panel w3-border-bottom w3-text-indigo">
-	<h4><img src="{{ asset('images/label-32.png') }}">&nbsp;</img>{{ timetable.name }}</h4>
-</div>
+<div class="w3-panel w3-border-bottom w3-text-indigo"><h4>
+	<img src="{{ asset('images/label-32.png') }}">&nbsp;</img>{{ timetable.name }}
+</h4></div>
 
 {{ form_start(form, {'action': path('timetable_add_line', { 'timetableID': timetable.ID }), 'method': 'POST'}) }}
 

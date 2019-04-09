@@ -4,9 +4,9 @@
  
 {% block content %}
 
-<div class="w3-panel w3-border-bottom w3-text-indigo">
-	<p><img src="{{ asset('images/planification-32.png') }}">&nbsp;</img>{{ planification.name }}</p>
-</div>
+<div class="w3-panel w3-border-bottom w3-text-indigo"><h4>
+	<img src="{{ asset('images/planification-32.png') }}">&nbsp;</img>{{ planification.name }}
+</h4></div>
 
 <div class="w3-panel w3-sand w3-round-large">
 	<p>{{ 'planificationPeriod.create.minimum.date'|trans({'%date%': ppCreateDate.bookingMaxDate|date('d/m/Y')}) }}</p>

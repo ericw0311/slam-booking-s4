@@ -10,7 +10,7 @@
 {% set userImage = (userFile.administrator) ? 'administrator' : 'user' %}
 
 <div class="w3-panel w3-border-bottom w3-text-indigo"><h4>
-<img src="{{ asset('images/' ~ userImage ~ '-32.png') }}"></img>&nbsp;{{ userFile.getFirstAndLastName() }}
+	<img src="{{ asset('images/' ~ userImage ~ '-32.png') }}"></img>&nbsp;{{ userFile.getFirstAndLastName() }}
 </h4></div>
 
 {% if userFile.accountType == "ORGANISATION" %}

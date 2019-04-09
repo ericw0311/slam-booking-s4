@@ -7,13 +7,13 @@
  
 {% block content %}
 
-<div class="w3-panel w3-border-bottom w3-text-indigo">
+<div class="w3-panel w3-border-bottom w3-text-indigo"><h4>
 {% if resource.internal %}
-	<p><img src="{{ asset('images/' ~ rcIcons[resource.code] ~ '-32.png') }}">&nbsp;{{ ('resourceClassification.singular.' ~ resource.code)|trans }}</p>
+	<img src="{{ asset('images/' ~ rcIcons[resource.code] ~ '-32.png') }}">&nbsp;{{ ('resourceClassification.singular.' ~ resource.code)|trans }}
 {% else %}
-	<p><i class="w3-xlarge fa fa-{{ rtIcons[resource.type] }}"></i>&nbsp;{{ resourceClassification.name }}</p>
+	<i class="w3-xlarge fa fa-{{ rtIcons[resource.type] }}"></i>&nbsp;{{ resourceClassification.name }}
 {% endif %}
-</div>
+</h4></div>
 
 {% if resource.internal %}
 	{{ form_start(form, {'action': path('resource_add_internal', { 'type': resource.type, 'code': resource.code }), 'method': 'POST'}) }}
