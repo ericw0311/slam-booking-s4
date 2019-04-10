@@ -13,7 +13,7 @@
 &nbsp;<a href="{{ path('planification_modify', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID }) }}" class="fa fa-pencil w3-xlarge" title="{{ 'modify'|trans }}"></a>
 
 {% if not planificationContext.isFirstPeriod() %}
-<a href="{{ path('planification_edit', { 'planificationID': planification.ID, 'planificationPeriodID': planificationContext.previousPlanificationPeriod.ID }) }}" class="w3-button" title="{{ 'period.previous'|trans }}"><i class="fa fa-chevron-circle-left"></i></a>
+<a href="{{ path('planification_edit', { 'planificationID': planification.ID, 'planificationPeriodID': planificationContext.previousPlanificationPeriod.ID }) }}" class="w3-button w3-text-indigo" title="{{ 'period.previous'|trans }}"><i class="fa fa-chevron-circle-left"></i></a>
 {% endif %}
 
 {% if planificationPeriod.beginningDate == '' and planificationPeriod.endDate != '' %}
@@ -25,7 +25,7 @@
 {% endif %}
 
 {% if not planificationContext.isLastPeriod() %}
-<a href="{{ path('planification_edit', { 'planificationID': planification.ID, 'planificationPeriodID': planificationContext.nextPlanificationPeriod.ID }) }}" class="w3-button" title="{{ 'period.next'|trans }}"><i class="fa fa-chevron-circle-right"></i></a>
+<a href="{{ path('planification_edit', { 'planificationID': planification.ID, 'planificationPeriodID': planificationContext.nextPlanificationPeriod.ID }) }}" class="w3-button w3-text-indigo" title="{{ 'period.next'|trans }}"><i class="fa fa-chevron-circle-right"></i></a>
 {% endif %}
 
 <span class="w3-right w3-margin-right">
@@ -45,9 +45,9 @@
 	<tr>
 	<th>{{ 'resource.plural'|trans }}
 {% if not planificationContext.isLastPeriod() %}
-&nbsp;<button onclick="document.getElementById('unaClosedPeriod').style.display='block'" class="w3-button w3-red" title="{{ 'modify'|trans }}"><i class="fa fa-pencil"></i></button>
+&nbsp;<button onclick="document.getElementById('unaClosedPeriod').style.display='block'" class="w3-button w3-text-red" title="{{ 'modify'|trans }}"><i class="fa fa-pencil"></i></button>
 {% elseif planificationContext.periodBookingsCount > 0 %}
-&nbsp;<button onclick="document.getElementById('unaBooking').style.display='block'" class="w3-button w3-red" title="{{ 'modify'|trans }}"><i class="fa fa-pencil"></i></button>
+&nbsp;<button onclick="document.getElementById('unaBooking').style.display='block'" class="w3-button w3-text-red" title="{{ 'modify'|trans }}"><i class="fa fa-pencil"></i></button>
 {% else %}
 &nbsp;<a href="{{ path('planification_update_resource', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceIDList': resourceIDList }) }}" class="fa fa-pencil w3-xlarge" title="{{ 'modify'|trans }}"></a>
 {% endif %}
@@ -72,9 +72,9 @@
 <tr>
 	<th colspan=3>{{ 'timetable.plural'|trans }}
 {% if not planificationContext.isLastPeriod() %}
-&nbsp;<button onclick="document.getElementById('unaClosedPeriod').style.display='block'" class="w3-button w3-red" title="{{ 'modify'|trans }}"><i class="fa fa-pencil"></i></button>
+&nbsp;<button onclick="document.getElementById('unaClosedPeriod').style.display='block'" class="w3-button w3-text-red" title="{{ 'modify'|trans }}"><i class="fa fa-pencil"></i></button>
 {% elseif planificationContext.periodBookingsCount > 0 %}
-&nbsp;<button onclick="document.getElementById('unaBooking').style.display='block'" class="w3-button w3-red" title="{{ 'modify'|trans }}"><i class="fa fa-pencil"></i></button>
+&nbsp;<button onclick="document.getElementById('unaBooking').style.display='block'" class="w3-button w3-text-red" title="{{ 'modify'|trans }}"><i class="fa fa-pencil"></i></button>
 {% else %}
 &nbsp;<a href="{{ path('planification_line', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID }) }}" class="fa fa-pencil w3-xlarge" title="{{ 'modify'|trans }}"></a>
 {% endif %}
