@@ -1,0 +1,28 @@
+{# templates/booking/users.update.many.html.twig #}
+
+{% extends 'booking/users.html.twig' %}
+
+{% block link_sortBefore %}
+	<a href="{{ path('booking_many_users_update', { 'planningDate': planningDate|date('Ymd'), 'bookingID': booking.ID, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'timetableLinesList': timetableLinesList, 'labelIDList': labelIDList, 'noteID': noteID, 'userFileIDInitialList': userFileIDInitialList, 'userFileIDList': userFile.entityIDList_sortBefore }) }}" class="glyphicon glyphicon-arrow-up" title="{{ 'sort.before'|trans }}"></a>
+{% endblock %}
+
+{% block link_sortAfter %}
+	<a href="{{ path('booking_many_users_update', { 'planningDate': planningDate|date('Ymd'), 'bookingID': booking.ID, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'timetableLinesList': timetableLinesList, 'labelIDList': labelIDList, 'noteID': noteID, 'userFileIDInitialList': userFileIDInitialList, 'userFileIDList': userFile.entityIDList_sortAfter }) }}" class="glyphicon glyphicon-arrow-down" title="{{ 'sort.after'|trans }}"></a>
+{% endblock %}
+
+{% block link_unselect %}
+	<a href="{{ path('booking_many_users_update', { 'planningDate': planningDate|date('Ymd'), 'bookingID': booking.ID, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'timetableLinesList': timetableLinesList, 'labelIDList': labelIDList, 'noteID': noteID, 'userFileIDInitialList': userFileIDInitialList, 'userFileIDList': userFile.entityIDList_unselect }) }}" class="glyphicon glyphicon-arrow-right" title="{{ 'user.unselect'|trans }}"></a>
+{% endblock %}
+
+{% block link_select %}
+	<a href="{{ path('booking_many_users_update', { 'planningDate': planningDate|date('Ymd'), 'bookingID': booking.ID, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'timetableLinesList': timetableLinesList, 'labelIDList': labelIDList, 'noteID': noteID, 'userFileIDInitialList': userFileIDInitialList, 'userFileIDList': userFile.entityIDList_select }) }}" class="glyphicon glyphicon-arrow-left" title="{{ 'user.select'|trans }}"></a>
+{% endblock %}
+
+{% block booking_buttons %}
+	<a href="{{ path('booking_many_update', { 'planningDate': planningDate|date('Ymd'), 'bookingID': booking.ID, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDInitialList, 'labelIDList': labelIDList, 'noteID': noteID }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
+{% if selectedUserFiles|length < 1 %}
+	<button type="button" class="btn btn-success" data-toggle="modal" data-target="#validateModal"><span class="glyphicon glyphicon-ok"></span> <del>{{ 'validate'|trans }}</del></button>
+{% else %}
+	<a href="{{ path('booking_many_update', { 'planningDate': planningDate|date('Ymd'), 'bookingID': booking.ID, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDList, 'labelIDList': labelIDList, 'noteID': noteID }) }}" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i>&nbsp;{{ 'validate'|trans }}</a>
+{% endif %}
+{% endblock %}

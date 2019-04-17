@@ -1,0 +1,65 @@
+{# templates/booking/period.end.html.twig #}
+
+{% extends 'booking/booking.html.twig' %}
+
+{% block booking_details %}
+
+<ul class="nav nav-pills">
+
+{% if previousFirstDateNumber > 0 %}
+	<li>{% block previousFirstDateNumberLink %}{% endblock %}</li>
+{% endif %}
+
+{% for endPeriodDay in endPeriodDays %}
+{% if loop.index <= 1 %}
+	<li class="active"><a data-toggle="pill" href="#{{ endPeriodDay.date|date('Ymd') }}">{{ dateCourte(endPeriodDay.date) }}</a></li>
+{% else %}
+	<li><a data-toggle="pill" href="#{{ endPeriodDay.date|date('Ymd') }}">{{ dateCourte(endPeriodDay.date) }}</a></li>
+{% endif %}
+{% endfor %}
+
+{% if nextFirstDateNumber > 0 %}
+	<li>{% block nextFirstDateNumberLink %}{% endblock %}</li>
+{% endif %}
+
+</ul>
+
+<div class="tab-content">
+
+{% for endPeriodDay in endPeriodDays %}
+{% if loop.index <= 1 %}
+	<div id="{{ endPeriodDay.date|date('Ymd') }}" class="tab-pane fade in active">
+{% else %}
+	<div id="{{ endPeriodDay.date|date('Ymd') }}" class="tab-pane fade">
+{% endif %}
+
+{% if endPeriodDay.type == 'A' %}
+<button type="button" class="list-group-item" data-toggle="modal" data-target="#bnaAfter"><img src="{{ asset('images/forbidden-32.png') }}"></button>
+{% elseif endPeriodDay.type == 'B' %}
+<button type="button" class="list-group-item" data-toggle="modal" data-target="#bnaBefore"><img src="{{ asset('images/forbidden-32.png') }}"></button>
+{% elseif endPeriodDay.type == 'X' %}
+<button type="button" class="list-group-item" data-toggle="modal" data-target="#bnaEndPeriod"><img src="{{ asset('images/forbidden-32.png') }}"></button>
+
+{% else %}
+
+{% for planningLine in endPeriodDay.planningLines %}
+{% if planningLine.type == 'O' %}
+	{% block createOrUpdateBookingLink %}{% endblock %}
+{% else %}
+<a href="#" class="list-group-item list-group-item-warning"><img src="{{ asset('images/forbidden-32.png') }}">&nbsp;{{ dateLongue(endPeriodDay.date) }}&nbsp;&rarr;&nbsp;{{ timetableLine(planningLine.timetableLine) }} réservé</a>
+{% endif %}
+{% endfor %}
+
+{% endif %}
+	</div>
+
+{% endfor %}
+</div>
+
+{% endblock %}
+
+{% block modal %}
+
+{{ include('planning/modal.html.twig') }}
+
+{% endblock %}

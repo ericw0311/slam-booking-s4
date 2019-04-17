@@ -4,18 +4,19 @@
 
 {% block booking_details %}
 
-<div class="w3-row">
+<div class="col-sm-6">
 
-<div class="w3-half">
-<table class="w3-table w3-striped">
-<tr>
+<table class="table table-striped">
+
+<thead><tr>
 {% if selectedLabels|length > 1 %}
 	<th colspan=4>
 {% else %}
 	<th colspan=2>
 {% endif %}
-	{{ 'labels.selected'|trans }}</th></tr>
+	{{ 'labels.selected'|trans }}</th></tr></thead>
 
+	<tbody>
 {% for label in selectedLabels %}
 	<tr>
 {% if selectedLabels|length > 1 %}
@@ -34,21 +35,25 @@
 	<td>{% block link_unselect %}{% endblock %}</td>
 	</tr>
 {% endfor %}
+	</tbody>
 </table>
+
 </div>
 
-<div class="w3-half">
-<table class="w3-table w3-striped">
-	<tr><th colspan=2>{{ 'labels.available'|trans }}</th></tr>
+<div class="col-sm-6">
+
+<table class="table table-striped">
+	<thead><tr><th colspan=2>{{ 'labels.available'|trans }}</th></tr></thead>
+	<tbody>
 {% for label in availableLabels %}
 	<tr>
 	<td>{% block link_select %}{% endblock %}</td>
 	<td><img src="{{ asset('images/' ~ label.imageName) }}">&nbsp;{{ label.name }}</td>
 	</tr>
 {% endfor %}
+	</tbody>
 </table>
-</div>
 
-</div> 
+</div>
 
 {% endblock %}

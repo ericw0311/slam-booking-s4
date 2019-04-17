@@ -1,0 +1,24 @@
+{# templates/booking/labels.create.one.html.twig #}
+
+{% extends 'booking/labels.html.twig' %}
+
+{% block link_sortBefore %}
+	<a href="{{ path('booking_one_labels_create', { 'planningDate': planningDate|date('Ymd'), 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDList, 'noteID': noteID, 'labelIDInitialList': labelIDInitialList, 'labelIDList': label.entityIDList_sortBefore }) }}" class="glyphicon glyphicon-arrow-up" title="{{ 'sort.before'|trans }}"></a>
+{% endblock %}
+
+{% block link_sortAfter %}
+	<a href="{{ path('booking_one_labels_create', { 'planningDate': planningDate|date('Ymd'), 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDList, 'noteID': noteID, 'labelIDInitialList': labelIDInitialList, 'labelIDList': label.entityIDList_sortAfter }) }}" class="glyphicon glyphicon-arrow-down" title="{{ 'sort.after'|trans }}"></a>
+{% endblock %}
+
+{% block link_unselect %}
+	<a href="{{ path('booking_one_labels_create', { 'planningDate': planningDate|date('Ymd'), 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDList, 'noteID': noteID, 'labelIDInitialList': labelIDInitialList, 'labelIDList': label.entityIDList_unselect }) }}" class="glyphicon glyphicon-arrow-right" title="{{ 'label.unselect'|trans }}"></a>
+{% endblock %}
+
+{% block link_select %}
+	<a href="{{ path('booking_one_labels_create', { 'planningDate': planningDate|date('Ymd'), 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDList, 'noteID': noteID, 'labelIDInitialList': labelIDInitialList, 'labelIDList': label.entityIDList_select }) }}" class="glyphicon glyphicon-arrow-left" title="{{ 'label.select'|trans }}"></a>
+{% endblock %}
+
+{% block booking_buttons %}
+	<a href="{{ path('booking_one_create', { 'planningDate': planningDate|date('Ymd'), 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDList, 'labelIDList': labelIDInitialList, 'noteID': noteID }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
+	<a href="{{ path('booking_one_create', { 'planningDate': planningDate|date('Ymd'), 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDList, 'labelIDList': labelIDList, 'noteID': noteID }) }}" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i>&nbsp;{{ 'validate'|trans }}</a>
+{% endblock %}

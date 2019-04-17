@@ -4,62 +4,62 @@
 
 {% block booking_details %}
 
-<ul class="nav nav-pills">
+<div class="w3-bar">
 
 {% if previousFirstDateNumber > 0 %}
-	<li>{% block previousFirstDateNumberLink %}{% endblock %}</li>
+	{% block previousFirstDateNumberLink %}{% endblock %}
 {% endif %}
-
 {% for endPeriodDay in endPeriodDays %}
-{% if loop.index <= 1 %}
-	<li class="active"><a data-toggle="pill" href="#{{ endPeriodDay.date|date('Ymd') }}">{{ dateCourte(endPeriodDay.date) }}</a></li>
-{% else %}
-	<li><a data-toggle="pill" href="#{{ endPeriodDay.date|date('Ymd') }}">{{ dateCourte(endPeriodDay.date) }}</a></li>
-{% endif %}
+	<button class="w3-bar-item w3-button w3-khaki w3-border w3-hover-light-blue" onclick="displayTab({{ endPeriodDay.date|date('Ymd') }})">{{ dateCourte(endPeriodDay.date) }}</button>
 {% endfor %}
-
 {% if nextFirstDateNumber > 0 %}
-	<li>{% block nextFirstDateNumberLink %}{% endblock %}</li>
+	{% block nextFirstDateNumberLink %}{% endblock %}
 {% endif %}
-
-</ul>
-
-<div class="tab-content">
+</div>
 
 {% for endPeriodDay in endPeriodDays %}
 {% if loop.index <= 1 %}
-	<div id="{{ endPeriodDay.date|date('Ymd') }}" class="tab-pane fade in active">
+<div id="{{ endPeriodDay.date|date('Ymd') }}" class="city">
 {% else %}
-	<div id="{{ endPeriodDay.date|date('Ymd') }}" class="tab-pane fade">
+<div id="{{ endPeriodDay.date|date('Ymd') }}" class="city" style="display:none">
 {% endif %}
 
 {% if endPeriodDay.type == 'A' %}
-<button type="button" class="list-group-item" data-toggle="modal" data-target="#bnaAfter"><img src="{{ asset('images/forbidden-32.png') }}"></button>
+	<button type="button" onclick="document.getElementById('bnaAfter').style.display='block'" class="w3-button w3-text-red"><i class="fa fa-ban"></i></button>
 {% elseif endPeriodDay.type == 'B' %}
-<button type="button" class="list-group-item" data-toggle="modal" data-target="#bnaBefore"><img src="{{ asset('images/forbidden-32.png') }}"></button>
+	<button type="button" onclick="document.getElementById('bnaBefore').style.display='block'" class="w3-button w3-text-red"><i class="fa fa-ban"></i></button>
 {% elseif endPeriodDay.type == 'X' %}
-<button type="button" class="list-group-item" data-toggle="modal" data-target="#bnaEndPeriod"><img src="{{ asset('images/forbidden-32.png') }}"></button>
+	<button type="button" onclick="document.getElementById('bnaEndPeriod').style.display='block'" class="w3-button w3-text-red"><i class="fa fa-ban"></i></button>
 
 {% else %}
 
+	<div class="w3-bar-block">
 {% for planningLine in endPeriodDay.planningLines %}
 {% if planningLine.type == 'O' %}
 	{% block createOrUpdateBookingLink %}{% endblock %}
 {% else %}
-<a href="#" class="list-group-item list-group-item-warning"><img src="{{ asset('images/forbidden-32.png') }}">&nbsp;{{ dateLongue(endPeriodDay.date) }}&nbsp;&rarr;&nbsp;{{ timetableLine(planningLine.timetableLine) }} réservé</a>
+	<a href="#" class="w3-bar-item w3-button w3-round-large w3-pale-red"><img src="{{ asset('images/booking-32.png') }}">&nbsp;{{ dateLongue(endPeriodDay.date) }}&nbsp;&rarr;&nbsp;{{ timetableLine(planningLine.timetableLine) }}</a>
 {% endif %}
 {% endfor %}
-
-{% endif %}
 	</div>
-
-{% endfor %}
 </div>
+{% endfor %}
 
 {% endblock %}
 
 {% block modal %}
-
 {{ include('planning/modal.html.twig') }}
+{% endblock %}
 
+{% block javascripts %}
+<script>
+function displayTab(tabCode) {
+  var i;
+  var x = document.getElementsByClassName("city");
+  for (i = 0; i < x.length; i++) {
+    x[i].style.display = "none";  
+  }
+  document.getElementById(tabCode).style.display = "block";  
+}
+</script>
 {% endblock %}

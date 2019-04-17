@@ -3,26 +3,27 @@
 {% set rtIcons = constant('App\\Entity\\Constants::RESOURCE_TYPE_ICON') %}
 {% set rcIcons = constant('App\\Entity\\Constants::RESOURCE_CLASSIFICATION_ICON') %}
 
-{% extends 'base.html.twig' %}
+{% extends 'base.connected.html.twig' %}
  
 {% block body %}
 
 {% block form_start %}{% endblock %}
 
-<div class="w3-panel w3-border-bottom w3-text-indigo"><h4>
+<legend>
+
 {% if resource.internal %}
-	<img src="{{ asset('images/' ~ rcIcons[resource.code] ~ '-32.png') }}">&nbsp;{{ resource.name }}
+<img src="{{ asset('images/' ~ rcIcons[resource.code] ~ '-32.png') }}">
 {% else %}
-	<i class="w3-xlarge fa fa-{{ rtIcons[resource.type] }}"></i>&nbsp;{{ resource.name }}
+<img src="{{ asset('images/' ~ rtIcons[resource.type] ~ '-32.png') }}">
 {% endif %}
-</h4></div>
+{{ resource.name }}
+
+</legend>
 
 {% block booking_details %}{% endblock %}
 
-<div class="w3-show-inline-block w3-margin-top">
-<div class="w3-bar w3-border w3-round">
+<div class="btn-group sb-margin-top" style="float: left">
 	{% block booking_buttons %}{% endblock %}
-</div>
 </div>
 
 {% block form_end %}{% endblock %}

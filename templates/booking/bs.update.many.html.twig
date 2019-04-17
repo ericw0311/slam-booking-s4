@@ -1,0 +1,50 @@
+{# templates/booking/update.many.html.twig #}
+
+{% extends 'booking/create.or.update.html.twig' %}
+
+{% block entered_by %}
+<div class="alert alert-info"><span class="glyphicon glyphicon-star"></span>&nbsp;{{ 'booking.entered.on.by'|trans({'%bookingDate%': dateLongue(booking.createdAt), '%bookingTime%': booking.createdAt|date("H:i"), '%userName%': booking.user.getFirstAndLastName()}) }}</div>
+{% endblock %}
+
+{% block period_end_link %}
+	<a href="{{ path('booking_many_end_period_update', { 'planningDate': planningDate|date('Ymd'), 'bookingID': booking.ID, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'timetableLinesList': timetableLinesList, 'firstDateNumber': 1, 'userFileIDList': userFileIDList, 'labelIDList': labelIDList, 'noteID': noteID }) }}" class="list-group-item" title="{{ 'booking.period.end.update'|trans }}"><img src="{{ asset('images/time-32.png') }}">&nbsp;{{ dateLongue(endDate) }}&nbsp;&rarr;&nbsp;{{ timetableLine(endTimetableLine) }}</a>
+{% endblock %}
+
+{% block userFiles_list_link %}
+	<a href="{{ path('booking_many_users_update', { 'planningDate': planningDate|date('Ymd'), 'bookingID': booking.ID, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'timetableLinesList': timetableLinesList, 'labelIDList': labelIDList, 'userFileIDInitialList': userFileIDList, 'userFileIDList': userFileIDList, 'noteID': noteID }) }}" class="list-group-item" title="{{ 'user.list.update'|trans }}"><img src="{{ asset('images/' ~ image) }}">&nbsp;{{ userFiles[0].getFirstAndLastName() }}</a>
+{% endblock %}
+
+{% block userFiles_table_link %}
+	<a href="{{ path('booking_many_users_update', { 'planningDate': planningDate|date('Ymd'), 'bookingID': booking.ID, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'timetableLinesList': timetableLinesList, 'labelIDList': labelIDList, 'userFileIDInitialList': userFileIDList, 'userFileIDList': userFileIDList, 'noteID': noteID }) }}" class="glyphicon glyphicon-pencil" title="{{ 'user.list.update'|trans }}"></a>
+{% endblock %}
+
+{% block labels_empty_list_link %}
+{% if numberLabels > 0 %}
+	<a href="{{ path('booking_many_labels_update', { 'planningDate': planningDate|date('Ymd'), 'bookingID': booking.ID, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDList, 'noteID': noteID, 'labelIDInitialList': labelIDList, 'labelIDList': labelIDList }) }}" class="list-group-item" title="{{ 'label.list.update'|trans }}"><img src="{{ asset('images/label-32.png') }}">&nbsp;{{ 'label.no'|trans }}</a>
+{% endif %}
+{% endblock %}
+
+{% block labels_list_link %}
+	<a href="{{ path('booking_many_labels_update', { 'planningDate': planningDate|date('Ymd'), 'bookingID': booking.ID, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDList, 'noteID': noteID, 'labelIDInitialList': labelIDList, 'labelIDList': labelIDList }) }}" class="list-group-item" title="{{ 'label.list.update'|trans }}"><img src="{{ asset('images/label-32.png') }}">&nbsp;{{ labels[0].getName() }}</a>
+{% endblock %}
+
+{% block labels_table_link %}
+	<a href="{{ path('booking_many_labels_update', { 'planningDate': planningDate|date('Ymd'), 'bookingID': booking.ID, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDList, 'noteID': noteID, 'labelIDInitialList': labelIDList, 'labelIDList': labelIDList }) }}" class="glyphicon glyphicon-pencil" title="{{ 'label.list.update'|trans }}"></a>
+{% endblock %}
+
+{% block note_empty_link %}
+	<a href="{{ path('booking_many_note_update', { 'planningDate': planningDate|date('Ymd'), 'bookingID': booking.ID, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDList, 'labelIDList': labelIDList, 'noteID': noteID }) }}" class="list-group-item" title="{{ 'note.enter'|trans }}"><img src="{{ asset('images/note-32.png') }}">&nbsp;{{ 'note.no'|trans }}</a>
+{% endblock %}
+
+{% block note_update_link %}
+	<a href="{{ path('booking_many_note_update', { 'planningDate': planningDate|date('Ymd'), 'bookingID': booking.ID, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDList, 'labelIDList': labelIDList, 'noteID': noteID }) }}" class="glyphicon glyphicon-pencil" title="{{ 'modify'|trans }}"></a>
+{% endblock %}
+
+{% block note_delete_link %}
+	<a href="{{ path('booking_many_note_delete_update', { 'planningDate': planningDate|date('Ymd'), 'bookingID': booking.ID, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDList, 'labelIDList': labelIDList, 'noteID': note.ID }) }}" class="glyphicon glyphicon-trash" title="{{ 'delete'|trans }}"></a>
+{% endblock %}
+
+{% block booking_buttons %}
+	<a href="{{ path('planning_many', { 'planificationID': planification.ID, 'date': planningDate|date('Ymd') }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
+	<a href="{{ path('booking_many_validate_update', { 'planningDate': planningDate|date('Ymd'), 'bookingID': booking.ID, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDList, 'labelIDList': labelIDList, 'noteID': noteID }) }}" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i>&nbsp;{{ 'validate'|trans }}</a>
+{% endblock %}

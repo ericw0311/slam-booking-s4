@@ -1,0 +1,71 @@
+{# templates/booking/duplicate.html.twig #}
+
+{% extends 'booking/booking.html.twig' %}
+
+{% block booking_details %}
+
+<div class="col-sm-12">
+{% if newBookingID > 0 %}
+<div class="alert alert-success">
+<span class="glyphicon glyphicon-star"></span>&nbsp;{{ 'booking.duplicate.exists'|trans({'%newBookingDate%': dateLongue(planningContext.getFirstDuplicateDate())}) }}
+{% elseif ctrlBookingLineID > 0 %}
+<div class="alert alert-danger">
+<span class="glyphicon glyphicon-star"></span>&nbsp;{{ 'booking.duplicate.ko'|trans({'%newBookingDate%': dateLongue(planningContext.getFirstDuplicateDate())}) }}
+{% else %}
+<div class="alert alert-info">
+<span class="glyphicon glyphicon-star"></span>&nbsp;{{ 'booking.duplicate.ok'|trans({'%newBookingDate%': dateLongue(planningContext.getFirstDuplicateDate())}) }}
+{% endif %}
+</div>
+</div>
+
+<div class="col-sm-6">
+
+{% for j in 1..planningContext.numberColumns %}
+{% for i in 1..planningContext.numberLines %}
+{{ include('planning/day.html.twig', { 'day_key': ('1-' ~ i ~ '-' ~ j) }) }}
+{% endfor %}
+{% endfor %}
+
+</div>
+
+<div class="col-sm-6">
+
+{% for j in 1..planningContext.numberColumns %}
+{% for i in 1..planningContext.numberLines %}
+{{ include('planning/day.html.twig', { 'day_key': ('2-' ~ i ~ '-' ~ j) }) }}
+{% endfor %}
+{% endfor %}
+
+</div>
+
+{% endblock %}
+
+{% block modal %}
+
+{{ include('planning/modal.html.twig') }}
+
+{% endblock %}
+
+{% block booking_buttons %}
+
+{% block planning_link %}{% endblock %}
+{% if previousGap > 0 %}
+	{% block duplicate_previous_week_link %}{% endblock %}
+{% else %}
+	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#naPreviousWeek"><span class="glyphicon glyphicon-chevron-left"></span> <del>{{ 'week.previous'|trans }}</del></button>
+{% endif %}
+
+{% if newBookingID <= 0 and ctrlBookingLineID <= 0 %}
+	{% if planningContext.getDay('2-1-1').type == 'B' %}
+		<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#bnaBefore"><span class="glyphicon glyphicon-ok"></span> <del>{{ 'duplicate'|trans }}</del></button>
+	{% elseif planningContext.getDay('2-1-1').type == 'A' %}
+		<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#bnaAfter"><span class="glyphicon glyphicon-ok"></span> <del>{{ 'duplicate'|trans }}</del></button>
+	{% else %}
+		{% block duplicate_validate_link %}{% endblock %}
+	{% endif %}
+{% elseif newBookingID > 0 %}
+	{% block duplicate_delete_link %}{% endblock %}
+{% endif %}
+{% block duplicate_next_week_link %}{% endblock %}
+
+{% endblock %}
