@@ -30,7 +30,6 @@
 	<button type="button" onclick="document.getElementById('bnaBefore').style.display='block'" class="w3-button w3-text-red"><i class="fa fa-ban"></i></button>
 {% elseif endPeriodDay.type == 'X' %}
 	<button type="button" onclick="document.getElementById('bnaEndPeriod').style.display='block'" class="w3-button w3-text-red"><i class="fa fa-ban"></i></button>
-
 {% else %}
 
 	<div class="w3-bar-block">
@@ -42,6 +41,7 @@
 {% endif %}
 {% endfor %}
 	</div>
+{% endif %}
 </div>
 {% endfor %}
 
