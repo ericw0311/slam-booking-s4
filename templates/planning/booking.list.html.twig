@@ -3,34 +3,32 @@
 {% set rtIcons = constant('App\\Entity\\Constants::RESOURCE_TYPE_ICON') %}
 {% set rcIcons = constant('App\\Entity\\Constants::RESOURCE_CLASSIFICATION_ICON') %}
 
-{% extends 'list.html.twig' %}
+{% extends 'booking.list.html.twig' %}
 
-{% set create_path, list_path, display_create_path = 'booking_add', list_path, false %}
+{% block number_lines_and_columns_link %}
+	<a href="{{ path(list_path, { 'page': listContext.page }) }}" class="w3-bar-item w3-button w3-light-gray"><i class="fa fa-wrench"></i>&nbsp;{{ 'parameters'|trans }}</a>
+{% endblock %}
 
-{% block list %}
+{% block page_1_link %}
+	<a href="{{ path(list_path, { 'page': 1 }) }}" class="w3-bar-item w3-button">1</a>
+{% endblock %}
 
-<div class="row">
+{% block page_minus_1_link %}
+	<a href="{{ path(list_path, { 'page': (listContext.page-1) }) }}" class="w3-bar-item w3-button">{{ (listContext.page-1) }}</a>
+{% endblock %}
 
-{% for i in 0..listContext.numberColumnsDisplayed-1 if listContext.numberColumnsDisplayed > 0 %}
-    <div class="col-sm-{{ (12/listContext.numberColumnsDisplayed) }}">
-	{% for j in 0..listContext.numberLinesDisplayed-1 if (i*listContext.numberLinesDisplayed+j) < listContext.numberRecordsDisplayed %}
+{% block page_plus_1_link %}
+	<a href="{{ path(list_path, { 'page': (listContext.page+1) }) }}" class="w3-bar-item w3-button">{{ (listContext.page+1) }}</a>
+{% endblock %}
 
-	{% if listBookings[i*listContext.numberLinesDisplayed+j].resource_internal %}
-	{% set resource_image = rcIcons[listBookings[i*listContext.numberLinesDisplayed+j].resource_code] %}
-	{% else %}
-	{% set resource_image = rtIcons[listBookings[i*listContext.numberLinesDisplayed+j].resource_type] %}
-	{% endif %}
+{% block page_link %}
+	<a href="{{ path(list_path, { 'page': listContext.page }) }}" class="w3-bar-item w3-button w3-indigo">{{ listContext.page }}</a>
+{% endblock %}
 
-	{% if listBookings[i*listContext.numberLinesDisplayed+j].administrator %}
-	{% set user_image = 'administrator' %}
-	{% else %}
-	{% set user_image = 'user' %}
-	{% endif %}
-<a href="{{ path(planning_path, { 'planificationID': listBookings[i*listContext.numberLinesDisplayed+j].planificationID, 'date': listBookings[i*listContext.numberLinesDisplayed+j].beginningDate|date('Ymd') }) }}" class="list-group-item"><img src="{{ asset('images/' ~ resource_image ~ '-32.png') }}">&nbsp;{{ listBookings[i*listContext.numberLinesDisplayed+j].resource_name }}&nbsp;<img src="{{ asset('images/time-16.png') }}">&nbsp;{{ periode(listBookings[i*listContext.numberLinesDisplayed+j].beginningDate, listBookings[i*listContext.numberLinesDisplayed+j].endDate) }}&nbsp;<img src="{{ asset('images/' ~ user_image ~ '-16.png') }}">&nbsp;{{ listBookings[i*listContext.numberLinesDisplayed+j].user_first_name }}&nbsp;{{ listBookings[i*listContext.numberLinesDisplayed+j].user_last_name }}</a>
-	{% endfor %}
-    </div>
-{% endfor %}
+{% block last_page_link %}
+	<a href="{{ path(list_path, { 'page': listContext.numberPages }) }}" class="w3-bar-item w3-button">{{ listContext.numberPages }}</a>
+{% endblock %}
 
-</div>
-
+{% block back_link %}
+	<a href="{{ path('default_summary') }}" class="w3-bar-item w3-button w3-light-gray"><i class="fa fa-arrow-left"></i>&nbsp;{{ 'back'|trans }}</a>
 {% endblock %}

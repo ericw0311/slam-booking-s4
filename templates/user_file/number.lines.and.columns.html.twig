@@ -1,22 +1,30 @@
 {# templates/user_file/number.lines.and.columns.html.twig #}
 
-{% extends 'base.connected.html.twig' %}
+{% extends 'base.half.html.twig' %}
  
-{% block body %}
+{% block content %}
 
-{{ form_start(form, {'action': path('user_file_number_lines_and_columns', { 'userFileID': userFile.ID, 'page': page }), 'method': 'POST', 'class': 'form-horizontal'}) }}
+<div class="w3-panel w3-border-bottom w3-text-indigo"><h4>
+	<i class="fa fa-wrench w3-xlarge"></i>&nbsp;{{ 'number.lines.columns'|trans }}
+</h4></div>
 
-<fieldset>
-	<legend><i class="glyphicon glyphicon-wrench"></i>&nbsp;{{ 'number.lines.columns'|trans }}</legend>
-	{{ form_row(form.numberLines) }}
-	{{ form_row(form.numberColumns) }}
-	{{ form_rest(form) }}
-</fieldset>
+{{ form_start(form, {'action': path('user_file_number_lines_and_columns', { 'userFileID': userFile.ID, 'page': page }), 'method': 'POST'}) }}
 
-<div class="btn-group">
-	<a href="{{ path('user_file_booking_list', { 'userFileID': userFile.ID, 'page': page }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
-	<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> {{ 'validate'|trans }}</button>
+<form class="w3-container">
+
+<p>{{ form_row(form.numberLines) }}</p>
+<p>{{ form_row(form.numberColumns) }}</p>
+
+{{ form_rest(form) }}
+
+<div class="w3-show-inline-block">
+<div class="w3-bar w3-border w3-round">
+	<a href="{{ path('user_file_booking_list', { 'userFileID': userFile.ID, 'page': page }) }}" class="w3-bar-item w3-button w3-light-gray"><i class="fa fa-times"></i>&nbsp;{{ 'cancel'|trans }}</a>
+	<button type="submit" class="w3-bar-item w3-button w3-green"><i class="fa fa-check"></i>&nbsp;{{ 'validate'|trans }}</button>
 </div>
+</div>
+
+</form>
 
 {{ form_end(form) }}
 

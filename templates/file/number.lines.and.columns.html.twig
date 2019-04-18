@@ -1,4 +1,4 @@
-{# templates/timetable/number.lines.and.columns.html.twig #}
+{# templates/file/number.lines.and.columns.html.twig #}
 
 {% extends 'base.half.html.twig' %}
  
@@ -8,7 +8,7 @@
 	<i class="fa fa-wrench w3-xlarge"></i>&nbsp;{{ 'number.lines.columns'|trans }}
 </h4></div>
 
-{{ form_start(form, {'action': path('timetable_number_lines_and_columns', { 'timetableID': timetable.ID, 'page': page }), 'method': 'POST'}) }}
+{{ form_start(form, {'action': path('file_number_lines_and_columns', { 'fileID': file.ID, 'page': page }), 'method': 'POST'}) }}
 
 <form class="w3-container">
 
@@ -19,7 +19,7 @@
 
 <div class="w3-show-inline-block">
 <div class="w3-bar w3-border w3-round">
-	<a href="{{ path('timetable_booking_list', { 'timetableID': timetable.ID, 'page': page }) }}" class="w3-bar-item w3-button w3-light-gray"><i class="fa fa-times"></i>&nbsp;{{ 'cancel'|trans }}</a>
+	<a href="{{ path('file_booking_list', { 'fileID': file.ID, 'page': page }) }}" class="w3-bar-item w3-button w3-light-gray"><i class="fa fa-times"></i>&nbsp;{{ 'cancel'|trans }}</a>
 	<button type="submit" class="w3-bar-item w3-button w3-green"><i class="fa fa-check"></i>&nbsp;{{ 'validate'|trans }}</button>
 </div>
 </div>

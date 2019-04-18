@@ -10,9 +10,9 @@
 
 <div>
 {% if numberBookings > 0 %}
-<a href="{{ path('label_booking_list', { 'labelID': label.ID, 'page': 1 }) }}"><img src="{{ asset('images/booking-32.png') }}"> {{ 'booking.plural'|trans }} <span class="badge">{{ numberBookings }}</span></a>
+	<a href="{{ path('label_booking_list', { 'labelID': label.ID, 'page': 1 }) }}" class="w3-text-indigo"><img src="{{ asset('images/booking-32.png') }}">&nbsp;{{ 'booking.plural'|trans }}&nbsp;<span class="w3-badge w3-indigo">{{ numberBookings }}</span></a>
 {% else %}
-<img src="{{ asset('images/booking-32.png') }}"> {{ 'booking.plural'|trans }} <span class="badge">{{ numberBookings }}</span>
+	<img src="{{ asset('images/booking-32.png') }}">&nbsp;<span class="w3-text-indigo">{{ 'booking.plural'|trans }}</span>&nbsp;<span class="w3-badge w3-indigo">{{ numberBookings }}</span>
 {% endif %}
 </div>
 
