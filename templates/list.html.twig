@@ -33,11 +33,15 @@
 
 {% for i in 0..listContext.numberColumnsDisplayed-1 if listContext.numberColumnsDisplayed > 0 %}
 	<div class="w3-col m{{ (12/listContext.numberColumnsDisplayed) }}">
-{% set lineNumber = 0 %}
+{% if i < listContext.numberColumnsDisplayed-1 %}
+	<div class="w3-bar-block w3-margin-right">
+{% else %}
 	<div class="w3-bar-block">
+{% endif %}
+{% set lineNumber = 0 %}
 {% for j in 0..listContext.numberLinesDisplayed-1 if (i*listContext.numberLinesDisplayed+j) < listContext.numberRecordsDisplayed %}
 {% set lineNumber = lineNumber + 1 %}
-{% set lineColor = (lineNumber is odd) ? 'pale-green' : 'sand' %}
+{% set lineColor = ((i is odd and lineNumber is odd) or (i is even and lineNumber is even)) ? 'transparent' : 'sand' %}
 {% block link %}{% endblock %}
 {% endfor %}
 	</div>

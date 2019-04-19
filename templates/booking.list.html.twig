@@ -47,7 +47,7 @@
 {% for j in 0..listContext.numberLinesDisplayed-1 if (i*listContext.numberLinesDisplayed+j) < listContext.numberRecordsDisplayed %}
 
 {% set lineNumber = lineNumber + 1 %}
-{% set lineColor = ((i is odd and lineNumber is odd) or (i is even and lineNumber is even)) ? 'transparent' : 'light-grey' %}
+{% set lineColor = ((i is odd and lineNumber is odd) or (i is even and lineNumber is even)) ? 'transparent' : 'sand' %}
 
 {% if listBookings[i*listContext.numberLinesDisplayed+j].administrator %}
 	{% set user_image = 'administrator' %}
