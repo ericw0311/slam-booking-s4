@@ -2,6 +2,6 @@
 
 {% extends 'timetable/foreign.html.twig' %}
 
-{% block legend %}
-	<legend><img src="{{ asset('images/time-32.png') }}"></img>&nbsp;{{ timetable.name }}:&nbsp;{{ 'delete.not.allowed'|trans }}</legend>
+{% block title %}
+	<img src="{{ asset('images/time-32.png') }}">&nbsp;{{ timetable.name }}:&nbsp;{{ 'delete.not.allowed'|trans }}
 {% endblock %}

@@ -1,21 +1,26 @@
 {# templates/timetable/foreign.html.twig #}
 
-{% extends 'base.connected.html.twig' %}
+{% extends 'base.html.twig' %}
  
 {% block body %}
 
-{% block legend %}{% endblock %}
+<div class="w3-panel w3-border-bottom w3-text-red"><h4>
+	{% block title %}{% endblock %}
+</h4></div>
 
-<div class="panel">
-
+<div class="w3-bar-block">
+{% set lineNumber = 0 %}
 {% for planification in listPlanifications %}
-	<a href="{{ path('planification_edit_lp', { 'planificationID': planification.ID }) }}" class="list-group-item list-group-item-warning"><img src="{{ asset('images/planification-32.png') }}">&nbsp;{{ planification.name }}</a>
+{% set lineNumber = lineNumber + 1 %}
+{% set lineColor = (lineNumber is odd) ? 'sand' : 'transparent' %}
+	<a href="{{ path('planification_edit_lp', { 'planificationID': planification.ID }) }}" class="w3-bar-item w3-button w3-round-large w3-{{ lineColor }}"><img src="{{ asset('images/planification-32.png') }}">&nbsp;{{ planification.name }}</a>
 {% endfor %}
-
 </div>
 
-<div class="btn-group">
-	<a href="{{ path('timetable_edit', { 'timetableID': timetable.ID }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'timetable.back'|trans }}</a>
+<div class="w3-show-inline-block w3-margin-top">
+<div class="w3-bar w3-border w3-round">
+	<a href="{{ path('timetable_edit', { 'timetableID': timetable.ID }) }}" class="w3-bar-item w3-button w3-light-gray"><i class="fa fa-arrow-left"></i>&nbsp;{{ 'timetable.back'|trans }}</a>
+</div>
 </div>
 
 {% endblock %}

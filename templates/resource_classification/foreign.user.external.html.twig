@@ -1,26 +1,33 @@
 {# templates/resource_classification/foreign.user.external.html.twig #}
 
-{% extends 'base.connected.html.twig' %}
+{% set rtIcons = constant('App\\Entity\\Constants::RESOURCE_TYPE_ICON') %}
+
+{% extends 'base.html.twig' %}
  
 {% block body %}
 
-<legend><img src="{{ asset('images/user-32.png') }}">&nbsp;{{ resourceClassification.name }}:&nbsp;{{ ('resourceClassification.' ~ action ~ '.not.allowed')|trans }}</legend>
+<div class="w3-panel w3-border-bottom w3-text-red"><h4>
+	<i class="w3-xlarge fa fa-{{ rtIcons[resourceType] }}"></i>&nbsp;{{ resourceClassification.name }}:&nbsp;{{ ('resourceClassification.' ~ action ~ '.not.allowed')|trans }}
+</h4></div>
 
-<div class="panel">
-
+<div class="w3-bar-block">
+{% set lineNumber = 0 %}
 {% for userFile in listUserFiles %}
-{% if userFile.administrator %} {% set image = 'administrator-32.png' %} {% else %} {% set image = 'user-32.png' %} {% endif %}
+{% set lineNumber = lineNumber + 1 %}
+{% set lineColor = (lineNumber is odd) ? 'sand' : 'transparent' %}
+{% set image = (userFile.administrator) ? 'administrator-32.png' : 'user-32.png' %}
 {% if userFile.userCreated %}
-	<a href="{{ path('user_file_edit', { 'userFileID': userFile.ID }) }}" class="list-group-item"><img src="{{ asset('images/' ~ image) }}">&nbsp;{{ userFile.getFirstAndLastName() }}&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-user"></span>&nbsp;{{ userFile.username }}</a>
+	<a href="{{ path('user_file_edit', { 'userFileID': userFile.ID }) }}" class="w3-bar-item w3-button w3-round-large w3-{{ lineColor }}"><img src="{{ asset('images/' ~ image) }}">&nbsp;{{ userFile.getFirstAndLastName() }}&nbsp;&nbsp;&nbsp;<i class="fa fa-{{ rtIcons[resourceType] }}"></i>&nbsp;{{ userFile.username }}</a>
 {% else %}
-	<a href="{{ path('user_file_edit', { 'userFileID': userFile.ID }) }}" class="list-group-item list-group-item-warning"><img src="{{ asset('images/' ~ image) }}">&nbsp;{{ userFile.getFirstAndLastName() }}</a>
+	<a href="{{ path('user_file_edit', { 'userFileID': userFile.ID }) }}" class="w3-bar-item w3-button w3-round-large w3-{{ lineColor }}"><img src="{{ asset('images/' ~ image) }}">&nbsp;{{ userFile.getFirstAndLastName() }}</a>
 {% endif %}
 {% endfor %}
-
 </div>
 
-<div class="btn-group">
-	<a href="{{ path('resource_classification_index', { 'resourceType': resourceType }) }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
+<div class="w3-show-inline-block w3-margin-top">
+<div class="w3-bar w3-border w3-round">
+	<a href="{{ path('resource_classification_index', { 'resourceType': resourceType }) }}" class="w3-bar-item w3-button w3-light-gray"><i class="fa fa-arrow-left"></i>&nbsp;{{ 'resourceClassification.back'|trans }}</a>
+</div>
 </div>
 
 {% endblock %}

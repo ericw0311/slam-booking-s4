@@ -288,6 +288,7 @@ resource.validate.and.create: Valider et ajouter une ressource
 
 resourceClassification.activated.ok: La classification a bien été activée
 resourceClassification.ask.delete: Voulez-vous vraiment supprimer la classification %name% ?
+resourceClassification.back: Retour à la classification de ressource
 resourceClassification.back.to.list: Retour aux classifications de ressources
 resourceClassification.create: Créer une classification de ressources
 resourceClassification.create.warning: Attention, vous créez une nouvelle classification de ressource. Ceci n'est à faire que si les classifications proposées par défaut ne suffisent pas
