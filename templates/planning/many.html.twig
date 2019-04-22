@@ -20,24 +20,18 @@
 
 <div class="w3-col s2">
 <div class="w3-bar-block w3-margin-top w3-margin-right">
+
+{% set lineNumber = 0 %}
 {% for i_p in planifications %}
 
+{% set lineNumber = lineNumber + 1 %}
+{% set lineColor = (lineNumber is odd) ? 'sand' : 'transparent' %}
+{% set lineColor = (i_p.ID == planification.ID) ? 'indigo' : lineColor %}
+
 {% if i_p.internal %}
-
-{% if i_p.ID == planification.ID %}
-	<a href="{{ path('planning_many', { 'planificationID': i_p.ID, 'date': date|date('Ymd') }) }}" class="w3-bar-item w3-button w3-round-large w3-blue"><img src="{{ asset('images/' ~ rcIcons[i_p.code] ~ '-32.png') }}">&nbsp;{{ i_p.name }}</a>
+	<a href="{{ path('planning_many', { 'planificationID': i_p.ID, 'date': date|date('Ymd') }) }}" class="w3-bar-item w3-button w3-round-large w3-{{ lineColor }}"><img src="{{ asset('images/' ~ rcIcons[i_p.code] ~ '-32.png') }}">&nbsp;{{ i_p.name }}</a>
 {% else %}
-	<a href="{{ path('planning_many', { 'planificationID': i_p.ID, 'date': date|date('Ymd') }) }}" class="w3-bar-item w3-button w3-round-large w3-sand"><img src="{{ asset('images/' ~ rcIcons[i_p.code] ~ '-32.png') }}">&nbsp;{{ i_p.name }}</a>
-{% endif %}
-
-{% else %}
-
-{% if i_p.ID == planification.ID %}
-	<a href="{{ path('planning_many', { 'planificationID': i_p.ID, 'date': date|date('Ymd') }) }}" class="w3-bar-item w3-button w3-round-large w3-blue"><i class="w3-xlarge fa fa-{{ rtIcons[i_p.type] }}"></i>&nbsp;{{ i_p.name }}</a>
-{% else %}
-	<a href="{{ path('planning_many', { 'planificationID': i_p.ID, 'date': date|date('Ymd') }) }}" class="w3-bar-item w3-button w3-round-large w3-sand"><i class="w3-xlarge fa fa-{{ rtIcons[i_p.type] }}"></i>&nbsp;{{ i_p.name }}</a>
-{% endif %}
-
+	<a href="{{ path('planning_many', { 'planificationID': i_p.ID, 'date': date|date('Ymd') }) }}" class="w3-bar-item w3-button w3-round-large w3-{{ lineColor }}"><i class="w3-xlarge fa fa-{{ rtIcons[i_p.type] }}"></i>&nbsp;{{ i_p.name }}</a>
 {% endif %}
 
 {% endfor %}

@@ -17,9 +17,12 @@
 <div class="w3-third w3-container">
 
 <div class="w3-bar-block">
+{% set lineNumber = 0 %}
 {% for l_resourceType in resourceTypes %}
-	{% set linkColor = (l_resourceType == resourceType) ? 'indigo' :'sand' %}
-	<a href="{{ path('resource_classification_index', { 'resourceType': l_resourceType }) }}" class="w3-bar-item w3-button w3-round-large w3-{{ linkColor }}"><i class="w3-xlarge fa fa-{{ rtIcons[l_resourceType] }}"></i>&nbsp;{{ ('resourceType.plural.' ~ l_resourceType)|trans }}</a>
+{% set lineNumber = lineNumber + 1 %}
+{% set lineColor = (lineNumber is odd) ? 'sand' : 'transparent' %}
+{% set lineColor = (l_resourceType == resourceType) ? 'indigo' : lineColor %}
+	<a href="{{ path('resource_classification_index', { 'resourceType': l_resourceType }) }}" class="w3-bar-item w3-button w3-round-large w3-{{ lineColor }}"><i class="w3-xlarge fa fa-{{ rtIcons[l_resourceType] }}"></i>&nbsp;{{ ('resourceType.plural.' ~ l_resourceType)|trans }}</a>
 {% endfor %}
 </div>
 </div>

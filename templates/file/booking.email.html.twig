@@ -4,9 +4,9 @@
  
 {% block content %}
 
-<div class="w3-panel w3-border-bottom w3-text-indigo">
-	<p><img src="{{ asset('images/file-32.png') }}">&nbsp;</img>{{ 'file.booking.email'|trans }}</p>
-</div>
+<div class="w3-panel w3-border-bottom w3-text-indigo"><h4>
+	<img src="{{ asset('images/file-32.png') }}">&nbsp;</img>{{ 'file.booking.email'|trans }}
+</h4></div>
 
 {{ form_start(form, {'action': path('file_booking_email', { 'fileID': file.ID }), 'method': 'POST'}) }}
 

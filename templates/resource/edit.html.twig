@@ -35,7 +35,7 @@
 {% endif %}
 </div>
 
-<div class="w3-show-inline-block">
+<div class="w3-show-inline-block w3-margin-top">
 <div class="w3-bar w3-border w3-round">
 	<a href="{{ path('resource', { 'page': 1 }) }}" class="w3-bar-item w3-button w3-light-gray"><i class="fa fa-arrow-left"></i>&nbsp;{{ 'resource.back.to.list'|trans }}</a>
 	<a href="{{ path('resource_modify', { 'resourceID': resource.ID }) }}" class="w3-bar-item w3-button w3-blue"><i class="fa fa-pencil"></i>&nbsp;{{ 'modify'|trans }}</a>

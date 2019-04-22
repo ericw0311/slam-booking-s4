@@ -11,6 +11,8 @@ use Psr\Log\LoggerInterface;
 use App\Entity\Constants;
 use App\Entity\UserContext;
 use App\Entity\ListContext;
+use App\Entity\UserParameter;
+use App\Entity\UserParameterNLC;
 use App\Entity\BookingPeriod;
 use App\Entity\PlanningContext;
 use App\Entity\Planification;
@@ -21,6 +23,8 @@ use App\Entity\TimetableLine;
 use App\Entity\Booking;
 use App\Entity\Ddate;
 use App\Form\DdateType;
+use App\Form\UserParameterNLCType;
+use App\Api\AdministrationApi;
 use App\Api\PlanningApi;
 use App\Api\BookingApi;
 
@@ -416,4 +420,38 @@ class PlanningController extends Controller
 	return $this->redirectToRoute('planning_'.($many ? 'many' : 'one').'_pp',
 		array('planificationID' => $planification->getID(), 'planificationPeriodID' => $planificationPeriod->getID(), 'date' => $date->format("Ymd")));
     }
+
+	// Met à jour le nombre de lignes et colonnes d'affichage des listes
+	/**
+     * @Route("/planning/numberLinesColumns/{list_path}/{page}", name="planning_number_lines_and_columns", requirements={"page"="\d+"})
+     */
+	public function number_lines_and_columns(Request $request, $list_path, $page)
+	{
+	$connectedUser = $this->getUser();
+	$em = $this->getDoctrine()->getManager();
+
+	$userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+	$numberLines = AdministrationApi::getNumberLines($em, $connectedUser, 'booking');
+	$numberColumns = AdministrationApi::getNumberColumns($em, $connectedUser, 'booking');
+
+	$upRepository = $em->getRepository(UserParameter::Class);
+	$userParameterNLC = new UserParameterNLC($numberLines, $numberColumns);
+	$form = $this->createForm(UserParameterNLCType::class, $userParameterNLC);
+
+	if ($request->isMethod('POST')) {
+		$form->submit($request->request->get($form->getName()));
+
+		if ($form->isSubmitted() && $form->isValid()) {
+
+			AdministrationApi::setNumberLines($em, $connectedUser, 'booking', $userParameterNLC->getNumberLines());
+			AdministrationApi::setNumberColumns($em, $connectedUser, 'booking', $userParameterNLC->getNumberColumns());
+			$request->getSession()->getFlashBag()->add('notice', 'number.lines.columns.updated.ok');
+			return $this->redirectToRoute($list_path, array('page' => 1));
+		}
+	}
+
+	return $this->render('planning/number.lines.and.columns.html.twig',
+	array('userContext' => $userContext, 'list_path' => $list_path, 'page' => $page, 'form' => $form->createView()));
+	}
 }

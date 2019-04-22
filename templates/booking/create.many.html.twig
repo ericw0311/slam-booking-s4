@@ -20,8 +20,8 @@
 
 {% block labels_empty_list_link %}
 {% if numberLabels > 0 %}
-<div class="w3-bar">
-	<a href="{{ path('booking_many_labels_create', { 'planningDate': planningDate|date('Ymd'), 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDList, 'noteID': noteID, 'labelIDInitialList': labelIDList, 'labelIDList': labelIDList }) }}" class="w3-bar-item" title="{{ 'label.list.update'|trans }}"><img src="{{ asset('images/label-32.png') }}">&nbsp;{{ 'label.no'|trans }}</a>
+<div class="w3-bar-block">
+	<a href="{{ path('booking_many_labels_create', { 'planningDate': planningDate|date('Ymd'), 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'timetableLinesList': timetableLinesList, 'userFileIDList': userFileIDList, 'noteID': noteID, 'labelIDInitialList': labelIDList, 'labelIDList': labelIDList }) }}" class="w3-bar-item w3-button w3-round-large w3-light-blue" title="{{ 'label.list.update'|trans }}"><img src="{{ asset('images/label-32.png') }}">&nbsp;{{ 'label.no'|trans }}</a>
 </div>
 {% endif %}
 {% endblock %}

@@ -17,8 +17,11 @@
 </div>
 
 <div class="w3-bar-block">
+{% set lineNumber = 0 %}
 {% for rt in resourceTypes %}
-	<a href="{{ path('planification_init_resource', { 'type': rt.type }) }}" class="w3-bar-item w3-button w3-round-large w3-sand"><i class="w3-xlarge fa fa-{{ rtIcons[rt.type] }}"></i>&nbsp;{{ ('resourceType.plural.' ~ rt.type)|trans }}<span class="w3-badge w3-right w3-green">{{ rt.1 }}</span></a>
+{% set lineNumber = lineNumber + 1 %}
+{% set lineColor = (lineNumber is odd) ? 'sand' : 'transparent' %}
+	<a href="{{ path('planification_init_resource', { 'type': rt.type }) }}" class="w3-bar-item w3-button w3-round-large w3-{{ lineColor }}"><i class="w3-xlarge fa fa-{{ rtIcons[rt.type] }}"></i>&nbsp;{{ ('resourceType.plural.' ~ rt.type)|trans }}<span class="w3-badge w3-right w3-green">{{ rt.1 }}</span></a>
 {% endfor %}
 </div>
 

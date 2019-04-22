@@ -39,7 +39,8 @@
 
 <div class="w3-row">
 
-<div class="w3-half">
+<div class="w3-half"><div class="w3-margin-right">
+
 {% if planificationResources|length > 0 %}
 <table class="w3-table w3-striped">
 	<tr>
@@ -64,9 +65,11 @@
 {% endfor %}
 </table>
 {% endif %}
-</div>
+
+</div></div>
 
 <div class="w3-half">
+
 {% if planificationLines|length > 0 %}
 <table class="w3-table w3-striped">
 <tr>
@@ -98,7 +101,7 @@
 
 </div> 
 
-<div class="w3-show-inline-block">
+<div class="w3-show-inline-block w3-margin-top">
 <div class="w3-bar w3-border w3-round">
 	<a href="{{ path('planification', { 'page': 1 }) }}" class="w3-bar-item w3-button w3-light-gray"><i class="fa fa-arrow-left"></i>&nbsp;{{ 'planification.back.to.list'|trans }}</a>
 	

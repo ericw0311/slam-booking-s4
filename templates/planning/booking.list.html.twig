@@ -6,7 +6,7 @@
 {% extends 'booking.list.html.twig' %}
 
 {% block number_lines_and_columns_link %}
-	<a href="{{ path(list_path, { 'page': listContext.page }) }}" class="w3-bar-item w3-button w3-light-gray"><i class="fa fa-wrench"></i>&nbsp;{{ 'parameters'|trans }}</a>
+	<a href="{{ path('planning_number_lines_and_columns', { 'list_path': list_path, 'page': listContext.page }) }}" class="w3-bar-item w3-button w3-light-gray"><i class="fa fa-wrench"></i>&nbsp;{{ 'parameters'|trans }}</a>
 {% endblock %}
 
 {% block page_1_link %}
