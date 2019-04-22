@@ -10,7 +10,7 @@
 	{% block previousFirstDateNumberLink %}{% endblock %}
 {% endif %}
 {% for endPeriodDay in endPeriodDays %}
-	<button class="w3-bar-item w3-button w3-khaki w3-border w3-hover-light-blue" onclick="displayTab({{ endPeriodDay.date|date('Ymd') }})">{{ dateCourte(endPeriodDay.date) }}</button>
+	<button class="w3-bar-item w3-button w3-pale-blue w3-border w3-hover-light-blue" onclick="displayTab({{ endPeriodDay.date|date('Ymd') }})">{{ dateCourte(endPeriodDay.date) }}</button>
 {% endfor %}
 {% if nextFirstDateNumber > 0 %}
 	{% block nextFirstDateNumberLink %}{% endblock %}
@@ -33,7 +33,10 @@
 {% else %}
 
 	<div class="w3-bar-block">
+{% set lineNumber = 0 %}
 {% for planningLine in endPeriodDay.planningLines %}
+{% set lineNumber = lineNumber + 1 %}
+{% set lineColor = (lineNumber is odd) ? 'sand' : 'transparent' %}
 {% if planningLine.type == 'O' %}
 	{% block createOrUpdateBookingLink %}{% endblock %}
 {% else %}

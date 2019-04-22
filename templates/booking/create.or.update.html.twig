@@ -11,7 +11,7 @@
 <div class="w3-half"><div class="w3-margin-right">
 
 <ul class="w3-ul w3-border">
-	<li><img src="{{ asset('images/time-32.png') }}">&nbsp;{{ dateLongue(beginningDate) }}&nbsp;&rarr;&nbsp;{{ timetableLine(beginningTimetableLine) }}</li>
+	<li class="w3-pale-blue"><img src="{{ asset('images/time-32.png') }}">&nbsp;{{ dateLongue(beginningDate) }}&nbsp;&rarr;&nbsp;{{ timetableLine(beginningTimetableLine) }}</li>
 </ul>
 
 {% if userFiles|length == 1 %}
@@ -21,9 +21,9 @@
 
 {% else %}
 
-<table class="w3-table w3-striped">
+<table class="w3-table w3-striped w3-margin-top">
 	<tr>
-	<th>{{ 'users'|trans }}&nbsp;{% block userFiles_table_link %}{% endblock %}</th>
+	<th class="w3-pale-yellow">{{ 'users'|trans }}&nbsp;{% block userFiles_table_link %}{% endblock %}</th>
 	</tr>
 {% for userFile in userFiles %}
 	<tr>
@@ -51,9 +51,9 @@
 
 {% else %}
 
-<table class="w3-table w3-striped">
+<table class="w3-table w3-striped w3-margin-top">
 	<tr>
-	<th>{{ 'label.plural'|trans }}&nbsp;{% block labels_table_link %}{% endblock %}</th>
+	<th class="w3-pale-yellow">{{ 'label.plural'|trans }}&nbsp;{% block labels_table_link %}{% endblock %}</th>
 	</tr>
 {% for label in labels %}
 	<tr>
@@ -74,8 +74,8 @@
 
 {% else %}
 
-<ul class="w3-ul w3-border">
-	<li>{{ note.note }}&nbsp;{% block note_update_link %}{% endblock %}&nbsp;{% block note_delete_link %}{% endblock %}</li>
+<ul class="w3-ul w3-border w3-margin-top">
+	<li class="w3-pale-blue">{{ note.note }}&nbsp;{% block note_update_link %}{% endblock %}&nbsp;{% block note_delete_link %}{% endblock %}</li>
 </ul>
 
 {% endif %}
