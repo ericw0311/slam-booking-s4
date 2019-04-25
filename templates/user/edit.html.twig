@@ -1,32 +1,22 @@
-{% extends 'base.connected.html.twig' %}
+{# templates/user/edit.html.twig #}
+
+{% extends 'base.html.twig' %}
  
 {% block body %}
 
-<legend><img src="{{ asset('images/user-32.png') }}">&nbsp;</img>&nbsp;{{ user.getFirstAndLastName() }}</legend>
+<div class="w3-panel w3-border-bottom w3-text-indigo"><h4>
+	<img src="{{ asset('images/user-32.png') }}"></img>&nbsp;{{ user.getFirstAndLastName() }}
+</h4></div>
 
-{% if user.accountType == "ORGANISATION" %}
-<p><img src="{{ asset('images/organisation-32.png') }}">&nbsp;<strong>{{ user.uniqueName }}</strong></p>
-{% endif %}
+<p><i class="fa fa-user w3-xlarge"></i>&nbsp;{{ user.userName }}</p>
 
-<p><span class="glyphicon glyphicon-user icon-size32"></span>&nbsp;{{ user.userName }}</strong></p>
+<p><i class="fa fa-envelope w3-xlarge"></i>&nbsp;{{ user.email }}</p>
 
-<p><span class="glyphicon glyphicon-envelope icon-size32"></span>&nbsp;{{ user.email }}</strong></p>
-
-<div class="btn-group">
-	<a href="{{ path('user_modify') }}" class="btn btn-primary"><i class="glyphicon glyphicon-pencil"></i> {{ 'modify'|trans }}</a>
-	<a href="{{ path('user_password') }}" class="btn btn-success"><i class="glyphicon glyphicon-tag"></i> {{ 'user.modify.password'|trans }}</a>
+<div class="w3-show-inline-block w3-margin-top">
+<div class="w3-bar w3-border w3-round">
+	<a href="{{ path('user_modify') }}" class="w3-bar-item w3-button w3-blue"><i class="fa fa-pencil"></i>&nbsp;{{ 'modify'|trans }}</a>
+	<a href="{{ path('user_password') }}" class="w3-bar-item w3-button w3-light-grey"><i class="fa fa-unlock-alt"></i>&nbsp;{{ 'user.modify.password'|trans }}</a>
 </div>
-
-{% endblock %}
-
-
-{% block message %}
-
-{% for flash_message in app.session.flashBag.get('notice') %}
-<div class="alert alert-success sb-message">
-	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-	{{ flash_message|trans }}
 </div>
-{% endfor %}
 
 {% endblock %}

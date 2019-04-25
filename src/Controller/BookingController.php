@@ -1007,114 +1007,63 @@ class BookingController extends Controller
 
     // Suppression d'une réservation
     /**
-     * @Route("/bookingmany/delete/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}", name="booking_many_delete")
+     * @Route("/bookingmany/delete/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}", name="booking_many_delete")
 	 * @ParamConverter("planningDate", options={"format": "Ymd"})
 	 * @ParamConverter("booking", options={"mapping": {"bookingID": "id"}})
 	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
      * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
-     * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
      */
-    public function many_delete(Request $request, \Swift_Mailer $mailer, TranslatorInterface $translator, \Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource)
+    public function many_delete(Request $request, \Swift_Mailer $mailer, TranslatorInterface $translator, \Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod)
     {
-	return BookingController::delete($request, $mailer, $translator, $planningDate, $booking, $planification, $planificationPeriod, $resource, 1);
+	return BookingController::delete($request, $mailer, $translator, $planningDate, $booking, $planification, $planificationPeriod, 1);
     }
 
     // Suppression d'une réservation
     /**
-     * @Route("/bookingone/delete/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}/{resourceID}", name="booking_one_delete")
+     * @Route("/bookingone/delete/{planningDate}/{bookingID}/{planificationID}/{planificationPeriodID}", name="booking_one_delete")
 	 * @ParamConverter("planningDate", options={"format": "Ymd"})
 	 * @ParamConverter("booking", options={"mapping": {"bookingID": "id"}})
 	 * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
      * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
-     * @ParamConverter("resource", options={"mapping": {"resourceID": "id"}})
      */
-    public function one_delete(Request $request, \Swift_Mailer $mailer, TranslatorInterface $translator, \Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource)
+    public function one_delete(Request $request, \Swift_Mailer $mailer, TranslatorInterface $translator, \Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod)
     {
-	return BookingController::delete($request, $mailer, $translator, $planningDate, $booking, $planification, $planificationPeriod, $resource, 0);
+	return BookingController::delete($request, $mailer, $translator, $planningDate, $booking, $planification, $planificationPeriod, 0);
     }
 
     // Suppression d'une réservation
-    public function delete(Request $request, \Swift_Mailer $mailer, TranslatorInterface $translator, \Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, Resource $resource, $many)
+    public function delete(Request $request, \Swift_Mailer $mailer, TranslatorInterface $translator, \Datetime $planningDate, Booking $booking, Planification $planification, PlanificationPeriod $planificationPeriod, $many)
     {
     $connectedUser = $this->getUser();
     $em = $this->getDoctrine()->getManager();
     $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
-	$timetableLinesList = BookingApi::getBookingLinesUrl($em, $booking);
-	BookingApi::getBookingLinesUrlBeginningAndEndPeriod($em, $timetableLinesList, $beginningDate, $beginningTimetableLine, $endDate, $endTimetableLine);
-	$userFileIDList = BookingApi::getBookingUsersUrl($em, $booking);
-	// Utilisateurs
-	$userFileIDArray = explode("-", $userFileIDList);
-	$userFiles = array();
-	$ufRepository = $em->getRepository(UserFile::Class);
-	foreach ($userFileIDArray as $userFileID) {
-		$userFile = $ufRepository->find($userFileID);
-		if ($userFile !== null) {
-			$userFiles[] = $userFile;
-		}
-	}
-	// Libellés
-	$lRepository = $em->getRepository(Label::Class);
-	$numberLabels = $lRepository->getLabelsCount($userContext->getCurrentFile());
-	$labelIDList = BookingApi::getBookingLabelsUrl($em, $booking);
-	$labelIDArray = explode("-", $labelIDList);
-	$labels = array();
-	$lRepository = $em->getRepository(Label::Class);
-	foreach ($labelIDArray as $labelID) {
-		$label = $lRepository->find($labelID);
-		if ($label !== null) {
-			$labels[] = $label;
-		}
-	}
-	// Note
-	$noteID = 0;
-	$note = new Note($connectedUser);
-	$nRepository = $em->getRepository(Note::Class);
-	if ($booking->getFormNote() !== null) {
-		$noteID = $booking->getFormNote()->getID();
-		$note = $nRepository->find($noteID);
+	// Envoi du mail
+	$sendEmailAdministrator = AdministrationApi::getFileBookingEmailAdministrator($em, $userContext->getCurrentFile());
+	$sendEmailBookingUser = AdministrationApi::getFileBookingEmailUser($em, $userContext->getCurrentFile());
+
+	if ($sendEmailAdministrator or $sendEmailBookingUser) {
+		$buRepository = $em->getRepository(BookingUser::Class);
+		$bookingUsers = $buRepository->findBy(array('booking' => $booking), array('oorder' => 'asc'));
+
+		$blaRepository = $em->getRepository(BookingLabel::Class);
+		$bookingLabels = $blaRepository->findBy(array('booking' => $booking), array('id' => 'asc'));
+
+		$message = (new \Swift_Message($translator->trans('booking.delete')))
+			->setFrom(['slam.booking.web@gmail.com' => 'Slam Booking'])
+			->setTo(BookingApi::getBookingUserEmailArray($em, $booking, $sendEmailAdministrator, $sendEmailBookingUser))
+			->setBody($this->renderView('emails/booking.html.twig',
+				array('type' => 'D', 'booking' => $booking, 'bookingUsers' => $bookingUsers, 'bookingLabels' => $bookingLabels)),
+				'text/html');
+		$mailer->send($message);
 	}
 
-    $form = $this->get('form.factory')->create();
- 
-	if ($request->isMethod('POST')) {
-		$form->submit($request->request->get($form->getName()));
-		if ($form->isSubmitted() && $form->isValid()) {
-
-			// Envoi du mail
-			$sendEmailAdministrator = AdministrationApi::getFileBookingEmailAdministrator($em, $userContext->getCurrentFile());
-			$sendEmailBookingUser = AdministrationApi::getFileBookingEmailUser($em, $userContext->getCurrentFile());
-
-			if ($sendEmailAdministrator or $sendEmailBookingUser) {
-				$buRepository = $em->getRepository(BookingUser::Class);
-				$bookingUsers = $buRepository->findBy(array('booking' => $booking), array('oorder' => 'asc'));
-
-				$blaRepository = $em->getRepository(BookingLabel::Class);
-				$bookingLabels = $blaRepository->findBy(array('booking' => $booking), array('id' => 'asc'));
-
-				$message = (new \Swift_Message($translator->trans('booking.delete')))
-					->setFrom(['slam.booking.web@gmail.com' => 'Slam Booking'])
-					->setTo(BookingApi::getBookingUserEmailArray($em, $booking, $sendEmailAdministrator, $sendEmailBookingUser))
-					->setBody($this->renderView('emails/booking.html.twig',
-						array('type' => 'D', 'booking' => $booking, 'bookingUsers' => $bookingUsers, 'bookingLabels' => $bookingLabels)),
-						'text/html');
-				$mailer->send($message);
-			}
-
-			// Inutile de persister ici, Doctrine connait déjà la reservation
-			$em->remove($booking);
-			$em->flush();
-			$request->getSession()->getFlashBag()->add('notice', 'booking.deleted.ok');
-			return $this->redirectToRoute('planning_'.($many ? 'many' : 'one').'_pp',
-				array('planificationID' => $planification->getID(), 'planificationPeriodID' => $planificationPeriod->getID(), 'date' => $planningDate->format('Ymd')));
-		}
-    }
-
-	return $this->render('booking/delete.'.($many ? 'many' : 'one').'.html.twig',
-		array('userContext' => $userContext, 'planningDate' => $planningDate, 'booking' => $booking, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource,
-			'timetableLinesList' => $timetableLinesList, 'beginningDate' => $beginningDate, 'beginningTimetableLine' => $beginningTimetableLine,
-			'endDate' => $endDate, 'endTimetableLine' => $endTimetableLine, 'userFiles' => $userFiles, 'userFileIDList' => $userFileIDList,
-			'numberLabels' => $numberLabels, 'labels' => $labels, 'labelIDList' => $labelIDList, 'noteID' => $noteID, 'note' => $note, 'form' => $form->createView()));
+	// Inutile de persister ici, Doctrine connait déjà la reservation
+	$em->remove($booking);
+	$em->flush();
+	$request->getSession()->getFlashBag()->add('notice', 'booking.deleted.ok');
+	return $this->redirectToRoute('planning_'.($many ? 'many' : 'one').'_pp',
+		array('planificationID' => $planification->getID(), 'planificationPeriodID' => $planificationPeriod->getID(), 'date' => $planningDate->format('Ymd')));
     }
 
     // Consultation d'une réservation

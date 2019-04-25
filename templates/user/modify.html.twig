@@ -1,33 +1,50 @@
-{% extends 'base.connected.html.twig' %}
- 
-{% block body %}
+{# templates/user/modify.html.twig #}
 
-{{ form_start(form, {'action': path('user_modify'), 'method': 'POST', 'class': 'form-horizontal'}) }}
+{% extends 'base.half.html.twig' %}
 
-<fieldset>
-	<legend><img src="{{ asset('images/user-32.png') }}">&nbsp;</img>{{ user.getFirstAndLastName() }}</legend>
-	
-	{{ form_row(form.accountType) }}
-	{{ form_row(form.firstName) }}
-	{{ form_row(form.lastName) }}
-	{{ form_row(form.userName) }}
-	{{ form_row(form.email) }}
-	{{ form_row(form.uniqueName) }}
-	{{ form_row(form.password) }}
-	{{ form_rest(form) }}
-</fieldset>
+{% block content %}
 
-<div class="btn-group">
-<a href="{{ path('user_edit') }}" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> {{ 'cancel'|trans }}</a>
-<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> {{ 'validate'|trans }}</button>
+<div class="w3-panel w3-border-bottom w3-text-indigo">
+	<p><i class="fa fa-user w3-xlarge"></i>&nbsp;{{ user.getFirstAndLastName() }}</p>
 </div>
+
+{{ form_start(form, {'action': path('user_modify'), 'method': 'POST'}) }}
+
+<form class="w3-container">
+
+{{ form_row(form.password) }}
+
+<p>{{ form_row(form.accountType) }}</p>
+<p>{{ form_row(form.firstName) }}</p>
+<p>{{ form_row(form.lastName) }}</p>
+
+<p><label>{{ 'user.name'|trans }}</label>
+{{ form_widget(form.userName) }}
+<span class="w3-text-red">{{ form_errors(form.userName) }}</span></p>
+
+<p><label>{{ 'user.email'|trans }}</label>
+{{ form_widget(form.email) }}
+<span class="w3-text-red">{{ form_errors(form.email) }}</span></p>
+
+<p><label>{{ 'user.organisation.name'|trans }}</label>
+{{ form_widget(form.uniqueName) }}
+<span class="w3-text-red">{{ form_errors(form.uniqueName) }}</span></p>
+
+{{ form_rest(form) }}
+
+<div class="w3-show-inline-block">
+<div class="w3-bar w3-border w3-round">
+	<a href="{{ path('user_edit') }}" class="w3-bar-item w3-button w3-light-gray"><i class="fa fa-times"></i>&nbsp;{{ 'cancel'|trans }}</a>
+	<button type="submit" class="w3-bar-item w3-button w3-green"><i class="fa fa-check"></i>&nbsp;{{ 'validate'|trans }}</button>
+</div>
+</div>
+
+</form>
 
 {{ form_end(form) }}
 
 {% endblock %}
 
 {% block javascripts %}
-
-<script src="{{ asset('scripts/user_modify.js') }}"></script>
-
+	<script src="{{ asset('scripts/user_modify.js') }}"></script>
 {% endblock %}

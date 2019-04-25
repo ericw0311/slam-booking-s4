@@ -11,23 +11,23 @@
 <div class="w3-half"><div class="w3-margin-right">
 
 <ul class="w3-ul w3-border">
-	<li class="w3-pale-blue"><img src="{{ asset('images/time-32.png') }}">&nbsp;{{ dateLongue(beginningDate) }}&nbsp;&rarr;&nbsp;{{ timetableLine(beginningTimetableLine) }}</li>
+	<li class="{% block period_end_color %}{% endblock %}"><img src="{{ asset('images/time-32.png') }}">&nbsp;{{ dateLongue(beginningDate) }}&nbsp;&rarr;&nbsp;{{ timetableLine(beginningTimetableLine) }}</li>
 </ul>
 
 {% if userFiles|length == 1 %}
 
 {% set image = (userFiles[0].administrator) ? 'administrator-32.png' : 'user-32.png' %}
-{% block userFiles_list_link %}{% endblock %}
+{% block user_file_list_link %}{% endblock %}
 
 {% else %}
 
 <table class="w3-table w3-striped w3-margin-top">
 	<tr>
-	<th class="w3-pale-yellow">{{ 'users'|trans }}&nbsp;{% block userFiles_table_link %}{% endblock %}</th>
+	<th class="{% block user_file_color %}{% endblock %}">{{ 'users'|trans }}{% block user_file_table_link %}{% endblock %}</th>
 	</tr>
 {% for userFile in userFiles %}
 	<tr>
-{% if userFile.administrator %} {% set image = 'administrator-32.png' %} {% else %} {% set image = 'user-32.png' %} {% endif %}
+{% set image = (userFile.administrator) ? 'administrator-32.png' : 'user-32.png' %}
 	<td><img src="{{ asset('images/' ~ image) }}">&nbsp;{{ userFile.getFirstAndLastName() }}</td>
 	</tr>
 {% endfor %}
@@ -43,17 +43,17 @@
 
 {% if labels|length < 1 %}
 
-{% block labels_empty_list_link %}{% endblock %}
+{% block label_empty_list_link %}{% endblock %}
 
 {% elseif labels|length == 1 %}
 
-{% block labels_list_link %}{% endblock %}
+{% block label_list_link %}{% endblock %}
 
 {% else %}
 
 <table class="w3-table w3-striped w3-margin-top">
 	<tr>
-	<th class="w3-pale-yellow">{{ 'label.plural'|trans }}&nbsp;{% block labels_table_link %}{% endblock %}</th>
+	<th class="{% block label_color %}{% endblock %}">{{ 'label.plural'|trans }}{% block label_table_link %}{% endblock %}</th>
 	</tr>
 {% for label in labels %}
 	<tr>
@@ -75,7 +75,7 @@
 {% else %}
 
 <ul class="w3-ul w3-border w3-margin-top">
-	<li class="w3-pale-blue">{{ note.note }}&nbsp;{% block note_update_link %}{% endblock %}&nbsp;{% block note_delete_link %}{% endblock %}</li>
+	<li class="{% block note_color %}{% endblock %}">{{ note.note }}{% block note_update_link %}{% endblock %}{% block note_delete_link %}{% endblock %}</li>
 </ul>
 
 {% endif %}

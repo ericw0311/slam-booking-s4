@@ -1,0 +1,7 @@
+{% extends 'base.connected.html.twig' %}
+ 
+{% block body %}
+
+<div class="well">Bienvenue {{ app.user.userName }}. Cette page est réservée aux utilisateurs ayant le role ROLE_ADMIN d'après le fichier security.yaml</div>
+
+{% endblock %}
