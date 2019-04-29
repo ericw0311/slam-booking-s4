@@ -450,12 +450,13 @@ class BookingApi
 		}
 
 		if ($planningType == 'D') {
-			// Duplication de réservation: La réservation traitée a une couleur verte (success), les autres ont une couleur rouge (danger)
-			$cellClass = ((($booking['bookingID'] == $originBookingID) or ($booking['bookingID'] == $newBookingID)) ? 'pale-green' : 'pink');
+			// Duplication de réservation: La réservation traitée a une couleur bleue, les autres ont une couleur rouge pale
+			$cellClass = ((($booking['bookingID'] == $originBookingID) or ($booking['bookingID'] == $newBookingID)) ? 'blue' : 'pale-red');
 		} else {
 			// Planning: La couleur des réservations est alternée à la fois entre ressources (utilisation du tableau des ressources d'ordre pair) et entre réservations d'une même journée (Compteur resourceBookingCount)
-			$cellClass = (in_array($booking['resourceID'], $evenResourcesID) ? ((($resourceBookingCount % 2) < 1) ? 'pale-green' : 'amber') : ((($resourceBookingCount % 2) < 1) ? 'aqua' : 'pink'));
+			$cellClass = (in_array($booking['resourceID'], $evenResourcesID) ? ((($resourceBookingCount % 2) < 1) ? 'pale-green' : 'pale-yellow') : ((($resourceBookingCount % 2) < 1) ? 'pale-blue' : 'pale-red'));
 		}
+
 		$bookingNDB = new BookingNDB($booking['bookingID'], $cellType, $cellClass);
 		$bookings[$key] = $bookingNDB;
 

@@ -19,6 +19,19 @@
 	</div>
 </div>
 
+<!-- Contrôle utilisateur de la réservation -->
+<div id="buAlert" class="w3-modal w3-animate-opacity">
+	<div class="w3-modal-content">
+		<header class="w3-container w3-red"> 
+			<span onclick="document.getElementById('buAlert').style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
+			<h3>{{ 'update.not.allowed'|trans }}</h3>
+		</header>
+		<div class="w3-container w3-bottombar w3-border-red">
+			<p>{{ 'booking.created.by.another.user'|trans }}</p>
+		</div>
+	</div>
+</div>
+
 <!-- Demandes de suppression de réservations -->
 <div id="askDeleteBookingMany" class="w3-modal w3-animate-opacity">
 	<div class="w3-modal-content">
@@ -56,7 +69,7 @@
 	</div>
 </div>
 
-<!-- Duplication -->
+<!-- Contrôle de navigation en duplication -->
 <div id="naPreviousWeek" class="w3-modal w3-animate-opacity">
 	<div class="w3-modal-content">
 		<header class="w3-container w3-red"> 
@@ -65,19 +78,6 @@
 		</header>
 		<div class="w3-container w3-bottombar w3-border-red">
 			<p>{{ 'booking.duplicate.previous.week.ko'|trans }}</p>
-		</div>
-	</div>
-</div>
-
-<!-- Contrôle utilisateur de la réservation -->
-<div id="unaCreator" class="w3-modal w3-animate-opacity">
-	<div class="w3-modal-content">
-		<header class="w3-container w3-red"> 
-			<span onclick="document.getElementById('unaCreator').style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
-			<h3>{{ 'update.not.allowed'|trans }}</h3>
-		</header>
-		<div class="w3-container w3-bottombar w3-border-red">
-			<p>{{ 'booking.created.by.another.user'|trans }}</p>
 		</div>
 	</div>
 </div>
