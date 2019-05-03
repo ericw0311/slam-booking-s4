@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block createOrUpdateBookingLink %}
-	<a href="{{ path('booking_many_update', { 'planningDate': planningDate|date('Ymd'), 'bookingID': booking.ID, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'timetableLinesList': planningLine.timetableLinesList, 'userFileIDList': userFileIDList, 'labelIDList': labelIDList, 'noteID': noteID }) }}" class="w3-bar-item w3-button w3-round-large w3-pale-green"><img src="{{ asset('images/time-32.png') }}">&nbsp;{{ dateLongue(endPeriodDay.date) }}&nbsp;&rarr;&nbsp;{{ timetableLine(planningLine.timetableLine) }}</a>
+	<a href="{{ path('booking_many_update', { 'planningDate': planningDate|date('Ymd'), 'bookingID': booking.ID, 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'resourceID': resource.ID, 'timetableLinesList': planningLine.timetableLinesList, 'userFileIDList': userFileIDList, 'labelIDList': labelIDList, 'noteID': noteID }) }}" class="w3-bar-item w3-button w3-round-large w3-{{ lineColor }}"><img src="{{ asset('images/time-32.png') }}">&nbsp;{{ dateLongue(endPeriodDay.date) }}&nbsp;&rarr;&nbsp;{{ timetableLine(planningLine.timetableLine) }}</a>
 {% endblock %}
 
 {% block booking_buttons %}
